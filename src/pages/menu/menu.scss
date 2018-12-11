@@ -1,0 +1,83 @@
+page-menu {
+    .content {
+        padding:20px;;
+        background-color: #EFF0F1;
+    }
+    
+    .card {
+        padding: 0% !important;
+    }
+    .avatar {
+        margin: 3px auto;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        border: 1px solid rgb(179, 179, 179);
+    }
+
+    .item {
+        width: 100%;
+        margin: 0%;
+    }
+
+    .button{
+        text-align: left;
+        margin: 0px;
+        font-size: 12pt;
+        padding: 5px;
+        background-color: white;
+        box-shadow: none;
+    }
+
+    .button:active,
+    .button:focus {
+        background-color: rgb(247, 247, 247);
+    }
+
+    .btnProfile {
+        width: 100%;
+        border-bottom: 0.5px solid gray;
+    }
+
+    .grid {
+        padding: 0%;
+        margin: 0%;
+    }
+
+    .name {
+        padding-top: 12px; 
+        font-size: 12pt;
+        font-weight: bold;
+    }
+
+    .label {
+        padding: 2px 0px;
+        font-size: 10pt;
+        color: gray;
+    }
+
+    .btnRegister, 
+    .btnControl {
+        width: 100%;
+        height: 50px;
+        font-weight: bold;
+        padding-left: 17px;
+    }
+
+    .btnLogout {
+        margin-left: 10px;
+        margin-top: 10px;
+        font-size: 12pt;
+        color: #ff6961;
+        margin-bottom: 10px;
+        background-color: white;
+    }
+
+    .btnLogout:active,
+    .btnLogout:focus {
+        font-size: 12pt;
+        background-color: white;
+        color: #fd9a94;
+        margin-bottom: 10px;
+    }
+}

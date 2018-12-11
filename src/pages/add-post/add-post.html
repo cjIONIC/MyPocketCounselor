@@ -1,0 +1,74 @@
+
+<ion-header>
+
+  <ion-navbar color="primary">
+    <ion-title>Create {{type}}</ion-title>
+      <ion-buttons end>
+        <button class="btnImage" ion-button icon-only round (click)="getImage()">
+            <ion-icon class="image" name="image"></ion-icon>
+          </button>
+        </ion-buttons>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+
+    <ion-item>
+        <ion-label color="primary" floating>Title</ion-label>
+        <ion-input  no-lines type="text" [(ngModel)]="title" id="title" required></ion-input>
+    </ion-item>
+
+    <ion-item *ngIf="type === 'Event'">
+        <ion-label color="primary" floating>Location</ion-label>
+        <ion-input type="text" [(ngModel)]="location" required></ion-input>
+    </ion-item>
+
+    <ion-item *ngIf="type === 'Event'">
+        <ion-label color="primary" floating>Starting Date</ion-label>
+        <ion-datetime pickerFormat="MMMM D, YYYY" max="2050" [(ngModel)]="startDate" required></ion-datetime>
+    </ion-item>
+
+    <ion-item *ngIf="type === 'Event'">
+        <ion-label color="primary" floating>Starting Time</ion-label>
+        <ion-datetime pickerFormat="h:mm A" max="2050" [(ngModel)]="startTime" required></ion-datetime>
+    </ion-item>
+    
+    <ion-item *ngIf="type === 'Event'">
+        <ion-label color="primary" floating>Ending Date</ion-label>
+        <ion-datetime pickerFormat="MMMM D, YYYY" max="2050" [(ngModel)]="endDate" required></ion-datetime>
+    </ion-item>
+    
+    <ion-item *ngIf="type === 'Event'">
+        <ion-label color="primary" floating>Ending Time</ion-label>
+        <ion-datetime pickerFormat="h:mm A" [(ngModel)]="endTime" required></ion-datetime>
+    </ion-item>
+
+    <ion-item *ngIf="type === 'Event'">
+        <ion-label color="primary" floating>Academic</ion-label>
+        <ion-select [(ngModel)]="academic" multiple="true">
+          <!-- Allows to loop the list of academic units in a select list-->
+              <ion-option *ngFor="let unit of academicList" value ="{{unit.acID}}"> {{unit.acName}}</ion-option>
+    
+        </ion-select>
+      </ion-item>
+
+    <ion-item>
+        <ion-label color="primary" floating>Description</ion-label>
+        <ion-textarea type="text" class="description" [(ngModel)]="description" required></ion-textarea>
+    </ion-item>
+
+    <!--Displays the image-->
+    <ion-item *ngIf="image" no-lines class="imageContainer">
+        <div class="imageHeader">
+            <button ion-button icon-only round class="closeImage"  (click)="removePic()"><ion-icon class="close" name="close"></ion-icon></button>
+        </div>
+        <img src="{{ image }}" class="src">
+    </ion-item>
+
+    <div class="buttons">
+        <button ion-button class="btnAdd" (click)="verifyPost()">Post</button>
+    </div>
+    
+</ion-content>

@@ -1,0 +1,15 @@
+<!-- Generated template for the PopFilterComponent component -->
+<ion-content class="content">   
+    <ion-grid class="grid">
+        <ion-list no-lines>
+            <ion-row>
+                <ion-col col-2><ion-checkbox class="check" checked="{{all}}" (ionChange)="getSelect('all')"></ion-checkbox></ion-col>
+                <ion-col col-9 class="label">All</ion-col>
+            </ion-row>
+            <ion-row  *ngFor="let academic of academicList">
+                <ion-col col-2><ion-checkbox class="check" checked="{{academic.check}}" (ionChange)="getSelect(academic)"></ion-checkbox></ion-col>
+                <ion-col col-9 class="label">{{academic.code}}</ion-col>
+            </ion-row>
+        </ion-list>
+    </ion-grid>
+</ion-content> 

@@ -1,0 +1,99 @@
+modal-profile {
+
+    //Hides the Scrollbar
+    ::-webkit-scrollbar{
+        display:none;
+    }
+
+    .profile {
+        margin-top: 20px;
+        align-content: center;
+    }
+
+    .avatar {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        border: 1px solid rgb(179, 179, 179);
+    }
+
+    .name {
+        text-align: center;
+        margin-top: 10px;
+        font-size: 12pt;
+        font-weight: bold;
+    }
+
+    .numberLabel {
+        margin-top: 10px;
+        text-align: center;
+        font-size: 10pt;
+        color: rgb(41, 41, 41);
+    }
+
+    .number {
+        text-align: center;
+        font-size: 12pt;
+    }
+
+    .academicLabel {
+        margin-top: 10px;
+        text-align: center;
+        font-size: 10pt;
+        color: rgb(41, 41, 41);
+    }
+
+    .academic {
+        text-align: center;
+        font-size: 12pt;
+    }
+
+    .status {
+        margin-top: 10px;
+        display: block;
+        text-align: center;
+    }
+
+    .statusLabel {
+        font-size: 10pt;
+        color: rgb(41, 41, 41);
+    }
+
+    .statusName {
+        font-size: 12pt;
+    }
+
+    .buttons {
+        display: block;
+        align-content: center;
+        text-align: center;
+        margin-top: 10%;
+    }
+
+    .changeButton {
+        border: 2px solid #ff6961;
+        width: 80%;
+    }
+
+    .appointmentButton {
+        width: 80%;
+        color: white;
+        background-color: #ff6961;
+    }
+
+    .messageButton {
+        width: 80%;
+        color: white;
+        background-color: #ff6961;
+    }
+
+    .appointmentButton:active ,
+    .appointmentButton:focus,
+    .messageButton:active,
+    .messageButton:focus {
+        background-color: #ff847d;
+    }
+}

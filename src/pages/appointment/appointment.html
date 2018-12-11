@@ -1,0 +1,111 @@
+<ion-content class="content">
+    <ion-fab right bottom >
+            <button ion-fab (click)="addAppointment()"><ion-icon name="create"></ion-icon></button>
+    </ion-fab>
+
+    <ion-card class="calendar">
+      <ion-grid class = "calendarHeader">
+          <ion-row>
+              <ion-col class="arrow" (click)="loadLastMonth()" col-2><ion-icon name="arrow-back"></ion-icon></ion-col>
+              <ion-col col-8>
+                  <ion-row><div class="month">{{currentMonthName}}</div></ion-row>
+                  <ion-row><div class="year">{{currentYear}}</div></ion-row>
+              </ion-col>
+              <ion-col class="arrow" (click)="loadNextMonth()" col-2><ion-icon name="arrow-forward"></ion-icon></ion-col>
+          </ion-row>
+        </ion-grid>
+    <div class = "calendarBody">
+      <ion-grid>
+          <ion-row class = "calendarWeek">
+              <ion-col col-1><div class="weekday">Sun</div></ion-col>
+              <ion-col col-1><div class="weekday">Mon</div></ion-col>
+              <ion-col col-1><div class="weekday">Tue</div></ion-col>
+              <ion-col col-1><div class="weekday">Wed</div></ion-col>
+              <ion-col col-1><div class="weekday">Thu</div></ion-col>
+              <ion-col col-1><div class="weekday">Fri</div></ion-col>
+              <ion-col col-1><div class="weekday">Sat</div></ion-col>
+          </ion-row>
+          
+          <!-- Shows the dates of the month -->
+          <ion-row class = "calendarDate">
+              <ion-col col-1 class="date" *ngFor="let lastDay of daysLastMonth" class = "lastMonth"><div class="lastDays">{{lastDay}}</div></ion-col>
+              <ion-col col-1 class="date" *ngFor="let day of daysOfCurrentMonth" (click)="selectedDate(day.date, currentMonth, currentYear)">
+                    <ion-row>
+                        <div *ngIf="currentDate === day.date && daySelected === day.date" class = "date1" >{{day.date}}</div>
+                        <div *ngIf="currentDate === day.date && daySelected !== day.date" class = "date2" >{{day.date}}</div>
+                        <div *ngIf="currentDate !== day.date && daySelected === day.date" class = "date1" >{{day.date}}</div>
+                        <div *ngIf="currentDate !== day.date && daySelected !== day.date" class = "date3" >{{day.date}}</div>
+                    </ion-row>
+                    <ion-row class="occupancy">
+                        <div *ngIf="day.occupied" class="occupied"></div>
+                        <div *ngIf="!day.occupied" class="nonOccupied"></div>
+                    </ion-row>
+              </ion-col>
+              <ion-col col-1 *ngFor="let nextDay of daysNextMonth" class="nextMonth"><div class="nextDays">{{nextDay}}</div></ion-col>
+          </ion-row>
+      </ion-grid>
+    </div>
+  </ion-card>
+  <ion-card class="cardSelect" *ngIf="displayDate">
+        <div class="selectedTitle">Date Selected:</div>
+        <div class="selected">{{displayDate}}</div>
+  </ion-card>
+  <ion-card class="cardSelect" *ngIf="!displayDate">
+        <div class="selected"> No Date Selected </div>
+  </ion-card>
+
+    <ion-list>
+      <ion-card *ngFor="let appointment of appointmentsOfSelectedDate">
+        <ion-grid class="schedule">
+            <ion-row>
+                <ion-col class="colTime" col-3>
+                    <div class="datetime">
+                        <ion-row><div class="time"> {{ appointment.time }} </div></ion-row>
+                        <ion-row><div class="meridian">{{ appointment.meridian }} </div> </ion-row>
+                    </div>
+                </ion-col> 
+                
+                <ion-col col-9>
+                    <!-- Name and Photo -->
+                    <ion-row>
+                        <ion-col col-3>
+                            <div *ngIf="userInfo['type'] !== 'Student'"><img src="{{ appointment.studentPhoto }}" class="avatar"></div>
+                            <div *ngIf="userInfo['type'] === 'Student'"><img src="{{ appointment.counselorPhoto }}" class="avatar"></div>
+                        </ion-col>
+                        <ion-col col-7>
+                            <ion-row  *ngIf="userInfo['type'] !== 'Student'"> <div class="name"> {{ appointment.student }} </div></ion-row>
+                            <ion-row *ngIf="userInfo['type'] === 'Student'"  class="name"> {{ appointment.counselor }} </ion-row>
+                            <!-- Academic Unit/s -->
+                            <ion-row no-padding *ngIf="userInfo['type'] === 'Student'">
+                                    <ion-col *ngFor="let academic of appointment['academic']" class="academic" col-auto> 
+                                        <div class="unit">{{ academic.code }}</div>
+                                    </ion-col>
+                            </ion-row>
+                            <ion-row no-padding *ngIf="userInfo['type'] !== 'Student'">
+                                    <ion-col class="academic" col-auto> 
+                                        <div class="unit">{{ appointment.academic }}</div>
+                                    </ion-col>
+                            </ion-row>
+                        </ion-col>
+                        <ion-col col-2 class="colClose" *ngIf="userInfo['type'] !== 'Student'">
+                                <div  class="iconBox">
+                                    <button class="finish"(click)=" popOptions($event, appointment)">
+                                        <ion-icon name="more"></ion-icon>
+                                    </button>
+                                </div>
+                            </ion-col>
+                    </ion-row>
+                    
+                    
+                    <!-- Content-->
+                    <ion-row class="description">{{ appointment.description }}</ion-row>
+                    <ion-row class="scheduleContent">Venue:<div class="venue">{{ appointment.venue }}</div></ion-row>
+                    <ion-row class="scheduleContent" *ngIf="appointment.concern">Concern:<div class="concern">{{ appointment.concern }}</div></ion-row>
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+      </ion-card>
+      <div *ngIf="appointmentsOfSelectedDate.length === 0 && displayDate" class="noAppointment">No appointments</div>
+    </ion-list>
+  
+</ion-content>

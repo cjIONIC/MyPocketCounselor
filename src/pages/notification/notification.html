@@ -1,0 +1,22 @@
+<ion-content>
+  <ion-list class="list" >
+    <ion-card class="card" *ngFor="let detail of notificationList" (click)="openNotification(detail)">
+        <ion-grid>
+                <ion-row class="notification">
+                        <ion-col col-3>
+                              <img src="{{ detail.picture }}" class="avatar">
+                        </ion-col>
+                        <ion-col col-9>
+                            <ion-row class="name">{{ detail.name }}</ion-row>
+                            <ion-row class="description">{{ detail.description }}</ion-row>
+                            <ion-row class="time"><div class="datetime">{{detail.datetime | timeAgo}}</div></ion-row>
+                        </ion-col>
+                  </ion-row>
+        </ion-grid>
+        
+    </ion-card>
+    <div *ngIf="notificationList.length === 0">
+            <div class="status"> No notification</div>
+    </div>
+  </ion-list>
+</ion-content>

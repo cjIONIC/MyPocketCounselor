@@ -1,0 +1,268 @@
+page-appointment {
+
+    .content {
+      background-color: #EFF0F1;
+    }
+
+    .calendar{
+      padding-bottom: 10px;
+    }
+    
+    .calendarBody {
+      padding: 10px;
+      padding-top: 0%;
+    }
+
+    .arrow {
+      font-size: 13pt;
+      margin: 0px;
+      margin-top: 10px;
+    }
+
+    .month, .year {
+      text-align: center;
+      align-content: center;
+      margin: 0px auto;
+      color: black;
+    }
+    
+    .month {
+      font-size: 12pt;
+      font-weight: bold;
+    }
+
+    [col-1] {
+        flex: 0 0 14.285714285714286%;
+        width: 14.285714285714286%;
+        max-width: 14.285714285714286%;
+        padding: 0%;
+      }
+
+      .col {
+        text-align: center;
+        padding: 5px;
+      }
+
+      .calendarWeek {
+          font-weight: bold;
+      }
+
+      .weekday {
+        width: 100%;
+        background-color: #6961ff;
+        color: white;
+        font-size: 9pt;
+        padding: 1px 2px;
+        border-radius: 50px;
+      }
+    
+      .lastMonth, .nextMonth {
+        color: #999999;
+        font-size: 90%;
+      }
+    
+      .lastDays, .nextDays  {
+        text-align: center;
+        width: 30px !important;
+        height: 30px !important;
+        font-size: 10pt;
+        border-radius: 50px;
+      }
+
+      .lastDays {
+        padding-top: 7px;
+      }
+
+      .nextDays {
+        padding-top: 6px;
+      }
+    
+      .date1, .date2, .date3, .date4 {
+        width: 25px !important;
+        height: 25px !important;
+        font-size: 12pt;
+        margin: 0px auto;
+        border-radius: 50px;
+      }
+      
+      .date1 { //Current date is selected
+        padding-top: 3px;
+        font-weight: bold;
+        background-color: #ff6961;
+        color: white;
+      }
+
+      .date2 { //Current date
+        padding-top: 2px;
+        color: #ff6961;
+        border: 1px solid #ff6961;
+      }
+      
+      .date3 { //Dates that are not selected
+        color: black;
+        padding-top: 4px;
+        border-radius: 50px;
+      }
+
+      .occupancy {
+        margin: 2px 0px 0px 0px;
+        padding: 0%;
+      }
+
+      .occupied {
+        margin: 0px auto;
+        height: 5px;
+        width: 5px;
+        border-radius: 50px;
+        background-color: #6961ff;
+      }
+
+      .nonOccupied {
+        margin: 0px auto;
+        height: 5px;
+        width: 5px;
+        border-radius: 50px;
+      }
+      
+      .calendarBody {
+        .grid {
+            padding: 0;
+        }
+        .col:last-child {
+            border-right: none;
+        }
+        .calendarWeek, .calendarDate {
+            text-align: center;
+            margin: 0;
+        }
+      }
+    
+      .cardSelect{
+        padding: 10px 10px;
+      }
+
+      .selectedTitle {
+        font-size: 12pt;
+        color: #ff6961;
+      }
+
+      .selected {
+        font-size: 12pt;
+        font-weight: bold;
+        color: black;
+      }
+
+      [col-3], [col-auto] {
+        padding: 0%;
+      }
+
+      .colTime {
+        position: relative;
+      }
+
+      .datetime {
+        margin: 0;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        -ms-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
+      }
+
+      .iconBox {
+        width: 100%;
+      }
+
+      .time {
+        font-size: 18pt;
+        font-weight: bold;
+        margin: 0px auto;
+      }
+
+      .meridian {
+        font-size: 25pt;
+        font-weight: bold;
+        padding: 0%;
+        margin: 0px auto;
+      }
+
+      .avatar {
+        margin: 5px auto;
+        padding-left: 0px;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        border: 1px solid rgb(179, 179, 179);
+    }
+
+    .colName {
+      padding: 0%;
+      height: auto;
+    }
+
+    .colClose {
+      padding: 0%;
+      text-align: end;
+    }
+
+    .name {
+      font-size: 12pt;
+      font-weight: bold;
+      text-align: left;
+    }
+
+    .finish {
+      background: transparent;
+      text-align: end;
+      font-size: 13pt;
+      margin: 0%;
+      padding: 2px 5px;
+      color: #ff6961;
+    }
+
+    .academic {
+      margin: 0px;
+      margin-top: 5px;
+      padding: 0px;
+    }
+
+    .unit {
+      color: #ff6961;
+      padding: 2px 10px 2px 10px;
+      border-radius: 50px;
+      border: 1px solid #ff6961;
+    }
+
+
+    .scheduleContent {
+      margin-top: 2px;
+      font-size: 10pt;
+    }
+
+    .venue{
+      font-size: 10pt;
+      font-weight: bold;
+      text-align: left;
+      padding-left: 20px;
+    }
+
+    .concern{
+      font-size: 10pt;
+      font-weight: bold;
+      text-align: left;
+      padding-left: 7px;
+    }
+
+    .description {
+      text-align: left;
+      margin-bottom: 10px;
+    }
+
+    .noAppointment {
+      text-align: center;
+      font-size: 15pt;
+      color: darkgray;
+      margin: 30px auto;
+    }
+
+}

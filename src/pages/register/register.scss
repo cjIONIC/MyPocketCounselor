@@ -1,0 +1,53 @@
+page-register {
+    //Hides the Scrollbar
+    ::-webkit-scrollbar{
+        display:none;
+    }
+
+    .profile {
+        margin-left: auto;
+        margin-right: auto;
+        width: 150px;
+        height: 150px;
+    }
+
+    .avatar {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        border: 1px solid rgb(179, 179, 179);
+    }
+
+    .imageFooter {
+        position: absolute;
+        padding-top: 110px;
+        padding-left: 110px;
+        width: 150px;
+        height: 150px;
+    }
+
+    .upload {
+        font-size: 12pt;
+        width: 40px;
+        height: 40px;
+        border-radius: 50px;
+        padding: 0%;
+        color: white;
+        background-color: #ff6961;
+    }
+    
+    .button {
+        display: block;
+        align-content: center;
+        text-align: center;
+        margin-top: 30px;
+    }
+
+    .btn {
+        width: 50%;
+        margin: 0px auto;
+    }
+}

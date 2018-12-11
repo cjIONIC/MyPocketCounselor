@@ -1,0 +1,41 @@
+<ion-content class = "people">
+      <ion-fab class="fabButton" right bottom *ngIf = " userInfo['type'] === 'Student' ">
+        <button ion-fab (click) = "callHotline()"><ion-icon name = "call" class="call"></ion-icon></button>
+      </ion-fab>
+      
+      <ion-card class="card">
+                  <ion-list class="list" >
+                        <ion-grid class="optionBar">
+                              <ion-row>
+                                    <ion-col col-8>
+                                          <div *ngIf="userInfo['type'] === 'Student'" class="type"><div class="label">Counselor List</div></div>
+                                          <div *ngIf="userInfo['type'] != 'Student'" class="type"><div class="label">Student List</div></div>
+                                    </ion-col>
+                                    <ion-col col-4 class="filter">
+                                          <button class = "filterBtn" (click)="filterButton($event)">
+                                                Filter <ion-icon name="options" class="options"></ion-icon>
+                                          </button>
+                                    </ion-col>
+                              </ion-row>
+                        </ion-grid>
+                                    <ion-grid  class="optionBar">
+                                          <ion-row class="contact"  *ngFor="let person of peopleList" class="profile" (click)="profile(person)">
+                                                <ion-col class="profileLeft" col-3>
+                                                      <img src="{{ person.picture }}" class="avatar">
+                                                </ion-col>
+                                                <ion-col class="profileRight" col-9>
+                                                      <ion-row class="name"> {{person.name}} </ion-row>
+                                                      <ion-row *ngIf="userInfo['type'] != 'Student'" class="academicStudent"><div class="academicName">{{person.academic}}</div> </ion-row>
+                                                      <ion-row *ngIf="userInfo['type'] === 'Student'">
+                                                            <ion-col  *ngFor="let academic of person.academic" class="academicCounselor" col-auto>
+                                                                  <div class="academicName">{{academic.code}}</div>
+                                                            </ion-col>
+                                                      </ion-row>
+                                                </ion-col>
+                                          </ion-row>
+                                    </ion-grid>
+                                    <div class="status" *ngIf="peopleList.length === 0 && userInfo['type'] === 'Student'">No Counselor Found</div>
+                                    <div class="status" *ngIf="peopleList.length === 0 && userInfo['type'] !== 'Student'">No Student Found</div>
+                        </ion-list>           
+      </ion-card>
+</ion-content>

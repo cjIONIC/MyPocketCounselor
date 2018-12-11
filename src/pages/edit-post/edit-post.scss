@@ -1,0 +1,40 @@
+page-edit-post {
+    .btnImage {
+        padding: 0%;
+    }
+
+    .description {
+        height: 100px;
+    }
+    
+    .buttons {
+        display: block;
+        align-content: center;
+        text-align: center;
+        margin-top: 30px;
+    }
+
+    .btnUpdate {
+        width: 50%;
+    }
+
+    .imageContainer {
+        width: 100%;
+        margin: 0%;
+        padding-right: 0%;
+    }
+
+    .imageHeader {
+        width: 100%;
+        padding: 5px 35px 5px 5px;
+        position:absolute;
+        align-content: flex-end;
+        text-align: end;
+    }
+
+    .closeImage {
+        border-radius: 50px;
+        width: 25px;
+        height: 25px;
+    }
+}

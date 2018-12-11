@@ -1,0 +1,38 @@
+<!-- Generated template for the ModalScheduleComponent component -->
+<ion-header>
+
+    <ion-navbar color="primary">
+        <ion-buttons end>
+            <button ion-button  style="text-transform: none; font-size: 15pt;" (click)="dismiss()">
+              Close
+            </button>
+          </ion-buttons>
+        <ion-title>Schedule Info</ion-title>
+    </ion-navbar>
+  
+</ion-header>
+<ion-content padding class="content">
+  <ion-item class="item">
+      <ion-label color="primary" floating>Student</ion-label>
+      <ion-input readonly [(ngModel)]="student"></ion-input>
+    <div> {{name}} </div>
+  </ion-item>
+  <ion-item class="item">
+    <ion-label color="primary" floating> Date</ion-label>
+    <ion-datetime pickerFormat="MMMM DD,YYYY" max="2050" [(ngModel)]="date" required></ion-datetime>
+  </ion-item>
+  <ion-item class="item">
+    <ion-label color="primary" floating> Time</ion-label>
+    <ion-datetime pickerFormat="h:mm A" [(ngModel)]="time" required></ion-datetime>
+  </ion-item>
+  <ion-item class="item">
+    <ion-label color="primary" floating>Venue</ion-label>
+        <ion-select [(ngModel)]="venue">
+            <ion-option *ngFor="let place of venuesArray" value ="{{place.acName}}" required> {{place.acName}}</ion-option>
+        </ion-select>
+  </ion-item>
+    
+  <div class="buttons">
+    <button ion-button class="btnReschedule" (click)="verifyInputs()">Reschedule</button>
+</div>
+</ion-content>

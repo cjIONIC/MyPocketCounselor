@@ -1,0 +1,40 @@
+<ion-header>
+
+    <ion-navbar color="primary">
+        <ion-buttons end>
+            <button ion-button  style="text-transform: none; font-size: 15pt;" (click)="close()">
+              Close
+            </button>
+          </ion-buttons>
+        <ion-title>{{type}} Info</ion-title>
+    </ion-navbar>
+  
+</ion-header>
+  <ion-content class="content">
+    <div *ngFor="let details of profileInfo" class="profile">
+        <div><img src="{{ details.picture }}" class="avatar"></div>
+        <div class="details">
+          <div class="name">{{details.name}}</div>
+          <div *ngIf="type === 'Counselor'" class="numberLabel">Mobile</div>
+          <div *ngIf="type === 'Counselor'" class="number">{{details.number}}</div>
+          <div class="academicLabel">Academic Unit</div>
+          <div class="academic"> 
+            <div *ngFor="let units of details.academic">
+              <div class="academicCounselor">{{units.name}}</div>
+            </div>
+          </div>
+          <div class="status" *ngIf="type === 'Student'" >
+            <div class="statusLabel">Status</div>
+            <div class="statusName">{{details.status}}</div>
+          </div>
+  
+          <div class="buttons">
+              <div><button *ngIf="type === 'Student'" ion-button class="changeButton"(click)="presentModal()" clear>Update Academic Info</button></div>
+              <div><button *ngIf="type !== 'Student'" ion-button class="appointmentButton" (click)="addAppointment()" clear> Request Appointment</button></div>
+              <div><button *ngIf="type === 'Student'" ion-button class="appointmentButton" (click)="addAppointment()" clear> Set Appointment</button></div>
+              <div><button ion-button class="messageButton" clear> Message</button></div>
+          </div>
+        </div>
+    </div>
+  </ion-content>
+  

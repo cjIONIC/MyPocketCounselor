@@ -1,0 +1,118 @@
+modal-request {
+
+    //Hides the Scrollbar
+    ::-webkit-scrollbar{
+        display:none;
+    }
+
+    .content {
+        background-color: #ff6961;
+    }
+
+    .icon {
+        color: white;
+    }
+
+    .header {
+        position: absolute;
+    }
+
+    .profile {
+        margin-top: 15%;
+        align-content: center;
+    }
+
+    .avatar {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        border: 1px solid rgb(253, 214, 214);
+    }
+
+    .name, .emailName, .statusName ,.academic {
+        color: white;
+    }
+
+    .academicLabel, .emailLabel, .statusLabel {
+        color: rgb(255, 205, 205);
+    }
+
+    .name {
+        text-align: center;
+        margin-top: 10px;
+        font-size: 12pt;
+        font-weight: bold;
+    }
+
+    .numberLabel {
+        margin-top: 10px;
+        text-align: center;
+        font-size: 10pt;
+    }
+
+    .number {
+        text-align: center;
+        font-size: 12pt;
+    }
+
+    .academicLabel {
+        margin-top: 10px;
+        text-align: center;
+        font-size: 10pt;
+    }
+
+    .academic {
+        text-align: center;
+        font-size: 12pt;
+    }
+
+    .emailLabel {
+        margin-top: 10px;
+        text-align: center;
+        font-size: 10pt;
+    }
+
+    .emailName {
+        text-align: center;
+        font-size: 12pt;
+        font-weight: bold;
+    }
+
+    .statusLabel {
+        margin-top: 10px;
+        text-align: center;
+        font-size: 10pt;
+    }
+
+    .statusName {
+        text-align: center;
+        font-size: 12pt;
+    }
+
+    .button {
+        margin-top: 10%;
+    }
+
+    .reject {
+        background-color: white;
+        width: 80%;
+        color: #ff6961;
+    }
+
+    .accept {
+        border: 2px solid white;
+        width: 80%;
+        color: white;
+    }
+
+    .appointmentButton {
+        width: 80%;
+    }
+
+    .messageButton {
+        width: 80%;
+    }
+}

@@ -1,0 +1,50 @@
+pop-feed-options {
+
+    .no-scroll {
+        padding: 5px;
+        margin:0%;
+    }
+
+    .no-scroll .scroll-content {
+        overflow: hidden;
+    }
+
+    .button {
+        background-color: white;
+        width:100px;
+        height: 40px;
+        text-align: left;
+        padding:5px 10px;;
+        margin: 2px auto;
+        text-align: left;
+        font-size: 12pt;
+    }
+
+    .button:active {
+        background-color: rgb(243, 243, 243);
+        width:100px;
+        height: 40px;
+        text-align: left;
+        padding:5px 10px;;
+        margin: 2px auto;
+        text-align: left;
+        font-size: 12pt;
+    }
+
+    .icon {
+        float: right;
+        font-size: 15pt;
+        margin-left: 0%;
+        text-align: left;
+        padding:5px;
+        margin-right: 10px;
+    }
+
+    .label {
+        text-align: left;
+        padding: 2px;
+        font-size: 12pt;
+    }
+
+    
+}

@@ -1,0 +1,8 @@
+{
+  "name": "mpc",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "ionic-angular",
+  "pro_id": "f628b18f"
+}

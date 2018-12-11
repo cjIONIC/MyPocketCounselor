@@ -1,0 +1,25 @@
+page-tab {
+
+    //Hides the Scrollbar
+    ::-webkit-scrollbar{
+        display:none;
+    }
+
+    .tabTitle { 
+        font-family: "Brusher";
+        //src: url('../assets/fonts/brusher/Brusher.ttf');
+        //src: url('../assets/fonts/brusher/Brusher.ttf') format('truetype'),
+        //url('../assets/fonts/brusher/Brusher.otf') format('opentype');
+    }
+
+    .toolbar-title-ios {
+        font-size: 15pt !important; // Default should be 2.0rem
+    }
+
+    .toolbar-title-md {
+        padding-top: 6px !important;
+        height: 50px !important;
+        font-size: 20pt !important; // Default should be 2.0rem
+    }
+}
+

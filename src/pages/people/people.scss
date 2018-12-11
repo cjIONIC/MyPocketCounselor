@@ -1,0 +1,151 @@
+page-people {
+
+    .call {
+        font-size: 20pt !important;
+    }
+
+    .hotlineText {
+        font-size: 18pt;
+        color: white;
+    }
+
+    .card, {
+        padding: 0%;
+    }
+
+    .list{
+        margin: 0%;
+        padding: 0%;
+    }
+
+    .optionBar, [col-8] {
+        margin: 0%;
+        padding:  5px 0px;
+    }
+
+    .type {
+        width: 100%;
+        margin: 0%;
+        padding: 0%;
+    }
+
+    .label {
+        width: 150px;
+        padding: 2px 15px;
+        font-size: 12pt;
+        color: white;
+        font-weight: normal;
+        background-color: #ffb861;
+        //background-image: linear-gradient(to right, #ffb861, white);
+        border-left: 5px solid #f08400;
+    }
+
+    [col-2] {
+        text-align: end;
+    }
+
+    .filter {
+        padding: 0%;
+        margin:  5px 0px;
+        text-align: end;
+        padding-right: 15px;
+    }
+
+    .filterBtn {
+        margin: 0%;
+        margin-top: 3%;
+        padding-right: 0%;
+        margin-left: 5px;
+        font-size: 12pt;
+        text-align: end;
+        color: #ff6961;
+        background: transparent;
+    }
+
+    .options {
+        font-size: 12pt;
+        padding-left: 5px;
+    }
+
+    .row {
+        width: 100%;
+    }
+
+    .people {
+        background-color: #EFF0F1;
+        align-content: center;
+        padding: 0%;
+    }
+
+    .btn {
+        text-align: left;
+        margin: 0px;
+    }
+
+    .profile:active,
+    .profile {
+        padding: 0px !important;
+        width: 100%;
+        margin: 0px !important;
+    }
+
+    .profile:active {
+        background-color: rgb(247, 247, 247);
+    }
+
+    .grid {
+        margin: 0px !important;
+        width: 100%;
+    }
+
+    .contact {
+        margin: 0%;
+    }
+
+    .profileLeft {
+        margin: 0%;
+        padding: 0%;
+    }
+    .avatar {
+        margin: 3px auto;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        border: 1px solid rgb(179, 179, 179);
+    }
+
+    .name {
+        text-align: left;
+        font-size: 12pt;
+        color: black;
+    }
+
+    .academicStudent {
+        margin-top: 5px;
+        text-align: left;
+        color: darkgray;
+        font-size: 10pt;
+    }
+
+    .academicCounselor {
+        margin: 0px;
+        margin-top: 5px;
+        padding: 0px;
+    }
+
+    .academicName {
+        color: #ff6961;
+        padding: 2px 10px;
+        border-radius: 50px;
+        margin-right: 10px;
+        border: 1px solid #ff6961;
+    }
+
+    .status {
+        width: 100%;
+        font-size: 12pt;
+        text-align: center;
+        padding: 10px;
+        color: darkgray;
+    }
+}

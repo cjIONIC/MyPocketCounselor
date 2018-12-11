@@ -1,0 +1,89 @@
+modal-notification {
+
+        //Hides the Scrollbar
+        ::-webkit-scrollbar{
+            display:none;
+        }
+        .col {
+            text-align: center;
+        }
+    
+        .avatar {
+            margin: 10px auto;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: 1px solid #b3b3b3;
+        }
+
+        .name {
+            text-align: center;
+            margin-top: 10px;
+            font-size: 12pt;
+            font-weight: bold;
+        }
+    
+        .academic {
+            text-align: center;
+            font-size: 12pt;
+        } 
+
+        .academicCounselor {
+            margin-top: 2px;
+            color: #ff6961;
+            padding: 2px 10px;
+            border-radius: 50px;
+            margin-right: 10px;
+            border: 1px solid #ff6961;
+        }
+
+        .detail {
+            padding: 0px 20px;
+            font-size: 10pt;
+            margin: 5px 0px;
+            color: rgb(41, 41, 41);
+        }
+
+        .schedule, .venue, .concern {
+            color: black;
+            font-weight: bold;
+        }
+
+        .schedule {
+            padding-left: 5px;
+        }
+
+        .venue {
+            padding-left: 22px;
+        }
+
+        .concern {
+            padding-left: 10px;
+        }
+
+        .description {
+            padding: 0px 20px;
+        }
+    
+        .buttons {
+            margin-top: 10%;
+        }
+    
+        .reschedule {
+            background-color: #ff6961;
+            width: 80%;
+            color: white;
+        }
+    
+        .accept {
+            border: 2px solid #ff6961;
+            width: 80%;
+            color: #ff6961;
+        }
+
+        .reschedule:active,
+        .reschedule:focus {
+            background-color: #ff847d;
+        }
+    
+}

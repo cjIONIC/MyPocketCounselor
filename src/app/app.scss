@@ -1,0 +1,107 @@
+// http://ionicframework.com/docs/theming/
+
+
+// App Global Sass
+// --------------------------------------------------
+// Put style rules here that you want to apply globally. These
+// styles are for the entire app and not just one component.
+// Additionally, this file can be also used as an entry point
+// to import other Sass files to be included in the output CSS.
+//
+// Shared Sass variables, which can be used to adjust Ionic's
+// default Sass variables, belong in "theme/variables.scss".
+//
+// To declare rules for a specific mode, create a child rule
+// for the .md, .ios, or .wp mode classes. The mode class is
+// automatically applied to the <body> element in the app.
+
+.main-content {
+    height: 100%;
+  }
+
+  
+    //Hides the Scrollbar
+    ::-webkit-scrollbar{
+      display:none;
+  }
+
+  
+  .custom-popover .popover-content{
+    width: 100px !important;
+    height: 100px !important;
+  }
+  
+  .custom-popover-schedule .popover-content{
+    width: 115px !important;
+    height: 100px !important;
+  }
+  
+  .custom-popover-filter .popover-content{
+    width: 230px !important;
+    height: 300px !important;
+  }
+  
+  .custom-modal-notification-counselor .modal-wrapper{
+    position: absolute;
+    overflow: hidden;
+    max-width: 300px;
+    width:300px;
+    height: 370px !important;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+    border: 0;
+    border-radius: 10px;
+  }
+  
+  .custom-modal-notification-student .modal-wrapper{
+    position: absolute;
+    overflow: hidden;
+    max-width: 300px;
+    width:300px;
+    height: 280px !important;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+    border: 0;
+    border-radius: 10px;
+  }
+  
+  .custom-modal-schedule .modal-wrapper{
+    position: absolute;
+    overflow: hidden;
+    max-width: 300px;
+    width:300px;
+    height: 460px !important;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+    border: 0;
+    border-radius: 10px;
+  }
+  
+  .custom-modal-profile .modal-wrapper{
+    position: absolute;
+    overflow: hidden;
+    max-width: 300px;
+    width:300px;
+    height: 500px !important;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+    border: 0;
+    border-radius: 10px;
+  }
+
+  @font-face {
+    font-family: "Brusher";
+    src: url('../assets/fonts/brusher/Brusher.ttf') format('truetype');
+    }
