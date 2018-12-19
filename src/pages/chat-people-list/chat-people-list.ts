@@ -158,7 +158,11 @@ export class ChatPeopleListPage {
   profile(person) {
     try {
       console.log("Person: ", person);
-      this.app.getRootNav().push(ChatMessagePage, {person: person});
+      let currentIndex = this.navCtrl.getActive().index;
+      this.app.getRootNav().push(ChatMessagePage, {person: person})
+        .then(() => {
+          this.navCtrl.remove(currentIndex);
+        });
     } catch {
 
     }

@@ -1,3 +1,62 @@
 page-chat-message {
 
+    .content {
+        background-color: #EFF0F1;
+        align-content: center;
+        padding: 10px;
+    }
+
+    .item {
+        display: inline-block;
+        width: 100%;
+        font-size: 12pt;
+    }
+
+    .recipient {
+        width: 70%;
+        margin: 10px;
+    }
+
+    .sender {
+        margin: 10px;
+        margin-left: auto;
+        width: 70%;
+    }
+
+    .messageRecipient {
+        background-color: white;
+        padding: 10px;
+        border-radius: 5px;
+        max-width: max-content;
+    }
+
+    .messageUser {
+        background-color: #ff6961;
+        padding: 10px;
+        border-radius: 5px;
+        margin-left: auto;
+        max-width: max-content;
+        color: white;
+    }
+
+    .description {
+        text-align: left;
+    }
+
+    .message {
+        font-size: 12pt;
+        border: 1px solid gray;
+        border-radius: 50px;
+        padding: 8px 15px;
+        width: 97%;
+    }
+
+    .text-input {
+        margin: 0px;
+    }
+
+    .send {
+        color: #ff6961;
+        padding-left: 10px;
+    }
 }

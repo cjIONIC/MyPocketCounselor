@@ -13,20 +13,24 @@
 </ion-header>
 
 
-<ion-content>
+<ion-content class="content">
   <ion-list>
     <ion-grid>
       <ion-row *ngFor="let detail of messageList">
-          <div *ngIf="detail.type === 'Recipient'; else sender">
-              <ion-card class="messageRecipient">
+          <div *ngIf="detail.type === 'Recipient'" class="recipient">
+            <div class="item">
+              <div class="messageRecipient">
                 <div class="description">{{detail.message}}</div>
-              </ion-card>
+              </div>
             </div>
-            <ng-template #sender>
-              <ion-card class="messageUser">
+          </div>
+          <div *ngIf="detail.type === 'Sender'" class="sender">
+            <div class="item">
+              <div class="messageUser">
                   <div class="description">{{detail.message}}</div>
-              </ion-card>
-            </ng-template>
+              </div>
+            </div>
+          </div>
       </ion-row>
     </ion-grid>
   </ion-list>
@@ -34,7 +38,9 @@
 
 <ion-footer>
     <ion-toolbar>
-      <ion-input [(ngModel)]="message"></ion-input>
-      <button ion-button (click)="sendMessage()"><ion-icon name="send"></ion-icon></button>
+      <ion-input [(ngModel)]="message" placeholder="Write something here..." class="message"></ion-input>
+      <ion-buttons end>
+      <button ion-button (click)="sendMessage()" class="send" icon-only><ion-icon name="send"></ion-icon></button>
+      </ion-buttons>
     </ion-toolbar>
   </ion-footer>
