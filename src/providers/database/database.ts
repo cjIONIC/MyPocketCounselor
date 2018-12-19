@@ -424,55 +424,35 @@ export class DatabaseProvider {
     return profile;
   }
 
-  async acceptRequestStudent(profile) {
+  async acceptStudentRequest(profile, id) {
     console.log("Profile: ", profile);
-    let numeric = Math.random().toString().replace('0.', '').substring(0,2);
-    let timestamp = new Date().getTime().toString().substring(5, 13);
-    let id = numeric+timestamp;
 
-    
+    this.fireDatabase.list('/student').push(profile)
+      .then(() => {
+        let ref=this.fireDatabase.list('registration');
 
-    let registrations = await this.fetchAllNodesByTableInDatabase("registration");
+        ref.snapshotChanges(['child_added'])
+        .subscribe(actions => {
+          var key = Object.keys(actions);
+          var reqTable = actions;
+          for(var y = 0; y < key.length; y++) {
+            var count = key[y];
+            var reqKey = reqTable[count].key;
+            var req = reqTable[count].payload.val();
+            var id = req.rID;
 
-    registrations.forEach( request => {
-      if(request["rID"] === profile["id"]) {
-        this.fireDatabase.list('/student').push({
-          sID: parseInt(id),
-          sFirstName: request["rFirstName"],
-          sLastName: request["rLastName"],
-          sEmail: request["rEmail"],
-          sPicture: request["rPicture"],
-          sUsername: request["rUsername"],
-          sPassword: request["rPassword"],
-          sStatus: request["rStatus"],
-          acID: parseInt(request["acID"])
-        }).then(() => {
-          let ref=this.fireDatabase.list('registration');
-
-          ref.snapshotChanges(['child_added'])
-          .subscribe(actions => {
-            var key = Object.keys(actions);
-            var reqTable = actions;
-            for(var y = 0; y < key.length; y++) {
-              var count = key[y];
-              var reqKey = reqTable[count].key;
-              var req = reqTable[count].payload.val();
-              var id = req.rID;
-
-              if(id ===  profile["id"]) {
-                ref.remove(reqKey);
-                console.log("%cSuccessfully deleted post!", "color: white; background: violet; font-size: 10px");
-              }
+            if(id ===  id) {
+              ref.remove(reqKey);
+              console.log("%cSuccessfully deleted request!", "color: white; background: violet; font-size: 10px");
             }
-          });
+          }
         });
-      }
-    })
-
+      });
+   
     return;
   }
 
-  async rejectRequestStudent(profile) {
+  async rejectStudentRequest(profile) {
     let ref=this.fireDatabase.list('registration');
 
     ref.snapshotChanges(['child_added'])
@@ -806,12 +786,6 @@ export class DatabaseProvider {
       })
     })
 
-    studentList.sort(function(a,b) {
-      if(a.name < b.name) { return -1; }
-      if(a.name > b.name) { return 1; }
-      return 0;
-    });
-
     return await studentList;
   }
 
@@ -853,12 +827,7 @@ export class DatabaseProvider {
 
     })
 
-    counselorList.sort(function(a,b) {
-      if(a.name < b.name) { return -1; }
-      if(a.name > b.name) { return 1; }
-      return 0;
-    });
-
+    console.log("Counselors: ", counselorList);
     return await counselorList
   }
 
@@ -1035,6 +1004,55 @@ export class DatabaseProvider {
     return appointmentsOfDate;
   }
 
+  async fetchAppointmentsForNotification(appointments){
+    let appointmentList = [];
+
+    appointments.forEach(async appointment => {
+      let picture, name, push = false;
+      console.log("Status: ", appointment["aStatus"]);
+      if(this.userInfo["type"] === "Student") {
+        if(appointment["sID"] === this.userInfo["id"] && appointment["aStatus"] !== "Pending") {
+          console.log("Found");
+          push = true;
+          let counselors = await this.fetchAllNodesByTableInDatabase("counselor");
+
+          counselors.forEach(counselor => {
+            if(appointment["cID"] === counselor["cID"]){
+              picture = counselor["cPicture"];
+              name = counselor["cFirstName"] + " " + counselor["cLastName"];
+            }
+          })
+        }
+      }else{
+        if(appointment["cID"] === this.userInfo["id"] && appointment["aStatus"] === "Pending") {
+          console.log("Found");
+          push = true;
+          let students = await this.fetchAllNodesByTableInDatabase("student");
+
+          students.forEach(student => {
+            if(appointment["sID"] === student["sID"]){
+              picture = student["sPicture"];
+              name = student["sFirstName"] + " " + student["sLastName"];
+            }
+          })
+        }
+      }
+
+      if(await push) {
+        appointmentList.push({
+          id: appointment["aID"],
+          picture: picture,
+          name: name,
+          status: appointment["aStatus"],
+          datetime: appointment["aDatetime"]
+        })
+      }
+    });
+
+    console.log("Fetched Appointment: ", appointmentList);
+    return await appointmentList;
+  }
+
   //Gets the student name, counselor name, concern name and academic name
   async filterAppointmentsOfDate(appointments : any[]) {
     let filteredAppointments = [];
@@ -1046,7 +1064,7 @@ export class DatabaseProvider {
     console.log("Arrays: ",appointments, counselors, concerns, students);
 
     appointments.forEach(appointment => {
-        let sName, sPicture, sAcademic, cName, cPicture, coName, matchAcademic:any;
+        let sName, sPicture, cName, cPicture,venue, coName, matchAcademic:any;
 
         students.forEach(student => {
           if(student["sID"] === appointment["sID"]){
@@ -1054,7 +1072,7 @@ export class DatabaseProvider {
             sPicture = student["sPicture"];
 
             if(this.userInfo["type"] !== "Student") {
-              academics.forEach(academic => {
+              academics.forEach(async academic => {
                 if(academic["acID"] === student["acID"]) {
                   matchAcademic = academic["acCode"];
                 }
@@ -1086,6 +1104,13 @@ export class DatabaseProvider {
             coName = concern["coName"];
         });
 
+        academics.forEach(academic => {
+          if(academic["acID"] === appointment["acID"]) {
+            venue = academic["acName"];
+            console.log("Found ", venue);
+          }
+        })
+
         let hour = new Date(appointment["aSchedule"]).getHours();
         let minute = new Date(appointment["aSchedule"]).getMinutes();
         let minuteString = (minute < 10 ? '0':'') + minute;
@@ -1103,7 +1128,7 @@ export class DatabaseProvider {
         
         filteredAppointments.push({
             id: appointment["aID"],
-            venue: appointment["aVenue"],
+            venue: venue,
             schedule: appointment["aSchedule"],
             time:time,
             meridian: meridian,
@@ -1169,16 +1194,21 @@ export class DatabaseProvider {
     }) //End of promise
   }
 
-  async fetchAppointmentDetails(id) {
+  async filterAppointmentDetails(id, appointments) { //Fetches and fills other details
     let details = [];
-    let appointments = await this.fetchAllNodesByTableInDatabase("appointment");
     let students = await this.fetchAllNodesByTableInDatabase("student");
-
+    let academics = await this.fetchAllNodesByTableInDatabase("academic");
     appointments.forEach(appointment =>{
       if(id === appointment["aID"]) {
         students.forEach(student => {
           if(appointment["sID"] === student["sID"]){
+            let venue;
             let name = student["sFirstName"]+" "+student["sLastName"];
+
+            academics.forEach(academic => {
+              if(appointment["acID"] === academic["acID"])
+                venue = academic["acName"];
+            })
 
             details.push({
               id: appointment["aID"],
@@ -1186,7 +1216,7 @@ export class DatabaseProvider {
               sID: student["sID"],
               cID: appointment["cID"],
               schedule: appointment["aSchedule"],
-              venue: appointment["aVenue"]
+              venue: venue
             });
           }
         })
@@ -1196,12 +1226,134 @@ export class DatabaseProvider {
     return Promise.resolve<any[]>(details[0]);
   }
 
+  async fetchAppointmentInfo(id, appointments) {
+    let appointmentInfo = [];
+
+    let concerns = await this.fetchAllNodesByTableInDatabase("concern");
+
+    appointments.forEach(async appointment => {
+      let picture, name, coName, academicList = [], push = false;
+
+      if(appointment["aID"] === id && this.userInfo["type"] === "Student") {
+        push = true;
+        let counselors = await this.fetchAllNodesByTableInDatabase("cousnelor");
+
+        counselors.forEach(async counselor => {
+          if(appointment["cID"] === counselor["cID"]) {
+            picture = counselor["cPicture"];
+            name = counselor["cFirstName"]+" "+counselor["cLastName"];
+
+            let academics = await this.fetchAllNodesByTableInDatabase("academic");
+
+            academics.forEach(academic => {
+              if(academic["cID"] === counselor["cID"]) {
+                academicList.push({
+                  code: academic["acCode"]
+                })
+              }
+            })
+          }
+        })
+      } else if(appointment["aID"] === id && this.userInfo["type"] !== "Student") {
+        push = true;
+        let students = await this.fetchAllNodesByTableInDatabase("student");
+
+        students.forEach(async student => {
+          if(appointment["sID"] === student["sID"]) {
+            picture = student["sPicture"];
+            name = student["sFirstName"]+" "+student["sLastName"];
+
+            let academics = await this.fetchAllNodesByTableInDatabase("academic");
+
+            academics.forEach(academic => {
+              if(academic["acID"] === student["acID"]) {
+                academicList.push({
+                  code: academic["acCode"]
+                })
+              }
+            })
+          }
+        })
+      }
+
+      if(await push) {
+        let schedule = this.convertDate(appointment["aSchedule"]);
+        
+        concerns.forEach(concern => {
+          if(concern["coID"] === appointment["coID"])
+            coName = concern["coName"];
+        });
+        let venue;
+        let academics = await this.fetchAllNodesByTableInDatabase("academic");
+        academics.forEach(academic => {
+          if(appointment["acID"] === academic["acID"]) venue = academic["acName"];
+        })
+
+        appointmentInfo.push({
+          id: appointment["aID"],
+          picture: picture,
+          name: name,
+          academic: academicList,
+          schedule: schedule,
+          description: appointment["aDescription"],
+          venue: venue,
+          concern: coName,
+          sID: appointment["sID"],
+          cID: appointment["cID"]
+        })
+      }
+    })
+
+    return await appointmentInfo;
+  }
+
   async addAppointment(appointment) {
     console.log("Setting Appointment");
 
     this.fireDatabase.list('/appointment').push(appointment);
-    await this.addNotification(appointment, "Add");
     return true;
+  }
+
+  async appointmentConfirmation(id) {
+    let ref = this.fireDatabase.list("appointment");
+
+    ref.snapshotChanges(['child_added']).subscribe(appointments => {
+      let keys = Object.keys(appointments);
+
+      for(let i = 0; i < keys.length; i++) {
+        let count = keys[i];
+
+        if(appointments[count].payload.val().aID === id) {
+          let appointment = appointments[count].payload.val();
+          
+          ref.update(appointments[count].key, { 
+            aStatus: "Accepted"
+          }).then(()=> {
+            console.log("Confirmed!");
+          });
+        }
+      }
+    }, error => console.log(error));
+  }
+
+  async fetchAppointment(id) {
+    let appointments = await this.fetchAllNodesByTableInDatabase("appointment");
+    let appointmentInfo = [];
+
+    appointments.forEach(appointment => {
+      if(appointment["aID"] === id) {
+        console.log("FOUND!");
+        appointmentInfo.push({
+          id: appointment["aID"],
+          schedule: appointment["aSchedule"],
+          sID: appointment["sID"],
+          cID: appointment["cID"]
+        });
+      }
+    })
+
+    console.log("Appointment Details: ", appointmentInfo);
+    return await appointmentInfo;
   }
 
   async rescheduleAppointment(id, schedule, venue) {
@@ -1221,7 +1373,6 @@ export class DatabaseProvider {
             aVenue: venue
           }).then(()=> {
             console.log("Rescheduled!");
-            this.addNotification(appointment, "Reschedule")
           });
         }
       }
@@ -1229,178 +1380,105 @@ export class DatabaseProvider {
   }
 
   /*********************/
-  /***** N O T I F *****/
+  /****** C H A T ******/
   /*********************/
-  async fetchNotification(id, type, notifications){
-    let notificationList = [];
-    console.log("Type: ", type);
-    let appointments = await this.fetchAllNodesByTableInDatabase("appointment");
+  async fetchRecipient(person, accounts) {
+    let recipient = [];
+    console.log("Person: ", person);
+    console.log("Accounts: ", accounts);
+    accounts.forEach(account => {
+      let name;
 
-    notifications.forEach( notification => {
-      appointments.forEach( async appointment => {
-        if(notification["aID"] === appointment["aID"]){
-          let push = false;
-          let name, picture;
-          if(notification["nType"] === "Student" && type === "Student"){
-            console.log("Type Student");
-            if(appointment["sID"] === id) {
-              push = true;
-              const counselors = await this.fetchAllNodesByTableInDatabase("counselor");
-
-              counselors.forEach(counselor =>{
-                if(appointment["cID"] === counselor["cID"]){
-                  name = counselor["cFirstName"] + " " + counselor["cLastName"];
-                  picture = counselor["cPicture"];
-                }
-              })
-            }
-          } 
-          if(notification["nType"] === "Counselor" && type !== "Student"){
-            if(appointment["cID"] === id) {
-              console.log("Type Counselor");
-              push = true;
-              const students = await this.fetchAllNodesByTableInDatabase("student");
-
-              students.forEach(student =>{
-                if(appointment["sID"] === student["sID"]){
-                  name = student["sFirstName"] + " " + student["sLastName"];
-                  picture = student["sPicture"];
-                }
-              })
-            }
-          }
-
-          if(push) {
-            notificationList.push({
-              id: notification["nID"],
-              name: name,
-              picture: picture,
-              description: notification["nDescription"],
-              datetime: notification["nDatetime"]
-            })
-          }
+      if(this.userInfo["type"] === "Student") {
+        if(account["cID"] === person["id"]) {
+          name = account["cFirstName"] + " " + account["cLastName"];
+          recipient.push({
+            id: account["cID"],
+            picture: account["cPicture"],
+            name: name
+          })
         }
-      })
+      } else {
+        if(account["sID"] === person["id"]) {
+          name = account["sFirstName"] + " " + account["sLastName"];
+          recipient.push({
+            id: account["sID"],
+            picture: account["sPicture"],
+            name: name
+          })
+        }
+      }
     })
 
-    await notificationList.reverse();
-    console.log("Notification: ", await notificationList);
+    console.log("Recipient Info: ", recipient);
 
-    return await notificationList;
+    return recipient[0];
   }
 
-  async addNotification(appointment, type) {
+  async fetchMessages(recipientID, messages) {
+    let messageList = [];
+
+    messages.forEach(message => {
+      //Message filter here...
+      if(this.userInfo["type"] === "Student") {
+        if(message["sID"] === this.userInfo["id"] && message["cID"] === recipientID) {
+          let account, type;
+          if(this.userInfo["type"] === "Student")  account = "Student" 
+          else account ="Counselor"
+
+          if(message["mType"] === account) {
+            type = "Sender";
+          } else {
+            type = "Recipient"
+          }
+
+          messageList.push({
+            id: message["mID"],
+            message: message["mDescription"],
+            datetime: message["mDatetime"],
+            type: type
+          })
+        }
+      } else {
+        if(message["cID"] === this.userInfo["id"] && message["sID"] === recipientID) {
+          
+          messageList.push({
+            id: message["mID"],
+            message: message["mDescription"],
+            datetime: message["mDatetime"],
+            type: message["mType"]
+          })
+        }
+      }
+    })
+
+    return await messageList;
+  }
+
+  async addMessage(counselor, student, message) {
     let numeric = Math.random().toString().replace('0.', '').substring(0,2);
     let timestamp = new Date().getTime().toString().substring(5, 13);
-    let id = numeric+timestamp;
+    const id = numeric+timestamp;
+    console.log(timestamp+" ? "+numeric);
 
-    let description, table;
+    let type, datetime = new Date(moment().format());
 
-    if(type === "Add") {
-      if(appointment["aStatus"] === "Pending") {
-        description = "Request for appointment!";
-        table = "Counselor";
-      }
-      else if (appointment["aStatus"] === "Accepted") {
-        description = "You have a new appointment!";
-        table = "Student";
-      }
-    } else if (type === "Reschedule") {
-      description = "Appointment Rescheduled!";
-      table = "Student";
-    } else if (type === "Confirm") {
-      description = "Appointment Confirmed!"
-      table = "Student";
-    } else if (type === "Finished") {
-      description = "Appoinemnt Finished!";
-      table = "Student";
+    if(this.userInfo["type"] === "Student") {
+      type = "Student";
+    } else {
+      type = "Counselor"
     }
 
-    let today = moment().format()
-    let datetime = new Date(today);
-
-    this.fireDatabase.list('/notification').push({
-      nID: parseInt(id),
-      nDescription: description,
-      nType: table,
-      nDatetime: datetime.toString(),
-      aID: appointment["aID"]
-    }).then(() => console.log("Success!"));
+    this.fireDatabase.list('/message').push({
+      mID: parseInt(id),
+      mDescription: message,
+      mType: type,
+      mDatetime: datetime.toString(),
+      sID: student,
+      cID: counselor
+    })
 
     return;
-  }
-
-  async fetchNotificationInfo(id, appointments) {
-    let notificationInfo = [];
-    let notifications = await this.fetchAllNodesByTableInDatabase("notification");
-    let academics = await this.fetchAllNodesByTableInDatabase("academic");
-
-    notifications.forEach(notif => {
-      if(id === notif["nID"]) {
-        appointments.forEach(async appointment => {
-          if(notif["aID"] === appointment["aID"]) {
-            let name, picture, academicList = [], concernName;
-
-            if(notif["nType"] === "Counselor") {
-              let students = await this.fetchAllNodesByTableInDatabase("student");
-
-              students.forEach(student => {
-                if(appointment["sID"] === student["sID"]) {
-                  name = student["sFirstName"]+" "+student["sLastName"];
-                  picture = student["sPicture"];
-
-                  academics.forEach(unit => {
-                    if(student["acID"] === unit["acID"]) academicList.push(unit)
-                  })
-                }
-              })
-
-              let concerns = await this.fetchAllNodesByTableInDatabase("concern");
-              concerns.forEach(concern => {
-                if(appointment["coID"] === concern["coID"]) concernName = concern["coName"];
-              });
-            } else {
-              let counselors = await this.fetchAllNodesByTableInDatabase("counselor");
-
-              counselors.forEach(counselor => {
-                if(appointment["cID"] === counselor["cID"]) {
-                  name = counselor["cFirstName"]+" "+counselor["cLastName"];
-                  picture = counselor["cPicture"];
-
-                  academics.forEach(unit => {
-                    if(counselor["cID"] === unit["cID"]) academicList.push(unit)
-                  })
-
-                  concernName = "None";
-                }
-              })
-            }
-
-           
-
-            
-           
-
-            let schedule = this.convertDate(appointment["aSchedule"]);
-
-            await notificationInfo.push({
-              id: notif["nID"],
-              name: name,
-              picture: picture,
-              schedule: schedule,
-              description: appointment["aDescription"],
-              venue: appointment["aVenue"],
-              concern: concernName,
-              academic: academicList,
-              aID: notif["aID"]
-            });
-          }
-        })
-      }
-    })
-    console.log("Notification: ", notificationInfo);
-
-    return notificationInfo;
   }
 
   /*********************/

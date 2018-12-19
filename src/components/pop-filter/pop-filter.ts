@@ -73,6 +73,7 @@ export class PopFilterComponent {
 
 
       this.academicList.sort(function(a,b) {
+        console.log(a, " ? ", b);
         if(a.code < b.code) { return -1; }
         if(a.code > b.code) { return 1; }
         return 0;

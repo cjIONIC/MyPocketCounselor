@@ -18,7 +18,7 @@
   <ion-list>
     <div class="profile">
         <div class="imageFooter"><button class="upload" (click)="changeProfilePic()"><ion-icon name="camera"></ion-icon></button></div>
-        <div *ngIf="!profilePic" class="avatar"></div>
+        <div *ngIf="!profilePic" class="noprofile"><ion-icon name="person" class="person"></ion-icon></div>
         <div *ngIf="profilePic" ><img src="{{ profilePic }}" class="avatar"></div>
       
     </div>
@@ -35,7 +35,7 @@
 
     <ion-item>
       <ion-label color="primary" floating> Username </ion-label>
-      <ion-input type="text" [(ngModel)]="username"></ion-input>
+      <ion-input type="text" [(ngModel)]="username" readonly></ion-input>
     </ion-item>
 
     <ion-item>

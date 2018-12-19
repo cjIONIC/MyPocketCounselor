@@ -11,7 +11,7 @@
   
 </ion-header>
   <ion-content class="content">
-      <div *ngFor="let details of appointmentInfo" class="profile">
+      <div *ngFor="let details of notificationInfo" class="profile">
         <ion-grid>
           <ion-row>
             <ion-col col-3>
@@ -23,7 +23,7 @@
               </ion-row>
               <ion-row class="academic">
                   <div *ngFor="let units of details.academic">
-                      <div class="academicCounselor">{{units.acCode}}</div>
+                      <div class="academicCounselor">{{units.code}}</div>
                     </div>
               </ion-row>
             </ion-col>
@@ -35,10 +35,10 @@
           <ion-row class="description">{{details.description}}</ion-row>
           <ion-row class="buttons" *ngIf="userInfo['type'] !== 'Student'">
               <ion-col>
-                  <button ion-button class="reschedule" clear>Reschedule</button>
+                  <button ion-button class="reschedule" clear (click)="reschedule()">Reschedule</button>
               </ion-col>
               <ion-col>
-                  <button ion-button class="accept" clear>Accept</button>
+                  <button ion-button class="accept" (click)="accept()" clear>Accept</button>
               </ion-col>
             </ion-row>
         </ion-grid>

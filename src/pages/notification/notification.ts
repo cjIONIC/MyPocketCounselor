@@ -82,16 +82,19 @@ export class NotificationPage {
   }
 
   fetchNotification() {
-    this.fireDatabase.list<Item>("notification")
-      .valueChanges().subscribe(async notification => {
-        this.notificationList = await this.db.fetchNotification(this.userInfo["id"], this.userInfo["type"], notification);
-        console.log("Notifications, ", await this.notificationList);
+    this.fireDatabase.list<Item>("appointment")
+      .valueChanges().subscribe(async appointment => {
+        console.log('%c Fetching Notifications','color: white; background: red; font-size: 16px');
+        this.notificationList = await this.db.fetchAppointmentsForNotification(appointment);
+        this.notificationList.reverse();
+        console.log("Notifications: ", await this.notificationList);
       }, error => console.log("Error!"));
   }
 
   openNotification(notification) {
     try {
       let id = notification.id;
+      console.log("Notification ID: ", id);
       if(this.userInfo["type"] !== "Student"){
         const modal = this.modalCtrl.create(ModalNotificationComponent,  { id: id},{ cssClass: 'custom-modal-notification-counselor' });
         modal.present();

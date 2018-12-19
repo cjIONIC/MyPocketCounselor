@@ -139,7 +139,7 @@ export class AddApointmentPage {
     //Fetches the name and information from the modal
     modal.onDidDismiss( result => {
       this.recipient = result;
-      this.fetchVenues(this.recipient["id"]);
+      if(this.userInfo["type"] === "Student") this.fetchVenues(this.recipient["id"]);
       console.log("Person: ", this.recipient)
     });
   }
@@ -229,11 +229,11 @@ export class AddApointmentPage {
       "aSchedule": schedule.toString(),
       "aSemester": semester,
       "aStatus": status,
-      "aVenue": this.venue,
       "aDatetime": date.toString(),
       "sID": student,
       "cID": counselor,
-      "coID": this.concern
+      "coID": this.concern,
+      "acID": parseInt(this.venue)
     })
 
 
@@ -245,7 +245,7 @@ export class AddApointmentPage {
     let list = this.fireDatabase.list<Item>('appointment');
     let item = list.valueChanges();
 
-    const found = new Promise((resolve) => {
+    let found = new Promise((resolve) => {
       item.subscribe( appointments => {
         let keys = Object.keys(appointments);
   
@@ -276,7 +276,7 @@ export class AddApointmentPage {
     let list = this.fireDatabase.list<Item>('appointment');
     let item = list.valueChanges();
 
-    const found = new Promise((resolve) => {
+    let found = new Promise((resolve) => {
       item.subscribe( appointments => {
         let keys = Object.keys(appointments);
   

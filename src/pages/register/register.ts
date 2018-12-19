@@ -46,8 +46,16 @@ export class RegisterPage {
     private loadingCtrl: LoadingController,
     private camera: Camera) {
 
+  }
+
+  initialize() {
+    try {
       this.googleInfo = this.navParams.get('user');
+      this.username = this.googleInfo["email"];
       this.fetchAllAcademics();
+    } catch {
+
+    }
   }
 
   changeProfilePic() {

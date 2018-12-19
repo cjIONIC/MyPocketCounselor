@@ -1,21 +1,27 @@
 import { Component } from '@angular/core';
-import { NavParams, NavController, App, Item, ToastController, ViewController } from 'ionic-angular';
-import { AngularFireDatabase } from 'angularfire2/database';
+import { IonicPage, NavController, NavParams, ToastController, ModalController, Item, App, Toast } from 'ionic-angular';
+import { ModalProfileComponent } from '../../components/modal-profile/modal-profile';
 import { DatabaseProvider } from '../../providers/database/database';
+import { AngularFireDatabase } from 'angularfire2/database';
 import { Network} from '@ionic-native/network';
 import { Subscription } from 'rxjs/Subscription';
+import { ChatMessagePage } from '../chat-message/chat-message';
 
 /**
- * Generated class for the ModalSearchComponent component.
+ * Generated class for the ChatPeopleListPage page.
  *
- * See https://angular.io/api/core/Component for more info on Angular
- * Components.
+ * See https://ionicframework.com/docs/components/#navigation for more info on
+ * Ionic pages and navigation.
  */
+
+@IonicPage()
 @Component({
-  selector: 'modal-search',
-  templateUrl: 'modal-search.html'
+  selector: 'page-chat-people-list',
+  templateUrl: 'chat-people-list.html',
 })
-export class ModalSearchComponent {
+export class ChatPeopleListPage {
+
+ 
 
   connected: Subscription;
   disconnected: Subscription;
@@ -24,15 +30,15 @@ export class ModalSearchComponent {
   completePeopleList = []; //Handles all people
   peopleList = []; //Modifiable List
 
-  constructor(public navCtrl: NavController, 
-    public fireDatabase: AngularFireDatabase,
-    public navParams: NavParams,
-    public network: Network,
-    public toastCtrl: ToastController,
-    public db: DatabaseProvider,
-    public app: App,
-    public viewCtrl: ViewController) {
 
+  constructor(public navCtrl: NavController, 
+    private fireDatabase: AngularFireDatabase,
+    public network: Network,
+    public navParams: NavParams,
+    public toastCtrl: ToastController,
+    public modalCtrl: ModalController,
+    private db: DatabaseProvider,
+    public app: App) {
       this.initialize();
   }
 
@@ -42,20 +48,6 @@ export class ModalSearchComponent {
     } catch {
 
     }
-  }
-
-  presentToast(description) {
-    let toast = this.toastCtrl.create({
-      message: description,
-      duration: 3000,
-      position: 'bottom'
-    });
-  
-    toast.onDidDismiss(() => {
-      console.log('Dismissed toast');
-    });
-  
-    toast.present();
   }
   
   async getUserInfo() {
@@ -79,6 +71,20 @@ export class ModalSearchComponent {
         }, error => console.log(error))
 
     }, error => console.log(error))
+  }
+
+  presentToast(description) {
+    let toast = this.toastCtrl.create({
+      message: description,
+      duration: 3000,
+      position: 'bottom'
+    });
+  
+    toast.onDidDismiss(() => {
+      console.log('Dismissed toast');
+    });
+  
+    toast.present();
   }
 
   async fetchList() {
@@ -149,20 +155,17 @@ export class ModalSearchComponent {
     
   }
   
-  dismiss(person) {
+  profile(person) {
     try {
-      this.viewCtrl.dismiss(person);
+      console.log("Person: ", person);
+      this.app.getRootNav().push(ChatMessagePage, {person: person});
     } catch {
 
     }
   }
-
-  close() {
-    this.viewCtrl.dismiss("");
-  }
-
+  
   ionViewDidLoad() {
-    console.log('ionViewDidLoad SearchPage');
+    console.log('ionViewDidLoad ChatPeopleListPage');
   }
 
   ionViewWillLeave(){

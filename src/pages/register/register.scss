@@ -21,6 +21,23 @@ page-register {
         border: 1px solid rgb(179, 179, 179);
     }
 
+    .noprofile {
+        display: block;
+        padding: 5px;
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        color: rgb(179, 179, 179);
+        text-align: center;
+        border: 1px solid rgb(179, 179, 179);
+    }
+
+    .person {
+        display: block;
+        font-size: 103pt;
+        border-radius: 50%;
+    }
+
     .imageFooter {
         position: absolute;
         padding-top: 110px;
@@ -37,6 +54,7 @@ page-register {
         padding: 0%;
         color: white;
         background-color: #ff6961;
+        border: 2px solid white;
     }
     
     .button {

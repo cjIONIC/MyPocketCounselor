@@ -87,7 +87,7 @@ export class ModalRequestComponent {
           text: 'Continue',
           handler: () => {
             try {
-              this.db.rejectRequestStudent(this.profileInfo[0]).then(() => this.close());
+              this.db.rejectStudentRequest(this.profileInfo[0]).then(() => this.close());
             } catch {
               
             }
@@ -98,7 +98,7 @@ export class ModalRequestComponent {
     alert.present();
   }
 
-  accept() {
+  confirmAccpet() {
     let alert = this.alertCtrl.create({
       title: 'Confirm Accept',
       message: 'You are about to accept this request. This account will be added to the Student List.',
@@ -112,9 +112,9 @@ export class ModalRequestComponent {
         },
         {
           text: 'Continue',
-          handler: () => {
+          handler:  () => {
             try {
-              this.db.acceptRequestStudent(this.profileInfo[0]).then(() => this.close());
+             
             } catch {
               
             }
@@ -123,6 +123,62 @@ export class ModalRequestComponent {
       ]
     });
     alert.present();
+  }
+
+  async acceptRequest() {
+    let request = await this.inputs();
+    let found = await this.simultaneousVerification();
+    let id = this.profileInfo[0].id;
+    if(found)this.db.acceptStudentRequest(await request, id).then(() => this.close());
+  }
+
+  async inputs() {
+    let requestInput = [];
+    let numeric = Math.random().toString().replace('0.', '').substring(0,2);
+    let timestamp = new Date().getTime().toString().substring(5, 13);
+    let id = numeric+timestamp;
+    let requestID = this.profileInfo[0].id;
+
+    let registrations = await this.db.fetchAllNodesByTableInDatabase("registration");
+
+    registrations.forEach( request => {
+      if(request["rID"] === requestID) {
+        requestInput.push({
+          sID: parseInt(id),
+          sFirstName: request["rFirstName"],
+          sLastName: request["rLastName"],
+          sEmail: request["rEmail"],
+          sPicture: request["rPicture"],
+          sUsername: request["rUsername"],
+          sPassword: request["rPassword"],
+          sStatus: request["rStatus"],
+          acID: parseInt(request["acID"])
+        })
+      }
+    })
+
+    return requestInput;
+  }
+
+  async simultaneousVerification() {
+    let list = this.fireDatabase.list<Item>("student");
+    let item = list.valueChanges();
+
+    let found = await new Promise((resolve) => {
+      item.subscribe(students => {
+        let email = this.profileInfo[0].email;
+  
+        students.forEach(student => {
+          if(student["sEmail"] === email) {
+            resolve(true);
+          }
+        })
+
+        resolve(false)
+      });
+    })
+   
+    return await found;
   }
 
   close() {

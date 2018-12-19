@@ -54,14 +54,14 @@
     <ion-item *ngIf="userInfo['type'] !== 'Student'">
         <ion-label color="primary" floating>Venue</ion-label>
         <ion-select [(ngModel)]="venue">
-            <ion-option *ngFor="let place of venuesArray" value ="{{place.acName}}"> {{place.acName}}</ion-option>
+            <ion-option *ngFor="let place of venuesArray" value ="{{place.acID}}"> {{place.acName}}</ion-option>
         </ion-select>
     </ion-item>
 
     <ion-item *ngIf="userInfo['type'] === 'Student' && recipient">
         <ion-label color="primary" floating>Venue</ion-label>
         <ion-select [(ngModel)]="venue">
-            <ion-option *ngFor="let place of venuesArray" value ="{{place.acName}}"> {{place.acName}}</ion-option>
+            <ion-option *ngFor="let place of venuesArray" value ="{{place.acID}}"> {{place.acName}}</ion-option>
         </ion-select>
     </ion-item>
 

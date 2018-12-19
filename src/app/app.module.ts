@@ -57,6 +57,8 @@ import { ModalScheduleComponent } from '../components/modal-schedule/modal-sched
 import { RequestPage } from '../pages/request/request';
 import { ModalRequestComponent } from '../components/modal-request/modal-request';
 import { ModalNotificationComponent } from '../components/modal-notification/modal-notification';
+import { ChatPeopleListPage } from '../pages/chat-people-list/chat-people-list';
+import { ChatMessagePage } from '../pages/chat-message/chat-message';
 
 const firebaseConfig = {
   apiKey: "AIzaSyAVITAZa_qU9vSHq_ASeHJ1JGt3Sy8s8a0",
@@ -87,6 +89,8 @@ const firebaseConfig = {
     MenuPage,
     SearchPage,
     ChatPage,
+    ChatPeopleListPage,
+    ChatMessagePage,
     AddApointmentPage,
     AppointmentPage,
     PopScheduleComponent,
@@ -131,6 +135,8 @@ const firebaseConfig = {
     MenuPage,
     SearchPage,
     ChatPage,
+    ChatPeopleListPage,
+    ChatMessagePage,
     AddApointmentPage,
     PopScheduleComponent,
     ModalScheduleComponent,

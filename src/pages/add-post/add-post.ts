@@ -156,23 +156,15 @@ export class AddPostPage {
       sourceType: this.camera.PictureSourceType.PHOTOLIBRARY,
       saveToPhotoAlbum: false
     }
-
-    let loading = this.loadingCtrl.create({
-      spinner: 'ios',
-      content: 'Adding Post Please Wait...'
-    });
-
-    loading.present().then(() => {
+    
       this.camera.getPicture(options).then((imageData) => {
        // imageData is either a base64 encoded string or a file URI
        // If it's base64 (DATA_URL):
        
        this.image='data:image/jpeg;base64,' + imageData;
-       loading.dismiss();
       }, (err) => {
         console.log("Error: ", err);
       });
-    })
   }
 
   //Verification of inputs

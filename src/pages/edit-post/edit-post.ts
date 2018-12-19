@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ToastController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ToastController, LoadingController } from 'ionic-angular';
 import { DatabaseProvider } from '../../providers/database/database';
 import { Network} from '@ionic-native/network';
 import { Subscription } from 'rxjs/Subscription';
@@ -43,6 +43,7 @@ export class EditPostPage {
   constructor(public navCtrl: NavController, 
       public db: DatabaseProvider,
       public navParams: NavParams,
+      public loadingCtrl: LoadingController,
       public network: Network,
       public toastCtrl: ToastController,
       private camera: Camera) {
@@ -155,15 +156,21 @@ export class EditPostPage {
 
   updatePost() {
     console.log('%c Updating Post','color: black; background: yellow; font-size: 16px');
-    
+    let loading = this.loadingCtrl.create({
+      spinner: 'ios',
+      content: 'Updating Post Please Wait...'
+    });
 
     let id = this.post["id"];
     console.log("Post ID: ", id);
+
+    loading.present().then(() => {
       this.db.updatePost(id, this.title, this.location,this.startDatetime,
                   this.endDatetime, this.description, this.image, this.changedPhoto).then(() => {   
                   let currentIndex = this.navCtrl.getActive().index;
                   this.navCtrl.remove(currentIndex);
       });
+    });
   }
   
   removePic() {

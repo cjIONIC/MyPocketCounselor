@@ -61,20 +61,25 @@ export class ModalScheduleComponent {
 
   async initialize(appointment) {
     try{ 
-      this.appointment = await this.db.fetchAppointmentDetails(appointment["id"]);
-      console.log("Fetched appointment: ", this.appointment);
-      this.student = await this.appointment["studentName"];
-      this.venue = await this.appointment["venue"];
-      this.date = moment().format();
-      this.time = moment().format();
 
-      let schedule = await new Date(this.appointment["schedule"]);
-      let timezone = await schedule.getTimezoneOffset() * 60000;
-      let datetime = await  new Date(schedule.getTime() - timezone).toISOString().slice(0, -1);
-      this.date =  moment(datetime).format();
-      this.time =  moment(datetime).format();
-  
-      this.fetchVenue()
+      this.fireDatabase.list<Item>("appointment")
+        .valueChanges().subscribe( async appointments => {
+
+          this.appointment = await this.db.filterAppointmentDetails(appointment["id"], appointments);
+          console.log("Fetched appointment: ", this.appointment);
+          this.student = await this.appointment["studentName"];
+          this.venue = await this.appointment["venue"];
+          this.date = moment().format();
+          this.time = moment().format();
+    
+          let schedule = await new Date(this.appointment["schedule"]);
+          let timezone = await schedule.getTimezoneOffset() * 60000;
+          let datetime = await  new Date(schedule.getTime() - timezone).toISOString().slice(0, -1);
+          this.date =  moment(datetime).format();
+          this.time =  moment(datetime).format();
+      
+          this.fetchVenue()
+        })
     } catch {
       console.log("Error");
     }

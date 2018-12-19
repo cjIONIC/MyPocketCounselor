@@ -1,0 +1,83 @@
+page-chat-people-list {
+    //Hides the Scrollbar
+    ::-webkit-scrollbar{
+        display:none;
+    }
+    .searchbar-search-icon { display:none; width:0; height:0; padding: 0; }
+
+    .searchbar-input {
+        padding-left: 10px !important;
+        font-size: 15pt !important;
+      }
+   
+      .row {
+        width: 100%;
+    }
+    
+    .content {
+        background-color: #EFF0F1;
+        align-content: center;
+    }
+
+    .people {
+        background-color: #EFF0F1;
+        align-content: center;
+        padding: 0%;
+    }
+
+    .btn {
+        text-align: left;
+        margin: 0px;
+    }
+
+    .profile:active,
+    .profile {
+        padding: 0px !important;
+        width: 100%;
+        margin: 0px !important;
+    }
+
+    .profile:active {
+        background-color: rgb(247, 247, 247);
+    }
+
+    .grid {
+        margin: 0px !important;
+        width: 100%;
+    }
+
+    .contact {
+        margin: 0%;
+    }
+
+    .profileLeft {
+        margin: 0%;
+        padding: 0%;
+    }
+
+    .profileRight {
+        padding-top: 9px; 
+    }
+
+    .avatar {
+        margin: 3px auto;
+        width: 35px;
+        height: 35px;
+        border-radius: 50%;
+        border: 1px solid rgb(179, 179, 179);
+    }
+
+    .name {
+        text-align: left;
+        font-size: 12pt;
+        color: black;
+    }
+
+    .status {
+        width: 100%;
+        font-size: 12pt;
+        text-align: center;
+        padding: 10px;
+        color: darkgray;
+    }
+}

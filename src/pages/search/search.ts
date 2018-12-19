@@ -101,6 +101,13 @@ export class SearchPage {
     item.subscribe( async students => {
       console.log('%c Fetching Students...','color: white; background: green; font-size: 16px');
       let tempArray = await this.db.fetchListStudent(students, filter, unit);
+      tempArray.sort(function(a,b) {
+        console.log(a, " ? ", b);
+        if(a.name < b.name) { return -1; }
+        if(a.name > b.name) { return 1; }
+        return 0;
+      });
+      
       if(!filter) this.completePeopleList = tempArray;
       this.peopleList = tempArray;
     }, error => console.log(error));
@@ -113,6 +120,13 @@ export class SearchPage {
     item.subscribe( async counselors => {
       console.log('%c Fetching Students...','color: white; background: green; font-size: 16px');
       let tempArray = await this.db.fetchListCounselor(counselors, filter, unit);
+      tempArray.sort(function(a,b) {
+        console.log(a, " ? ", b);
+        if(a.name < b.name) { return -1; }
+        if(a.name > b.name) { return 1; }
+        return 0;
+      });
+      
       if(!filter) this.completePeopleList = tempArray;
       this.peopleList = tempArray;
     }, error => console.log(error));
