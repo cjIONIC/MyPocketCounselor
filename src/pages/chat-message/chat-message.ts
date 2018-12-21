@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { Component, ViewChild } from '@angular/core';
+import { IonicPage, NavController, NavParams, Content } from 'ionic-angular';
 import { initializeApp } from 'firebase';
 import { AngularFireDatabase } from 'angularfire2/database';
 import { Item } from 'klaw';
@@ -19,13 +19,15 @@ import { DatabaseProvider } from '../../providers/database/database';
 })
 export class ChatMessagePage {
 
+  scroll = false;
+
   recipient = [];
   userInfo = [];
 
   messageList = [];
   message:any;
 
-  content: any;
+  @ViewChild(Content) content: Content;
 
   constructor(public navCtrl: NavController, 
     public fireDatabase: AngularFireDatabase,
@@ -82,6 +84,7 @@ export class ChatMessagePage {
 
     item.subscribe(async accounts => {
       this.recipient = await this.db.fetchRecipient(this.recipient, accounts);
+      console.log("Fetched Recipient: ", this.recipient);
     })
   }
 
@@ -93,7 +96,19 @@ export class ChatMessagePage {
     item.subscribe(async messages => {
       this.messageList = await this.db.fetchMessages(this.recipient["id"], messages);
       console.log("Messages: ", this.messageList);
+      //this.scrollChat();
     }, error => console.log("Error"));
+  }
+
+  scrollChat() {
+    if(!this.scroll) {
+      setTimeout(() => {
+        this.content.scrollToBottom(0);
+        }, 100);
+      this.scroll = true;
+    }
+   
+   //this.content.scrollToBottom(0);
   }
 
   sendMessage() {
@@ -109,11 +124,10 @@ export class ChatMessagePage {
     }
 
     this.db.addMessage(counselor, student, this.message)
-      .then(() => this.message = null)
-  }
-
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad ChatMessagePage');
+      .then(() => {
+        this.message = null;
+        this.scroll = false;
+      })
   }
 
 }

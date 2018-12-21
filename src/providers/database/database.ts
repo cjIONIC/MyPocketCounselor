@@ -1418,7 +1418,7 @@ export class DatabaseProvider {
   async fetchMessages(recipientID, messages) {
     let messageList = [];
 
-    messages.forEach(message => {
+    messages.forEach(async message => {
       //Message filter here...
       if(this.userInfo["type"] === "Student") {
         if(message["sID"] === this.userInfo["id"] && message["cID"] === recipientID) {
@@ -1431,21 +1431,24 @@ export class DatabaseProvider {
           } else {
             type = "Recipient"
           }
+          let date = await this.convertMessageDate(message["mDatetime"]);
 
           messageList.push({
             id: message["mID"],
             message: message["mDescription"],
-            datetime: message["mDatetime"],
+            datetime: date,
             type: type
           })
         }
       } else {
         if(message["cID"] === this.userInfo["id"] && message["sID"] === recipientID) {
           
+          let date = await this.convertMessageDate(message["mDatetime"]);
+
           messageList.push({
             id: message["mID"],
             message: message["mDescription"],
-            datetime: message["mDatetime"],
+            datetime: date,
             type: message["mType"]
           })
         }
@@ -1453,6 +1456,27 @@ export class DatabaseProvider {
     })
 
     return await messageList;
+  }
+
+  async convertMessageDate(messageDatetime) {
+    let datetime = await new Date(moment(messageDatetime).format());
+    let hour = datetime.getHours();
+    let minute = datetime.getMinutes();
+
+    let minuteString = (minute < 10 ? '0':'') + minute;
+      let meridian;
+      if(hour < 12) meridian = "AM";
+      if(hour >= 12) {
+        meridian = "PM";
+        hour = hour - 12;
+      }
+      if(hour === 24 || hour === 0) hour = 12;
+
+      let hourString = (hour < 10 ? '0':'')+hour;
+
+      let time = hourString+":"+minuteString+" "+meridian;
+
+    return await time;
   }
 
   async addMessage(counselor, student, message) {

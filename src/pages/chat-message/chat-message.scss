@@ -1,5 +1,39 @@
 page-chat-message {
 
+    .toolbar {
+        margin: 0%;
+        padding: 0%;
+    }
+
+    .row {
+        width: 100%;
+        padding: 0%;
+    }
+
+    [col-2], [col-10] {
+        padding: 0%;
+    }
+
+    .name {
+        padding-top: 14px;
+        margin-left: 5px;
+        font-size: 15pt;
+        color: white;
+    }
+
+    .avatar {
+        margin: 3px auto;
+        width: 35px;
+        height: 35px;
+        border-radius: 50%;
+        border: 1px solid rgb(235, 235, 235);
+    }
+
+    .name {
+    }
+
+    
+
     .content {
         background-color: #EFF0F1;
         align-content: center;
@@ -9,18 +43,23 @@ page-chat-message {
     .item {
         display: inline-block;
         width: 100%;
-        font-size: 12pt;
+    }
+
+    .itemSender {
+        display: inline-block;
+        width: 100%;
+        text-align: end;
     }
 
     .recipient {
-        width: 70%;
+        width: 60%;
         margin: 10px;
     }
 
     .sender {
         margin: 10px;
         margin-left: auto;
-        width: 70%;
+        width: 60%;
     }
 
     .messageRecipient {
@@ -41,9 +80,16 @@ page-chat-message {
 
     .description {
         text-align: left;
+        font-size: 12pt;
+    }
+
+    .time {
+        font-size: 10pt;
+        padding: 0px 5px;
     }
 
     .message {
+        margin-left: 5px;
         font-size: 12pt;
         border: 1px solid gray;
         border-radius: 50px;
@@ -58,5 +104,6 @@ page-chat-message {
     .send {
         color: #ff6961;
         padding-left: 10px;
+        margin-right: 5px;
     }
 }
