@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, App } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, App, Item } from 'ionic-angular';
 import { ChatPeopleListPage } from '../chat-people-list/chat-people-list';
+import { AngularFireDatabase } from 'angularfire2/database';
+import { DatabaseProvider } from '../../providers/database/database';
+import { initializeApp } from 'firebase';
 
 /**
  * Generated class for the ChatPage page.
@@ -16,14 +19,38 @@ import { ChatPeopleListPage } from '../chat-people-list/chat-people-list';
 })
 export class ChatPage {
 
+  chatList = [];
+
   constructor(public navCtrl: NavController, 
     public navParams: NavParams,
+    public fireDatabase: AngularFireDatabase,
+    public db: DatabaseProvider,
     public app: App) {
+
+      this.initialize();
+  }
+
+  initialize() {
+    try {
+      this.fetchChats();
+    } catch {
+
+    }
   }
 
   addChat() {
     console.log("Adding Chat");
     this.app.getRootNav().push(ChatPeopleListPage);
+  }
+
+  fetchChats() {
+    let list = this.fireDatabase.list<Item>("message");
+    let item = list.valueChanges();
+
+    item.subscribe( async messages => {
+      this.chatList = await this.db.fetchChats(messages);
+      console.log("Chats: ", this.chatList);
+    })
   }
 
   ionViewDidLoad() {

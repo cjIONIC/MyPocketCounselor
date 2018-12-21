@@ -1382,6 +1382,112 @@ export class DatabaseProvider {
   /*********************/
   /****** C H A T ******/
   /*********************/
+  async fetchChats(messages1) {
+    let chatList = [];
+    let messages2 = messages1;
+    let counselors = await this.fetchAllNodesByTableInDatabase("counselor");
+    let students = await this.fetchAllNodesByTableInDatabase("student");
+
+    console.log("Chat List: ", chatList);
+    await messages1.forEach(async message1 => {
+      let duplicate = false;
+      let datetime, description, recipientName, recipientPicture, push = false;
+
+      if(this.userInfo["type"] === "Student") {
+
+        if(message1["sID"] === this.userInfo["id"]) {
+
+          chatList.forEach(chat => {
+            if(chat["cID"] === message1["cID"]) {
+              console.log("Duplicate!");
+              duplicate = true;
+            }
+          })
+
+          if(!duplicate) {
+            console.log("Pushing...");
+
+            messages2.forEach(async message2 => {
+              if(message2["cID"] === message1["cID"]) {
+                datetime = message2["mDatetime"];
+                description = message2["mDescription"];
+                console.log("Info: ", datetime, description);
+              }
+            })
+
+            counselors.forEach(counselor => {
+              if(counselor["cID"] === message1["cID"]) {
+                recipientName = counselor["cLastName"] +", "+ counselor["cFirstName"];
+                recipientPicture = counselor["cPicture"];
+              }
+            })
+
+            console.log("Pushed!");
+
+            let time = this.convertMessageDate(datetime);
+            chatList.push({
+              id: message1["mID"],
+              name: recipientName,
+              picture: recipientPicture,
+              description: description,
+              datetime: datetime,
+              time: time,
+              cID: message1["cID"]
+            })
+          }
+        }
+      } else { //Counselor or GTD Head
+        if(message1["cID"] === this.userInfo["id"]) {
+          
+          chatList.forEach(chat => {
+            if(chat["sID"] === message1["sID"]) {
+              console.log("Duplicate!");
+              duplicate = true;
+            }
+          })
+
+          if(!duplicate) {
+            console.log("Pushing...");
+
+            messages2.forEach(async message2 => {
+              if(message2["sID"] === message1["sID"]) {
+                datetime = message2["mDatetime"];
+                description = message2["mDescription"];
+              }
+            })
+
+            students.forEach(student => {
+              if(student["sID"] === message1["sID"]) {
+                recipientName = student["sLastName"] +", "+ student["sFirstName"];
+                recipientPicture = student["sPicture"];
+              }
+            })
+
+            console.log("Pushed!");
+
+            let time = this.convertMessageDate(datetime);
+            chatList.push({
+              id: message1["mID"],
+              name: recipientName,
+              picture: recipientPicture,
+              description: description,
+              datetime: datetime,
+              time: time,
+              sID: message1["sID"]
+            })
+          }
+        }
+      }
+    })
+
+    await chatList.sort(function(a,b) {
+      if(a.datetime < b.datetime) { return -1; }
+      if(a.datetime > b.datetime) { return 1; }
+      return 0;
+    });
+    return chatList;
+  }
+
   async fetchRecipient(person, accounts) {
     let recipient = [];
     console.log("Person: ", person);
@@ -1458,8 +1564,9 @@ export class DatabaseProvider {
     return await messageList;
   }
 
-  async convertMessageDate(messageDatetime) {
-    let datetime = await new Date(moment(messageDatetime).format());
+  convertMessageDate(messageDatetime) {
+    console.log("Datetime passed: ", messageDatetime);
+    let datetime = new Date(messageDatetime);
     let hour = datetime.getHours();
     let minute = datetime.getMinutes();
 
@@ -1476,7 +1583,8 @@ export class DatabaseProvider {
 
       let time = hourString+":"+minuteString+" "+meridian;
 
-    return await time;
+      console.log("Time to be returned: ", time);
+    return time;
   }
 
   async addMessage(counselor, student, message) {

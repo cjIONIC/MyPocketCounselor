@@ -19,5 +19,22 @@
 
 
 <ion-content class="content">
-  <ion-card></ion-card>
+  <ion-card *ngFor="let chat of chatList">
+    <ion-grid>
+      <ion-row>
+        <ion-col col-3>
+          <img src = "{{ chat.picture }}">
+        </ion-col>
+        <ion-col col-9>
+          <ion-row>
+            <ion-col col-8> {{ chat.name }} </ion-col>
+            <ion-col col-4> {{ chat.time }} </ion-col>
+          </ion-row>
+          <ion-row>
+            {{ chat.description }}
+          </ion-row>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-card>
 </ion-content>
