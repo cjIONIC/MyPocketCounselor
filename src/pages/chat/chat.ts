@@ -4,6 +4,7 @@ import { ChatPeopleListPage } from '../chat-people-list/chat-people-list';
 import { AngularFireDatabase } from 'angularfire2/database';
 import { DatabaseProvider } from '../../providers/database/database';
 import { initializeApp } from 'firebase';
+import moment from 'moment';
 
 /**
  * Generated class for the ChatPage page.
@@ -20,6 +21,7 @@ import { initializeApp } from 'firebase';
 export class ChatPage {
 
   chatList = [];
+  date = moment(new Date()).format("MM/DD/YY");
 
   constructor(public navCtrl: NavController, 
     public navParams: NavParams,

@@ -1405,12 +1405,14 @@ export class DatabaseProvider {
           })
 
           if(!duplicate) {
+            let studentTime: Date;
             console.log("Pushing...");
 
             messages2.forEach(async message2 => {
               if(message2["cID"] === message1["cID"]) {
-                datetime = message2["mDatetime"];
+                datetime = moment(new Date(message2["mDatetime"])).format("MM/DD/YY");
                 description = message2["mDescription"];
+                studentTime = new Date(message2["mDatetime"]);
                 console.log("Info: ", datetime, description);
               }
             })
@@ -1423,15 +1425,13 @@ export class DatabaseProvider {
             })
 
             console.log("Pushed!");
-
-            let time = this.convertMessageDate(datetime);
             chatList.push({
               id: message1["mID"],
               name: recipientName,
               picture: recipientPicture,
               description: description,
               datetime: datetime,
-              time: time,
+              time: studentTime.toString(),
               cID: message1["cID"]
             })
           }
@@ -1448,11 +1448,14 @@ export class DatabaseProvider {
 
           if(!duplicate) {
             console.log("Pushing...");
+            let counselorTime: Date;
 
             messages2.forEach(async message2 => {
               if(message2["sID"] === message1["sID"]) {
-                datetime = message2["mDatetime"];
+                datetime = moment(new Date(message2["mDatetime"])).format("MM/DD/YY");
                 description = message2["mDescription"];
+                counselorTime = new Date(message2["mDatetime"]);
+                console.log("Info: ", datetime, description);
               }
             })
 
@@ -1472,7 +1475,7 @@ export class DatabaseProvider {
               picture: recipientPicture,
               description: description,
               datetime: datetime,
-              time: time,
+              time: counselorTime.toString(),
               sID: message1["sID"]
             })
           }
@@ -1521,23 +1524,26 @@ export class DatabaseProvider {
     return recipient[0];
   }
 
-  async fetchMessages(recipientID, messages) {
+  fetchMessages(recipientID, messages) {
     let messageList = [];
+    let account;
+    if(this.userInfo["type"] === "Student")  account = "Student" 
+    else account ="Counselor"
 
-    messages.forEach(async message => {
+    messages.forEach( message => {
       //Message filter here...
+      let type;
+
       if(this.userInfo["type"] === "Student") {
         if(message["sID"] === this.userInfo["id"] && message["cID"] === recipientID) {
-          let account, type;
-          if(this.userInfo["type"] === "Student")  account = "Student" 
-          else account ="Counselor"
+          
 
           if(message["mType"] === account) {
             type = "Sender";
           } else {
             type = "Recipient"
           }
-          let date = await this.convertMessageDate(message["mDatetime"]);
+          let date = this.convertMessageDate(message["mDatetime"]);
 
           messageList.push({
             id: message["mID"],
@@ -1548,29 +1554,44 @@ export class DatabaseProvider {
         }
       } else {
         if(message["cID"] === this.userInfo["id"] && message["sID"] === recipientID) {
-          
-          let date = await this.convertMessageDate(message["mDatetime"]);
+          let type;
+          if(message["mType"] === account) {
+            type = "Sender";
+          } else {
+            type = "Recipient"
+          }
+
+          let date = this.convertMessageDate(message["mDatetime"]);
 
           messageList.push({
             id: message["mID"],
             message: message["mDescription"],
             datetime: date,
-            type: message["mType"]
+            type: type
           })
         }
       }
     })
 
-    return await messageList;
+    return messageList;
   }
 
   convertMessageDate(messageDatetime) {
     console.log("Datetime passed: ", messageDatetime);
     let datetime = new Date(messageDatetime);
+
+    
+
+    let month = datetime.getMonth();
+    let day = datetime.getDate();
+    let year = datetime.getFullYear();
     let hour = datetime.getHours();
     let minute = datetime.getMinutes();
 
+    let monthString = (month < 10 ? '0':'') + month;
+    let dayString = (day < 10 ? '0':'') + day;
     let minuteString = (minute < 10 ? '0':'') + minute;
+
       let meridian;
       if(hour < 12) meridian = "AM";
       if(hour >= 12) {
@@ -1582,9 +1603,9 @@ export class DatabaseProvider {
       let hourString = (hour < 10 ? '0':'')+hour;
 
       let time = hourString+":"+minuteString+" "+meridian;
+      let stringDate = monthString+"/"+day+"/"+year+" "+time;
 
-      console.log("Time to be returned: ", time);
-    return time;
+    return stringDate;
   }
 
   async addMessage(counselor, student, message) {
@@ -1722,10 +1743,6 @@ export class DatabaseProvider {
     this.currentDateMDY = month + " " + day + ", " + year;
 
     console.log("Current Date: ", this.currentDateMDYhmA);
-  }
-
-  async convertDateToString(datetime) {
-    return new Date(datetime).toLocaleString().replace(/:\d{2}\s/,' ');
   }
 
   findMonth(month) {

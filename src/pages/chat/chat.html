@@ -23,14 +23,15 @@
     <ion-grid>
       <ion-row>
         <ion-col col-3>
-          <img src = "{{ chat.picture }}">
+          <img src = "{{ chat.picture }}" class="avatar">
         </ion-col>
         <ion-col col-9>
           <ion-row>
-            <ion-col col-8> {{ chat.name }} </ion-col>
-            <ion-col col-4> {{ chat.time }} </ion-col>
+            <ion-col col-8 class="name"> {{ chat.name }} </ion-col>
+            <ion-col col-4 *ngIf="date !== chat.datetime" class="time"> {{ chat.time | date: 'hh:mm' }} </ion-col>
+            <ion-col col-4 *ngIf="date === chat.datetime" class="time"> {{ chat.time | date: 'LLL dd' }} </ion-col>
           </ion-row>
-          <ion-row>
+          <ion-row class="description">
             {{ chat.description }}
           </ion-row>
         </ion-col>
