@@ -12,21 +12,26 @@ import { DatabaseProvider } from '../../providers/database/database';
 import { Network} from '@ionic-native/network';
 import { Subscription } from 'rxjs/Subscription';
 
+/**
+ * Generated class for the AppointmentAddPage page.
+ *
+ * See https://ionicframework.com/docs/components/#navigation for more info on
+ * Ionic pages and navigation.
+ */
+
 @IonicPage()
 @Component({
-  selector: 'page-add-apointment',
-  templateUrl: 'add-apointment.html',
+  selector: 'page-appointment-add',
+  templateUrl: 'appointment-add.html',
 })
-export class AddApointmentPage {
-
+export class AppointmentAddPage {
   connected: Subscription;
   disconnected: Subscription;
 
-  description:any;
-  date:any;
-  time:any;
-  venue:any;
-  concern:any;
+  appointmentDetails: any;
+
+  dateDefault:any;
+  timeDefault:any;
   
   userInfo = [];
   recipient:any;
@@ -51,15 +56,14 @@ export class AddApointmentPage {
 
   async initializeSearch() {
     let date = this.navParams.get('date');
-    let recipient = this.navParams.get('recipient');
+    this.recipient = this.navParams.get('recipient');
 
-    if(recipient) this.recipient = recipient[0];
     console.log("Date passed: ", date);
 
     await this.fetchUserProfile();
 
-   this.date = moment(date).format();
-   this.time = moment().format();
+   this.dateDefault = moment(date).format();
+   this.timeDefault = moment().format();
 
   }
 
@@ -92,6 +96,10 @@ export class AddApointmentPage {
     })
   }
 
+  onSubmit(value) {
+    console.log("Value: ", value);
+  }
+
   presentToast(description) {
     let toast = this.toastCtrl.create({
       message: description,
@@ -113,9 +121,7 @@ export class AddApointmentPage {
           return result[key];
         });
       })
-    } else {
-      this.concern = "None";
-    }
+    } 
   }
 
   fetchVenues(id) {
@@ -144,52 +150,51 @@ export class AddApointmentPage {
     });
   }
 
-  verifyInputs() {
-    if (this.userInfo["type"] !== "Student")
-      if(!this.recipient || !this.date || !this.time || !this.description || !this.venue)
-      this.presentToast("Enter all fields!")
-      else this.addAppointment();
-    
-    if (this.userInfo["type"] === "Student")
-      if(!this.recipient || !this.date || !this.time || !this.description || !this.venue || !this.concern)
-      this.presentToast("Enter all fields!")
-      else this.addAppointment();
+  onAdd(details) {
+    this.appointmentDetails = details;
+    console.log("Values: ", this.appointmentDetails);
+    this.addAppointment();
   }
 
   async addAppointment() {
     console.log('%c Adding Appointment','color: white; background: red; font-size: 16px');
     let appointmentsOfCounselor, appointmentsOfStudent; //Variables used in checking
 
-    let datetime = moment(this.date).format("MMM DD YYYY") +" "+ moment(this.time).format("h:mm A");
+    let datetime = moment(this.appointmentDetails["date"]).format("MMM DD YYYY") +" "+ moment(this.appointmentDetails["time"]).format("h:mm A");
     const schedule = new Date(datetime) ;
     console.log("Schedule: ", await schedule);
     let appointmentInputs = await this.appointmentInputs(schedule);
     console.log("Inputs: ", appointmentInputs);
-    
-    try {
-      if(this.userInfo["type"] != "Student") {
-        console.log('%c Searching appointments for counselor','color: white; background: red; font-size: 16px');
-        appointmentsOfCounselor = await this.checkDuplicateForCounselor(this.userInfo["id"], schedule);
-        appointmentsOfStudent =  await this.checkDuplicateForStudent(this.recipient["id"], schedule);
-      } else {
-        console.log('%c Searching appointments for student','color: white; background: red; font-size: 16px');
-        appointmentsOfCounselor = await this.checkDuplicateForCounselor(this.recipient["id"], schedule);
-        appointmentsOfStudent =  await this.checkDuplicateForStudent(this.userInfo["id"], schedule);
-      }
 
-      console.log("Statusfinding: ", appointmentsOfCounselor, appointmentsOfStudent)
-      if(await appointmentsOfStudent && await appointmentsOfCounselor)
-        this.presentToast("Date and time has already been occupied!");
-      else {
-        await this.db.addAppointment(appointmentInputs[0]).then(() => {
-            //Dismiss page after successfully set the appointment
-            let currentIndex = this.navCtrl.getActive().index;
-            this.navCtrl.remove(currentIndex);
-          }).catch(err => console.log("Error: ", err));
-      }
-    } catch {
+    let timeout = Math.floor(Math.random() * 500) + 200;
 
-    }
+    setTimeout(async () => {
+      try {
+        if(this.userInfo["type"] != "Student") {
+          console.log('%c Searching appointments for counselor','color: white; background: red; font-size: 16px');
+          appointmentsOfCounselor = await this.checkDuplicateForCounselor(this.userInfo["id"], schedule);
+          appointmentsOfStudent =  await this.checkDuplicateForStudent(this.recipient["id"], schedule);
+        } else {
+          console.log('%c Searching appointments for student','color: white; background: red; font-size: 16px');
+          appointmentsOfCounselor = await this.checkDuplicateForCounselor(this.recipient["id"], schedule);
+          appointmentsOfStudent =  await this.checkDuplicateForStudent(this.userInfo["id"], schedule);
+        }
+  
+        console.log("Statusfinding: ", appointmentsOfCounselor, appointmentsOfStudent)
+        if(await appointmentsOfStudent && await appointmentsOfCounselor)
+          this.presentToast("Date and time has already been occupied!");
+        else {
+          await this.db.addAppointment(appointmentInputs[0]).then(() => {
+              //Dismiss page after successfully set the appointment
+              let currentIndex = this.navCtrl.getActive().index;
+              this.navCtrl.remove(currentIndex);
+            }).catch(err => console.log("Error: ", err));
+        }
+      } catch {
+  
+      }
+    }, timeout);
+   
   }
 
   appointmentInputs(schedule) {
@@ -204,14 +209,16 @@ export class AddApointmentPage {
     let timestamp = new Date().getTime().toString().substring(0,4);
     const id = numeric+timestamp;
 
+    let concern;
+
     if(this.userInfo["type"] != "Student") {
       student = this.recipient["id"];
       counselor = this.userInfo["id"];
-      this.concern = "None";
+      concern = "None";
     } else {
       student = this.userInfo["id"];
       counselor = this.recipient["id"];
-      this.concern = parseInt(this.concern);
+      concern = parseInt(this.appointmentDetails["concern"]);
     }
 
     //Identifies which semestral period the appointment is set
@@ -225,15 +232,15 @@ export class AddApointmentPage {
     
     appointmentInputs.push({
       "aID": parseInt(id),
-      "aDescription": this.description,
+      "aDescription": this.appointmentDetails["description"],
       "aSchedule": schedule.toString(),
       "aSemester": semester,
       "aStatus": status,
       "aDatetime": date.toString(),
       "sID": student,
       "cID": counselor,
-      "coID": this.concern,
-      "acID": parseInt(this.venue)
+      "coID": concern,
+      "acID": parseInt(this.appointmentDetails["venue"])
     })
 
 
@@ -303,7 +310,7 @@ export class AddApointmentPage {
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad AddApointmentPage');
+    console.log('ionViewDidLoad AppointmentAddPage');
   }
 
   ionViewWillLeave(){

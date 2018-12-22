@@ -38,6 +38,7 @@ export class ModalSearchComponent {
 
   async initialize() {
     try {
+
       await this.getUserInfo();
     } catch {
 
@@ -149,9 +150,9 @@ export class ModalSearchComponent {
     
   }
   
-  dismiss(person) {
+  dismiss(recipient) {
     try {
-      this.viewCtrl.dismiss(person);
+      this.viewCtrl.dismiss(recipient);
     } catch {
 
     }

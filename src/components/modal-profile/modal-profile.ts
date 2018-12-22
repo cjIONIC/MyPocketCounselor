@@ -3,7 +3,6 @@ import { IonicPage, NavController, NavParams, ModalController, ToastController, 
 import { DatabaseProvider } from '../../providers/database/database';
 import { AngularFireDatabase } from 'angularfire2/database';
 import { ModalStudentUpdateComponent } from '../../components/modal-student-update/modal-student-update';
-import { AddApointmentPage } from '../../pages/add-apointment/add-apointment';
 import { Network} from '@ionic-native/network';
 import { Subscription } from 'rxjs/Subscription';
 
@@ -15,7 +14,7 @@ import { Subscription } from 'rxjs/Subscription';
  */
 @Component({
   selector: 'modal-profile',
-  templateUrl: 'modal-profile.html'
+  templateUrl: 'modal-profile.html' 
 })
 export class ModalProfileComponent {
 
@@ -83,7 +82,7 @@ export class ModalProfileComponent {
     let dateToday = new Date();
     let recipient = this.profileInfo;
     this.viewCtrl.dismiss();
-    this.app.getRootNav().push(AddApointmentPage, { date: dateToday, recipient: recipient});
+    //this.app.getRootNav().push(AddApointmentPage, { date: dateToday, recipient: recipient});
 
   }
 

@@ -3,10 +3,10 @@ import { CommonModule } from '@angular/common';
 import { ErrorHandler, NgModule } from '@angular/core';
 import { IonicApp, IonicErrorHandler, IonicModule, Modal } from 'ionic-angular';
 import { SplashScreen } from '@ionic-native/splash-screen';
-import { StatusBar } from '@ionic-native/status-bar';
+import { StatusBar } from '@ionic-native/status-bar'; 
 import { CallNumber } from '@ionic-native/call-number';
 
-import { MyApp } from './app.component';
+import { MyApp } from './app.component'; 
 
 //Pages
 import { FeedPage } from '../pages/feed/feed';
@@ -28,7 +28,6 @@ import { AngularFireStorageModule } from 'angularfire2/storage';
 
 //Extra imports for Native Apps
 //import { Calendar } from '@ionic-native/calendar';
-import { AddApointmentPage } from '../pages/add-apointment/add-apointment';
 import { DatePicker } from '@ionic-native/date-picker'; 
 import { DatabaseProvider } from '../providers/database/database';
 
@@ -59,6 +58,10 @@ import { ModalRequestComponent } from '../components/modal-request/modal-request
 import { ModalNotificationComponent } from '../components/modal-notification/modal-notification';
 import { ChatPeopleListPage } from '../pages/chat-people-list/chat-people-list';
 import { ChatMessagePage } from '../pages/chat-message/chat-message';
+import { AppointmentAddPage } from '../pages/appointment-add/appointment-add';
+
+
+
 
 import { ReactiveFormsModule } from '@angular/forms';
 
@@ -70,6 +73,7 @@ const firebaseConfig = {
   storageBucket: "mpcapp-c01ec.appspot.com",
   messagingSenderId: "578845672664"
 };
+
 
 @NgModule({ 
   declarations: [
@@ -93,8 +97,8 @@ const firebaseConfig = {
     ChatPage,
     ChatPeopleListPage,
     ChatMessagePage,
-    AddApointmentPage,
     AppointmentPage,
+    AppointmentAddPage,
     PopScheduleComponent,
     ModalScheduleComponent,
     ModalSearchComponent,
@@ -140,11 +144,11 @@ const firebaseConfig = {
     ChatPage,
     ChatPeopleListPage,
     ChatMessagePage,
-    AddApointmentPage,
     PopScheduleComponent,
     ModalScheduleComponent,
     ModalSearchComponent,
     AppointmentPage,
+    AppointmentAddPage,
     TabPage
   ],
   providers: [

@@ -1,14 +1,15 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, AlertController, ToastController, Item, App, Toast, PopoverController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, AlertController, ToastController, Item, App, ModalOptions, ModalController , PopoverController } from 'ionic-angular';
 import { DatabaseProvider } from '../../providers/database/database';
 import { AngularFireDatabase } from 'angularfire2/database';
-import { AddApointmentPage } from '../add-apointment/add-apointment';
 import { Subscription } from 'rxjs/Subscription';
 
 import { Network} from '@ionic-native/network';
 import { PopScheduleComponent } from '../../components/pop-schedule/pop-schedule';
 import moment from 'moment';
+import { ModalSearchComponent } from '../../components/modal-search/modal-search';
 
+import { AppointmentAddPage } from '../../pages/appointment-add/appointment-add'
 /**
  * Generated class for the AppointmentPage page.
  *
@@ -55,6 +56,7 @@ export class AppointmentPage {
     public toastCtrl: ToastController,
     public popoverCtrl: PopoverController,
     public network: Network,
+    public modalCtrl: ModalController,
     public db: DatabaseProvider,
     public navParams: NavParams,
     private app: App) {
@@ -253,10 +255,20 @@ export class AppointmentPage {
   }
 
   addAppointment() {
-    let time = moment().format("h:mm A")
+    const modalOptions: ModalOptions = {
+      enableBackdropDismiss: false
+    }
     let datetime = moment(this.selectedDay).format("MMM DD YYYY") +" "+ moment().format("h:mm A");
     console.log("Date to be passed: ", datetime);
-    this.app.getRootNav().push(AddApointmentPage, { date: datetime});
+    
+    const modal = this.modalCtrl.create(ModalSearchComponent, { date: datetime}, modalOptions);
+    modal.present();
+
+    //Fetches the name and information from the modal
+    modal.onDidDismiss( recipient => {
+      
+    this.app.getRootNav().push(AppointmentAddPage, {date: datetime, recipient: recipient});
+    });
   }
 
   popOptions(myEvent, appointment) {

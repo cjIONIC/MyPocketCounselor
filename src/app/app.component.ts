@@ -28,7 +28,7 @@ export class MyApp {
       statusBar.styleDefault();
       splashScreen.hide();
 
-      this.getUserProfile();
+       this.getUserProfile();
     });
   }
   
