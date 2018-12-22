@@ -1405,14 +1405,12 @@ export class DatabaseProvider {
           })
 
           if(!duplicate) {
-            let studentTime: Date;
             console.log("Pushing...");
 
             messages2.forEach(async message2 => {
               if(message2["cID"] === message1["cID"]) {
-                datetime = moment(new Date(message2["mDatetime"])).format("MM/DD/YY");
+                datetime = new Date(message2["mDatetime"]);
                 description = message2["mDescription"];
-                studentTime = new Date(message2["mDatetime"]);
                 console.log("Info: ", datetime, description);
               }
             })
@@ -1431,7 +1429,6 @@ export class DatabaseProvider {
               picture: recipientPicture,
               description: description,
               datetime: datetime,
-              time: studentTime.toString(),
               cID: message1["cID"]
             })
           }
@@ -1448,13 +1445,11 @@ export class DatabaseProvider {
 
           if(!duplicate) {
             console.log("Pushing...");
-            let counselorTime: Date;
 
             messages2.forEach(async message2 => {
               if(message2["sID"] === message1["sID"]) {
-                datetime = moment(new Date(message2["mDatetime"])).format("MM/DD/YY");
+                datetime = new Date(message2["mDatetime"]);
                 description = message2["mDescription"];
-                counselorTime = new Date(message2["mDatetime"]);
                 console.log("Info: ", datetime, description);
               }
             })
@@ -1475,7 +1470,6 @@ export class DatabaseProvider {
               picture: recipientPicture,
               description: description,
               datetime: datetime,
-              time: counselorTime.toString(),
               sID: message1["sID"]
             })
           }

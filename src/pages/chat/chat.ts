@@ -3,7 +3,6 @@ import { IonicPage, NavController, NavParams, App, Item } from 'ionic-angular';
 import { ChatPeopleListPage } from '../chat-people-list/chat-people-list';
 import { AngularFireDatabase } from 'angularfire2/database';
 import { DatabaseProvider } from '../../providers/database/database';
-import { initializeApp } from 'firebase';
 import moment from 'moment';
 
 /**
@@ -21,7 +20,8 @@ import moment from 'moment';
 export class ChatPage {
 
   chatList = [];
-  date = moment(new Date()).format("MM/DD/YY");
+  currentDate: Date;
+  week: any;
 
   constructor(public navCtrl: NavController, 
     public navParams: NavParams,
@@ -34,6 +34,8 @@ export class ChatPage {
 
   initialize() {
     try {
+      this.currentDate = new Date(moment().format());
+
       this.fetchChats();
     } catch {
 
@@ -53,6 +55,25 @@ export class ChatPage {
       this.chatList = await this.db.fetchChats(messages);
       console.log("Chats: ", this.chatList);
     })
+  }
+
+  compareDate(date) {
+    console.log("Comparing...");
+    let status, datetime = new Date(date);
+
+    if(moment(this.currentDate).format('MM/dd/yy') === moment(datetime).format('MM/dd/yy')) {
+      status = "today";
+    } else if(moment(this.currentDate.getDate()-1).format('MM/dd/yy') === moment(datetime.getDate()-1).format('MM/dd/yy')) {
+      status = "yesterday";
+    } else if(moment(this.currentDate).format('ww') === moment(datetime).format('ww')) {
+      status = "week";
+    } else if(moment(this.currentDate).format('yyyy') === moment(datetime).format('yyyy')) {
+      status = "year";
+    } else {
+      status = "past"
+    }
+
+    return status;
   }
 
   ionViewDidLoad() {

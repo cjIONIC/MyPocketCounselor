@@ -35,6 +35,7 @@ export class RegisterPage {
   googleInfo = [];
   profilePic: any; //Stores the image for the profile picture
 
+
   constructor(private fireDatabase: AngularFireDatabase, 
     public db: DatabaseProvider,
     public viewCtrl: ViewController,
@@ -51,11 +52,14 @@ export class RegisterPage {
   initialize() {
     try {
       this.googleInfo = this.navParams.get('user');
-      this.username = this.googleInfo["email"];
       this.fetchAllAcademics();
     } catch {
 
     }
+  }
+
+  onSubmit(value) {
+    console.log("Value: ",value);
   }
 
   changeProfilePic() {

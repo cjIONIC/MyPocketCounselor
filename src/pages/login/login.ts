@@ -123,16 +123,11 @@ export class LoginPage {
   }
 
   //Logs in using username and password
-  upLogin() {
+  upLogin(loginInfo) {
     console.log('%c Logging in with username and password','color: white; background: blue; font-size: 16px');
     let googleInfo = "";
     let type = "usernamepassword"
-
-    if(!this.username && !this.password){
-      this.presentToast("Invalid username or password!");
-    } else {
-      this.verifyAccount(googleInfo, this.username, this.password, type);
-    }
+    this.verifyAccount(googleInfo, loginInfo["username"], loginInfo["password"], type);
 
   }
 

@@ -31,6 +31,7 @@ export class MyApp {
       this.getUserProfile();
     });
   }
+  
   async getUserProfile() {
     const user = await this.db.getProfileInStorage();
     //this.db.setProfileInStorage();

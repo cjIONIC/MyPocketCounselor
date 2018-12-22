@@ -46,6 +46,7 @@ page-login {
         margin: 0%;
         margin-bottom: 10px;
         padding: 0%;
+        font-size: 12pt;
         border: medium none;
         border-bottom: 1px solid white !important;
     }
@@ -94,6 +95,13 @@ page-login {
         border: 1px solid white;
     }
 
+    .login:disabled,
+    .login[disabled=disabled] {
+        background: #ffffff00;
+        border: 1px solid white;
+        opacity: 1; 
+    }
+
     .login:active, .login:focus {
         background: rgba(252, 154, 154, 0.5);
         border: 1px solid white;
@@ -113,5 +121,16 @@ page-login {
     .google:active, .google:focus{
         background: rgba(255, 228, 228, 0.829);
         color: #ff6961 !important;
+    }
+
+    .alert {
+        width: 100%;
+        font-size: 12pt;
+        text-align: left;
+        color: #ff6961;
+        background-color: white;
+        padding: 5px 10px;
+        border-radius: 10px;
+        margin-top: 5px;
     }
 }

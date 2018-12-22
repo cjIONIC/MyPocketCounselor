@@ -60,6 +60,8 @@ import { ModalNotificationComponent } from '../components/modal-notification/mod
 import { ChatPeopleListPage } from '../pages/chat-people-list/chat-people-list';
 import { ChatMessagePage } from '../pages/chat-message/chat-message';
 
+import { ReactiveFormsModule } from '@angular/forms';
+
 const firebaseConfig = {
   apiKey: "AIzaSyAVITAZa_qU9vSHq_ASeHJ1JGt3Sy8s8a0",
   authDomain: "mpcapp-c01ec.firebaseapp.com",
@@ -101,6 +103,7 @@ const firebaseConfig = {
   ],
   imports: [
     BrowserModule,
+    ReactiveFormsModule,
     CommonModule,
     HttpClientModule,
     FormsModule,      

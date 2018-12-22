@@ -28,8 +28,11 @@
         <ion-col col-9>
           <ion-row>
             <ion-col col-8 class="name"> {{ chat.name }} </ion-col>
-            <ion-col col-4 *ngIf="date !== chat.datetime" class="time"> {{ chat.time | date: 'hh:mm' }} </ion-col>
-            <ion-col col-4 *ngIf="date === chat.datetime" class="time"> {{ chat.time | date: 'LLL dd' }} </ion-col>
+            <ion-col col-4 *ngIf="compareDate(chat.datetime) === 'today'" class="time"> {{ chat.datetime | date: 'hh:mm' }} </ion-col>
+            <ion-col col-4 *ngIf="compareDate(chat.datetime) === 'yesterday'" class="time"> Yesterday </ion-col>
+            <ion-col col-4 *ngIf="compareDate(chat.datetime) === 'week'" class="time"> {{ chat.datetime | date: 'EE' }} </ion-col>
+            <ion-col col-4 *ngIf="compareDate(chat.datetime) === 'year'" class="time"> {{ chat.datetime | date: 'MMM dd' }} </ion-col>
+            <ion-col col-4 *ngIf="compareDate(chat.datetime) === 'past'" class="time"> {{ chat.datetime | date: 'MM/dd/yyyy' }} </ion-col>
           </ion-row>
           <ion-row class="description">
             {{ chat.description }}

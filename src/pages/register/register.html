@@ -22,46 +22,142 @@
         <div *ngIf="profilePic" ><img src="{{ profilePic }}" class="avatar"></div>
       
     </div>
-    
-    <ion-item>
-      <ion-label color="primary" floating> First Name </ion-label>
-      <ion-input type="text" [(ngModel)]="fname"></ion-input>
-    </ion-item>
-   
-    <ion-item>
-      <ion-label color="primary" floating> Last Name </ion-label>
-      <ion-input type="text" [(ngModel)]="lname"></ion-input>
-    </ion-item>
+  
+      <!--
+      <ion-item>
+        <ion-label color="primary" floating> First Name </ion-label>
+        <ion-input type="text" formControlName="firstname"></ion-input>
+      </ion-item>
+      <button type="submit">Register</button>
+      
+      <ion-item>
+        <ion-label color="primary" floating> Last Name </ion-label>
+        <ion-input type="text" [(ngModel)]="lname"></ion-input>
+      </ion-item>
 
-    <ion-item>
-      <ion-label color="primary" floating> Username </ion-label>
-      <ion-input type="text" [(ngModel)]="username" readonly></ion-input>
-    </ion-item>
+      <ion-item>
+        <ion-label color="primary" floating> Username </ion-label>
+        <ion-input type="text" [(ngModel)]="username" readonly></ion-input>
+      </ion-item>
 
-    <ion-item>
-      <ion-label color="primary" floating> Password </ion-label>
-      <ion-input type="password" [(ngModel)]="password"></ion-input>
-    </ion-item>
+      <ion-item>
+        <ion-label color="primary" floating> Password </ion-label>
+        <ion-input type="password" [(ngModel)]="password"></ion-input>
+      </ion-item>
 
-    <ion-item>
-      <ion-label color="primary" floating> Academic Unit </ion-label>
-      <ion-select [(ngModel)]="academic">
-        <!-- Allows to loop the list of academic units in a select list-->
-        <ion-option *ngFor="let unit of academicArray" value ="{{unit.acID}}"> {{unit.acCode}}</ion-option>
-      </ion-select>
-    </ion-item>
+      <ion-item>
+        <ion-label color="primary" floating> Academic Unit </ion-label>
+        <ion-select [(ngModel)]="academic">
+          
+          <ion-option *ngFor="let unit of academicArray" value ="{{unit.acID}}"> {{unit.acCode}}</ion-option>
+        </ion-select>
+      </ion-item>
 
-    <ion-item>
-      <ion-label color="primary" floating> Status </ion-label>
-      <ion-select [(ngModel)]="status">
-          <ion-option value="Enrolled">Enrolled</ion-option>
-          <ion-option value="Not Enrolled">Not Enrolled</ion-option>
-      </ion-select>
-    </ion-item>
+      <ion-item>
+        <ion-label color="primary" floating> Status </ion-label>
+        <ion-select [(ngModel)]="status">
+            <ion-option value="Enrolled">Enrolled</ion-option>
+            <ion-option value="Not Enrolled">Not Enrolled</ion-option>
+        </ion-select>
+      </ion-item>
+    -->
+    <form #registrationForm="ngForm" (ngSubmit)="onSubmit(registrationForm.value)" novalidate>
+  
+          <ion-item>
+            <ion-label color="primary" floating> First name </ion-label>
+            <ion-input type="text" #firstname="ngModel" name="firstname" pattern="([a-zA-Z ]+)[a-zA-Z]$" ngModel required></ion-input>
+          </ion-item>
+          <div *ngIf="firstname.errors && (firstname.dirty || firstname.touched)">
+            <div [hidden]="!firstname.errors.required" class="alert">
+              First name is required
+            </div>
+            <div [hidden]="!firstname.errors.pattern" class="alert">
+              First name must contain atleast two letters and spaces in between
+            </div>
+          </div>
+
+          <ion-item>
+            <ion-label color="primary" floating> Last name </ion-label>
+            <ion-input type="text" #lastname="ngModel" name="lastname" pattern="([a-zA-Z ]+)[a-zA-Z]$" ngModel required></ion-input>
+          </ion-item>
+          <div *ngIf="lastname.errors && (lastname.dirty || lastname.touched)">
+            <div [hidden]="!lastname.errors.required" class="alert">
+              Last name is required
+            </div>
+            <div [hidden]="!lastname.errors.pattern" class="alert">
+              Last name must contain atleast two letters and spaces in between
+            </div>
+          </div>
+
+          <ion-item>
+            <ion-label color="primary" floating> Username</ion-label>
+            <ion-input type="username" #username="ngModel" name="username" minlength="6" pattern="^[a-zA-Z0-9]*$" ngModel required></ion-input>
+          </ion-item>
+          <div *ngIf="username.errors && (password.dirty || username.touched)">
+            <div [hidden]="!username.errors.required" class="alert">
+              Username is required
+            </div>
+            <div [hidden]="!username.errors.pattern" class="alert">
+              Username must only contain letters and numbers
+            </div>
+            <div [hidden]="!username.errors.minlength" class="alert">
+              Username must contain atleast six characters
+            </div>
+          </div>
+          
+
+          <ion-item>
+              <ion-label color="primary" floating> Password</ion-label>
+              <ion-input type="password" #password="ngModel" name="password" minlength="6" pattern="^[a-zA-Z0-9]*$" ngModel required></ion-input>
+            </ion-item>
+            <div *ngIf="password.errors && (password.dirty || password.touched)">
+              <div [hidden]="!password.errors.required" class="alert">
+                Password is required
+              </div>
+              <div [hidden]="!password.errors.pattern" class="alert">
+                Password must only contain letters and numbers
+              </div>
+              <div [hidden]="!password.errors.minlength" class="alert">
+                Password must contain atleast six characters
+              </div>
+            </div>
+            
+          <ion-item>
+            <ion-label color="primary" floating> Academic Unit </ion-label>
+            <ion-select  #academic="ngModel" name="academic" ngModel required>
+              <ion-option *ngFor="let unit of academicArray" value ="{{unit.acID}}"> {{unit.acCode}}</ion-option>
+            </ion-select>
+          </ion-item>
+          <div *ngIf="academic.errors && (academic.dirty || academic.touched)">
+            <div [hidden]="!academic.errors.required" class="alert">
+              Academic is required
+            </div>
+          </div>
+          
+          <ion-item>
+            <ion-label color="primary" floating> Status </ion-label>
+            <ion-select #status="ngModel" name="status" ngModel required>
+                <ion-option value="Enrolled">Enrolled</ion-option>
+                <ion-option value="Not Enrolled">Not Enrolled</ion-option>
+            </ion-select>
+          </ion-item>
+          <div *ngIf="status.errors && (status.dirty || status.touched)">
+            <div [hidden]="!status.errors.required" class="alert">
+              Status is required
+            </div>
+          </div>
+          <div class="button">
+            <button class="btn" block ion-button [disabled]="!registrationForm.form.valid" type="submit">Submit</button>
+          </div>
+      </form>
+     
   
   </ion-list>
 
   <div class="button">
+    <!--
     <button class="btn" block ion-button (click)="verifyStudentInfo()"> Register </button>
+    -->
+    
   </div>
 </ion-content>
