@@ -150,13 +150,10 @@ export class AppointmentAddPage {
     });
   }
 
-  onAdd(details) {
+  async onAdd(details) {
     this.appointmentDetails = details;
     console.log("Values: ", this.appointmentDetails);
-    this.addAppointment();
-  }
-
-  async addAppointment() {
+    
     console.log('%c Adding Appointment','color: white; background: red; font-size: 16px');
     let appointmentsOfCounselor, appointmentsOfStudent; //Variables used in checking
 
@@ -168,32 +165,39 @@ export class AppointmentAddPage {
 
     let timeout = Math.floor(Math.random() * 500) + 200;
 
-    setTimeout(async () => {
-      try {
-        if(this.userInfo["type"] != "Student") {
-          console.log('%c Searching appointments for counselor','color: white; background: red; font-size: 16px');
-          appointmentsOfCounselor = await this.checkDuplicateForCounselor(this.userInfo["id"], schedule);
-          appointmentsOfStudent =  await this.checkDuplicateForStudent(this.recipient["id"], schedule);
-        } else {
-          console.log('%c Searching appointments for student','color: white; background: red; font-size: 16px');
-          appointmentsOfCounselor = await this.checkDuplicateForCounselor(this.recipient["id"], schedule);
-          appointmentsOfStudent =  await this.checkDuplicateForStudent(this.userInfo["id"], schedule);
+    let list = this.fireDatabase.list<Item>("appointment");
+    let item = list.valueChanges();
+    let pushed = false;
+
+    item.subscribe(() => {
+      setTimeout(async () => {
+        try {
+          if(this.userInfo["type"] != "Student") {
+            console.log('%c Searching appointments for counselor','color: white; background: red; font-size: 16px');
+            appointmentsOfCounselor = await this.checkDuplicateForCounselor(this.userInfo["id"], schedule);
+            appointmentsOfStudent =  await this.checkDuplicateForStudent(this.recipient["id"], schedule);
+          } else {
+            console.log('%c Searching appointments for student','color: white; background: red; font-size: 16px');
+            appointmentsOfCounselor = await this.checkDuplicateForCounselor(this.recipient["id"], schedule);
+            appointmentsOfStudent =  await this.checkDuplicateForStudent(this.userInfo["id"], schedule);
+          }
+    
+          console.log("Statusfinding: ", appointmentsOfCounselor, appointmentsOfStudent)
+          if(await appointmentsOfStudent && await appointmentsOfCounselor && !pushed)
+            this.presentToast("Date and time has already been occupied!");
+          else if(await !appointmentsOfStudent && await !appointmentsOfCounselor && !pushed){
+            pushed = true;
+            await this.db.addAppointment(appointmentInputs[0]).then(() => {
+                //Dismiss page after successfully set the appointment
+                let currentIndex = this.navCtrl.getActive().index;
+                this.navCtrl.remove(currentIndex);
+              }).catch(err => console.log("Error: ", err));
+          }
+        } catch {
+    
         }
-  
-        console.log("Statusfinding: ", appointmentsOfCounselor, appointmentsOfStudent)
-        if(await appointmentsOfStudent && await appointmentsOfCounselor)
-          this.presentToast("Date and time has already been occupied!");
-        else {
-          await this.db.addAppointment(appointmentInputs[0]).then(() => {
-              //Dismiss page after successfully set the appointment
-              let currentIndex = this.navCtrl.getActive().index;
-              this.navCtrl.remove(currentIndex);
-            }).catch(err => console.log("Error: ", err));
-        }
-      } catch {
-  
-      }
-    }, timeout);
+      }, timeout);
+    })
    
   }
 

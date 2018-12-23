@@ -49,8 +49,10 @@ export class AddPostPage {
   endTime: any;
   academic: any;
 
+  includeEndDate: false;
+  includeTimeDate: false;
 
-  image: any;
+  imageFile: any = "https://firebasestorage.googleapis.com/v0/b/mpcapp-c01ec.appspot.com/o/post%2FIMG_0z295_1544673125110.jpeg?alt=media&token=1e6b7738-833a-4517-9788-6f8a306fd748";
 
   constructor(public db: DatabaseProvider,
     public fireDatabase: AngularFireDatabase,
@@ -125,13 +127,21 @@ export class AddPostPage {
       this.date = result;
       console.log("Fetched Date: ", this.date);
 
-      this.startDate = moment().format();
-      this.endDate = moment().format();
-      this.startTime = moment().format();
-      this.endTime = moment().format();
+      this.startDatetime = moment().format();
+      this.endDatetime = moment().format();
 
       console.log("Fetch Date: ", this.startDate);
     });
+  }
+
+  endDateInclude(event) {
+    console.log("Event: ", event)
+    this.includeEndDate = event;
+  }
+
+  endTimeInclude(event) {
+    console.log("Event: ", event)
+    this.includeTimeDate = event;
   }
 
   presentToast(description) {
@@ -161,7 +171,7 @@ export class AddPostPage {
        // imageData is either a base64 encoded string or a file URI
        // If it's base64 (DATA_URL):
        
-       this.image='data:image/jpeg;base64,' + imageData;
+       this.imageFile='data:image/jpeg;base64,' + imageData;
       }, (err) => {
         console.log("Error: ", err);
       });
@@ -241,7 +251,7 @@ export class AddPostPage {
     });
     
     loading.present().then(() => {
-          this.db.addPost(this.title, this.location, this.description,this.startDatetime, this.endDatetime, this.academic, this.image, this.type)
+          this.db.addPost(this.title, this.location, this.description,this.startDatetime, this.endDatetime, this.academic, this.imageFile, this.type)
           .then((action) => {
               //Dismiss loading box and page after adding event
               let currentIndex = this.navCtrl.getActive().index;
@@ -252,7 +262,7 @@ export class AddPostPage {
   }
 
   removePic() {
-    this.image = null;
+    this.imageFile = null;
   }
 
   ionViewDidLoad() {
