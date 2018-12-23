@@ -1,0 +1,37 @@
+<ion-header>
+  <ion-toolbar color="primary">
+      <!--<ion-title class="tabTitle">MyPocketCounselor</ion-title>-->
+
+      <button class="btnSearch" (click)="search()">
+        <ion-grid>
+          <ion-row>
+            <ion-col col-1>
+              <div class="searchIcon"><ion-icon name="search"></ion-icon></div>
+            </ion-col>
+            <ion-col col-11>
+              <div class="searchLabel">Search</div>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+        
+         
+      </button>
+
+        <ion-buttons end>
+            <button ion-button icon-only [navPush]="pushChatPage">
+              <ion-icon name="chatboxes"></ion-icon>
+            </button>
+          </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content no-bounce>
+  <ion-tabs>
+      <ion-tab [root]="tab1" tabIcon="paper"></ion-tab>
+      <ion-tab [root]="tab2" tabIcon="people"></ion-tab>
+      <ion-tab [root]="tab3" tabIcon="calendar"></ion-tab>
+      <ion-tab [root]="tab4" tabIcon="notifications"></ion-tab>
+      <ion-tab [root]="tab5" tabIcon="menu"></ion-tab>
+  </ion-tabs>
+</ion-content>
+

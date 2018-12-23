@@ -8,8 +8,8 @@ import { DatabaseProvider } from '../providers/database/database';
 
 //Pages
 import { LoginPage } from '../pages/login/login';
-import { TabPage } from '../pages/tab/tab';
 import { RegisterPage } from '../pages/register/register';
+import { HomePage } from '../pages/home/home';
 
 @Component({
   templateUrl: 'app.html'
@@ -42,7 +42,7 @@ export class MyApp {
     this.rootPage = LoginPage;
     } else {
       console.log("Already logged in");
-      this.rootPage = TabPage;
+      this.rootPage = HomePage;
     }
   }
 }

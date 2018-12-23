@@ -1,9 +1,30 @@
-page-tab {
+page-home {
 
     //Hides the Scrollbar
     ::-webkit-scrollbar{
         display:none;
     }
+
+    .grid,.col,.row {
+        padding: 0%;
+    }
+
+    .btnSearch {
+        margin: auto 10px;
+        width: 95%;
+        text-align: left;
+        font-size: 15pt;
+        padding: 5px 15px;
+        border-radius: 50px;
+        background: #f1534b;
+        color: white;
+    }
+
+    .searchLabel {
+        padding-top: 2px;
+        padding-left: 10px;
+    }
+
 
     .tabTitle { 
         font-family: "Brusher";
@@ -22,4 +43,3 @@ page-tab {
         font-size: 20pt !important; // Default should be 2.0rem
     }
 }
-

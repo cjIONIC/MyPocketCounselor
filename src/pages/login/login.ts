@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController, App, ToastController, LoadingController } from 'ionic-angular';
 import { Subscription } from 'rxjs/Subscription';
 //Pages
-import { TabPage } from '../tab/tab';
 import { RegisterPage } from '../register/register';
 
 //Provides
@@ -15,6 +14,7 @@ import firebase from 'firebase';
 //Plugin
 import { GooglePlus } from '@ionic-native/google-plus';
 import { Network} from '@ionic-native/network';
+import { HomePage } from '../home/home';
 
 
 @IonicPage()
@@ -144,7 +144,7 @@ export class LoginPage {
         if(counselorFound) {
           let currentIndex = this.navCtrl.getActive().index;
           loading.dismiss();
-          this.app.getRootNav().push(TabPage).then(() => {
+          this.app.getRootNav().push(HomePage).then(() => {
             this.navCtrl.remove(currentIndex);
           });
         }
@@ -155,7 +155,7 @@ export class LoginPage {
             if(studentFound) {
               let currentIndex = this.navCtrl.getActive().index;
               loading.dismiss();
-              this.app.getRootNav().push(TabPage).then(() => {
+              this.app.getRootNav().push(HomePage).then(() => {
                 this.navCtrl.remove(currentIndex);
               });
             } else {

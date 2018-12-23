@@ -12,7 +12,6 @@ import { MyApp } from './app.component';
 import { PeoplePage } from '../pages/people/people';
 import { NotificationPage } from '../pages/notification/notification';
 import { MenuPage } from '../pages/menu/menu';
-import { TabPage } from '../pages/tab/tab';
 import { SearchPage } from '../pages/search/search';
 import { ChatPage } from '../pages/chat/chat';
 import { LoginPage } from '../pages/login/login';
@@ -64,6 +63,7 @@ import { AppointmentAddPage } from '../pages/appointment-add/appointment-add';
 import { ReactiveFormsModule } from '@angular/forms';
 import { PostAddPage } from '../pages/post-add/post-add';
 import { PostEditPage } from '../pages/post-edit/post-edit';
+import { HomePage } from '../pages/home/home';
 
 const firebaseConfig = {
   apiKey: "AIzaSyAVITAZa_qU9vSHq_ASeHJ1JGt3Sy8s8a0",
@@ -81,6 +81,7 @@ const firebaseConfig = {
     LoginPage,
     RegisterPage,
     RequestPage,
+    HomePage,
     ModalRequestComponent,
     PostPage,
     PostAddPage,
@@ -102,7 +103,6 @@ const firebaseConfig = {
     PopScheduleComponent,
     ModalScheduleComponent,
     ModalSearchComponent,
-    TabPage,
     TimeAgoPipe
   ],
   imports: [
@@ -128,6 +128,7 @@ const firebaseConfig = {
     LoginPage,
     RegisterPage,
     RequestPage,
+    HomePage,
     ModalRequestComponent,
     PostPage,
     PostAddPage,
@@ -148,8 +149,7 @@ const firebaseConfig = {
     ModalScheduleComponent,
     ModalSearchComponent,
     AppointmentPage,
-    AppointmentAddPage,
-    TabPage
+    AppointmentAddPage
   ],
   providers: [
     StatusBar,
