@@ -603,6 +603,7 @@ export class DatabaseProvider {
     let today = moment().format();
     let date = new Date(today);
 
+    console.log("Image: ", image);
 
     console.log("Academics: ", academic);
     let keys = Object.keys(academic);
@@ -612,6 +613,7 @@ export class DatabaseProvider {
       let filePath = await this.uploadImage("post", image);
       imageURL = await this.downloadImage(filePath);
     } else imageURL = "No image";
+    console.log("Image URL: ", imageURL);
     
     for( var i = 0; i < keys.length; i++) {
       let count  = keys[i];

@@ -263,12 +263,6 @@ export class AppointmentPage {
     
     const modal = this.modalCtrl.create(ModalSearchComponent, { date: datetime}, modalOptions);
     modal.present();
-
-    //Fetches the name and information from the modal
-    modal.onDidDismiss( recipient => {
-      
-    this.app.getRootNav().push(AppointmentAddPage, {date: datetime, recipient: recipient});
-    });
   }
 
   popOptions(myEvent, appointment) {

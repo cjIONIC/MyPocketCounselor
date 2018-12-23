@@ -58,6 +58,7 @@ export class AppointmentAddPage {
     let date = this.navParams.get('date');
     this.recipient = this.navParams.get('recipient');
 
+    console.log("Recipient: ", this.recipient);
     console.log("Date passed: ", date);
 
     await this.fetchUserProfile();

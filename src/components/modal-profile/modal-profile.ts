@@ -5,6 +5,8 @@ import { AngularFireDatabase } from 'angularfire2/database';
 import { ModalStudentUpdateComponent } from '../../components/modal-student-update/modal-student-update';
 import { Network} from '@ionic-native/network';
 import { Subscription } from 'rxjs/Subscription';
+import { AppointmentAddPage } from '../../pages/appointment-add/appointment-add';
+import moment from 'moment';
 
 /**
  * Generated class for the ModalProfileComponent component.
@@ -79,10 +81,10 @@ export class ModalProfileComponent {
   }
 
   addAppointment() {
-    let dateToday = new Date();
-    let recipient = this.profileInfo;
+    let date = new Date(moment().format());
+    let recipient = this.profileInfo[0];
     this.viewCtrl.dismiss();
-    //this.app.getRootNav().push(AddApointmentPage, { date: dateToday, recipient: recipient});
+    this.app.getRootNav().push(AppointmentAddPage, {date: date, recipient: recipient});
 
   }
 

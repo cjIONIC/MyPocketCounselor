@@ -63,7 +63,7 @@ export class AddPostPage {
   dateBalance = true;
 
   includeEndDate: false;
-  includeTimeDate: false;
+  includeEndTime: false;
 
   imageFile: any;
 
@@ -171,12 +171,15 @@ export class AddPostPage {
         this.tempStartDate = moment(date).format();
         this.endDateDefault = moment(newEndDate).format()
       }
-
-      let currentDate = new Date(moment().format());
-      if (currentDate > (new Date(this.startDateDefault))) this.dateValid = false;
+  
+      let currentDate = new Date((new Date(moment().format())).setHours(0,0,0));
+      if (currentDate > new Date((new Date(this.startDateDefault)).setHours(0,0,0))) 
+        this.dateValid = false;
+      else this.dateValid = true;
 
     } else {
       if(date < startDate) this.dateBalance = false;
+      else this.dateBalance = true;
     }
 
   }
@@ -197,12 +200,13 @@ export class AddPostPage {
       if(time < startTime) {
         this.tempStartTime = moment(time).format();
       }
-      else if (time > startTime || time === (new Date(this.endTimeDefault))) {
+      else if (time > startTime) {
         this.tempStartTime = moment(time).format();
         this.endTimeDefault = moment(newEndTime).format()
       }
     } else {
       if(time < startTime) this.timeBalance = false;
+      else this.timeBalance = true;
     }
 
   }
@@ -214,7 +218,7 @@ export class AddPostPage {
 
   endTimeInclude(event) {
     console.log("Event: ", event)
-    this.includeTimeDate = event;
+    this.includeEndTime = event;
   }
 
   presentToast(description) {
@@ -255,14 +259,26 @@ export class AddPostPage {
   }
 
   onAdd(post) { 
+    console.log('%c Adding Post','color: black; background: yellow; font-size: 16px');
     console.log("Value: ", post);
 
     let startDate, endDate, location, academic;
 
     if(this.type === "Event") {
-      academic = post["academic"];    
+      academic = post["academic"];  
+      location = post["location"]  
+      let tempEndDate, tempEndTime;
+
+      if(!this.includeEndDate) tempEndDate = new Date(0,0,0);
+      else tempEndDate = post["endDate"];
+
+      if(!this.includeEndTime) tempEndTime = new Date(0,0,0);
+      else tempEndTime = post["endTime"];
+
       startDate = new Date(moment(post["startDate"]).format("MMM DD YYYY") +" "+ moment(post["startTime"]).format("h:mm A"));
-      endDate = new Date(moment(post["endDate"]).format("MMM DD YYYY") +" "+ moment(post["endDate"]).format("h:mm A"));
+      endDate = new Date(moment(tempEndDate).format("MMM DD YYYY") +" "+ moment(tempEndTime).format("h:mm A"));
+
+      console.log("End Datetime: ", endDate);
     } else {
       location = "None";
       startDate = "None";
@@ -279,7 +295,6 @@ export class AddPostPage {
       academic = tempArr;
     }
 
-    console.log('%c Adding Post','color: black; background: yellow; font-size: 16px');
     let loading = this.loadingCtrl.create({
       spinner: 'ios',
       content: 'Adding Post Please Wait...'
@@ -295,7 +310,6 @@ export class AddPostPage {
               loading.dismiss();
           });
     });
-    
   }
 
   ionViewDidLoad() {

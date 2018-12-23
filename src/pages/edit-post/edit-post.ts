@@ -27,18 +27,36 @@ export class EditPostPage {
 
   post = [];
 
-  title:any;
-  location:any;
-  startDate:any;
-  endDate:any;
-  startTime:any;
-  endTime:any;
+  fetchedDate = true;
+  fetchedTime = true;
+
+  checkDate = true;
+  checkTime = true;
+
+  titleDefault:any;
+  locationDefault:any;
+  startDateDefault:any;
+  endDateDefault:any;
+  startTimeDefault:any;
+  endTimeDefault:any;
   startDatetime:any;
   endDatetime:any;
-  description:any;
-  image:any;
+  descriptionDefault:any;
+  imageFile:any;
   changedPhoto:Boolean = false;
   type:any;
+
+  tempStartTime: any;
+  tempStartDate: any;
+
+  dateValid = true;
+
+  timeBalance = true;
+  dateBalance = true;
+
+  includeEndDate = false;
+  includeEndTime = false;
+
 
   constructor(public navCtrl: NavController, 
       public db: DatabaseProvider,
@@ -65,28 +83,127 @@ export class EditPostPage {
   }
 
   setValue(post) {
-    this.startDate = moment().format();
-    this.endDate = moment().format();
+    this.startDateDefault = moment().format();
+    this.endDateDefault = moment().format();
 
     this.type = post["type"];
     console.log("Post type: ", this.type );
-    this.title = post["title"];
-    this.location = post["location"];
-    this.description = post["description"];
-    this.image=post["picture"];
+    this.titleDefault = post["title"];
+    this.locationDefault = post["location"];
+    this.descriptionDefault = post["description"];
+    console.log("Image: ", post["picture"]);
 
-    let startDate = new Date(post["startDate"]);
-    let startDateTimezone = startDate.getTimezoneOffset() * 60000;
-    let startDatetime =  new Date(startDate.getTime() - startDateTimezone).toISOString().slice(0, -1);
+    if(post["picture"] !== "No image") this.imageFile=post["picture"];
+    else this.imageFile = "No image";
 
-    let endDate = new Date(post["endDate"]);
-    let endDateTimezone = endDate.getTimezoneOffset() * 60000;
-    let endDatetime =  new Date(endDate.getTime() - endDateTimezone).toISOString().slice(0, -1);
+    this.startDateDefault = moment(new Date(post["startDate"])).format();
+    this.endDateDefault = moment(new Date(post["endDate"])).format();
+    this.startTimeDefault = moment(new Date(post["startDate"])).format();
+    this.endTimeDefault = moment(new Date(post["endDate"])).format();
 
-    this.startDate = moment(startDatetime).format();
-    this.endDate = moment(endDatetime).format();
-    this.startTime = moment(startDatetime).format();
-    this.endTime = moment(endDatetime).format();
+    this.tempStartDate = this.startDateDefault;
+    this.tempStartTime =  this.startTimeDefault;
+
+    let year =  (new Date(post["endDate"])).getFullYear();
+    if(year < 2000) {
+      this.includeEndDate = false;
+      this.fetchedDate = false;
+      this.checkDate = false;
+    } else this.includeEndDate = true;
+
+    let time = (new Date(post["endDate"])).getHours() + (new Date(post["endDate"])).getMinutes();
+    if(time === 0) {
+      this.includeEndTime = false;
+      this.fetchedTime = false;
+      this.checkTime = false;
+    } else this.includeEndTime = true; 
+  }
+
+  compareDate(value, type) {
+    let date = new Date();
+    let newEndDate = new Date();
+    console.log("Value: ", value);
+
+    date.setFullYear(value["year"], value["month"]-1, value["day"]);
+    let startDate = new Date(this.tempStartDate);
+
+    if (!this.fetchedDate) {
+      if(type === 'start') {
+        newEndDate.setFullYear(value["year"], value["month"]-1, value["day"]+1);
+    
+        if(date < startDate) {
+          this.tempStartDate = moment(date).format();
+          console.log("Lesser");
+        }
+        else if (date > startDate) {
+          this.tempStartDate = moment(date).format();
+          this.endDateDefault = moment(newEndDate).format()
+        }
+  
+        let currentDate = new Date((new Date(moment().format())).setHours(0,0,0));
+        if (currentDate > new Date((new Date(this.startDateDefault)).setHours(0,0,0))) 
+          this.dateValid = false;
+        else this.dateValid = true;
+  
+      } else {
+        if(date < startDate) this.dateBalance = false;
+        else this.dateBalance = true;
+      }
+    } else {
+      this.fetchedDate = false;
+    }
+    
+
+  }
+
+  compareTime(value, type) {
+    let time = new Date();
+    let newEndTime = new Date();
+    console.log("Value: ", value);
+
+    time.setHours(value["hour"], value["minute"]);
+    let startTime = new Date(this.tempStartTime);
+
+    if(!this.fetchedTime) {
+      if(type === 'start') {
+        newEndTime.setHours(value["hour"]+1, value["minute"]);
+  
+        console.log("Date: ", time, " ? ", this.startTimeDefault);
+    
+        if(time < startTime) {
+          this.tempStartTime = moment(time).format();
+        }
+        else if (time > startTime) {
+          this.tempStartTime = moment(time).format();
+          this.endTimeDefault = moment(newEndTime).format()
+        }
+      }  else {
+        if(time < startTime) this.timeBalance = false;
+        else this.timeBalance = true;
+      }
+    } else {
+      this.fetchedTime = false;
+    }
+   
+
+  }
+
+  endDateInclude(event) {
+    console.log("Event: ", event)
+    if(!this.checkDate) {
+      this.includeEndDate = event;
+    } else {
+      this.checkDate = false;
+    }
+  }
+
+  endTimeInclude(event) {
+    console.log("Event: ", event)
+    if(!this.checkTime) {
+      this.includeEndTime = event;
+    } else {
+      this.checkTime = false;
+    }
   }
 
   presentToast(description) {
@@ -115,66 +232,61 @@ export class EditPostPage {
     this.camera.getPicture(options).then((imageData) => {
      // imageData is either a base64 encoded string or a file URI
      // If it's base64 (DATA_URL):
-     this.image='data:image/jpeg;base64,' + imageData;
+     this.imageFile='data:image/jpeg;base64,' + imageData;
      this.changedPhoto = true;
     }, (err) => {
       console.log("Error: ", err);
     });
   }
   
-  //Verification of inputs
-  async verifyPost() {
-
-    if(this.type === "Event") {
-      console.log("Event");
-      //Creates date type using inputs
-      let startDate = moment(this.startDate).format("MMM DD YYYY") +" "+ moment(this.startTime).format("h:mm A");
-      let endDate = moment(this.endDate).format("MMM DD YYYY") +" "+ moment(this.endTime).format("h:mm A");
-      this.startDatetime =await  new Date(startDate);
-      this.endDatetime = await new Date(endDate);
-      console.log(this.startDatetime.toISOString()," ? ",this.endDatetime.toISOString())
-  
-      console.log("Title: ", this.title);
-      //Checks for inputs
-      if (!this.title || !this.location  || !this.description) {
-        this.presentToast("Enter all fields!");
-      } else if(this.startDatetime < this.endDatetime && this.startDatetime != this.endDatetime) {
-        this.updatePost();
-      } else {
-        this.presentToast("Ending must be greater that starting date!");
-      }
-    } else { //Type is quotes
-      //Checks for inputs
-      if (this.title == null || this.description == null) {
-        this.presentToast("Enter all fields!");
-      } else {
-       this.updatePost();
-      }
-    }
-    
+  removePic() {
+    this.imageFile = null;
   }
 
-  updatePost() {
+  onEdit(post) { 
     console.log('%c Updating Post','color: black; background: yellow; font-size: 16px');
-    let loading = this.loadingCtrl.create({
-      spinner: 'ios',
-      content: 'Updating Post Please Wait...'
-    });
+    console.log("Value: ", post);
+
+    let startDate, endDate, location;
+
+    if(this.type === "Event") {
+      location = post["location"]  
+      let tempEndDate, tempEndTime;
+
+      if(!this.includeEndDate) tempEndDate = new Date(0,0,0);
+      else tempEndDate = post["endDate"];
+
+      if(!this.includeEndTime) tempEndTime = new Date(0,0,0);
+      else tempEndTime = post["endTime"];
+
+      startDate = new Date(moment(post["startDate"]).format("MMM DD YYYY") +" "+ moment(post["startTime"]).format("h:mm A"));
+      endDate = new Date(moment(tempEndDate).format("MMM DD YYYY") +" "+ moment(tempEndTime).format("h:mm A"));
+
+      console.log("End Datetime: ", endDate);
+    } else {
+      location = "None";
+      startDate = "None";
+      endDate = "None";
+    }
 
     let id = this.post["id"];
     console.log("Post ID: ", id);
 
-    loading.present().then(() => {
-      this.db.updatePost(id, this.title, this.location,this.startDatetime,
-                  this.endDatetime, this.description, this.image, this.changedPhoto).then(() => {   
-                  let currentIndex = this.navCtrl.getActive().index;
-                  this.navCtrl.remove(currentIndex);
-      });
+    let loading = this.loadingCtrl.create({
+      spinner: 'ios',
+      content: 'Adding Post Please Wait...'
     });
-  }
-  
-  removePic() {
-    this.image = null;
+    
+    loading.present().then(() => {
+          this.db.updatePost(id, post["title"], location, startDate, endDate, post["description"], 
+             post["image"], this.changedPhoto)
+          .then((action) => {
+              //Dismiss loading box and page after adding event
+              let currentIndex = this.navCtrl.getActive().index;
+              this.navCtrl.remove(currentIndex);
+              loading.dismiss();
+          });
+    });
   }
 
   ionViewWillLeave(){

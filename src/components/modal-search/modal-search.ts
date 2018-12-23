@@ -4,6 +4,7 @@ import { AngularFireDatabase } from 'angularfire2/database';
 import { DatabaseProvider } from '../../providers/database/database';
 import { Network} from '@ionic-native/network';
 import { Subscription } from 'rxjs/Subscription';
+import { AppointmentAddPage } from '../../pages/appointment-add/appointment-add';
 
 /**
  * Generated class for the ModalSearchComponent component.
@@ -24,6 +25,8 @@ export class ModalSearchComponent {
   completePeopleList = []; //Handles all people
   peopleList = []; //Modifiable List
 
+  date: any;
+
   constructor(public navCtrl: NavController, 
     public fireDatabase: AngularFireDatabase,
     public navParams: NavParams,
@@ -38,7 +41,7 @@ export class ModalSearchComponent {
 
   async initialize() {
     try {
-
+      this.date = this.navParams.get('date');
       await this.getUserInfo();
     } catch {
 
@@ -152,14 +155,15 @@ export class ModalSearchComponent {
   
   dismiss(recipient) {
     try {
-      this.viewCtrl.dismiss(recipient);
+      this.close();
+      this.app.getRootNav().push(AppointmentAddPage, {date: this.date, recipient: recipient});
     } catch {
 
     }
   }
 
   close() {
-    this.viewCtrl.dismiss("");
+    this.viewCtrl.dismiss();
   }
 
   ionViewDidLoad() {
