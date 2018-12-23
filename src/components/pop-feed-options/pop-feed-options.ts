@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { NavParams, App, ViewController, AlertController } from 'ionic-angular';
-import { EditPostPage } from '../../pages/edit-post/edit-post';
 import { DatabaseProvider } from '../../providers/database/database';
+import { PostEditPage } from '../../pages/post-edit/post-edit';
 
 /**
  * Generated class for the PopFeedOptionsComponent component.
@@ -64,7 +64,7 @@ export class PopFeedOptionsComponent {
   editPost() {
     try {
       this.viewCtrl.dismiss().then(() => {
-        this.app.getRootNav().push(EditPostPage, {post:this.post});
+        this.app.getRootNav().push(PostEditPage, {post:this.post});
       });
     } catch {
       

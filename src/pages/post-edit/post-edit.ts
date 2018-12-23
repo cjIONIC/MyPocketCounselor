@@ -9,7 +9,7 @@ import moment from 'moment';
 import { Camera, CameraOptions } from '@ionic-native/camera';
 
 /**
- * Generated class for the EditPostPage page.
+ * Generated class for the PostEditPage page.
  *
  * See https://ionicframework.com/docs/components/#navigation for more info on
  * Ionic pages and navigation.
@@ -17,10 +17,10 @@ import { Camera, CameraOptions } from '@ionic-native/camera';
 
 @IonicPage()
 @Component({
-  selector: 'page-edit-post',
-  templateUrl: 'edit-post.html',
+  selector: 'page-post-edit',
+  templateUrl: 'post-edit.html',
 })
-export class EditPostPage {
+export class PostEditPage {
 
   connected: Subscription;
   disconnected: Subscription;
@@ -109,7 +109,10 @@ export class EditPostPage {
       this.includeEndDate = false;
       this.fetchedDate = false;
       this.checkDate = false;
-    } else this.includeEndDate = true;
+    } else {
+        this.includeEndDate = true;
+        this.fetchedDate = false;
+    }
 
     let time = (new Date(post["endDate"])).getHours() + (new Date(post["endDate"])).getMinutes();
     if(time === 0) {
@@ -189,21 +192,33 @@ export class EditPostPage {
   }
 
   endDateInclude(event) {
-    console.log("Event: ", event)
+    console.log("Event: ", event);
+    
+    console.log("Fetched: ", this.fetchedDate);
+
     if(!this.checkDate) {
       this.includeEndDate = event;
     } else {
+      this.includeEndDate = false;
       this.checkDate = false;
     }
+    console.log("Check: ", this.checkDate);
+    console.log("Include: ", this.includeEndDate);
   }
 
   endTimeInclude(event) {
     console.log("Event: ", event)
+    
+    console.log("Fetched: ", this.fetchedTime);
+
     if(!this.checkTime) {
       this.includeEndTime = event;
     } else {
+      this.includeEndTime = false;
       this.checkTime = false;
     }
+    console.log("Check: ", this.checkTime);
+    console.log("Include: ", this.includeEndTime);
   }
 
   presentToast(description) {

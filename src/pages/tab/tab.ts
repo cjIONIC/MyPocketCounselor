@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
-import { FeedPage } from '../feed/feed';
+import { PostPage } from '../post/post';
 import { PeoplePage } from '../people/people';
 import { NotificationPage } from '../notification/notification';
 import { MenuPage } from '../menu/menu';
@@ -24,7 +24,7 @@ export class TabPage {
 
   search = false;
 
-  tab1 = FeedPage;
+  tab1 = PostPage;
   tab2 = PeoplePage;
   tab3 = AppointmentPage;
   tab4 = NotificationPage;

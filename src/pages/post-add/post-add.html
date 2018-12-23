@@ -1,18 +1,187 @@
-<!--
-  Generated template for the PostAddPage page.
 
-  See http://ionicframework.com/docs/components/#navigation for more info on
-  Ionic pages and navigation.
--->
 <ion-header>
 
-  <ion-navbar>
-    <ion-title>post-add</ion-title>
+  <ion-navbar color="primary">
+    <ion-title>Create {{type}}</ion-title>
+      <ion-buttons end>
+        <button class="btnImage" ion-button icon-only round (click)="getImage()">
+            <ion-icon class="image" name="image"></ion-icon>
+          </button>
+        </ion-buttons>
   </ion-navbar>
 
 </ion-header>
 
 
 <ion-content padding>
+    <form #postForm="ngForm" (ngSubmit)="onAdd(postForm.value)" novalidate>
+      <ion-item>
+        <ion-label color="primary" stacked>Title</ion-label>
+        <ion-input type="text"
+            #title="ngModel" 
+            name="title" 
+            ngModel required>
+        </ion-input>
+      </ion-item>
+      <div *ngIf="title.errors && (title.dirty || title.touched)">
+         <div [hidden]="!title.errors.required" class="alert">
+            Title is required
+         </div>
+      </div>
 
+      <div *ngIf="type === 'Event'">
+            <ion-item>
+                <ion-label color="primary" stacked>Location</ion-label>
+                <ion-input type="text" 
+                    #location="ngModel" 
+                    name="location" 
+                    ngModel required>
+                </ion-input>
+            </ion-item>
+            <div *ngIf="location.errors && (location.dirty || location.touched)">
+                <div [hidden]="!location.errors.required" class="alert">
+                Location is required
+                </div>
+            </div>
+
+            <ion-item>
+                <ion-label color="primary" stacked>Academic</ion-label>
+                <ion-select #academic="ngModel" 
+                    name="academic" 
+                    placeholder="Choose Academic Unit/s to Post to"
+                    multiple="true"
+                    ngModel required>
+                <ion-option *ngFor="let unit of academicList" value ="{{unit.acID}}"> {{unit.acName}}</ion-option>
+                </ion-select>
+            </ion-item>
+            <div *ngIf="academic.errors && (academic.dirty || academic.touched)">
+                <div [hidden]="!academic.errors.required" class="alert">
+                Academic unit is required
+                </div>
+            </div>
+
+            <div class="custom-label">Date</div>
+            <ion-item>
+                <ion-label>Include End Date</ion-label>
+                <ion-checkbox checked="false" (ionChange)="endDateInclude($event.value)"></ion-checkbox>
+            </ion-item>
+            
+            <!-- Date Form -->
+            <ion-grid>
+                <ion-row>
+                    <ion-col>
+                        <ion-item>
+                            <ion-label color="primary" stacked>From</ion-label>
+                            <ion-datetime pickerFormat="MMM D, YYYY" 
+                                #startDate="ngModel" 
+                                name="startDate" 
+                                (ionChange)="compareDate($event, 'start')"
+                                max="2050" 
+                                [(ngModel)]="startDateDefault"
+                                required></ion-datetime>
+                        </ion-item>
+                    </ion-col>
+                    <ion-col>
+                        <div >
+                            <button ion-item [disabled]="!includeEndDate">
+                                <ion-label color="primary" stacked>To</ion-label>
+                                <ion-datetime pickerFormat="MMM D, YYYY" 
+                                    #endDate="ngModel" 
+                                    (ionChange)="compareDate($event, 'end')"
+                                    name="endDate" 
+                                    max="2050" 
+                                    [(ngModel)]="endDateDefault"
+                                    required></ion-datetime>
+                            </button>
+                        </div>
+                    </ion-col>
+                </ion-row>
+            </ion-grid>
+            <div *ngIf="!dateBalance" class="alert">
+                Ending date must be greater
+            </div>
+            <div *ngIf="!dateValid" class="alert">
+                Starting Date is in the past
+            </div>
+
+            <div class="custom-label">Time</div>
+            <ion-item>
+                <ion-label>Include End Time</ion-label>
+                <ion-checkbox checked="false" (ionChange)="endTimeInclude($event.value)"></ion-checkbox>
+            </ion-item>
+            <!-- Time Form -->
+            <ion-grid>
+                <ion-row>
+                    <ion-col>
+                        <ion-item>
+                            <ion-label color="primary" stacked>From</ion-label>
+                            <ion-datetime pickerFormat="hh:mm A" 
+                                #startTime="ngModel" 
+                                (ionChange)="compareTime($event, 'start')"
+                                name="startTime" 
+                                [(ngModel)]="startTimeDefault"
+                                required></ion-datetime>
+                        </ion-item>
+                    </ion-col>
+                    <ion-col>
+                        <div >
+                            <button ion-item [disabled]="!includeEndTime">
+                                <ion-label color="primary" stacked>To</ion-label>
+                                <ion-datetime pickerFormat="hh:mm A" 
+                                    #endTime="ngModel" 
+                                    (ionChange)="compareTime($event, 'end')"
+                                    name="endTime" 
+                                    [(ngModel)]="endTimeDefault"
+                                    required></ion-datetime>
+                            </button>
+                        </div>
+                    </ion-col>
+                </ion-row>
+            </ion-grid>
+            <div *ngIf="!timeBalance" class="alert">
+                Ending time must be greater
+            </div>
+      </div>
+        
+      <ion-item>
+          <ion-label color="primary" stacked>Desciption</ion-label>
+          <ion-textarea type="text" class="description"  
+            type="text" 
+            #description="ngModel" 
+            name="description" 
+            ngModel required>
+          </ion-textarea>
+      </ion-item>
+      <div *ngIf="description.errors && (description.dirty || description.touched)">
+          <div [hidden]="!description.errors.required" class="alert">
+                Description is required
+          </div>
+      </div>
+
+      <button ion-item class="imageContainer" [hidden]="true">
+          <div class="imageHeader">
+              <button ion-button icon-only round class="closeImage"  (click)="removePic()"><ion-icon class="close" name="close"></ion-icon></button>
+          </div>
+          <ion-input type="text"
+            #image="ngModel" 
+            name="image" 
+            [(ngModel)]="imageFile">
+          </ion-input>
+      </button>
+
+      <ion-item *ngIf="imageFile" no-lines class="imageContainer">
+          <div class="imageHeader">
+              <button ion-button icon-only round class="closeImage"  (click)="removePic()"><ion-icon class="close" name="close"></ion-icon></button>
+          </div>
+          <img src="{{ imageFile }}" class="src">
+      </ion-item>
+
+      
+    <div class="buttons">
+            <button ion-button class="btnAdd" 
+                [disabled]="!postForm.form.valid || !dateValid || !dateBalance || !timeBalance" 
+                type="submit">Post</button>
+        </div>
+    </form>
+    
 </ion-content>

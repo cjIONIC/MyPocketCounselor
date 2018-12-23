@@ -53,9 +53,20 @@
                     </div>
                 </ion-col>
               </ion-row >
-            <ion-row  *ngIf = "post.type === 'Event'" class="item">Venue:<div  class="venue">{{post.location}}</div></ion-row>
-            <ion-row  *ngIf = "post.type === 'Event'" class="item">Start:<div class="start">{{post.startDate | date: 'EE, MMM dd' }}</div></ion-row >
-              <ion-row  *ngIf = "post.type === 'Event'" class="item">End:<div class="end">{{post.endDate | date: 'EE, MMM dd' }}</div></ion-row >
+            <ion-row  *ngIf = "post.type === 'Event'" class="item">
+              <ion-col col-1 class="detailIcon"><ion-icon name="pin"></ion-icon></ion-col>
+              <ion-col col-11>{{post.location}}</ion-col>
+            </ion-row>
+            <ion-row  *ngIf = "post.type === 'Event'" class="item">
+              <ion-col col-1 class="detailIcon"><ion-icon name="calendar"></ion-icon></ion-col>
+              <ion-col col-11 *ngIf="!post.pushEndDate">{{post.startDate | date: 'EE, MMM dd' }}</ion-col>
+              <ion-col col-11 *ngIf="post.pushEndDate">{{post.startDate | date: 'EE, MMM dd' }} - {{post.endDate | date: 'EE, MMM dd' }}</ion-col>
+            </ion-row >
+            <ion-row  *ngIf = "post.type === 'Event'" class="item">
+              <ion-col col-1 class="detailIcon"><ion-icon name="time"></ion-icon></ion-col>
+              <ion-col col-11 *ngIf="!post.pushEndTime">{{post.startDate | date: 'hh:mm aa' }}</ion-col>
+              <ion-col col-11 *ngIf="post.pushEndTime">{{post.startDate | date: 'hh:mm aa' }} - {{post.endDate | date: 'hh:mm aa' }}</ion-col>
+            </ion-row >
             <ion-row  class="description">
                 {{post.description}}
             </ion-row >

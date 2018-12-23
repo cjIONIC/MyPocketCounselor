@@ -8,16 +8,16 @@ import { AngularFireDatabase } from 'angularfire2/database';
 //Provides
 import { DatabaseProvider } from '../../providers/database/database';
 import { PopFeedOptionsComponent } from '../../components/pop-feed-options/pop-feed-options';
-import { AddPostPage } from '../add-post/add-post';
 
 import { Network} from '@ionic-native/network';
+import { PostAddPage } from '../post-add/post-add';
 
 @IonicPage()
 @Component({
-  selector: 'page-feed',
-  templateUrl: 'feed.html',
+  selector: 'page-post',
+  templateUrl: 'post.html',
 })
-export class FeedPage {
+export class PostPage {
 
   connected: Subscription;
   disconnected: Subscription;
@@ -116,7 +116,7 @@ export class FeedPage {
 
   addPost(postType) {
     console.log("Post type: ", postType);
-    this.app.getRootNav().push(AddPostPage, { type: postType});
+    this.app.getRootNav().push(PostAddPage, { type: postType});
   }
 
   likePost(post) {

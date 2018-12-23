@@ -521,6 +521,16 @@ export class DatabaseProvider {
           }
         })
 
+        let pushEndDate, pushEndTime;
+
+        let endDate = new Date(post["pEnd"]);
+        if(endDate.getFullYear() < 2000) pushEndDate = false;
+        else pushEndDate = true;
+
+        let endTime = (new Date(post["pEnd"])).getHours() + (new Date(post["pEnd"])).getMinutes();
+        if(endTime === 0) pushEndTime = false;
+        else pushEndTime = true;
+
         studentFeed.push({
           id : post["pID"],
           title : post["pTitle"],
@@ -529,6 +539,8 @@ export class DatabaseProvider {
           location : post["pLocation"],
           startDate : post["pStart"],
           endDate : post["pEnd"],
+          pushEndDate: pushEndDate,
+          pushEndTime: pushEndTime,
           description : post["pDescription"],
           picture : post["pPicture"],
           like : post["pLike"],
@@ -576,6 +588,16 @@ export class DatabaseProvider {
           }
         })
 
+        let pushEndDate, pushEndTime;
+
+        let endDate = new Date(post["pEnd"]);
+        if(endDate.getFullYear() < 2000) pushEndDate = false;
+        else pushEndDate = true;
+
+        let endTime = (new Date(post["pEnd"])).getHours() + (new Date(post["pEnd"])).getMinutes();
+        if(endTime === 0) pushEndTime = false;
+        else pushEndTime = true;
+
         counselorFeed.push({
           id : post["pID"],
           title : post["pTitle"],
@@ -584,6 +606,8 @@ export class DatabaseProvider {
           location : post["pLocation"],
           startDate : post["pStart"],
           endDate : post["pEnd"],
+          pushEndDate: pushEndDate,
+          pushEndTime: pushEndTime,
           description : post["pDescription"],
           picture : post["pPicture"],
           like : post["pLike"],

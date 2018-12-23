@@ -1,4 +1,4 @@
-page-feed {
+page-post {
 
     .content {
         background-color: #EFF0F1;
@@ -109,33 +109,15 @@ page-feed {
         padding-left: 10px;
     }
 
+    .detailIcon {
+        color: #ff6961;
+    }
+
     .item {
         width: 100%;
         margin: 2px 0px;
         font-size: 10pt;
         padding: 0px 10px;
-    }
-
-    .venue {
-        width: auto;
-        margin: 0%;
-        font-size: 10pt;
-        border-radius: 50px;
-    }
-
-    .date {
-        width: auto;
-        margin: 0%;
-        font-size: 10pt;
-        border-radius: 50px;
-    }
-
-    .venue, .start, .end {
-        font-weight: bold;
-    }
-
-    .venue {
-        margin-left: 10px;
     }
 
     .start {

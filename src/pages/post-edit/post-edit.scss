@@ -1,10 +1,26 @@
-page-edit-post {
+page-post-edit {
+
+    .custom-label {
+        font-size: 9pt;
+        color: #ff6961;
+        margin-top: 10px;
+        margin-left: 15px;
+    }
+
+    .check-item {
+        font-size: 12pt;
+    }
+
+    .grid, .col {
+        padding: 0px;
+    }
+    
     .btnImage {
         padding: 0%;
     }
 
     .description {
-        height: 100px;
+        height: auto;
     }
     
     .buttons {

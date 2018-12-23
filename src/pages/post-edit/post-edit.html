@@ -13,55 +13,7 @@
 
 
 <ion-content padding>
-
-    <!--
-  <ion-item>
-      <ion-label color="primary" stacked>Title</ion-label>
-      <ion-input type="text" [(ngModel)]="title" required></ion-input>
-  </ion-item>
-
-  <ion-item *ngIf="type === 'Event'">
-      <ion-label color="primary" stacked>Location</ion-label>
-      <ion-input type="text" [(ngModel)]="location" required></ion-input>
-  </ion-item>
-
-  <ion-item *ngIf="type === 'Event'">
-      <ion-label color="primary" floating>Starting Date</ion-label>
-      <ion-datetime pickerFormat="MMMM D, YYYY" max="2050" [(ngModel)]="startDate" required></ion-datetime>
-  </ion-item>
-
-  <ion-item *ngIf="type === 'Event'">
-      <ion-label color="primary" floating>Starting Time</ion-label>
-      <ion-datetime pickerFormat="h:mm A" max="2050" [(ngModel)]="startTime" required></ion-datetime>
-  </ion-item>
-  
-  <ion-item *ngIf="type === 'Event'">
-      <ion-label color="primary" floating>Ending Date</ion-label>
-      <ion-datetime pickerFormat="MMMM D, YYYY" max="2050" [(ngModel)]="endDate" required></ion-datetime>
-  </ion-item>
-  
-  <ion-item *ngIf="type === 'Event'">
-      <ion-label color="primary" floating>Ending Time</ion-label>
-      <ion-datetime pickerFormat="h:mm A" [(ngModel)]="endTime" required></ion-datetime>
-  </ion-item>
-
-  <ion-item>
-      <ion-label color="primary" stacked>Description</ion-label>
-      <ion-textarea type="text"class="description" [(ngModel)]="description" required></ion-textarea>
-  </ion-item>
-
-  <ion-item *ngIf="image !== 'No image' || !image" no-lines class="imageContainer">
-        <div class="imageHeader">
-                <button ion-button icon-only round class="closeImage"  (click)="removePic()"><ion-icon class="close" name="close"></ion-icon></button>
-            </div>
-            <img src="{{ image }}" class="src">
-  </ion-item>
-
-  <div class="buttons">
-        <button ion-button class="btnUpdate" (click)="verifyPost()">Update</button>
-    </div>
--->
-<form #postForm="ngForm" (ngSubmit)="onEdit(postForm.value)" novalidate>
+    <form #postForm="ngForm" (ngSubmit)="onEdit(postForm.value)" novalidate>
         <ion-item>
           <ion-label color="primary" stacked>Title</ion-label>
           <ion-input type="text"
@@ -94,7 +46,7 @@
               </div>
   
               <div class="custom-label">Date</div>
-              <ion-item>
+              <ion-item no-lines class="check-item">
                   <ion-label>Include End Date</ion-label>
                   <ion-checkbox checked="{{ includeEndDate }}" (ionChange)="endDateInclude($event.value)"></ion-checkbox>
               </ion-item>
@@ -138,7 +90,7 @@
               </div>
   
               <div class="custom-label">Time</div>
-              <ion-item>
+              <ion-item no-lines class="check-item">
                   <ion-label>Include End Time</ion-label>
                   <ion-checkbox checked="{{ includeEndTime }}" (ionChange)="endTimeInclude($event.value)"></ion-checkbox>
               </ion-item>
@@ -216,6 +168,6 @@
                   [disabled]="!postForm.form.valid || !dateValid || !dateBalance || !timeBalance" 
                   type="submit">Post</button>
           </div>
-      </form>
+    </form>
 
 </ion-content>

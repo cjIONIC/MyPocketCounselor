@@ -9,7 +9,6 @@ import { CallNumber } from '@ionic-native/call-number';
 import { MyApp } from './app.component'; 
 
 //Pages
-import { FeedPage } from '../pages/feed/feed';
 import { PeoplePage } from '../pages/people/people';
 import { NotificationPage } from '../pages/notification/notification';
 import { MenuPage } from '../pages/menu/menu';
@@ -36,15 +35,14 @@ import {  FormsModule } from '@angular/forms';
 
 import { HttpClientModule } from '@angular/common/http';
 import { PopFeedOptionsComponent } from '../components/pop-feed-options/pop-feed-options';
-import { EditPostPage } from '../pages/edit-post/edit-post';
 import { PopFilterComponent } from '../components/pop-filter/pop-filter';
 import { ModalStudentUpdateComponent } from '../components/modal-student-update/modal-student-update';
 
+import { PostPage } from '../pages/post/post';
 //Native Plugins
 import { File } from '@ionic-native/file';
 import { FileChooser } from '@ionic-native/file-chooser';
 import { Camera } from '@ionic-native/camera';
-import { AddPostPage } from '../pages/add-post/add-post';
 import { GooglePlus } from '@ionic-native/google-plus';
 import { IonicStorageModule } from '@ionic/storage';
 import { ModalSearchComponent } from '../components/modal-search/modal-search';
@@ -64,6 +62,8 @@ import { AppointmentAddPage } from '../pages/appointment-add/appointment-add';
 
 
 import { ReactiveFormsModule } from '@angular/forms';
+import { PostAddPage } from '../pages/post-add/post-add';
+import { PostEditPage } from '../pages/post-edit/post-edit';
 
 const firebaseConfig = {
   apiKey: "AIzaSyAVITAZa_qU9vSHq_ASeHJ1JGt3Sy8s8a0",
@@ -82,10 +82,10 @@ const firebaseConfig = {
     RegisterPage,
     RequestPage,
     ModalRequestComponent,
-    FeedPage,
+    PostPage,
+    PostAddPage,
+    PostEditPage,
     PopFeedOptionsComponent,
-    AddPostPage,
-    EditPostPage,
     PeoplePage,
     PopFilterComponent,
     ModalProfileComponent,
@@ -129,10 +129,10 @@ const firebaseConfig = {
     RegisterPage,
     RequestPage,
     ModalRequestComponent,
-    FeedPage,
+    PostPage,
+    PostAddPage,
+    PostEditPage,
     PopFeedOptionsComponent,
-    AddPostPage,
-    EditPostPage,
     PeoplePage,
     PopFilterComponent,
     ModalProfileComponent,
