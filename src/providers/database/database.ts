@@ -503,8 +503,6 @@ export class DatabaseProvider {
 
     posts.forEach(async post => {
       if(post["acID"] === this.userInfo["academic"] || post["acID"] === 1) {
-        let startDate = await this.convertDate(post["pStart"]);
-        let endDate = await this.convertDate(post["pEnd"]);
 
         let liked = false, postAcademic, counselorAvatar, counselorName;
 
@@ -529,8 +527,8 @@ export class DatabaseProvider {
           counselor : counselorName,
           avatar : counselorAvatar,
           location : post["pLocation"],
-          startDate : startDate,
-          endDate : endDate,
+          startDate : post["pStart"],
+          endDate : post["pEnd"],
           description : post["pDescription"],
           picture : post["pPicture"],
           like : post["pLike"],
@@ -570,8 +568,6 @@ export class DatabaseProvider {
       }
 
       if(await pushPost) {
-        let startDate = await this.convertDate(post["pStart"]);
-        let endDate = await this.convertDate(post["pEnd"]);
 
         counselors.forEach(counselor => {
           if(counselor["cID"] === post["cID"]) {
@@ -586,8 +582,8 @@ export class DatabaseProvider {
           counselor : counselorName,
           avatar : counselorAvatar,
           location : post["pLocation"],
-          startDate : startDate,
-          endDate : endDate,
+          startDate : post["pStart"],
+          endDate : post["pEnd"],
           description : post["pDescription"],
           picture : post["pPicture"],
           like : post["pLike"],

@@ -54,8 +54,8 @@
                 </ion-col>
               </ion-row >
             <ion-row  *ngIf = "post.type === 'Event'" class="item">Venue:<div  class="venue">{{post.location}}</div></ion-row>
-            <ion-row  *ngIf = "post.type === 'Event'" class="item">Start:<div class="start">{{post.startDate}}</div></ion-row >
-              <ion-row  *ngIf = "post.type === 'Event'" class="item">End:<div class="end">{{post.endDate}}</div></ion-row >
+            <ion-row  *ngIf = "post.type === 'Event'" class="item">Start:<div class="start">{{post.startDate | date: 'EE, MMM dd' }}</div></ion-row >
+              <ion-row  *ngIf = "post.type === 'Event'" class="item">End:<div class="end">{{post.endDate | date: 'EE, MMM dd' }}</div></ion-row >
             <ion-row  class="description">
                 {{post.description}}
             </ion-row >

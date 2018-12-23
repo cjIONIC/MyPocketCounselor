@@ -32,6 +32,8 @@ export class AddPostPage {
   connected: Subscription;
   disconnected: Subscription;
 
+  postDetails: any;
+
   userInfo = [];
   academicList = [];
   type:any;
@@ -41,18 +43,29 @@ export class AddPostPage {
   title: any;
   location: any;
   description: any;
-  startDatetime: any;
-  endDatetime: any;
   startDate: any;
   endDate: any;
   startTime: any;
   endTime: any;
   academic: any;
+  
+  startDateDefault: any;
+  endDateDefault: any;
+  startTimeDefault: any;
+  endTimeDefault: any;
+
+  tempStartTime: any;
+  tempStartDate: any;
+
+  dateValid = true;
+
+  timeBalance = true;
+  dateBalance = true;
 
   includeEndDate: false;
   includeTimeDate: false;
 
-  imageFile: any = "https://firebasestorage.googleapis.com/v0/b/mpcapp-c01ec.appspot.com/o/post%2FIMG_0z295_1544673125110.jpeg?alt=media&token=1e6b7738-833a-4517-9788-6f8a306fd748";
+  imageFile: any;
 
   constructor(public db: DatabaseProvider,
     public fireDatabase: AngularFireDatabase,
@@ -127,11 +140,71 @@ export class AddPostPage {
       this.date = result;
       console.log("Fetched Date: ", this.date);
 
-      this.startDatetime = moment().format();
-      this.endDatetime = moment().format();
+      this.startDateDefault = moment(new Date()).format();
+      this.endDateDefault = moment(new Date()).format();
+      this.startTimeDefault = moment(new Date()).format();
+      this.endTimeDefault = moment(new Date()).format();
+
+      this.tempStartDate = this.startDateDefault;
+      this.tempStartTime =  this.startTimeDefault;
 
       console.log("Fetch Date: ", this.startDate);
     });
+  }
+
+  compareDate(value, type) {
+    let date = new Date();
+    let newEndDate = new Date();
+    console.log("Value: ", value);
+
+    date.setFullYear(value["year"], value["month"]-1, value["day"]);
+    let startDate = new Date(this.tempStartDate);
+
+    if(type === 'start') {
+      newEndDate.setFullYear(value["year"], value["month"]-1, value["day"]+1);
+  
+      if(date < startDate) {
+        this.tempStartDate = moment(date).format();
+        console.log("Lesser");
+      }
+      else if (date > startDate || date === (new Date(this.endDateDefault))) {
+        this.tempStartDate = moment(date).format();
+        this.endDateDefault = moment(newEndDate).format()
+      }
+
+      let currentDate = new Date(moment().format());
+      if (currentDate > (new Date(this.startDateDefault))) this.dateValid = false;
+
+    } else {
+      if(date < startDate) this.dateBalance = false;
+    }
+
+  }
+
+  compareTime(value, type) {
+    let time = new Date();
+    let newEndTime = new Date();
+    console.log("Value: ", value);
+
+    time.setHours(value["hour"], value["minute"]);
+    let startTime = new Date(this.tempStartTime);
+
+    if(type === 'start') {
+      newEndTime.setHours(value["hour"]+1, value["minute"]);
+
+      console.log("Date: ", time, " ? ", this.startTimeDefault);
+  
+      if(time < startTime) {
+        this.tempStartTime = moment(time).format();
+      }
+      else if (time > startTime || time === (new Date(this.endTimeDefault))) {
+        this.tempStartTime = moment(time).format();
+        this.endTimeDefault = moment(newEndTime).format()
+      }
+    } else {
+      if(time < startTime) this.timeBalance = false;
+    }
+
   }
 
   endDateInclude(event) {
@@ -177,73 +250,35 @@ export class AddPostPage {
       });
   }
 
-  //Verification of inputs
-  verifyPost() {
+  removePic() {
+    this.imageFile = null;
+  }
+
+  onAdd(post) { 
+    console.log("Value: ", post);
+
+    let startDate, endDate, location, academic;
+
     if(this.type === "Event") {
-      //Creates date type using inputs
-      let startDate = moment(this.startDate).format("MMM DD YYYY") +" "+ moment(this.startTime).format("h:mm A");
-      let endDate = moment(this.endDate).format("MMM DD YYYY") +" "+ moment(this.endTime).format("h:mm A");
-      this.startDatetime = new Date(startDate);
-      this.endDatetime = new Date(endDate);
-  
-      //Checks for inputs
-      if (this.title == null || this.location == null || this.description == null || this.academic == null) {
-        this.presentToast("Enter all fields!");
-      } else if(this.startDatetime < this.endDatetime && this.startDatetime != this.endDatetime) {
-        this.inputEvent();
-      } else {
-        this.presentToast("Ending must be greater that starting date!");
-      }
-    } else { //Type is quotes
-      //Checks for inputs
-      if (this.title == null || this.description == null) {
-        this.presentToast("Enter all fields!");
-      } else {
-       this.inputQuotes();
-      }
-    }
-    
-  }
-
-  inputEvent() {
-    console.log('%c Creating Event','color: black; background: yellow; font-size: 16px');
-    
-
-    console.log("Start: ", this.startDatetime);
-    console.log("End: ", this.endDatetime);
-
-    //Checks if start date has lesser value than end date
-    if (this.startDatetime < this.endDatetime) {
-      console.log("Adding event");
-      this.addPost();
+      academic = post["academic"];    
+      startDate = new Date(moment(post["startDate"]).format("MMM DD YYYY") +" "+ moment(post["startTime"]).format("h:mm A"));
+      endDate = new Date(moment(post["endDate"]).format("MMM DD YYYY") +" "+ moment(post["endDate"]).format("h:mm A"));
     } else {
-      this.presentToast("Ending Date must be greater!");
+      location = "None";
+      startDate = "None";
+      endDate = "None";
+
+      let tempArr = [];
+      let keysAcademic = Object.keys(this.academicList);
+      for(let i=0; i< keysAcademic.length; i++) {
+        let countAcademic = keysAcademic[i];
+        let idAcademic  = this.academicList[countAcademic].acID;
+        console.log("Acad ID: ", idAcademic);
+        if(idAcademic != undefined) tempArr.push(idAcademic);
+      }   
+      academic = tempArr;
     }
-  }
 
-  inputQuotes(){
-    console.log('%c Creating Quotes','color: black; background: yellow; font-size: 16px');
-    console.log("Adding quotes");
-    this.location = "None";
-    this.startDatetime = "None";
-    this.endDatetime = "None";
-
-    let tempArr = [];
-    let keysAcademic = Object.keys(this.academicList);
-    for(let i=0; i< keysAcademic.length; i++) {
-      let countAcademic = keysAcademic[i];
-      let idAcademic  = this.academicList[countAcademic].acID;
-      console.log("Acad ID: ", idAcademic);
-      if(idAcademic != undefined) tempArr.push(idAcademic);
-    }   
-
-    this.academic = tempArr;
-
-    this.addPost();
-  }
-
-  //Add post in database
-  addPost() {
     console.log('%c Adding Post','color: black; background: yellow; font-size: 16px');
     let loading = this.loadingCtrl.create({
       spinner: 'ios',
@@ -251,7 +286,8 @@ export class AddPostPage {
     });
     
     loading.present().then(() => {
-          this.db.addPost(this.title, this.location, this.description,this.startDatetime, this.endDatetime, this.academic, this.imageFile, this.type)
+          this.db.addPost(post["title"], location, post["description"], startDate, 
+            endDate, academic, post["image"], this.type)
           .then((action) => {
               //Dismiss loading box and page after adding event
               let currentIndex = this.navCtrl.getActive().index;
@@ -259,10 +295,7 @@ export class AddPostPage {
               loading.dismiss();
           });
     });
-  }
-
-  removePic() {
-    this.imageFile = null;
+    
   }
 
   ionViewDidLoad() {
