@@ -89,6 +89,10 @@ export class ChatMessagePage {
     })
   }
 
+  compareTime(datetime) {
+    console.log("Datetime: ", datetime);
+  }
+
   fetchMessages() {
 
     let list = this.fireDatabase.list<Item>("message");

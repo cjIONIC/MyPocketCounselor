@@ -1582,7 +1582,7 @@ export class DatabaseProvider {
           messageList.push({
             id: message["mID"],
             message: message["mDescription"],
-            datetime: date,
+            datetime: message["mDatetime"],
             type: type
           })
         }

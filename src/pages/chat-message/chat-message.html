@@ -26,6 +26,9 @@
   <ion-list>
     <ion-grid>
       <ion-row *ngFor="let detail of messageList; let last = last">
+          <div *ngIf="compareTime(detail.datetime)">
+            Sample Time
+          </div>
           <div *ngIf="detail.type === 'Recipient'" class="recipient">
             <div class="item">
               <div class="messageRecipient">
