@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ToastController, ModalController, Item, App, Toast } from 'ionic-angular';
+import { Component, ViewChild } from '@angular/core';
+import { IonicPage, NavController, NavParams, ToastController, ModalController, Item, App, Searchbar, Navbar } from 'ionic-angular';
 import { ModalProfileComponent } from '../../components/modal-profile/modal-profile';
 import { DatabaseProvider } from '../../providers/database/database';
 import { AngularFireDatabase } from 'angularfire2/database';
@@ -20,6 +20,9 @@ import { Subscription } from 'rxjs/Subscription';
   templateUrl: 'search.html',
 })
 export class SearchPage {
+
+  @ViewChild(Navbar) navbar: Navbar;
+  @ViewChild('searchbar') searchbar: Searchbar;
 
   connected: Subscription;
   disconnected: Subscription;
@@ -181,6 +184,12 @@ export class SearchPage {
   }
 
   ionViewDidEnter() {
+    this.navbar.backButtonClick = () => this.navCtrl.pop({animate: false});
+    
+    setTimeout(() => {
+      this.searchbar.setFocus();
+    });
+
     this.connected = this.network.onConnect().subscribe( data => {
       this.presentToast("You are online");
     }, error => console.log(error));

@@ -47,6 +47,10 @@ export class HomePage {
     });
   }
 
+  chat() {
+    this.app.getRootNav().push(ChatPage);
+  }
+
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad TabPage');
