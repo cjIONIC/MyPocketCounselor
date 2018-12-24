@@ -9,7 +9,7 @@
     <ion-list class="list" >
       <ion-card class="card">
           <ion-grid>
-              <ion-row class="contact"  *ngFor="let person of peopleList" class="profile" (click)="profile(person)">
+              <ion-row class="contact"  *ngFor="let person of peopleList" class="profile" (click)="profile(person.id)">
                     <ion-col class="profileLeft" col-2>
                           <img src="{{ person.picture }}" class="avatar">
                     </ion-col>

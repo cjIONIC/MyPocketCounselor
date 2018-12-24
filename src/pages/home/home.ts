@@ -37,8 +37,6 @@ export class HomePage {
     public app: App,
     public navParams: NavParams) {
 
-    //Opening pages in Toolbar
-    this.pushSearchPage = SearchPage;
   } 
 
   search() {

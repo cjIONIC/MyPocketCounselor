@@ -1420,7 +1420,7 @@ export class DatabaseProvider {
         if(message1["sID"] === this.userInfo["id"]) {
 
           chatList.forEach(chat => {
-            if(chat["cID"] === message1["cID"]) {
+            if(chat["cID"] === message1["recipientID"]) {
               console.log("Duplicate!");
               duplicate = true;
             }
@@ -1451,7 +1451,7 @@ export class DatabaseProvider {
               picture: recipientPicture,
               description: description,
               datetime: datetime,
-              cID: message1["cID"]
+              recipientID: message1["cID"]
             })
           }
         }
@@ -1459,7 +1459,7 @@ export class DatabaseProvider {
         if(message1["cID"] === this.userInfo["id"]) {
           
           chatList.forEach(chat => {
-            if(chat["sID"] === message1["sID"]) {
+            if(chat["sID"] === message1["recipientID"]) {
               console.log("Duplicate!");
               duplicate = true;
             }
@@ -1492,7 +1492,7 @@ export class DatabaseProvider {
               picture: recipientPicture,
               description: description,
               datetime: datetime,
-              sID: message1["sID"]
+              recipientID: message1["sID"]
             })
           }
         }
@@ -1515,7 +1515,7 @@ export class DatabaseProvider {
       let name;
 
       if(this.userInfo["type"] === "Student") {
-        if(account["cID"] === person["id"]) {
+        if(account["cID"] === person) {
           name = account["cFirstName"] + " " + account["cLastName"];
           recipient.push({
             id: account["cID"],
@@ -1524,7 +1524,7 @@ export class DatabaseProvider {
           })
         }
       } else {
-        if(account["sID"] === person["id"]) {
+        if(account["sID"] === person) {
           name = account["sFirstName"] + " " + account["sLastName"];
           recipient.push({
             id: account["sID"],

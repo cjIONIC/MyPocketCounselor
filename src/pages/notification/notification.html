@@ -3,10 +3,10 @@
     <ion-card class="card" *ngFor="let detail of notificationList" (click)="openNotification(detail)">
         <ion-grid>
                 <ion-row class="notification">
-                        <ion-col col-3>
+                        <ion-col col-2>
                               <img src="{{ detail.picture }}" class="avatar">
                         </ion-col>
-                        <ion-col col-9>
+                        <ion-col col-10>
                             <ion-row class="name">{{ detail.name }}</ion-row>
                             <ion-row *ngIf="detail.status === 'Pending'" class="description">You have an appointment request</ion-row>
                             <ion-row *ngIf="detail.status === 'Accepted'" class="description">Your request has been confirmed</ion-row>

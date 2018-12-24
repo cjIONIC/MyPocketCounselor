@@ -22,6 +22,7 @@ export class ChatMessagePage {
   scroll = false;
 
   recipient = [];
+  recipientID:any;
   userInfo = [];
 
   messageList = [];
@@ -38,8 +39,8 @@ export class ChatMessagePage {
 
   initialize() {
     try {
-      this.recipient =  this.navParams.get('person');
-      console.log("Fetched Recipient: ", this.recipient);
+      this.recipientID =  this.navParams.get('person');
+      console.log("Fetched Recipient: ", this.recipientID);
       this.getUserInfo();
     } catch {
 
@@ -83,7 +84,7 @@ export class ChatMessagePage {
     let item = list.valueChanges();
 
     item.subscribe(async accounts => {
-      this.recipient = await this.db.fetchRecipient(this.recipient, accounts);
+      this.recipient = await this.db.fetchRecipient(this.recipientID, accounts);
       console.log("Fetched Recipient: ", this.recipient);
     })
   }
