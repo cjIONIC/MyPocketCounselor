@@ -1029,6 +1029,9 @@ export class DatabaseProvider {
   async fetchAppointmentsForNotification(appointments){
     let appointmentList = [];
 
+    let counselors = await this.fetchAllNodesByTableInDatabase("counselor");
+    let students = await this.fetchAllNodesByTableInDatabase("student");
+
     appointments.forEach(async appointment => {
       let picture, name, push = false;
       console.log("Status: ", appointment["aStatus"]);
@@ -1036,7 +1039,6 @@ export class DatabaseProvider {
         if(appointment["sID"] === this.userInfo["id"] && appointment["aStatus"] !== "Pending") {
           console.log("Found");
           push = true;
-          let counselors = await this.fetchAllNodesByTableInDatabase("counselor");
 
           counselors.forEach(counselor => {
             if(appointment["cID"] === counselor["cID"]){
@@ -1049,7 +1051,6 @@ export class DatabaseProvider {
         if(appointment["cID"] === this.userInfo["id"] && appointment["aStatus"] === "Pending") {
           console.log("Found");
           push = true;
-          let students = await this.fetchAllNodesByTableInDatabase("student");
 
           students.forEach(student => {
             if(appointment["sID"] === student["sID"]){
@@ -1060,7 +1061,7 @@ export class DatabaseProvider {
         }
       }
 
-      if(await push) {
+      if(push) {
         appointmentList.push({
           id: appointment["aID"],
           picture: picture,
@@ -1248,24 +1249,25 @@ export class DatabaseProvider {
     return Promise.resolve<any[]>(details[0]);
   }
 
-  async fetchAppointmentInfo(id, appointments) {
+  async fetchAppointmentForNotificationInfo(id, appointments) {
     let appointmentInfo = [];
 
     let concerns = await this.fetchAllNodesByTableInDatabase("concern");
+    let counselors = await this.fetchAllNodesByTableInDatabase("counselor");
+    let students = await this.fetchAllNodesByTableInDatabase("student");
+    let academics = await this.fetchAllNodesByTableInDatabase("academic");
 
     appointments.forEach(async appointment => {
       let picture, name, coName, academicList = [], push = false;
 
       if(appointment["aID"] === id && this.userInfo["type"] === "Student") {
         push = true;
-        let counselors = await this.fetchAllNodesByTableInDatabase("cousnelor");
 
         counselors.forEach(async counselor => {
           if(appointment["cID"] === counselor["cID"]) {
             picture = counselor["cPicture"];
             name = counselor["cFirstName"]+" "+counselor["cLastName"];
 
-            let academics = await this.fetchAllNodesByTableInDatabase("academic");
 
             academics.forEach(academic => {
               if(academic["cID"] === counselor["cID"]) {
@@ -1278,14 +1280,11 @@ export class DatabaseProvider {
         })
       } else if(appointment["aID"] === id && this.userInfo["type"] !== "Student") {
         push = true;
-        let students = await this.fetchAllNodesByTableInDatabase("student");
 
         students.forEach(async student => {
           if(appointment["sID"] === student["sID"]) {
             picture = student["sPicture"];
             name = student["sFirstName"]+" "+student["sLastName"];
-
-            let academics = await this.fetchAllNodesByTableInDatabase("academic");
 
             academics.forEach(academic => {
               if(academic["acID"] === student["acID"]) {
@@ -1298,15 +1297,13 @@ export class DatabaseProvider {
         })
       }
 
-      if(await push) {
-        let schedule = this.convertDate(appointment["aSchedule"]);
+      if(push) {
         
         concerns.forEach(concern => {
           if(concern["coID"] === appointment["coID"])
             coName = concern["coName"];
         });
         let venue;
-        let academics = await this.fetchAllNodesByTableInDatabase("academic");
         academics.forEach(academic => {
           if(appointment["acID"] === academic["acID"]) venue = academic["acName"];
         })
@@ -1316,7 +1313,7 @@ export class DatabaseProvider {
           picture: picture,
           name: name,
           academic: academicList,
-          schedule: schedule,
+          schedule: appointment["aSchedule"],
           description: appointment["aDescription"],
           venue: venue,
           concern: coName,
@@ -1326,7 +1323,7 @@ export class DatabaseProvider {
       }
     })
 
-    return await appointmentInfo;
+    return appointmentInfo;
   }
 
   async addAppointment(appointment) {
@@ -1653,7 +1650,6 @@ export class DatabaseProvider {
   /*********************/
   /** F E E D B A C K **/
   /*********************/
-
   async searchFeedback(feedbacks, id) {
     let found = false;
 

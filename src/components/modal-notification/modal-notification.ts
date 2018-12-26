@@ -5,6 +5,7 @@ import { AngularFireDatabase } from 'angularfire2/database';
 import { Item } from 'klaw';
 import moment from 'moment';
 import { ModalScheduleComponent } from '../modal-schedule/modal-schedule';
+import { ModalFeedbackAddComponent } from '../modal-feedback-add/modal-feedback-add';
 
 /**
  * Generated class for the ModalNotificationComponent component.
@@ -22,6 +23,8 @@ export class ModalNotificationComponent {
   notificationInfo = [];
   userInfo = [];
 
+  foundFeedback: any;
+
   constructor(public navParams: NavParams,
       public viewCtrl: ViewController,
       public modalCtrl: ModalController,
@@ -29,6 +32,7 @@ export class ModalNotificationComponent {
       public fireDatabase: AngularFireDatabase) {
     this.initialize();
   }
+
   initialize() {
     try {
       this.id = this.navParams.get('id');
@@ -69,7 +73,7 @@ export class ModalNotificationComponent {
 
     item.subscribe(async appointments => {
       console.log("Fetching appointment...");
-      this.notificationInfo = await this.db.fetchAppointmentInfo(this.id, appointments);
+      this.notificationInfo = await this.db.fetchAppointmentForNotificationInfo(this.id, appointments);
       console.log("Notification Info: ",await this.notificationInfo);
     }, error => console.log(error))
   }
@@ -165,8 +169,15 @@ export class ModalNotificationComponent {
     let item = list.valueChanges();
 
     item.subscribe(feedbacks => {
-      let found = this.db.searchFeedback(feedbacks, this.notificationInfo["id"]);
+      this.foundFeedback = this.db.searchFeedback(feedbacks, this.notificationInfo["id"]);
     })
+  }
+
+  addFeedback() {
+    console.log("Adding feedback...");
+
+    const modal = this.modalCtrl.create(ModalFeedbackAddComponent);
+    modal.present();
   }
 
   close() {

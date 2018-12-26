@@ -28,7 +28,7 @@
               </ion-row>
             </ion-col>
           </ion-row>
-          <ion-row class="detail">Schedule: <div class="schedule">{{details.schedule}}</div></ion-row>
+          <ion-row class="detail">Schedule: <div class="schedule">{{ details.schedule | date: 'EE MMM dd, yyyy hh:mm aa' }}</div></ion-row>
           <ion-row class="detail">Venue: <div class="venue">{{details.venue}}</div></ion-row>
           <ion-row class="detail" *ngIf="userInfo['type'] !== 'Student'">Concern: <div class="concern">{{details.concern}}</div></ion-row>
           <ion-row class="detail">Description:</ion-row>
@@ -43,7 +43,7 @@
           </ion-row>
           <ion-row class="buttons" *ngIf="userInfo['type'] === 'Student'">
               <ion-col>
-                  <button ion-button clear *ngIf="appointmentFeedback()">Add Feedback</button>
+                  <button ion-button clear *ngIf="!foundFeedback" (click)="addFeedback()">Add Feedback</button>
               </ion-col>
           </ion-row>
         </ion-grid>
