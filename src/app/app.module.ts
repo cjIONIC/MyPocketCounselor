@@ -64,6 +64,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { PostAddPage } from '../pages/post-add/post-add';
 import { PostEditPage } from '../pages/post-edit/post-edit';
 import { HomePage } from '../pages/home/home';
+import { RegisterValidationPage } from '../pages/register-validation/register-validation';
 
 const firebaseConfig = {
   apiKey: "AIzaSyAVITAZa_qU9vSHq_ASeHJ1JGt3Sy8s8a0",
@@ -80,6 +81,7 @@ const firebaseConfig = {
     MyApp,
     LoginPage,
     RegisterPage,
+    RegisterValidationPage,
     RequestPage,
     HomePage,
     ModalRequestComponent,
@@ -127,6 +129,7 @@ const firebaseConfig = {
     MyApp,
     LoginPage,
     RegisterPage,
+    RegisterValidationPage,
     RequestPage,
     HomePage,
     ModalRequestComponent,

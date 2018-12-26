@@ -40,7 +40,12 @@
               <ion-col>
                   <button ion-button class="accept" (click)="accept()" clear>Accept</button>
               </ion-col>
-            </ion-row>
+          </ion-row>
+          <ion-row class="buttons" *ngIf="userInfo['type'] === 'Student'">
+              <ion-col>
+                  <button ion-button clear *ngIf="appointmentFeedback()">Add Feedback</button>
+              </ion-col>
+          </ion-row>
         </ion-grid>
       </div>
     </ion-content>

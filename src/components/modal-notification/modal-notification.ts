@@ -160,6 +160,14 @@ export class ModalNotificationComponent {
     modal.present().then(() => this.viewCtrl.dismiss());
   }
   
+  appointmentFeedback() {
+    let list = this.fireDatabase.list<Item>('feedback');
+    let item = list.valueChanges();
+
+    item.subscribe(feedbacks => {
+      let found = this.db.searchFeedback(feedbacks, this.notificationInfo["id"]);
+    })
+  }
 
   close() {
     this.viewCtrl.dismiss();

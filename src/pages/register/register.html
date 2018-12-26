@@ -1,9 +1,3 @@
-<!--
-  Generated template for the RegisterPage page.
-
-  See http://ionicframework.com/docs/components/#navigation for more info on
-  Ionic pages and navigation.
--->
 <ion-header>
 
   <ion-navbar color="primary">
@@ -22,45 +16,7 @@
         <div *ngIf="profilePic" ><img src="{{ profilePic }}" class="avatar"></div>
       
     </div>
-  
-      <!--
-      <ion-item>
-        <ion-label color="primary" floating> First Name </ion-label>
-        <ion-input type="text" formControlName="firstname"></ion-input>
-      </ion-item>
-      <button type="submit">Register</button>
-      
-      <ion-item>
-        <ion-label color="primary" floating> Last Name </ion-label>
-        <ion-input type="text" [(ngModel)]="lname"></ion-input>
-      </ion-item>
 
-      <ion-item>
-        <ion-label color="primary" floating> Username </ion-label>
-        <ion-input type="text" [(ngModel)]="username" readonly></ion-input>
-      </ion-item>
-
-      <ion-item>
-        <ion-label color="primary" floating> Password </ion-label>
-        <ion-input type="password" [(ngModel)]="password"></ion-input>
-      </ion-item>
-
-      <ion-item>
-        <ion-label color="primary" floating> Academic Unit </ion-label>
-        <ion-select [(ngModel)]="academic">
-          
-          <ion-option *ngFor="let unit of academicArray" value ="{{unit.acID}}"> {{unit.acCode}}</ion-option>
-        </ion-select>
-      </ion-item>
-
-      <ion-item>
-        <ion-label color="primary" floating> Status </ion-label>
-        <ion-select [(ngModel)]="status">
-            <ion-option value="Enrolled">Enrolled</ion-option>
-            <ion-option value="Not Enrolled">Not Enrolled</ion-option>
-        </ion-select>
-      </ion-item>
-    -->
     <form #registrationForm="ngForm" (ngSubmit)="onSubmit(registrationForm.value)" novalidate>
   
           <ion-item>

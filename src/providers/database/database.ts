@@ -1651,6 +1651,20 @@ export class DatabaseProvider {
   }
 
   /*********************/
+  /** F E E D B A C K **/
+  /*********************/
+
+  async searchFeedback(feedbacks, id) {
+    let found = false;
+
+    feedbacks.forEach(feedback => {
+      if(feedback["fIB"] === id) found = true;
+    })
+
+    return found;
+  }
+
+  /*********************/
   /**** O T H E R S ****/
   /*********************/
   uploadImage(folder, image) {

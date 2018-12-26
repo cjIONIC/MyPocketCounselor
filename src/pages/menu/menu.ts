@@ -5,8 +5,7 @@ import { LoginPage } from '../login/login';
 import { AngularFireDatabase } from 'angularfire2/database';
 import { Network} from '@ionic-native/network';
 import { Subscription } from 'rxjs/Subscription';
-import { initializeApp } from 'firebase';
-import { RequestPage } from '../request/request';
+import { RegisterValidationPage } from '../register-validation/register-validation';
 
 /**
  * Generated class for the MenuPage page.
@@ -75,7 +74,7 @@ export class MenuPage {
   }
 
   registration() {
-    this.app.getRootNav().push(RequestPage);
+    this.app.getRootNav().push(RegisterValidationPage);
   }
 
   logout() {
