@@ -26,15 +26,12 @@
   <ion-list>
     <ion-grid>
       <ion-row *ngFor="let detail of messageList; let last = last">
-          <div *ngIf="compareTime(detail.datetime)">
-            Sample Time
-          </div>
           <div *ngIf="detail.type === 'Recipient'" class="recipient">
             <div class="item">
               <div class="messageRecipient">
                 <div class="description">{{detail.message}}</div>
               </div>
-              <div class="time">{{ detail.datetime}}</div>
+              <div class="time"> {{ detail.datetime | date: 'MMM dd,yyyy hh:mm aa' }} </div>
             </div>
           </div>
           <div *ngIf="detail.type === 'Sender'" class="sender">
@@ -42,7 +39,7 @@
               <div class="messageUser">
                   <div class="description">{{detail.message}}</div>
               </div>
-              <div class="time">{{ detail.datetime}}</div>
+              <div class="time"> {{ detail.datetime | date: 'MMM dd,yyyy hh:mm aa' }} </div>
             </div>
           </div>
           {{last ? scrollChat() : ''}}

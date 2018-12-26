@@ -4,6 +4,7 @@ import { initializeApp } from 'firebase';
 import { AngularFireDatabase } from 'angularfire2/database';
 import { Item } from 'klaw';
 import { DatabaseProvider } from '../../providers/database/database';
+import moment from 'moment';
 
 /**
  * Generated class for the ChatMessagePage page.
@@ -20,6 +21,7 @@ import { DatabaseProvider } from '../../providers/database/database';
 export class ChatMessagePage {
 
   scroll = false;
+  currentDate: Date;
 
   recipient = [];
   recipientID:any;
@@ -27,6 +29,8 @@ export class ChatMessagePage {
 
   messageList = [];
   message:any;
+
+  messageDate =  new Date('December 10, 2018');
 
   @ViewChild(Content) content: Content;
 
@@ -39,6 +43,7 @@ export class ChatMessagePage {
 
   initialize() {
     try {
+      this.currentDate = new Date(moment().format());
       this.recipientID =  this.navParams.get('person');
       console.log("Fetched Recipient: ", this.recipientID);
       this.getUserInfo();
@@ -89,8 +94,15 @@ export class ChatMessagePage {
     })
   }
 
-  compareTime(datetime) {
-    console.log("Datetime: ", datetime);
+  compareTime(messageDatetime) {
+    console.log("Datetime: ", messageDatetime);
+    let datetime = new Date(messageDatetime);
+    let sample = this.messageDate.valueOf() - datetime.valueOf()
+    console.log("Message: ", sample);
+    if(!this.messageDate) {
+      this.messageDate = datetime;
+    } else {
+    }
   }
 
   fetchMessages() {
@@ -116,6 +128,21 @@ export class ChatMessagePage {
    //this.content.scrollToBottom(0);
   }
 
+  compareDate(date) {
+    console.log("Comparing...");
+    let status, datetime = new Date(date);
+    let currentDate = this.currentDate;
+    let yesterday = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate()-1)
+
+    if(moment(this.currentDate).format('yyyy') === moment(datetime).format('yyyy')) {
+      status = "year";
+    } else {
+      status = "past"
+    }
+
+    return status;
+  }
+
   sendMessage() {
     console.log("Message: ", this.message);
     let counselor, student;
@@ -132,6 +159,8 @@ export class ChatMessagePage {
       .then(() => {
         this.message = null;
         this.scroll = false;
+      }).catch(() => {
+        console.log("Unable to send message");
       })
   }
 
