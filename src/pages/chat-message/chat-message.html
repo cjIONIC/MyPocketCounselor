@@ -49,10 +49,24 @@
 </ion-content>
 
 <ion-footer>
-    <ion-toolbar>
-      <ion-input [(ngModel)]="message" placeholder="Write something here..." class="message"></ion-input>
-      <ion-buttons end>
-      <button ion-button (click)="sendMessage()" class="send" icon-only><ion-icon name="send"></ion-icon></button>
-      </ion-buttons>
-    </ion-toolbar>
+      <form #messageForm="ngForm" (ngSubmit)="onSend(messageForm.value)" novalidate>
+        <ion-toolbar>
+          <ion-input type="text"
+            #message="ngModel"
+            name="message"
+            placeholder="Write something here..." 
+            [(ngModel)]="messageDefault"
+            class="message"
+            required></ion-input>
+          <ion-buttons end>
+            <button ion-button 
+              type="submit"
+              [disabled]="!messageForm.form.valid" 
+              class="send" 
+              icon-only>
+              <ion-icon name="send"></ion-icon>
+            </button>
+          </ion-buttons>
+        </ion-toolbar>
+      </form>
   </ion-footer>

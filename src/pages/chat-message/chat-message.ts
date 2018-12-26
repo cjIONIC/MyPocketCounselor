@@ -28,7 +28,7 @@ export class ChatMessagePage {
   userInfo = [];
 
   messageList = [];
-  message:any;
+  messageDefault:any;
 
   messageDate =  new Date('December 10, 2018');
 
@@ -143,8 +143,9 @@ export class ChatMessagePage {
     return status;
   }
 
-  sendMessage() {
-    console.log("Message: ", this.message);
+  onSend(messageForm) {
+    let message = messageForm["message"];
+    console.log("Message: ", message);
     let counselor, student;
 
     if(this.userInfo["type"] === "Student") {
@@ -155,9 +156,9 @@ export class ChatMessagePage {
       counselor = this.userInfo["id"];
     }
 
-    this.db.addMessage(counselor, student, this.message)
+    this.db.addMessage(counselor, student, message)
       .then(() => {
-        this.message = null;
+        this.messageDefault = null;
         this.scroll = false;
       }).catch(() => {
         console.log("Unable to send message");
