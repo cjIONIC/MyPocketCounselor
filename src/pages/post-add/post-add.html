@@ -51,7 +51,7 @@
                     placeholder="Choose Academic Unit/s to Post to"
                     multiple="true"
                     ngModel required>
-                <ion-option *ngFor="let unit of academicList" value ="{{unit.acID}}"> {{unit.acName}}</ion-option>
+                    <ion-option *ngFor="let unit of academicList" value ="{{unit.acID}}"> {{unit.acName}}</ion-option>
                 </ion-select>
             </ion-item>
             <div *ngIf="academic.errors && (academic.dirty || academic.touched)">

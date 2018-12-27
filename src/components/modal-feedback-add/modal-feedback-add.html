@@ -1,4 +1,45 @@
 <!-- Generated template for the ModalFeedbackAddComponent component -->
-<div>
-  {{text}}
-</div>
+<ion-header>
+
+  <ion-navbar color="primary">
+      <ion-buttons end>
+          <button ion-button  style="text-transform: none; font-size: 15pt;" (click)="dismiss()">
+            Close
+          </button>
+        </ion-buttons>
+      <ion-title>Feedback</ion-title>
+  </ion-navbar>
+
+</ion-header>
+<ion-content padding class="content">
+    <form #rateForm="ngForm" (ngSubmit)="onSubmit(rateForm.value)" novalidate>
+      <ion-item>
+        <ion-label color="primary" stacked>Rating</ion-label>
+        <ion-select #rate="ngModel"
+          name="rate"
+          placeholder="Select rating"
+          ngModel
+          required>
+          <ion-option value="1">1</ion-option>
+          <ion-option value="2">2</ion-option>
+          <ion-option value="3">3</ion-option>
+          <ion-option value="4">4</ion-option>
+          <ion-option value="5">5</ion-option>
+        </ion-select>
+      </ion-item>
+      <div *ngIf="rate.errors && (rate.dirty || rate.touched)">
+          <div [hidden]="!rate.errors.required" class="alert">
+          Rating is required
+          </div>
+      </div>
+      
+      <ion-item>
+        <ion-label color="primary" stacked>Description (optional)</ion-label>
+        <ion-textarea type="text"
+          #description="ngModel"
+          name="description"
+          ngModel></ion-textarea>
+      </ion-item>
+      <button ion-button [disabled]="!rateForm.form.valid" type="submit">Submit</button>
+    </form>
+</ion-content>

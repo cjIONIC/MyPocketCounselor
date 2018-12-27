@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { AlertController, ViewController, NavParams, ModalController } from 'ionic-angular';
 import { ModalScheduleComponent } from '../modal-schedule/modal-schedule';
+import { DatabaseProvider } from '../../providers/database/database';
 
 /**
  * Generated class for the PopScheduleComponent component.
@@ -18,10 +19,12 @@ export class PopScheduleComponent {
 
   constructor(public alertCtrl: AlertController,
     public navParams: NavParams,
+    public db: DatabaseProvider,
     public modalCtrl: ModalController,
     public viewCtrl: ViewController) {
       try {
         this.appointment = this.navParams.get('appointment');
+        console.log("Fetched Appointment: ", this.appointment);
       } catch {
 
       }
@@ -43,6 +46,8 @@ export class PopScheduleComponent {
           text: 'Continue',
           handler: () => {
             try {
+              this.db.finishAppointment(this.appointment)
+                .then(() => this.viewCtrl.dismiss());
             } catch {
               
             }

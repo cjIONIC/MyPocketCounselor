@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Item } from 'ionic-angular';
 //Firebase
-import firebase from 'firebase';
+import firebase, { app } from 'firebase';
 import { AngularFireAuth} from 'angularfire2/auth';
 import { AngularFireDatabase } from 'angularfire2/database';
 import { AngularFireStorage } from 'angularfire2/storage';
@@ -1323,6 +1323,7 @@ export class DatabaseProvider {
       }
     })
 
+    appointmentInfo = await appointmentInfo[0];
     return appointmentInfo;
   }
 
@@ -1396,6 +1397,30 @@ export class DatabaseProvider {
         }
       }
     }, error => console.log(error));
+  }
+
+  async finishAppointment(appointment) {
+    let ref = this.fireDatabase.list("appointment");
+
+    ref.snapshotChanges(['child_added']).subscribe(appointments => {
+      let keys = Object.keys(appointments);
+
+      for(let i = 0; i < keys.length; i++) {
+        let count = keys[i];
+
+        if(appointments[count].payload.val().aID === appointment["id"]) {
+          let appointment = appointments[count].payload.val();
+          
+          ref.update(appointments[count].key, { 
+            aStatus: "Finished"
+          }).then(()=> {
+            console.log("Finished!");
+          });
+        }
+      }
+    }, error => console.log(error));
+
+    return;
   }
 
   /*********************/
@@ -1650,15 +1675,27 @@ export class DatabaseProvider {
   /*********************/
   /** F E E D B A C K **/
   /*********************/
-  async searchFeedback(feedbacks, id) {
-    let found = false;
+  async searchFeedback(feedbacks, appointments, id) {
+    let foundFeedback = false, foundAppointment = false;
 
     feedbacks.forEach(feedback => {
-      if(feedback["fIB"] === id) found = true;
+      if(feedback["aID"] === id) foundFeedback = true;
     })
 
-    return found;
+    appointments.forEach(appointment => {
+      
+      if(appointment["aID"] === id && appointment["aStatus"] === "Finished") foundAppointment = true;
+    })
+
+    console.log(foundFeedback , " ? ", foundAppointment);
+
+    let result = false;
+    if (!foundFeedback && foundAppointment) result = true;
+
+    return <Boolean> result;
   }
+
+  addFeedback()
 
   /*********************/
   /**** O T H E R S ****/

@@ -7,7 +7,6 @@ import { PopScheduleComponent } from './pop-schedule/pop-schedule';
 import { ModalScheduleComponent } from './modal-schedule/modal-schedule';
 import { ModalRequestComponent } from './modal-request/modal-request';
 import { ModalNotificationComponent } from './modal-notification/modal-notification';
-import { FeedbackAddComponent } from './feedback-add/feedback-add';
 import { ModalFeedbackAddComponent } from './modal-feedback-add/modal-feedback-add';
 @NgModule({
 	declarations: [PopFilterComponent,
@@ -18,7 +17,6 @@ import { ModalFeedbackAddComponent } from './modal-feedback-add/modal-feedback-a
     ModalScheduleComponent,
     ModalRequestComponent,
     ModalNotificationComponent,
-    FeedbackAddComponent,
     ModalFeedbackAddComponent],
 	imports: [],
 	exports: [PopFilterComponent,
@@ -29,7 +27,6 @@ import { ModalFeedbackAddComponent } from './modal-feedback-add/modal-feedback-a
     ModalScheduleComponent,
     ModalRequestComponent,
     ModalNotificationComponent,
-    FeedbackAddComponent,
     ModalFeedbackAddComponent]
 })
 export class ComponentsModule {}

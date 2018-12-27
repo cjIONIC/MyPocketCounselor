@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { ViewController } from 'ionic-angular';
+import { DatabaseProvider } from '../../providers/database/database';
 
 /**
  * Generated class for the ModalFeedbackAddComponent component.
@@ -14,9 +16,17 @@ export class ModalFeedbackAddComponent {
 
   text: string;
 
-  constructor() {
+  constructor(public viewCtrl: ViewController,
+    public db: DatabaseProvider) {
     console.log('Hello ModalFeedbackAddComponent Component');
-    this.text = 'Hello World';
+  }
+
+  onSubmit(value) {
+    console.log("Value: ", value);
+  }
+
+  dismiss() {
+    this.viewCtrl.dismiss();
   }
 
 }

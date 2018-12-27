@@ -23,7 +23,7 @@ export class ModalNotificationComponent {
   notificationInfo = [];
   userInfo = [];
 
-  foundFeedback: any;
+  proceedFeedback: any;
 
   constructor(public navParams: NavParams,
       public viewCtrl: ViewController,
@@ -75,6 +75,7 @@ export class ModalNotificationComponent {
       console.log("Fetching appointment...");
       this.notificationInfo = await this.db.fetchAppointmentForNotificationInfo(this.id, appointments);
       console.log("Notification Info: ",await this.notificationInfo);
+      this.appointmentFeedback();
     }, error => console.log(error))
   }
 
@@ -167,16 +168,20 @@ export class ModalNotificationComponent {
   appointmentFeedback() {
     let list = this.fireDatabase.list<Item>('feedback');
     let item = list.valueChanges();
+    let appointmentSubscription = this.fireDatabase.list<Item>('appointment').valueChanges();
 
-    item.subscribe(feedbacks => {
-      this.foundFeedback = this.db.searchFeedback(feedbacks, this.notificationInfo["id"]);
-    })
+      appointmentSubscription.subscribe(appointments => {
+        item.subscribe(async feedbacks => {
+          this.proceedFeedback = await this.db.searchFeedback(feedbacks, appointments, this.notificationInfo["id"]);
+          console.log("Result: ", this.proceedFeedback);
+        })
+      })
   }
 
   addFeedback() {
     console.log("Adding feedback...");
 
-    const modal = this.modalCtrl.create(ModalFeedbackAddComponent);
+    const modal = this.modalCtrl.create(ModalFeedbackAddComponent, {appointment: this.notificationInfo});
     modal.present();
   }
 
