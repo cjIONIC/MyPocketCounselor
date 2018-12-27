@@ -1695,7 +1695,27 @@ export class DatabaseProvider {
     return <Boolean> result;
   }
 
-  addFeedback()
+  async addFeedback(appointmentID, rate, description) {
+    let numeric = Math.random().toString().replace('0.', '').substring(0,2);
+    let timestamp = new Date().getTime().toString().substring(5, 13);
+    const id = numeric+timestamp;
+    console.log(timestamp+" ? "+numeric);
+
+    let datetime = new Date(moment().format());
+
+    if(!description) description = "None"
+    
+    this.fireDatabase.list('/feedback').push({
+      fID: parseInt(id),
+      fDescription: description,
+      fRate: parseInt(rate),
+      fDatetime: datetime.toString(),
+      sID: this.userInfo["id"],
+      aID: appointmentID
+    }).then(() => console.log("Added feedback!"));
+
+    return;
+  }
 
   /*********************/
   /**** O T H E R S ****/

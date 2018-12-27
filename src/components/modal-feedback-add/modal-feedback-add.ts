@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ViewController } from 'ionic-angular';
+import { ViewController, NavParams } from 'ionic-angular';
 import { DatabaseProvider } from '../../providers/database/database';
 
 /**
@@ -14,15 +14,31 @@ import { DatabaseProvider } from '../../providers/database/database';
 })
 export class ModalFeedbackAddComponent {
 
-  text: string;
+  appointmentInfo: any;
 
   constructor(public viewCtrl: ViewController,
+    public navParams: NavParams,
     public db: DatabaseProvider) {
-    console.log('Hello ModalFeedbackAddComponent Component');
+    
+      this.initialize();
+  }
+  
+  initialize() {
+    try {
+      this.appointmentInfo = this.navParams.get('appointment');
+    } catch {
+
+    }
   }
 
   onSubmit(value) {
     console.log("Value: ", value);
+    let id = this.appointmentInfo["id"];
+    let rate = value["rate"];
+    let description = value["description"];
+
+    this.db.addFeedback(id, rate, description)
+      .then(() => this.dismiss());
   }
 
   dismiss() {
