@@ -26,11 +26,14 @@
 </ion-header>
 
 <ion-content no-bounce>
-  <ion-tabs>
+  <ion-tabs (ionChange)="getActiveTab($event)">
       <ion-tab [root]="tab1" tabIcon="paper"></ion-tab>
       <ion-tab [root]="tab2" tabIcon="people"></ion-tab>
       <ion-tab [root]="tab3" tabIcon="calendar"></ion-tab>
-      <ion-tab [root]="tab4" tabIcon="notifications"></ion-tab>
+      <ion-tab [root]="tab4" 
+          tabIcon="notifications" 
+          tabBadge = "{{ notificationBadge }}"
+          tabBadgeStyle="danger"></ion-tab>
       <ion-tab [root]="tab5" tabIcon="menu"></ion-tab>
   </ion-tabs>
 </ion-content>

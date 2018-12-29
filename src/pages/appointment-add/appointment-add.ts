@@ -241,6 +241,8 @@ export class AppointmentAddPage {
       "aSchedule": schedule.toString(),
       "aSemester": semester,
       "aStatus": status,
+      "aStudentStatus": "Sent",
+      "aCounselorStatus": "Sent",
       "aDatetime": date.toString(),
       "sID": student,
       "cID": counselor,

@@ -1133,28 +1133,11 @@ export class DatabaseProvider {
             console.log("Found ", venue);
           }
         })
-
-        let hour = new Date(appointment["aSchedule"]).getHours();
-        let minute = new Date(appointment["aSchedule"]).getMinutes();
-        let minuteString = (minute < 10 ? '0':'') + minute;
-        let meridian;
-        if(hour < 12) meridian = "AM";
-        if(hour >= 12) {
-          meridian = "PM";
-          hour = hour - 12;
-        }
-        if(hour === 24 || hour === 0) hour = 12;
-
-        let hourString = (hour < 10 ? '0':'')+hour;
-
-        let time = hourString+":"+minuteString;
         
         filteredAppointments.push({
             id: appointment["aID"],
             venue: venue,
             schedule: appointment["aSchedule"],
-            time:time,
-            meridian: meridian,
             description: appointment["aDescription"],
             student: sName,
             studentPhoto: sPicture,

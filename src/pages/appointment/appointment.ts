@@ -30,7 +30,6 @@ export class AppointmentPage {
 
   userInfo:any;
   fired:Boolean = false ;
-  displayDate: any;
 
   date = new Date(moment().format()); //Handles the Date() attributes
   monthName:string[];
@@ -194,7 +193,6 @@ export class AppointmentPage {
   loadLastMonth() {
     this.date = new Date(this.date.getFullYear(), this.date.getMonth(), 0);
     this.daySelected = "";
-    this.displayDate = "";
     this.fired = false;
     this.appointmentsOfSelectedDate = [];
     this.fetchAppointmentsOfCurrentMonth();
@@ -204,7 +202,6 @@ export class AppointmentPage {
   loadNextMonth() {
     this.date = new Date(this.date.getFullYear(), this.date.getMonth()+2, 0);
     this.daySelected = "";
-    this.displayDate = "";
     this.fired = false;
     this.appointmentsOfSelectedDate = [];
     this.fetchAppointmentsOfCurrentMonth();
@@ -218,9 +215,6 @@ export class AppointmentPage {
 
     console.log("Info: ", month, day, year);
     this.selectedDay = new Date(year, month, day);
-    let setDay = this.selectedDay;
-    let monthName = this.db.findMonth(setDay.getMonth());
-    this.displayDate = week[ setDay.getDay()] +", " + monthName+" "+ day+", "+year;
 
     var list = this.fireDatabase.list<Item>('appointment');
     var item = list.valueChanges();

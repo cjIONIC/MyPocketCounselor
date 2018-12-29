@@ -22,10 +22,10 @@ export class ModalScheduleComponent {
   connected: Subscription;
   disconnected: Subscription;
 
-  student: any;
-  date: any;
-  time: any;
-  venue: any;
+  studentDefault: any;
+  dateDefault: any;
+  timeDefault: any;
+  venue: any = "Sample";
 
   venuesArray = [];
   appointment = [];
@@ -61,22 +61,19 @@ export class ModalScheduleComponent {
 
   async initialize(appointment) {
     try{ 
+      this.dateDefault = moment().format();
+      this.timeDefault = moment().format();
 
       this.fireDatabase.list<Item>("appointment")
         .valueChanges().subscribe( async appointments => {
 
           this.appointment = await this.db.filterAppointmentDetails(appointment["id"], appointments);
           console.log("Fetched appointment: ", this.appointment);
-          this.student = await this.appointment["studentName"];
-          this.venue = await this.appointment["venue"];
-          this.date = moment().format();
-          this.time = moment().format();
-    
-          let schedule = await new Date(this.appointment["schedule"]);
-          let timezone = await schedule.getTimezoneOffset() * 60000;
-          let datetime = await  new Date(schedule.getTime() - timezone).toISOString().slice(0, -1);
-          this.date =  moment(datetime).format();
-          this.time =  moment(datetime).format();
+          this.studentDefault = this.appointment["studentName"];
+          this.venue =  await this.appointment["venue"];
+
+          this.dateDefault =  moment(new Date(this.appointment["schedule"])).format();
+          this.timeDefault =  moment(new Date(this.appointment["schedule"])).format();
       
           this.fetchVenue()
         })
@@ -95,15 +92,13 @@ export class ModalScheduleComponent {
     })
   }
 
-  verifyInputs(){
-    console.log("Reschedule");
-    let datetime = moment(this.date).format("MMM DD YYYY") +" "+ moment(this.time).format("h:mm A");
+  onReschedule(appointment) {
+    let datetime = moment(appointment["date"]).format("MMM DD YYYY") +" "+ moment(appointment["time"]).format("h:mm A");
     const schedule = new Date(datetime) ;
-    if(!this.time || !this.date || !this.venue) this.presentToast("Enter all fields!");
-    else this.reschedule(schedule);
+    this.reschedule(schedule, appointment["unit"]);
   }
 
-  async reschedule(schedule) {
+  async reschedule(schedule, venue) {
     console.log('%c Rescheduling Appointment','color: white; background: red; font-size: 16px');
     let appointmentsOfCounselor, appointmentsOfStudent; //Variables used in checking
     console.log("Schedule: ", schedule);
@@ -116,7 +111,7 @@ export class ModalScheduleComponent {
       if(await appointmentsOfStudent && await appointmentsOfCounselor) 
         this.presentToast("Date and time has already been occupied!");
       else {
-        await this.db.rescheduleAppointment(this.appointment["id"], schedule, this.venue).then(() => {
+        await this.db.rescheduleAppointment(this.appointment["id"], schedule, venue).then(() => {
             this.viewCtrl.dismiss();
           }).catch(err => console.log("Error: ", err));
       }

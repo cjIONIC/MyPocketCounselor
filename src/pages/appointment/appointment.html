@@ -46,11 +46,11 @@
       </ion-grid>
     </div>
   </ion-card>
-  <ion-card class="cardSelect" *ngIf="displayDate">
+  <ion-card class="cardSelect" *ngIf="selectedDay">
         <div class="selectedTitle">Date Selected:</div>
-        <div class="selected">{{displayDate}}</div>
+        <div class="selected">{{ selectedDay | date: 'EEEE, MMMM dd, yyyy'}}</div>
   </ion-card>
-  <ion-card class="cardSelect" *ngIf="!displayDate">
+  <ion-card class="cardSelect" *ngIf="!selectedDay">
         <div class="selected"> No Date Selected </div>
   </ion-card>
 
@@ -60,8 +60,8 @@
             <ion-row>
                 <ion-col class="colTime" col-3>
                     <div class="datetime">
-                        <ion-row><div class="time"> {{ appointment.time }} </div></ion-row>
-                        <ion-row><div class="meridian">{{ appointment.meridian }} </div> </ion-row>
+                        <ion-row><div class="time"> {{ appointment.schedule | date: 'hh:mm' }} </div></ion-row>
+                        <ion-row><div class="meridian">{{ appointment.schedule | date: 'aa' }} </div> </ion-row>
                     </div>
                 </ion-col> 
                 

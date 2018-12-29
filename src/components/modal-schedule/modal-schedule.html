@@ -12,27 +12,49 @@
   
 </ion-header>
 <ion-content padding class="content">
-  <ion-item class="item">
-      <ion-label color="primary" floating>Student</ion-label>
-      <ion-input readonly [(ngModel)]="student"></ion-input>
-    <div> {{name}} </div>
-  </ion-item>
-  <ion-item class="item">
-    <ion-label color="primary" floating> Date</ion-label>
-    <ion-datetime pickerFormat="MMMM DD,YYYY" max="2050" [(ngModel)]="date" required></ion-datetime>
-  </ion-item>
-  <ion-item class="item">
-    <ion-label color="primary" floating> Time</ion-label>
-    <ion-datetime pickerFormat="h:mm A" [(ngModel)]="time" required></ion-datetime>
-  </ion-item>
-  <ion-item class="item">
-    <ion-label color="primary" floating>Venue</ion-label>
-        <ion-select [(ngModel)]="venue">
-            <ion-option *ngFor="let place of venuesArray" value ="{{place.acName}}" required> {{place.acName}}</ion-option>
-        </ion-select>
-  </ion-item>
+  
+    <ion-item> {{studentDefault}} </ion-item>
+
+    <form #appointmentForm="ngForm" (ngSubmit)="onReschedule(appointmentForm.value)" novalidate>
+      <ion-item>
+          <ion-label color="primary" stacked> Date</ion-label>
+          <ion-datetime pickerFormat="MMM DD,YYYY" 
+            max="2050" 
+            #date="ngModel" 
+            name="date" 
+            [(ngModel)]="dateDefault" 
+            required>
+          </ion-datetime>
+        </ion-item>
     
-  <div class="buttons">
-    <button ion-button class="btnReschedule" (click)="verifyInputs()">Reschedule</button>
-</div>
+        <ion-item>
+          <ion-label color="primary" stacked> Time</ion-label>
+          <ion-datetime pickerFormat="h:mm A" 
+            #time="ngModel" 
+            name="time"
+            [(ngModel)]="timeDefault" 
+            required>
+          </ion-datetime>
+        </ion-item>
+        
+      <ion-item class="item">
+          <ion-label color="primary" stacked>Venue</ion-label>
+              <ion-select #unit="ngModel" 
+                  name="unit"  
+                  [(ngModel)]="venue"
+                  required>
+                  <ion-option *ngFor="let place of venuesArray" value ="{{place.acName}}" required> {{place.acName}}</ion-option>
+              </ion-select>
+        </ion-item>
+
+        <div *ngIf="venue.errors && (venue.dirty || venue.touched)">
+            <div [hidden]="!venue.errors.required" class="alert">
+              Venue is required
+            </div>
+          </div>
+        
+      <div class="buttons">
+        <button ion-button class="btnReschedule" [disabled]="!appointmentForm.form.valid" type="submit">Reschedule</button>
+      </div>
+  </form>
 </ion-content>
