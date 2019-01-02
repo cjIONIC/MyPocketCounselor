@@ -25,6 +25,7 @@ import { DatabaseProvider } from '../../providers/database/database';
 })
 export class HomePage {
 
+  notificationHasEnter: any = false;
   notificationBadge: any;
   selectedPage: any;
   userInfo = [];
@@ -92,8 +93,13 @@ export class HomePage {
   getActiveTab(value) {
     console.log("CURRENTLY SELECTED TAB: ", value);
     this.selectedPage = value.root.name;
+
+    if(this.selectedPage === "NotificationPage") {
+      this.notificationHasEnter = true;
+    }
   }
 
+  
   scanAppointmentChanges() {
     let list = this.fireDatabase.list<Item>("appointment");
     let item = list.valueChanges();

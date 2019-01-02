@@ -7,6 +7,7 @@ import { Network} from '@ionic-native/network';
 import { Subscription } from 'rxjs/Subscription';
 import { AppointmentAddPage } from '../../pages/appointment-add/appointment-add';
 import moment from 'moment';
+import { ChatMessagePage } from '../../pages/chat-message/chat-message';
 
 /**
  * Generated class for the ModalProfileComponent component.
@@ -83,9 +84,14 @@ export class ModalProfileComponent {
   addAppointment() {
     let date = new Date(moment().format());
     let recipient = this.profileInfo[0];
-    this.viewCtrl.dismiss();
     this.app.getRootNav().push(AppointmentAddPage, {date: date, recipient: recipient});
+    this.viewCtrl.dismiss();
 
+  }
+
+  message() {
+    this.app.getRootNav().push(ChatMessagePage, {person: this.id});
+    this.viewCtrl.dismiss();
   }
 
   presentModal() {

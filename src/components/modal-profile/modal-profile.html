@@ -32,7 +32,7 @@
               <div><button *ngIf="type === 'Student'" ion-button class="changeButton"(click)="presentModal()" clear>Update Academic Info</button></div>
               <div><button *ngIf="type !== 'Student'" ion-button class="appointmentButton" (click)="addAppointment()" clear> Request Appointment</button></div>
               <div><button *ngIf="type === 'Student'" ion-button class="appointmentButton" (click)="addAppointment()" clear> Set Appointment</button></div>
-              <div><button ion-button class="messageButton" clear> Message</button></div>
+              <div><button ion-button class="messageButton" (click)="message()" clear> Message</button></div>
           </div>
         </div>
     </div>
