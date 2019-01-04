@@ -6,6 +6,7 @@ import { AngularFireDatabase } from 'angularfire2/database';
 import { Network} from '@ionic-native/network';
 import { Subscription } from 'rxjs/Subscription';
 import { RegisterValidationPage } from '../register-validation/register-validation';
+import { ProfilePage } from '../profile/profile';
 
 /**
  * Generated class for the MenuPage page.
@@ -71,6 +72,10 @@ export class MenuPage {
       this.userInfo = await this.db.getUserInfo();
       console.log("User information: ", this.userInfo);
     }, error => console.log(error));
+  }
+
+  openProfile() {
+    this.app.getRootNav().push(ProfilePage);
   }
 
   registration() {

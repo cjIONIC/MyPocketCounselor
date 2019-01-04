@@ -66,6 +66,7 @@ import { PostEditPage } from '../pages/post-edit/post-edit';
 import { HomePage } from '../pages/home/home';
 import { RegisterValidationPage } from '../pages/register-validation/register-validation';
 import { ModalFeedbackAddComponent } from '../components/modal-feedback-add/modal-feedback-add';
+import { ProfilePage } from '../pages/profile/profile';
 
 const firebaseConfig = {
   apiKey: "AIzaSyAVITAZa_qU9vSHq_ASeHJ1JGt3Sy8s8a0",
@@ -97,6 +98,7 @@ const firebaseConfig = {
     NotificationPage,
     ModalNotificationComponent,
     MenuPage,
+    ProfilePage,
     SearchPage,
     ChatPage,
     ChatPeopleListPage,
@@ -146,6 +148,7 @@ const firebaseConfig = {
     NotificationPage,
     ModalNotificationComponent,
     MenuPage,
+    ProfilePage,
     SearchPage,
     ChatPage,
     ChatPeopleListPage,

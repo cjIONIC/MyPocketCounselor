@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, Item } from 'ionic-angular';
+import { DatabaseProvider } from '../../providers/database/database';
+import { AngularFireDatabase } from 'angularfire2/database';
 
 /**
  * Generated class for the ProfilePage page.
@@ -15,7 +17,39 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class ProfilePage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  userInfo = [];
+
+  constructor(public navCtrl: NavController, 
+      public db: DatabaseProvider,
+      public fireDatabase: AngularFireDatabase,
+      public navParams: NavParams) {
+    this.initialize();
+  }
+
+  initialize() {
+    try {
+      this.getUserInfo();
+    } catch {
+
+    }
+  }
+  
+  async getUserInfo() {
+    let userInfo = await this.db.getProfileInStorage();
+    console.log("Currently logged in: ", userInfo);
+    let table;
+
+    if(userInfo["type"] === "Student") table = "student"
+    else table = "counselor";
+
+    let list = this.fireDatabase.list<Item>(table);
+    let item = list.valueChanges();
+
+    item.subscribe(async accounts => {
+      await this.db.refreshUserInfo(accounts, userInfo);
+      this.userInfo = await this.db.getUserInfo();
+      console.log("User information: ", this.userInfo);
+    }, error => console.log(error));
   }
 
   ionViewDidLoad() {
