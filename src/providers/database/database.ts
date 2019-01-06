@@ -779,6 +779,60 @@ export class DatabaseProvider {
 
   }
 
+  async fetchPostForProfile(posts) {
+    let postArray = [];
+    let academics = await this.fetchAllNodesByTableInDatabase("academic");
+
+    posts.forEach(post => {
+      let unit;
+
+      if(post["cID"] === this.userInfo["id"]) {
+
+        academics.forEach(academic => {
+          if(academic["cID"] === post["cID"]) {
+            unit = academic["acName"];
+          }
+        })
+
+        let counselorName = this.userInfo["firstname"] + " " + this.userInfo["lastname"];
+
+        let pushEndDate, pushEndTime;
+
+        let endDate = new Date(post["pEnd"]);
+        if(endDate.getFullYear() < 2000) pushEndDate = false;
+        else pushEndDate = true;
+
+        let endTime = (new Date(post["pEnd"])).getHours() + (new Date(post["pEnd"])).getMinutes();
+        if(endTime === 0) pushEndTime = false;
+        else pushEndTime = true;
+
+        postArray.push({
+          id : post["pID"],
+          title : post["pTitle"],
+          counselor : counselorName,
+          avatar : this.userInfo["picture"],
+          location : post["pLocation"],
+          startDate : post["pStart"],
+          endDate : post["pEnd"],
+          pushEndDate: pushEndDate,
+          pushEndTime: pushEndTime,
+          description : post["pDescription"],
+          picture : post["pPicture"],
+          like : post["pLike"],
+          datetime :post["pDatetime"],
+          academic : unit,
+          type: post["pType"]
+        })
+
+      }
+    })
+
+    postArray.reverse();
+    console.log("Posts: ", postArray);
+
+    return postArray;
+  }
+
   /*********************/
   /**** P E O P L E ****/
   /*********************/
@@ -1698,6 +1752,31 @@ export class DatabaseProvider {
     }).then(() => console.log("Added feedback!"));
 
     return;
+  }
+
+  async fetchFeedbackRating(counselor, feedbacks) {
+    let totalRate = 0;
+    let numberOfStudentRate = 0;
+
+    let appointments = await this.fetchAllNodesByTableInDatabase("appointment");
+
+    feedbacks.forEach(feedback => {
+      
+      appointments.forEach(appointment => {
+        if(feedback["aID"] === appointment["aID"]) {
+          if(appointment["cID"] === counselor) {
+            numberOfStudentRate++;
+            totalRate += feedback["fRate"];
+          }
+        }
+      })
+
+    })
+
+    let averageRate = totalRate / numberOfStudentRate;
+
+    console.log("Rate: ", averageRate);
+    return averageRate;
   }
 
   /*********************/

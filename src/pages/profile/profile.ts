@@ -18,6 +18,9 @@ import { AngularFireDatabase } from 'angularfire2/database';
 export class ProfilePage {
 
   userInfo = [];
+  rating: any;
+
+  postArray = [];
 
   constructor(public navCtrl: NavController, 
       public db: DatabaseProvider,
@@ -49,7 +52,30 @@ export class ProfilePage {
       await this.db.refreshUserInfo(accounts, userInfo);
       this.userInfo = await this.db.getUserInfo();
       console.log("User information: ", this.userInfo);
+
+      if(this.userInfo["type"] !== "Student") {
+        this.fetchRating();
+        this.fetchPersonalPosts();
+      }
     }, error => console.log(error));
+  }
+
+  fetchRating() {
+    let list = this.fireDatabase.list<Item>("feedback");
+    let item = list.valueChanges();
+
+    item.subscribe(async feedbacks => {
+      this.rating = await this.db.fetchFeedbackRating(this.userInfo["id"], feedbacks);
+    })
+  }
+
+  fetchPersonalPosts() {
+    let list =  this.fireDatabase.list<Item>('post');
+    let item = list.valueChanges();
+
+    item.subscribe( async posts => {
+      this.postArray = await this.db.fetchPostForProfile(posts);
+    })
   }
 
   ionViewDidLoad() {
