@@ -28,10 +28,15 @@
       <ion-row *ngFor="let detail of messageList; let last = last">
           <div *ngIf="detail.type === 'Recipient'" class="recipient">
             <div class="item">
-              <div class="messageRecipient">
-                <div class="description">{{detail.message}}</div>
-              </div>
-              <div class="time"> {{ detail.datetime | date: 'MMM dd,yyyy hh:mm aa' }} </div>
+              <ion-row>
+                  <ion-col col-2><img src = "{{ recipient['picture'] }}" class="avatar"></ion-col>
+                  <ion-col col-10>
+                      <div class="messageRecipient">
+                          <div class="description">{{detail.message}}</div>
+                      </div>
+                      <div class="time"> {{ detail.datetime | date: 'MMM dd,yyyy hh:mm aa' }} </div>
+                  </ion-col>
+              </ion-row>
             </div>
           </div>
           <div *ngIf="detail.type === 'Sender'" class="sender">

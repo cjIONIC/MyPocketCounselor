@@ -42,4 +42,10 @@ page-chat {
         font-size: 10pt;
         color: gray;
     }
+
+    .text {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
 }
