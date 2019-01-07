@@ -10,6 +10,7 @@ import { ChatPage } from '../chat/chat';
 import { AppointmentPage } from '../appointment/appointment';
 import { AngularFireDatabase } from 'angularfire2/database';
 import { DatabaseProvider } from '../../providers/database/database';
+import { updateDate } from 'ionic-angular/umd/util/datetime-util';
 
 /**
  * Generated class for the HomePage page.
@@ -96,7 +97,12 @@ export class HomePage {
 
     if(this.selectedPage === "NotificationPage") {
       this.notificationHasEnter = true;
-    }
+      this.notificationBadge
+    } else if (this.selectedPage !== "NotificationPage"
+      && this.notificationHasEnter === true) {
+        this.updateAppointmentStatus();
+        this.notificationHasEnter = false;
+      }
   }
 
   
@@ -127,6 +133,34 @@ export class HomePage {
       else this.notificationBadge = null;
 
     })
+  }
+
+  async updateAppointmentStatus() {
+    let appointments = await this.db.fetchAllNodesBySnapshot("appointment");
+    let ref = this.fireDatabase.list('appointment');
+
+    let keys = Object.keys(appointments);
+
+    for(let i = 0; i < keys.length; i++) {
+      let count = keys[i];
+      let appointment = appointments[count].payload.val();
+
+      if(this.userInfo["type"] === "Student") {
+        if(appointment.sID === this.userInfo["id"] 
+          && appointment.aStudentStatus === "Sent"
+          && appointment.aStatus !== "Pending") {
+            ref.update(appointments[count].key, { aStudentStatus: "Received" });
+        }
+      } else {
+        if(appointment.sID === this.userInfo["id"] 
+          && appointment.aCounselorStatus === "Sent"
+          && appointment.aStatus === "Pending") {
+            ref.update(appointments[count].key, { aCounselorStatus: "Received" });
+        }
+      }
+    }
+
+    this.notificationBadge = null;
   }
 
   ionViewDidLoad() {

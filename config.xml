@@ -90,10 +90,10 @@
     <plugin name="cordova-plugin-ionic-keyboard" spec="^2.1.2" />
     <plugin name="cordova-plugin-network-information" spec="2.0.1" />
     <plugin name="com.telerik.plugins.nativepagetransitions" spec="^0.6.5" />
-    <engine name="ios" spec="4.5.5" />
-    <engine name="android" spec="7.1.4" />
     <plugin name="cordova-plugin-googleplus" spec="^5.3.2">
         <variable name="REVERSED_CLIENT_ID" value="com.googleusercontent.apps.578845672664-vo40upp9jd6qd4eauift56dgas0pn5qm" />
         <variable name="PLAY_SERVICES_VERSION" value="11.0.4" />
     </plugin>
+    <engine name="ios" spec="4.5.5" />
+    <engine name="android" spec="7.1.4" />
 </widget>
