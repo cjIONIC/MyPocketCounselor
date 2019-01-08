@@ -18,7 +18,16 @@
   
   <ion-content padding>
       <ion-item>
-          {{ recipient.name }}
+        <div class="header">Recipient</div>
+        <ion-grid>
+          <ion-row>
+              <ion-col col-2><img src="{{ recipient.picture }}" class="avatar"></ion-col>
+              <ion-col col-10 class="recipientName">
+                  {{ recipient.name }}
+              </ion-col>
+          </ion-row>
+        </ion-grid>
+          
       </ion-item>
 
       <form #appointmentForm="ngForm" (ngSubmit)="onAdd(appointmentForm.value)" novalidate>

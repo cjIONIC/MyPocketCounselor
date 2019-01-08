@@ -139,6 +139,8 @@ export class HomePage {
   }
 
   async updateAppointmentStatus() {
+    this.notificationBadge = null;
+
     let appointments = await this.db.fetchAllNodesBySnapshot("appointment");
     let ref = this.fireDatabase.list('appointment');
 
@@ -162,8 +164,6 @@ export class HomePage {
         }
       }
     }
-
-    this.notificationBadge = null;
   }
 
   ionViewDidLoad() {

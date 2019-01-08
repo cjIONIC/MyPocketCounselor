@@ -128,8 +128,31 @@ export class ModalRequestComponent {
   async acceptRequest() {
     let request = await this.inputs();
     let found = await this.simultaneousVerification();
-    let id = this.profileInfo[0].id;
-    if(found)this.db.acceptStudentRequest(await request, id).then(() => this.close());
+
+    let list = this.fireDatabase.list<Item>("student");
+    let item = list.valueChanges();
+
+    let timeout = Math.floor(Math.random() * 1500) + 500;
+
+    setTimeout(async () => {
+      item.subscribe(async students => {
+        let email = this.profileInfo[0].email;
+        let found = false;
+  
+        students.forEach(student => {
+          if(student["sEmail"] === email) {
+            
+          }
+        });
+  
+        if(found) {
+          let id = this.profileInfo[0].id;
+          this.db.acceptStudentRequest(await request, id).then(() => this.close());
+        }
+
+      });
+    }, timeout);
+
   }
 
   async inputs() {

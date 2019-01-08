@@ -58,8 +58,31 @@ export class RegisterPage {
     }
   }
 
-  onSubmit(value) {
-    console.log("Value: ",value);
+  async onSubmit(form) {
+    console.log("Value: ",form);
+    
+    let loading = this.loadingCtrl.create({
+      spinner: 'ios',
+      content: 'Registering Please Wait...'
+    });
+
+    loading.present().then(async () => {
+      let student = await this.checkUsernameInStudent(this.username);
+      let counselor = await this.checkUsernameInCounselor(this.username);
+      let register = await this.checkUsernameInRegister(this.username);
+  
+      if( !student && !counselor && !register) {
+        this.registerUser().then(() => {
+          let currentIndex = this.navCtrl.getActive().index;
+          this.navCtrl.remove(currentIndex);
+          console.log("Successfully registered");
+          loading.dismiss();
+        }); 
+      } else {
+        this.presentToast("Username already exist!");
+        loading.dismiss();
+      }
+    });
   }
 
   changeProfilePic() {

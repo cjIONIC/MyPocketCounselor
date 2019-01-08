@@ -920,7 +920,8 @@ export class DatabaseProvider {
             if(academic["acID"] === account["acID"]) {
               academicUnit.push({
                 id: academic["acID"],
-                name: academic["acName"]
+                name: academic["acName"],
+                code: academic["acCode"]
               });
             }
           })

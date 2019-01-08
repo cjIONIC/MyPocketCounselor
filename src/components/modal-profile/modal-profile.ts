@@ -83,8 +83,16 @@ export class ModalProfileComponent {
 
   addAppointment() {
     let date = new Date(moment().format());
-    let recipient = this.profileInfo[0];
-    this.app.getRootNav().push(AppointmentAddPage, {date: date, recipient: recipient});
+    let profile = this.profileInfo[0];
+    let academic = profile["academic"];
+    //let recipient = this.profileInfo[0];
+    let recipient = [{
+      id: profile["id"],
+      name: profile["name"],
+      picture: profile["picture"],
+      academic: academic[0].code
+    }]
+    this.app.getRootNav().push(AppointmentAddPage, {date: date, recipient: recipient[0]});
     this.viewCtrl.dismiss();
 
   }

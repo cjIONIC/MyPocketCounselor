@@ -154,7 +154,7 @@ export class AppointmentAddPage {
     let appointmentInputs = await this.appointmentInputs(schedule);
     console.log("Inputs: ", appointmentInputs);
 
-    let timeout = Math.floor(Math.random() * 500) + 200;
+    let timeout = Math.floor(Math.random() * 1500) + 500;
 
     let list = this.fireDatabase.list<Item>("appointment");
     let item = list.valueChanges();
