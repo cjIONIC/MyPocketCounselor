@@ -102,7 +102,10 @@ export class HomePage {
       && this.notificationHasEnter === true) {
         this.updateAppointmentStatus();
         this.notificationHasEnter = false;
-      }
+    } else {
+      this.scanAppointmentChanges();
+    }
+
   }
 
   
@@ -116,13 +119,13 @@ export class HomePage {
       appointments.forEach(appointment => {
         if(this.userInfo["type"] === "Student") {
           if(appointment["sID"] === this.userInfo["id"] 
-            && appointment["aStudentStatus"] === "Sent"
+            && appointment["aNotification"] === "Sent"
             && appointment["aStatus"] !== "Pending") {
             notificationBadge++;
           }
         }else{
           if(appointment["cID"] === this.userInfo["id"] 
-            && appointment["aCounselorStatus"] === "Sent"
+            && appointment["aNotification"] === "Sent"
             && appointment["aStatus"] === "Pending") {
             notificationBadge++;
           }
@@ -147,15 +150,15 @@ export class HomePage {
 
       if(this.userInfo["type"] === "Student") {
         if(appointment.sID === this.userInfo["id"] 
-          && appointment.aStudentStatus === "Sent"
+          && appointment.aNotification === "Sent"
           && appointment.aStatus !== "Pending") {
-            ref.update(appointments[count].key, { aStudentStatus: "Received" });
+            ref.update(appointments[count].key, { aNotification: "Received" });
         }
       } else {
-        if(appointment.sID === this.userInfo["id"] 
-          && appointment.aCounselorStatus === "Sent"
+        if(appointment.cID === this.userInfo["id"] 
+          && appointment.aNotification === "Sent"
           && appointment.aStatus === "Pending") {
-            ref.update(appointments[count].key, { aCounselorStatus: "Received" });
+            ref.update(appointments[count].key, { aNotification: "Received" });
         }
       }
     }

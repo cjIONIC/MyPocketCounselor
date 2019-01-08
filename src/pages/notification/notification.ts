@@ -118,6 +118,8 @@ export class NotificationPage {
   }
 
   ionViewDidEnter() {
+    this.initialize();
+    
     this.connected = this.network.onConnect().subscribe( data => {
       this.presentToast("You are online");
       this.initialize();

@@ -88,8 +88,13 @@ export class AppointmentAddPage {
               await this.db.refreshUserInfo(accounts, userInfo);
               this.userInfo = await this.db.getUserInfo();
               console.log("User information: ", this.userInfo);
-              await this.fetchConcerns(this.userInfo["type"]);
-              await this.fetchVenues(this.userInfo["id"]);
+
+              if(this.userInfo["type"] === "Student") {
+                this.fetchConcerns(this.userInfo["type"]);
+                this.fetchVenues(this.recipient["id"]);
+              } else  {
+                this.fetchVenues(this.userInfo["id"]);
+              }
             }, error => console.log(error))
 
         }, error => console.log(error))
@@ -134,21 +139,6 @@ export class AppointmentAddPage {
 
       console.log("Appointment Venues: ", this.venuesArray);
     })
-  }
-
-  selectRecipient() {
-    const modalOptions: ModalOptions = {
-      enableBackdropDismiss: false
-    }
-    const modal = this.modalCtrl.create(ModalSearchComponent, "", modalOptions);
-    modal.present();
-
-    //Fetches the name and information from the modal
-    modal.onDidDismiss( result => {
-      this.recipient = result;
-      if(this.userInfo["type"] === "Student") this.fetchVenues(this.recipient["id"]);
-      console.log("Person: ", this.recipient)
-    });
   }
 
   async onAdd(details) {
@@ -241,8 +231,7 @@ export class AppointmentAddPage {
       "aSchedule": schedule.toString(),
       "aSemester": semester,
       "aStatus": status,
-      "aStudentStatus": "Sent",
-      "aCounselorStatus": "Sent",
+      "aNotification": "Sent",
       "aDatetime": date.toString(),
       "sID": student,
       "cID": counselor,

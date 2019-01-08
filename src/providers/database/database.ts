@@ -1121,6 +1121,7 @@ export class DatabaseProvider {
           picture: picture,
           name: name,
           status: appointment["aStatus"],
+          notification: appointment["aNotification"],
           datetime: appointment["aDatetime"]
         })
       }
