@@ -387,8 +387,9 @@ export class DatabaseProvider {
       return 0;
     });
 
-    await requestList.reverse();
-    return await requestList;
+    requestList.reverse();
+    console.log("Fetched requests: ", requestList);
+    return requestList;
   }
 
   async fetchRequestProfile(id, accounts) {

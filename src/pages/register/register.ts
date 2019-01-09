@@ -47,6 +47,8 @@ export class RegisterPage {
     private loadingCtrl: LoadingController,
     private camera: Camera) {
 
+      this.initialize();
+
   }
 
   initialize() {
@@ -66,23 +68,28 @@ export class RegisterPage {
       content: 'Registering Please Wait...'
     });
 
-    loading.present().then(async () => {
-      let student = await this.checkUsernameInStudent(this.username);
-      let counselor = await this.checkUsernameInCounselor(this.username);
-      let register = await this.checkUsernameInRegister(this.username);
-  
-      if( !student && !counselor && !register) {
-        this.registerUser().then(() => {
-          let currentIndex = this.navCtrl.getActive().index;
-          this.navCtrl.remove(currentIndex);
-          console.log("Successfully registered");
+    
+    let timeout = Math.floor(Math.random() * 1500) + 500;
+
+    setTimeout(async () => {
+      loading.present().then(async () => {
+        let student = await this.checkUsernameInStudent(this.username);
+        let counselor = await this.checkUsernameInCounselor(this.username);
+        let register = await this.checkUsernameInRegister(this.username);
+    
+        if( !student && !counselor && !register) {
+          this.registerUser(form).then(() => {
+            let currentIndex = this.navCtrl.getActive().index;
+            this.navCtrl.remove(currentIndex);
+            console.log("Successfully registered");
+            loading.dismiss();
+          }); 
+        } else {
+          this.presentToast("Username already exist!");
           loading.dismiss();
-        }); 
-      } else {
-        this.presentToast("Username already exist!");
-        loading.dismiss();
-      }
-    });
+        }
+      });
+    }, timeout);
   }
 
   changeProfilePic() {
@@ -149,74 +156,6 @@ export class RegisterPage {
     toast.present();
   }
 
-   verifyStudentInfo() {
-    console.log('%c Verifying Inputs','color: white; background: violet; font-size: 16px');
-    let username = false;
-    let password = false;
-
-    let loading = this.loadingCtrl.create({
-      spinner: 'ios',
-      content: 'Registering Please Wait...'
-    });
-
-    loading.present().then(async () => {
-      if (this.fname == null ||
-        this.lname == null ||
-        this.username == null ||
-        this.password == null ||
-        this.academic == null ||
-        this.status == null) {
-          this.presentToast("Enter all fields!");
-      } else {
-        //Check Username input
-        let username = false;
-        if ( /[^a-zA-Z0-9]/.test(this.username)) {
-          this.presentToast("Username must contain letters or numbers only!");
-          loading.dismiss();
-        } else {
-          if(this.username.length > 5) {
-            username = true;
-          } else {
-            this.presentToast("Username must contain atleast 6 characters!");
-            loading.dismiss();
-          }
-        }
-  
-        //Check password input
-        if (/[^a-zA-Z0-9]/.test(this.password)) {
-          this.presentToast("Password must contain letters or numbers only!");
-          loading.dismiss();
-        } else {
-          if(this.password.length > 5) {
-            password = true;
-          } else {
-            this.presentToast("Password must contain atleast 6 characters!");
-            loading.dismiss();
-          }
-        }
-  
-        //Registering student
-        if(username == true && password == true) {
-          const student = await this.checkUsernameInStudent(this.username);
-          const counselor = await this.checkUsernameInCounselor(this.username);
-          const register = await this.checkUsernameInRegister(this.username);
-
-          if( !student && !counselor) {
-            this.registerUser().then(() => {
-              let currentIndex = this.navCtrl.getActive().index;
-              this.navCtrl.remove(currentIndex);
-              console.log("Successfully registered");
-              loading.dismiss();
-            }); 
-          } else {
-            this.presentToast("Username already exist!");
-            loading.dismiss();
-          }
-        }
-      }
-    });
-  }
-
   async checkUsernameInStudent(username) {
     console.log('%c Checking student usernames...','color: black; background: pink; font-size: 16px');
     let list = this.fireDatabase.list<Item>('student');
@@ -259,13 +198,12 @@ export class RegisterPage {
     return foundUsername;
   }
 
-  registerUser() {
+  registerUser(form) {
     console.log("Academic: ", this.academic);
     console.log('%c Registering student','color: black; background: pink; font-size: 16px');
     return new Promise((resolve) => {
-      this.db.registerStudent(this.fname, this.lname, 
-      this.googleInfo["email"],this.username, this.password,this.academic, 
-      this.status, this.profilePic).then( action => {
+      this.db.registerStudent(form["firstname"],form["lastname"],this.googleInfo["email"],form["username"],
+        form["password"],form["academic"],form["status"], this.profilePic).then( action => {
         resolve(true);
       });
     })

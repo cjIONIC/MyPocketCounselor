@@ -12,8 +12,11 @@
     <ion-card class="card">
         <ion-grid>
             <ion-row  *ngFor="let person of requestList" class="profile" (click)="profile(person)">
-                  <ion-col class="profileLeft" col-3>
+                  <ion-col class="profileLeft" *ngIf="person.picture !== 'No image'" col-3>
                         <img src="{{ person.picture }}" class="avatar">
+                  </ion-col>
+                  <ion-col class="profileLeft" *ngIf="person.picture === 'No image'" col-3>
+                        <div class="avatar"></div>
                   </ion-col>
                   <ion-col class="profileRight" col-9>
                       <ion-row class="name">{{person.name}}</ion-row>

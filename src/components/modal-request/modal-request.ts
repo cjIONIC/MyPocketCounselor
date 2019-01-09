@@ -125,32 +125,39 @@ export class ModalRequestComponent {
     alert.present();
   }
 
-  async acceptRequest() {
+  async accept() {
     let request = await this.inputs();
-    let found = await this.simultaneousVerification();
 
     let list = this.fireDatabase.list<Item>("student");
     let item = list.valueChanges();
 
     let timeout = Math.floor(Math.random() * 1500) + 500;
+    
+    let profile = this.profileInfo[0];
+    let email = profile["email"];
+    console.log("Email: ", email);
 
     setTimeout(async () => {
-      item.subscribe(async students => {
-        let email = this.profileInfo[0].email;
-        let found = false;
+      let found = await new Promise <any> ( resolve => {
+        item.subscribe(async students => {
+    
+          students.forEach(student => {
+            if(student["sEmail"] === email) {
+                console.log(student["sEmail"] , " ? ", email);
+                resolve(true);
+            }
+          });
   
-        students.forEach(student => {
-          if(student["sEmail"] === email) {
-            
-          }
+          resolve(false)
+  
         });
-  
-        if(found) {
-          let id = this.profileInfo[0].id;
-          this.db.acceptStudentRequest(await request, id).then(() => this.close());
-        }
+      })
 
-      });
+      if(!found) {
+        let id = profile["id"];
+        this.db.acceptStudentRequest(request[0], id).then(() => this.close());
+      }
+
     }, timeout);
 
   }
@@ -189,6 +196,7 @@ export class ModalRequestComponent {
 
     let found = await new Promise((resolve) => {
       item.subscribe(students => {
+
         let email = this.profileInfo[0].email;
   
         students.forEach(student => {

@@ -74,6 +74,7 @@ export class RegisterValidationPage {
       .valueChanges().subscribe(async requests => {
         console.log("Request:", requests);
         this.requestList = await this.db.fetchRegistrations(academicList, requests);
+        console.log("Request fetched: ", this.requestList);
       }, error => console.log("Error"));
   }
   

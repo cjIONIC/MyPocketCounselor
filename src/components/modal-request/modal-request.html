@@ -6,7 +6,8 @@
         </ion-buttons>
     </div>
     <div *ngFor="let details of profileInfo" class="profile">
-        <div><img src="{{ details.picture }}" class="avatar"></div>
+        <div *ngIf="details.picture !== 'No image'"><img src="{{ details.picture }}" class="avatar"></div>
+        <div *ngIf="details.picture === 'No image'"><div class="avatar"></div></div>
         <div class="details">
           <div class="name">{{details.name}}</div>
           <div class="academicLabel">Academic Unit</div>

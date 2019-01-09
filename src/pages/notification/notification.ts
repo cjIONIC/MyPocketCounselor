@@ -106,6 +106,34 @@ export class NotificationPage {
 
     }
   }
+  async updateAppointmentStatus() {
+
+    let appointments = await this.db.fetchAllNodesBySnapshot("appointment");
+    let ref = this.fireDatabase.list('appointment');
+
+    let keys = Object.keys(appointments);
+
+    for(let i = 0; i < keys.length; i++) {
+      let count = keys[i];
+      let appointment = appointments[count].payload.val();
+
+      if(this.userInfo["type"] === "Student") {
+        if(appointment.sID === this.userInfo["id"] 
+          && appointment.aNotification === "Sent"
+          && appointment.aStatus !== "Pending") {
+            ref.update(appointments[count].key, { aNotification: "Received" });
+        }
+      } else {
+        if(appointment.cID === this.userInfo["id"] 
+          && appointment.aNotification === "Sent"
+          && appointment.aStatus === "Pending") {
+            ref.update(appointments[count].key, { aNotification: "Received" });
+        }
+      }
+    }
+
+    return;
+  }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad NotificationPage');
@@ -115,6 +143,7 @@ export class NotificationPage {
     this.connected.unsubscribe();
     this.disconnected.unsubscribe();
 
+    this.updateAppointmentStatus();
   }
 
   ionViewDidEnter() {

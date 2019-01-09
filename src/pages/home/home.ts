@@ -29,6 +29,8 @@ export class HomePage {
   notificationHasEnter: any = false;
   notificationBadge: any;
   selectedPage: any;
+  updatedNotification: any = false;
+
   userInfo = [];
 
   tab1 = PostPage;
@@ -90,80 +92,39 @@ export class HomePage {
   chat() {
     this.app.getRootNav().push(ChatPage);
   }
-
-  getActiveTab(value) {
-    console.log("CURRENTLY SELECTED TAB: ", value);
-    this.selectedPage = value.root.name;
-
-    if(this.selectedPage === "NotificationPage") {
-      this.notificationHasEnter = true;
-      this.notificationBadge
-    } else if (this.selectedPage !== "NotificationPage"
-      && this.notificationHasEnter === true) {
-        this.updateAppointmentStatus();
-        this.notificationHasEnter = false;
-    } else {
-      this.scanAppointmentChanges();
-    }
-
-  }
-
   
   scanAppointmentChanges() {
     let list = this.fireDatabase.list<Item>("appointment");
     let item = list.valueChanges();
-    let notificationBadge = 0;
+    
 
     item.subscribe(appointments => {
-      
-      appointments.forEach(appointment => {
-        if(this.userInfo["type"] === "Student") {
-          if(appointment["sID"] === this.userInfo["id"] 
-            && appointment["aNotification"] === "Sent"
-            && appointment["aStatus"] !== "Pending") {
-            notificationBadge++;
+      console.log("Scanning...");
+      let notificationBadge = 0;
+      this.notificationBadge = null;
+
+        appointments.forEach(appointment => {
+          if(this.userInfo["type"] === "Student") {
+            if(appointment["sID"] === this.userInfo["id"] 
+              && appointment["aNotification"] === "Sent"
+              && appointment["aStatus"] !== "Pending") {
+              notificationBadge++;
+            }
+          }else if(this.userInfo["type"] !== "Student"){
+            if(appointment["cID"] === this.userInfo["id"] 
+              && appointment["aNotification"] === "Sent"
+              && appointment["aStatus"] === "Pending") {
+              notificationBadge++;
+            }
           }
-        }else{
-          if(appointment["cID"] === this.userInfo["id"] 
-            && appointment["aNotification"] === "Sent"
-            && appointment["aStatus"] === "Pending") {
-            notificationBadge++;
-          }
-        }
+        })
+  
+        if(notificationBadge !== 0) this.notificationBadge = notificationBadge;
+        else this.notificationBadge = null;
+  
+        console.log("Notification badge: ", notificationBadge);
       })
-
-      if(notificationBadge !== 0) this.notificationBadge = notificationBadge;
-      else this.notificationBadge = null;
-
-    })
-  }
-
-  async updateAppointmentStatus() {
-    this.notificationBadge = null;
-
-    let appointments = await this.db.fetchAllNodesBySnapshot("appointment");
-    let ref = this.fireDatabase.list('appointment');
-
-    let keys = Object.keys(appointments);
-
-    for(let i = 0; i < keys.length; i++) {
-      let count = keys[i];
-      let appointment = appointments[count].payload.val();
-
-      if(this.userInfo["type"] === "Student") {
-        if(appointment.sID === this.userInfo["id"] 
-          && appointment.aNotification === "Sent"
-          && appointment.aStatus !== "Pending") {
-            ref.update(appointments[count].key, { aNotification: "Received" });
-        }
-      } else {
-        if(appointment.cID === this.userInfo["id"] 
-          && appointment.aNotification === "Sent"
-          && appointment.aStatus === "Pending") {
-            ref.update(appointments[count].key, { aNotification: "Received" });
-        }
-      }
-    }
+   
   }
 
   ionViewDidLoad() {

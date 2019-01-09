@@ -28,20 +28,20 @@
               First name is required
             </div>
             <div [hidden]="!firstname.errors.pattern" class="alert">
-              First name must contain atleast two letters and spaces in between
+              First name must only contain characters and atleast two letters
             </div>
           </div>
 
           <ion-item>
             <ion-label color="primary" floating> Last name </ion-label>
-            <ion-input type="text" #lastname="ngModel" name="lastname" pattern="([a-zA-Z ]+)[a-zA-Z]$" ngModel required></ion-input>
+            <ion-input type="text" #lastname="ngModel" name="lastname" pattern="^[a-zA-Z]*$" ngModel required></ion-input>
           </ion-item>
           <div *ngIf="lastname.errors && (lastname.dirty || lastname.touched)">
             <div [hidden]="!lastname.errors.required" class="alert">
               Last name is required
             </div>
             <div [hidden]="!lastname.errors.pattern" class="alert">
-              Last name must contain atleast two letters and spaces in between
+              Last name must only contain alphabets
             </div>
           </div>
 
