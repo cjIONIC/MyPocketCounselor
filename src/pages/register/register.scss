@@ -57,6 +57,20 @@ page-register {
         border: 2px solid white;
     }
 
+    .emailLabel, .email {
+        margin: 0px 15px;
+    }
+
+    .emailLabel {
+        margin-top: 10px;
+        font-size: 10pt;
+        color: #ff6961;
+    }
+
+    .email {
+        font-size: 12pt;
+    }
+
     .alert {
         font-size: 12pt;
         color: white;

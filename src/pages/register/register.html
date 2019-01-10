@@ -18,48 +18,21 @@
     </div>
 
     <form #registrationForm="ngForm" (ngSubmit)="onSubmit(registrationForm.value)" novalidate>
-  
+
+          <ion-item>
+            <ion-label color="primary" floating> Email </ion-label>
+            <ion-input type="text" #email="ngModel" name="email" [(ngModel)]="emailDefault" readonly></ion-input>
+          </ion-item>
+
           <ion-item>
             <ion-label color="primary" floating> First name </ion-label>
-            <ion-input type="text" #firstname="ngModel" name="firstname" pattern="([a-zA-Z ]+)[a-zA-Z]$" ngModel required></ion-input>
+            <ion-input type="text" #firstname="ngModel" name="firstname" [(ngModel)]="fNameDefault" readonly></ion-input>
           </ion-item>
-          <div *ngIf="firstname.errors && (firstname.dirty || firstname.touched)">
-            <div [hidden]="!firstname.errors.required" class="alert">
-              First name is required
-            </div>
-            <div [hidden]="!firstname.errors.pattern" class="alert">
-              First name must only contain characters and atleast two letters
-            </div>
-          </div>
 
           <ion-item>
             <ion-label color="primary" floating> Last name </ion-label>
-            <ion-input type="text" #lastname="ngModel" name="lastname" pattern="^[a-zA-Z]*$" ngModel required></ion-input>
+            <ion-input type="text" #lastname="ngModel" name="lastname" [(ngModel)]="lNameDefault" readonly></ion-input>
           </ion-item>
-          <div *ngIf="lastname.errors && (lastname.dirty || lastname.touched)">
-            <div [hidden]="!lastname.errors.required" class="alert">
-              Last name is required
-            </div>
-            <div [hidden]="!lastname.errors.pattern" class="alert">
-              Last name must only contain alphabets
-            </div>
-          </div>
-
-          <ion-item>
-            <ion-label color="primary" floating> Username</ion-label>
-            <ion-input type="username" #username="ngModel" name="username" minlength="6" pattern="^[a-zA-Z0-9]*$" ngModel required></ion-input>
-          </ion-item>
-          <div *ngIf="username.errors && (password.dirty || username.touched)">
-            <div [hidden]="!username.errors.required" class="alert">
-              Username is required
-            </div>
-            <div [hidden]="!username.errors.pattern" class="alert">
-              Username must only contain letters and numbers
-            </div>
-            <div [hidden]="!username.errors.minlength" class="alert">
-              Username must contain atleast six characters
-            </div>
-          </div>
           
 
           <ion-item>

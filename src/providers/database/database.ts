@@ -147,7 +147,7 @@ export class DatabaseProvider {
     return found;
   }
 
-  loginSearchStudent(username, password) {
+  loginSearchStudent(email, password) {
     console.log("Searching student...");
 
     var list = this.fireDatabase.list<Item>('student');
@@ -163,7 +163,7 @@ export class DatabaseProvider {
           var sEmail = array[count].sEmail;
           var sPassword = array[count].sPassword;
     
-          if (username == sEmail && password == sPassword) {
+          if (email == sEmail && password == sPassword) {
     
             user.push({
               "id": array[count].sID,
@@ -191,7 +191,7 @@ export class DatabaseProvider {
     });
   }
 
-  loginSearchCounselor(username, password) {
+  loginSearchCounselor(email, password) {
     console.log("Searching counselor...");
 
     var list = this.fireDatabase.list<Item>('counselor');
@@ -208,7 +208,7 @@ export class DatabaseProvider {
           var cEmail = array[count].cEmail;
           var cPassword = array[count].cPassword;
     
-          if (username === cEmail && password === cPassword) {
+          if (email === cEmail && password === cPassword) {
     
             user.push({
               "id": array[count].cID,
@@ -292,8 +292,8 @@ export class DatabaseProvider {
   }
 
   //Registers student to the database
-  async registerStudent(fname, lname, email, username,
-    password, academic, status, image) {
+  async registerStudent(fname, lname, email,
+    password, academic, status, image, type) {
     let acID = parseInt(academic);
     let imageURL;
 
@@ -306,8 +306,12 @@ export class DatabaseProvider {
     let id = numeric+timestamp;
     
     if(image) {
-      let filePath = await this.uploadImage("registration", image);
-      imageURL = await this.downloadImage(filePath);
+      if(type === "fromDevice") {
+        let filePath = await this.uploadImage("registration", image);
+        imageURL = await this.downloadImage(filePath);
+      } else {
+        imageURL = image;
+      }
     } else imageURL = "No image";
     
 
@@ -317,7 +321,6 @@ export class DatabaseProvider {
       rLastName: lname,
       rEmail: email,
       rPicture: imageURL,
-      rUsername: username,
       rPassword: password,
       rStatus: status,
       rDatetime: date.toString(),
@@ -328,23 +331,41 @@ export class DatabaseProvider {
   }
 
   async fetchRegistrations(academics, requests) {
+    let allAcademics = await this.fetchAllNodesByTableInDatabase("academic");
     let requestList = [];
 
     requests.forEach(request => {
 
-      academics.forEach(academic => {
-        if(request["acID"] === academic["acID"] || this.userInfo['type'] === "GTD Head") {
-          let name = request["rLastName"] +", "+ request["rFirstName"];
-
-          requestList.push({
-            id: request["rID"],
-            name: name,
-            picture: request["rPicture"],
-            academic: academic["acCode"],
-            datetime: request["rDatetime"]
-          });
-        }
-      })
+      if(this.userInfo["type"] === "Counselor") {
+        academics.forEach(academic => {
+          if(request["acID"] === academic["acID"]) {
+            let name = request["rLastName"] +", "+ request["rFirstName"];
+  
+            requestList.push({
+              id: request["rID"],
+              name: name,
+              picture: request["rPicture"],
+              academic: academic["acCode"],
+              datetime: request["rDatetime"]
+            });
+          }
+        })
+      } else if(this.userInfo["type"] === "GTD Head"){
+        allAcademics.forEach(academic => {
+          if(request["acID"] === academic["acID"]) {
+            let name = request["rLastName"] +", "+ request["rFirstName"];
+  
+            requestList.push({
+              id: request["rID"],
+              name: name,
+              picture: request["rPicture"],
+              academic: academic["acCode"],
+              datetime: request["rDatetime"]
+            });
+          }
+        });
+      }
+     
     })
 
     requestList.sort(function(a,b) {
@@ -832,42 +853,102 @@ export class DatabaseProvider {
     return await studentList;
   }
 
+  async fetchUnitCounselor() {
+    let unitCounselor = [];
+    let counselors = await this.fetchAllNodesByTableInDatabase("counselor");
+    let students = await this.fetchAllNodesByTableInDatabase("student");
+    let academics = await this.fetchAllNodesByTableInDatabase("academic");
+    let academics1 = await this.fetchAllNodesByTableInDatabase("academic");
+
+    students.forEach(student => {
+      if(student["sID"] === this.userInfo["id"]) {
+
+        academics.forEach(academic => {
+          if(student["acID"] === academic["acID"]) {
+
+            counselors.forEach(counselor => {
+              if(academic["cID"] === counselor["cID"]) {
+                let name = counselor["cLastName"] +", "+ counselor["cFirstName"];
+
+                let academicList = []; //Handles all units of counselor
+                academics1.forEach(academic1 => {
+                  if(counselor["cID"] === academic1["cID"]) {
+                    academicList.push({
+                      id: academic1["acID"],
+                      code: academic1["acCode"]
+                    })
+                  }
+                })
+
+                unitCounselor.push({
+                  id: counselor["cID"],
+                  name: name,
+                  number: counselor["cNumber"],
+                  academic: academicList,
+                  picture: counselor["cPicture"]
+                })
+
+              }
+            })
+
+          }
+        })
+
+      }
+    })
+
+    return unitCounselor[0];
+  }
+
   async fetchListCounselor(counselors, filter: Boolean, unit) {
     let counselorList = [];
     let academics = await this.fetchAllNodesByTableInDatabase("academic");
+    let students = await this.fetchAllNodesByTableInDatabase("student");
+
+    let counselorID;
+
+    students.forEach(student => {
+      if(student["sID"] === this.userInfo["id"]) {
+        academics.forEach(academic => {
+          if(student["acID"] === academic["acID"])
+          counselorID = academic["cID"];
+        })
+      }
+    })
 
     counselors.forEach(async counselor => {
-      let push = false;
-      let academicList = []; //Handles all units of counselor
-      academics.forEach(academic => {
-        if(counselor["cID"] === academic["cID"]) {
-          academicList.push({
-            id: academic["acID"],
-            code: academic["acCode"]
+      if(counselor["cID"] !== counselorID) {
+        let push = false;
+        let academicList = []; //Handles all units of counselor
+        academics.forEach(academic => {
+          if(counselor["cID"] === academic["cID"]) {
+            academicList.push({
+              id: academic["acID"],
+              code: academic["acCode"]
+            })
+          }
+        })
+  
+        if(!filter) push =true;
+  
+        if(filter) {
+          academicList.forEach(listUnit => {
+            if(listUnit["id"] === unit) push = true;
           })
         }
-      })
-
-      if(!filter) push =true;
-
-      if(filter) {
-        academicList.forEach(listUnit => {
-          if(listUnit["id"] === unit) push = true;
-        })
-      }
-
-      if(await push) {
-        let name = counselor["cLastName"] +", "+ counselor["cFirstName"];
-
-        counselorList.push({
-          id: counselor["cID"],
-          name: name,
-          academic: academicList,
-          picture: counselor["cPicture"]        
-        })
+  
+        if(await push) {
+          let name = counselor["cLastName"] +", "+ counselor["cFirstName"];
+  
+          counselorList.push({
+            id: counselor["cID"],
+            name: name,
+            academic: academicList,
+            picture: counselor["cPicture"]        
+          })
+        }
       }
       
-
     })
 
     console.log("Counselors: ", counselorList);

@@ -28,6 +28,10 @@ export class LoginPage {
   username: any;
   password: any;
 
+  googleUser: any;
+
+  passwordDefault = "sample";
+
   connected: Subscription;
   disconnected: Subscription;
 
@@ -77,12 +81,15 @@ export class LoginPage {
     console.log('%c Logging in with google','color: white; background: blue; font-size: 16px');
 
     var googleInfo = [];
+    let firstname, lastname;
     //Opens dialog to choose account
     this.googlePlus.login({
       'webClientId':'578845672664-vo40upp9jd6qd4eauift56dgas0pn5qm.apps.googleusercontent.com',
       'offline':true
     }).then(res => {
       console.log("Result: ", res );
+      firstname = res["givenName"];
+      lastname = res["familyName"];
 
       let loading = this.loadingCtrl.create({
         spinner: 'ios',
@@ -97,26 +104,29 @@ export class LoginPage {
 
           console.log("Informations: ", action);
 
-          /*
-          var user = firebase.auth().currentUser;
+          this.googleUser = firebase.auth().currentUser;
+          console.log("Google USER: ", this.googleUser);
           this.fireAuth.auth.signOut();
           this.googlePlus.logout();
-          user.delete();
-          */
-  
-          console.log("Action ",JSON.stringify(action));
+          this.googleUser.delete();
   
           googleInfo.push({
             "name": action["displayName"],
             "picture": action["photoURL"],
+            "firstname": firstname,
+            "lastname": lastname,
             "email": action["email"],
             "id": action["uid"]
           });
-  
           googleInfo = googleInfo[0];
           console.log("Google Info ",googleInfo);
-  
-          this.verifyGoogleAccount(googleInfo);
+
+          let email = googleInfo["email"];
+          let domain = email.substring(email.lastIndexOf("@") +1);
+
+          if(domain !== "su.edu.ph") this.presentAlert("Info", "Invalid SU Email Address");
+          else this.verifyGoogleAccount(googleInfo);
+
         }).catch(err => {
           console.log("Error: ", err);
         })
@@ -129,7 +139,7 @@ export class LoginPage {
   //Logs in using username and password
   upLogin(loginInfo) {
     console.log('%c Logging in with username and password','color: white; background: blue; font-size: 16px');
-    this.verifyLogin(loginInfo["username"], loginInfo["password"]);
+    this.verifyLogin(loginInfo["email"], loginInfo["password"]);
 
   }
 
@@ -151,7 +161,7 @@ export class LoginPage {
       if ((counselorFound || studentFound ) && !registerFound) {
         this.presentAlert("Info", "This account already exist");
         loading.dismiss();
-      } else if(registerFound){
+      } else if(!counselorFound && !studentFound  && registerFound){
         loading.dismiss();
         this.presentAlert("Registration Info", "Your account is still being verified.");
       } else {
@@ -162,7 +172,7 @@ export class LoginPage {
 
   }
 
-  verifyLogin(username, password) {
+  verifyLogin(email, password) {
 
     let loading = this.loadingCtrl.create({
       spinner: 'ios',
@@ -170,9 +180,9 @@ export class LoginPage {
     });
 
     loading.present().then(async () => {
-      let counselorFound = await this.db.loginSearchCounselor(username, password);
-      let studentFound = await this.db.loginSearchStudent(username, password);
-      let registerFound = await this.db.registerCheckAccounts(username);
+      let counselorFound = await this.db.loginSearchCounselor(email, password);
+      let studentFound = await this.db.loginSearchStudent(email, password);
+      let registerFound = await this.db.registerCheckAccounts(email);
 
       if ((counselorFound || studentFound ) && !registerFound) {
         let currentIndex = this.navCtrl.getActive().index;

@@ -50,7 +50,6 @@ import { Keyboard } from '@ionic-native/keyboard';
 import { Network } from '@ionic-native/network'
 import { PopScheduleComponent } from '../components/pop-schedule/pop-schedule';
 import { ModalScheduleComponent } from '../components/modal-schedule/modal-schedule';
-import { RequestPage } from '../pages/request/request';
 import { ModalRequestComponent } from '../components/modal-request/modal-request';
 import { ModalNotificationComponent } from '../components/modal-notification/modal-notification';
 import { ChatPeopleListPage } from '../pages/chat-people-list/chat-people-list';
@@ -86,7 +85,6 @@ const firebaseConfig = {
     LoginForgotPage,
     RegisterPage,
     RegisterValidationPage,
-    RequestPage,
     HomePage,
     ModalRequestComponent,
     PostPage,
@@ -137,7 +135,6 @@ const firebaseConfig = {
     LoginForgotPage,
     RegisterPage,
     RegisterValidationPage,
-    RequestPage,
     HomePage,
     ModalRequestComponent,
     PostPage,

@@ -13,41 +13,40 @@
                         <div class="or">or</div>
                     <form #loginForm="ngForm" (ngSubmit)="upLogin(loginForm.value)" novalidate>
                         <ion-grid>
+                            <ion-row class="label">Enter SU Email here</ion-row>
                             <ion-row class="item">
                                 <ion-col col-1><ion-icon class="icon" name="person"></ion-icon></ion-col>
                                 <ion-col col-11>
-                                    <ion-input placeholder="Enter username here" 
-                                        type="text" 
-                                        #username="ngModel" 
-                                        name="username" 
-                                        minlength="4" 
-                                        pattern="^[a-zA-Z0-9]*$" 
+                                    <ion-input placeholder="@su.edu.ph" 
+                                        class="textInput"
+                                        type="email" 
+                                        #email="ngModel" 
+                                        name="email" 
+                                        pattern="^[a-zA-Z]+@(?:(?:[a-zA-Z0-9-]+\.)?[a-zA-Z]+\.)?(su.edu)\.ph$" 
                                         ngModel required>
                                     </ion-input>
                                 </ion-col>
                             </ion-row>
-                            <ion-row *ngIf="username.errors && (username.dirty || username.touched)">
-                               <div [hidden]="!username.errors.required" class="alert">
-                                 Username is required
+                            <ion-row *ngIf="email.errors && (email.dirty || email.touched)">
+                               <div [hidden]="!email.errors.required" class="alert">
+                                 SU Email is required
                                 </div>
-                                <div [hidden]="!username.errors.pattern" class="alert">
-                                 Username must only contain letters and numbers
-                                </div>
-                                <div [hidden]="!username.errors.minlength" class="alert">
-                                 Username must contain atleast six characters
+                                <div [hidden]="!email.errors.pattern" class="alert">
+                                 Invalid SU Email Address
                                 </div>
                             </ion-row>
+                            <ion-row class="label">Enter password here</ion-row>
                             <ion-row class="item">
                                 <ion-col col-1><ion-icon class="icon" name="lock"></ion-icon></ion-col>
                                 <ion-col col-11>
                                     <ion-input type="password" 
-                                        placeholder="Enter password here" 
-                                        type="password" 
+                                        class="textInput"
                                         #password="ngModel" 
                                         name="password" 
                                         minlength="6" 
                                         pattern="^[a-zA-Z0-9]*$" 
-                                        ngModel required>
+                                        ngModel
+                                        required>
                                     </ion-input>
                                 </ion-col>
                             </ion-row>
@@ -66,7 +65,7 @@
                         <button ion-button block class="login" [disabled]="!loginForm.form.valid" type="submit">Log in</button>
                         </form>
                       
-                        <div class="forgot" (click)="forgotPassword()">Forgot Password</div>
+                        <div class="forgot" (click)="forgotPassword()">Forgot Password?</div>
                       
                 </ion-list>
             </ion-card-content>

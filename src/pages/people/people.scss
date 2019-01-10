@@ -1,7 +1,44 @@
 page-people {
 
+    .hotlineCard {
+        padding: 10px;
+        text-align: center;
+    }
+
+    .cardContent {
+    }
+    
+    .hLabel1 {
+        font-size: 12pt;
+        margin-bottom: 5px;
+    }
+
+    .hLabel2 {
+        font-size: 10pt;
+        margin-top: 5px;
+    }
+
+    .buttonContent {
+        display: block;
+    }
+
     .call {
-        font-size: 20pt !important;
+        font-size: 30pt !important;
+        color: white;
+    }
+
+    .customCall {
+        text-align: start;
+        margin-left: 10px;
+        margin-top: 5px;
+    }
+    
+    .customPlus {
+        position: absolute;
+        font-size: 13pt;
+        font-weight: bold;
+        color: white;
+        margin-left: 30px;
     }
 
     .hotlineText {
@@ -9,7 +46,28 @@ page-people {
         color: white;
     }
 
-    .card, {
+    .hotlineContentButton {
+        width: 100%;
+        text-align: center;
+        margin: 15px 0px 10px 0px;
+    }
+
+    .hotlineButton:active,
+    .hotlineButton:focus {
+        width: 70px;
+        height: 70px;
+        border-radius: 50px;
+        background-color: #91ffa7;
+    }
+
+    .hotlineButton {
+        width: 70px;
+        height: 70px;
+        border-radius: 50px;
+        background-color: #61ff81;
+    }
+
+    .counselorCard2 {
         padding: 0%;
     }
 
@@ -82,6 +140,13 @@ page-people {
         margin: 0px;
     }
 
+    .profile1:active,
+    .profile1 {
+        width: 100%;
+        margin: 0%;
+        padding:  5px 0px;
+    }
+
     .profile:active,
     .profile {
         padding: 0px !important;
@@ -89,7 +154,8 @@ page-people {
         margin: 0px !important;
     }
 
-    .profile:active {
+    .profile:active,
+    .profile1:active {
         background-color: rgb(247, 247, 247);
     }
 
@@ -106,18 +172,50 @@ page-people {
         margin: 0%;
         padding: 0%;
     }
-    .avatar {
+    
+    .avatar1 {
         margin: 3px auto;
+        margin-top: 15px;
         width: 50px;
         height: 50px;
         border-radius: 50%;
         border: 1px solid rgb(179, 179, 179);
     }
+    
+    .avatar2 {
+        margin: 3px auto;
+        width: 35px;
+        height: 35px;
+        border-radius: 50%;
+        border: 1px solid rgb(179, 179, 179);
+    }
+    
+    .unitLabel {
+        font-size: 10pt;
+        margin-left: 10px;
+        color: gray;
+    }
 
-    .name {
+    .name1 {
         text-align: left;
         font-size: 12pt;
         color: black;
+    }
+
+    .name2 {
+        text-align: left;
+        font-size: 12pt;
+        color: black;
+        margin-top: 5px;
+    }
+
+    .phone {
+        margin-top: 5px;
+        font-size: 10pt;
+    }
+
+    .call2 {
+        margin-right: 5px;
     }
 
     .academicStudent {

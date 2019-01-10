@@ -29,6 +29,8 @@ export class PeoplePage {
 
   unit: any;
 
+  counselorUnit = [];
+
   userInfo = [];
   completePeopleList = []; //Handles all people
   peopleList = []; //Modifiable List
@@ -126,6 +128,10 @@ export class PeoplePage {
 
     item.subscribe( async counselors => {
       console.log('%c Fetching Students...','color: white; background: green; font-size: 16px');
+
+      this.counselorUnit = await this.db.fetchUnitCounselor();
+      console.log("Unit COunselor: ", this.counselorUnit);
+
       let tempArray = await this.db.fetchListCounselor(counselors, filter, unit);
       tempArray.sort(function(a,b) {
         console.log(a, " ? ", b);
@@ -163,7 +169,7 @@ export class PeoplePage {
           }
         },
         {
-          text: 'Call',
+          text: 'Continue',
           handler: () => {
             try {
               console.log('%c Calling Hotline Number...','color: white; background: green; font-size: 16px');

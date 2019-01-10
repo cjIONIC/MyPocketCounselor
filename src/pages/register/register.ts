@@ -31,9 +31,14 @@ export class RegisterPage {
   connected: Subscription;
   disconnected: Subscription;
 
+  emailDefault: any;
+  fNameDefault: any;
+  lNameDefault: any;
+
   academicArray: any;
   googleInfo = [];
   profilePic: any; //Stores the image for the profile picture
+  picType: any;
 
 
   constructor(private fireDatabase: AngularFireDatabase, 
@@ -54,6 +59,11 @@ export class RegisterPage {
   initialize() {
     try {
       this.googleInfo = this.navParams.get('user');
+      this.emailDefault = this.googleInfo["email"];
+      this.fNameDefault = this.googleInfo["firstname"];
+      this.lNameDefault = this.googleInfo["lastname"];
+      this.profilePic = this.googleInfo["picture"];
+      this.picType = "fromEmail";
       this.fetchAllAcademics();
     } catch {
 
@@ -71,25 +81,18 @@ export class RegisterPage {
     
     let timeout = Math.floor(Math.random() * 1500) + 500;
 
-    setTimeout(async () => {
-      loading.present().then(async () => {
-        let student = await this.checkUsernameInStudent(this.username);
-        let counselor = await this.checkUsernameInCounselor(this.username);
-        let register = await this.checkUsernameInRegister(this.username);
-    
-        if( !student && !counselor && !register) {
-          this.registerUser(form).then(() => {
-            let currentIndex = this.navCtrl.getActive().index;
-            this.navCtrl.remove(currentIndex);
-            console.log("Successfully registered");
-            loading.dismiss();
-          }); 
-        } else {
-          this.presentToast("Username already exist!");
+    loading.present().then(() => {
+      setTimeout(async () => {
+        this.registerUser(form).then(() => {
+          let currentIndex = this.navCtrl.getActive().index;
+          this.navCtrl.remove(currentIndex);
+          console.log("Successfully registered");
           loading.dismiss();
-        }
-      });
-    }, timeout);
+        }); 
+      }, timeout);
+    });
+
+   
   }
 
   changeProfilePic() {
@@ -107,6 +110,7 @@ export class RegisterPage {
      // imageData is either a base64 encoded string or a file URI
      // If it's base64 (DATA_URL):
      this.profilePic='data:image/jpeg;base64,' + imageData;
+     this.picType = "fromDevice";
      console.log("Pic: ", this.profilePic);
     }, (err) => {
       console.log("Error: ", err);
@@ -156,54 +160,12 @@ export class RegisterPage {
     toast.present();
   }
 
-  async checkUsernameInStudent(username) {
-    console.log('%c Checking student usernames...','color: black; background: pink; font-size: 16px');
-    let list = this.fireDatabase.list<Item>('student');
-    let item = list.valueChanges();
-
-    const foundUsername = await new Promise<boolean>((resolve) => {
-      item.subscribe(async students => {
-        resolve(await this.db.registerCheckUsernameDuplicates(students, username, "Student"));
-      }, error => console.log(error))
-    })
-
-    return foundUsername;
-  }
-
-  async checkUsernameInCounselor(username) {
-    console.log('%c Checking counselor usernames...','color: black; background: pink; font-size: 16px');
-    let list = this.fireDatabase.list<Item>('counselor');
-    let item = list.valueChanges();
-
-    const foundUsername = await new Promise<boolean>((resolve) => {
-      item.subscribe(async counselors => {
-        resolve(await this.db.registerCheckUsernameDuplicates(counselors, username, "Counselor"));
-      }, error => console.log(error))
-    })
-
-    return foundUsername;
-  }
-
-  async checkUsernameInRegister(username) {
-    console.log('%c Checking registration usernames...','color: black; background: pink; font-size: 16px');
-    let list = this.fireDatabase.list<Item>('counselor');
-    let item = list.valueChanges();
-
-    const foundUsername = await new Promise<boolean>((resolve) => {
-      item.subscribe(async registrations => {
-        resolve(await this.db.registerCheckUsernameDuplicates(registrations, username, "Register"));
-      }, error => console.log(error))
-    })
-
-    return foundUsername;
-  }
-
   registerUser(form) {
     console.log("Academic: ", this.academic);
     console.log('%c Registering student','color: black; background: pink; font-size: 16px');
     return new Promise((resolve) => {
-      this.db.registerStudent(form["firstname"],form["lastname"],this.googleInfo["email"],form["username"],
-        form["password"],form["academic"],form["status"], this.profilePic).then( action => {
+      this.db.registerStudent(form["firstname"],form["lastname"],this.googleInfo["email"],
+        form["password"],form["academic"],form["status"], this.profilePic, this.picType).then( action => {
         resolve(true);
       });
     })

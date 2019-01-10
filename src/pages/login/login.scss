@@ -51,15 +51,25 @@ page-login {
         border-bottom: 1px solid white !important;
     }
 
+    .col {
+        height: auto;
+    }
+
+    .text-input-md,
+    .text-input-ios {
+        margin: 0px 8px;
+    }
+
     .or, .label, .label:active {
         color: white !important;
     }
+
     .icon {
         font-size: 15pt;
         padding: 0%;
         color: white;
         margin: 0%;
-        margin-top: 12px;
+        //margin-top: 12px;
     }
     .input, .input:active, .input:focus, .input:hover {
         width: 100%;
@@ -71,7 +81,7 @@ page-login {
     }
 
     ::-webkit-input-placeholder {
-        color: white !important;
+        color: rgba(248, 248, 248, 0.507) !important;
         }
         input:focus::-webkit-input-placeholder {
         color: rgba(248, 248, 248, 0.507) !important;
@@ -132,5 +142,11 @@ page-login {
         padding: 5px 10px;
         border-radius: 10px;
         margin-top: 5px;
+    }
+
+    .forgot {
+        margin: 20px;
+        font-size: 10pt;
+        color: white;
     }
 }

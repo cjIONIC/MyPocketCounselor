@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ModalController, ToastController, ViewController, Item, Toast, AlertController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ModalController, ToastController, ViewController, Item, Toast, AlertController, LoadingController } from 'ionic-angular';
 import { DatabaseProvider } from '../../providers/database/database';
 import { AngularFireDatabase } from 'angularfire2/database';
 import { Network} from '@ionic-native/network';
@@ -31,6 +31,7 @@ export class ModalRequestComponent {
       private db: DatabaseProvider,
       public toastCtrl: ToastController,
       public network: Network,
+      public loadingCtrl: LoadingController,
       public viewCtrl: ViewController,
       public alertCtrl: AlertController,
       public modalCtrl: ModalController) {
@@ -44,6 +45,15 @@ export class ModalRequestComponent {
     } catch {
 
     }
+  }
+
+  presentAlert(title, description) {
+    const alert = this.alertCtrl.create({
+      title: title,
+      subTitle: description,
+      buttons: ['OK']
+    });
+    alert.present();
   }
 
   presentToast(description) {
@@ -136,29 +146,43 @@ export class ModalRequestComponent {
     let profile = this.profileInfo[0];
     let email = profile["email"];
     console.log("Email: ", email);
-
-    setTimeout(async () => {
-      let found = await new Promise <any> ( resolve => {
-        item.subscribe(async students => {
     
-          students.forEach(student => {
-            if(student["sEmail"] === email) {
-                console.log(student["sEmail"] , " ? ", email);
-                resolve(true);
-            }
+    let loading = this.loadingCtrl.create({
+      spinner: 'ios',
+      content: 'Please Wait...'
+    });
+
+    loading.present().then(() => {
+      setTimeout(async () => {
+        let found = await new Promise <any> ( resolve => {
+          item.subscribe(async students => {
+      
+            students.forEach(student => {
+              if(student["sEmail"] === email) {
+                  console.log(student["sEmail"] , " ? ", email);
+                  resolve(true);
+              }
+            });
+    
+            resolve(false)
+    
           });
+        })
   
-          resolve(false)
+        if(!found) {
+          let id = profile["id"];
+          console.log("To be added: ", request[0]);
+          this.db.acceptStudentRequest(request[0], id).then(() => this.close());
+        } else {
+          this.viewCtrl.dismiss().then(() => {
+            this.presentAlert("Info","Account was already verified");
+          });
+        }
   
-        });
-      })
+      }, timeout);
+    })
 
-      if(!found) {
-        let id = profile["id"];
-        this.db.acceptStudentRequest(request[0], id).then(() => this.close());
-      }
-
-    }, timeout);
+   
 
   }
 
@@ -179,7 +203,6 @@ export class ModalRequestComponent {
           sLastName: request["rLastName"],
           sEmail: request["rEmail"],
           sPicture: request["rPicture"],
-          sUsername: request["rUsername"],
           sPassword: request["rPassword"],
           sStatus: request["rStatus"],
           acID: parseInt(request["acID"])
@@ -188,28 +211,6 @@ export class ModalRequestComponent {
     })
 
     return requestInput;
-  }
-
-  async simultaneousVerification() {
-    let list = this.fireDatabase.list<Item>("student");
-    let item = list.valueChanges();
-
-    let found = await new Promise((resolve) => {
-      item.subscribe(students => {
-
-        let email = this.profileInfo[0].email;
-  
-        students.forEach(student => {
-          if(student["sEmail"] === email) {
-            resolve(true);
-          }
-        })
-
-        resolve(false)
-      });
-    })
-   
-    return await found;
   }
 
   close() {

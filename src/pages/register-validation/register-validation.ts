@@ -65,7 +65,7 @@ export class RegisterValidationPage {
     let academics = await this.db.fetchAllNodesByTableInDatabase("academic");
 
     academics.forEach(academic => {
-      if(academic["acID"] === this.userInfo["id"]) {
+      if(academic["cID"] === this.userInfo["id"]) {
         academicList.push(academic);
       }
     })
