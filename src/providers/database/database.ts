@@ -12,6 +12,7 @@ import { Storage } from '@ionic/storage';
 
 import moment from 'moment';
 import { not } from '@angular/compiler/src/output/output_ast';
+import { isGeneratedFile } from '@angular/compiler/src/aot/util';
 
 /*
   Generated class for the DatabaseProvider provider.
@@ -128,7 +129,25 @@ export class DatabaseProvider {
   /*********************/
   /****** L O G S ******/
   /*********************/
-  loginSearchStudent(googleUser, username, password, type) {
+  async searchGoogleAccount(googleUser, table) {
+    let accounts = await this.fetchAllNodesByTableInDatabase(table);
+
+    let found = false;
+
+    accounts.forEach(account => {
+      let email;
+
+      if(table === "student") email = account["sEmail"];
+      else if(table === "counselor") email = account["cEmail"];
+      else email = account["rEmail"];
+
+      if(email === googleUser["email"]) found = true;
+    })
+
+    return found;
+  }
+
+  loginSearchStudent(username, password) {
     console.log("Searching student...");
 
     var list = this.fireDatabase.list<Item>('student');
@@ -139,53 +158,27 @@ export class DatabaseProvider {
         var foundAccount = false;
         var keys = Object.keys(array);
         var user = []; //Temporary array for user info storage
-        
-        if(type == "googleSignIn") { //For Google Plus login
-          var email = googleUser["email"];
+        for ( var y = 0; y<keys.length; y++) {
+          var count  = keys[y];
+          var sEmail = array[count].sEmail;
+          var sPassword = array[count].sPassword;
+    
+          if (username == sEmail && password == sPassword) {
+    
+            user.push({
+              "id": array[count].sID,
+              "firstname": array[count].sFirstName,
+              "lastname": array[count].sLastName,
+              "password":array[count].sPassword,
+              "academic": array[count].acID,
+              "picture": array[count].sPicture,
+              "type": "Student"
+            });
 
-          for ( var i = 0; i<keys.length; i++) {
-            var count  = keys[i];
-            var sEmail = array[count].sEmail;
-      
-            if (email == sEmail) {
-               user.push({
-                "id": array[count].sID,
-                "firstname": array[count].sFirstName,
-                "lastname": array[count].sLastName,
-                "picture": array[count].sPicture,
-                "username": array[count].sUsername,
-                "password":array[count].sPassword,
-                "academic": array[count].acID,
-                "email":array[count].sEmail,
-                "type": "Student"
-               });
-      
-              foundAccount = true;
-            }
-          }          
-        } else { //For Username and Password login
-          for ( var y = 0; y<keys.length; y++) {
-            var count  = keys[y];
-            var sUsername = array[count].sUsername;
-            var sPassword = array[count].sPassword;
-      
-            if (username == sUsername && password == sPassword) {
-      
-              user.push({
-                "id": array[count].sID,
-                "firstname": array[count].sFirstName,
-                "lastname": array[count].sLastName,
-                "username": array[count].sUsername,
-                "password":array[count].sPassword,
-                "academic": array[count].acID,
-                "picture": array[count].sPicture,
-                "type": "Student"
-              });
-
-              foundAccount = true;
-            }
+            foundAccount = true;
           }
         }
+
 
         if(foundAccount) {
           this.userInfo = await  user[0];
@@ -198,7 +191,7 @@ export class DatabaseProvider {
     });
   }
 
-  loginSearchCounselor(googleUser, username, password, type) {
+  loginSearchCounselor(username, password) {
     console.log("Searching counselor...");
 
     var list = this.fireDatabase.list<Item>('counselor');
@@ -210,51 +203,25 @@ export class DatabaseProvider {
         var keys = Object.keys(array);
         var user = []; //Temporary array for user info storage
   
-        if(type == "googleSignIn") {
-          var email = googleUser["email"];
-
-          for ( var i = 0; i<keys.length; i++) { //For Google Plus login
-            var count  = keys[i];
-            var cEmail = array[count].cEmail;
+        for ( var i = 0; i<keys.length; i++) {
+          var count  = keys[i];
+          var cEmail = array[count].cEmail;
+          var cPassword = array[count].cPassword;
     
-            if (email == cEmail) {
-              user.push({
-                "id": array[count].cID,
-                "firstname": array[count].cFirstName,
-                "lastname": array[count].cLastName,
-                "picture": array[count].cPicture,
-                "username": array[count].cUsername,
-                "password":array[count].cPassword,
-                "email":array[count].cEmail,
-                "number":array[count].cNumber,
-                "type": array[count].cType
-              });
-      
-              foundAccount = true;
-            }
-          }          
-        } else { //For Username and Password login
-          for ( var i = 0; i<keys.length; i++) {
-            var count  = keys[i];
-            var cUsername = array[count].cUsername;
-            var cPassword = array[count].cPassword;
-      
-            if (username == cUsername && password == cPassword) {
-      
-              user.push({
-                "id": array[count].cID,
-                "firstname": array[count].cFirstName,
-                "lastname": array[count].cLastName,
-                "picture": array[count].cPicture,
-                "username": array[count].cUsername,
-                "password":array[count].cPassword,
-                "email":array[count].cEmail,
-                "number":array[count].cNumber,
-                "type": array[count].cType
-              });
+          if (username === cEmail && password === cPassword) {
+    
+            user.push({
+              "id": array[count].cID,
+              "firstname": array[count].cFirstName,
+              "lastname": array[count].cLastName,
+              "picture": array[count].cPicture,
+              "password":array[count].cPassword,
+              "email":array[count].cEmail,
+              "number":array[count].cNumber,
+              "type": array[count].cType
+            });
 
-              foundAccount = true;
-            }
+            foundAccount = true;
           }
         }
 
@@ -278,6 +245,30 @@ export class DatabaseProvider {
   /*********************/
   /** R E G I S T E R **/
   /*********************/
+  registerCheckAccounts(username) {
+    var foundAccount = false;
+    var list = this.fireDatabase.list<Item>('registration');
+    var item = list.valueChanges();
+
+    return new Promise((resolve) => {
+      item.subscribe( array => {
+        var keys = Object.keys(array);
+  
+        for(var i = 0; i<keys.length; i++) {
+          var count = keys[i];
+          var email = array[count].rEmail;
+          
+          if(username === email) {
+            console.log("Found!");
+            foundAccount = true;
+          }
+        }
+
+        resolve(foundAccount);
+      });
+    })
+  }
+
   //Checks duplicates of username
   registerCheckUsernameDuplicates(accounts, username, type) {
     console.log('%c Checking Username Duplicates','color: white; background: violet; font-size: 16px');
@@ -334,31 +325,6 @@ export class DatabaseProvider {
     });
 
    return true;
-  }
-
-  registerCheckAccounts(student) {
-    var foundAccount = false;
-    var list = this.fireDatabase.list<Item>('registration');
-    var item = list.valueChanges();
-    console.log("Student: ", student);
-
-    return new Promise((resolve) => {
-      item.subscribe( array => {
-        var keys = Object.keys(array);
-  
-        for(var i = 0; i<keys.length; i++) {
-          var count = keys[i];
-          var email = array[count].rEmail;
-          
-          if(student["email"] === email) {
-            console.log("Found!");
-            foundAccount = true;
-          }
-        }
-
-        resolve(foundAccount);
-      });
-    })
   }
 
   async fetchRegistrations(academics, requests) {

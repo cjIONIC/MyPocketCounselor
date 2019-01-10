@@ -95,10 +95,14 @@ export class LoginPage {
   
           loading.dismiss();
 
+          console.log("Informations: ", action);
+
+          /*
           var user = firebase.auth().currentUser;
           this.fireAuth.auth.signOut();
           this.googlePlus.logout();
           user.delete();
+          */
   
           console.log("Action ",JSON.stringify(action));
   
@@ -112,7 +116,7 @@ export class LoginPage {
           googleInfo = googleInfo[0];
           console.log("Google Info ",googleInfo);
   
-          this.verifyAccount(googleInfo, "","", "googleSignIn");
+          this.verifyGoogleAccount(googleInfo);
         }).catch(err => {
           console.log("Error: ", err);
         })
@@ -125,55 +129,64 @@ export class LoginPage {
   //Logs in using username and password
   upLogin(loginInfo) {
     console.log('%c Logging in with username and password','color: white; background: blue; font-size: 16px');
-    let googleInfo = "";
-    let type = "usernamepassword"
-    this.verifyAccount(googleInfo, loginInfo["username"], loginInfo["password"], type);
+    this.verifyLogin(loginInfo["username"], loginInfo["password"]);
 
   }
 
-  verifyAccount(googleInfo, username, password, type) {
+  forgotPassword() {
+    console.log("Forgot Password");
+  }
+
+  verifyGoogleAccount(googleInfo){
+    let counselorFound = this.db.searchGoogleAccount(googleInfo, "counselor");
+    let studentFound = this.db.searchGoogleAccount(googleInfo, "student");
+    let registerFound =  this.db.searchGoogleAccount(googleInfo, "registration");
 
     let loading = this.loadingCtrl.create({
       spinner: 'ios',
       content: 'Please Wait...'
     });
+
     loading.present().then(() => {
-      this.db.loginSearchCounselor(googleInfo, username, password, type).then((result) => {
-        var counselorFound = result;
-  
-        if(counselorFound) {
-          let currentIndex = this.navCtrl.getActive().index;
-          loading.dismiss();
-          this.app.getRootNav().push(HomePage).then(() => {
-            this.navCtrl.remove(currentIndex);
-          });
-        }
-        else {
-          this.db.loginSearchStudent(googleInfo, username, password, type).then((result) => {
-            var studentFound = result;
-  
-            if(studentFound) {
-              let currentIndex = this.navCtrl.getActive().index;
-              loading.dismiss();
-              this.app.getRootNav().push(HomePage).then(() => {
-                this.navCtrl.remove(currentIndex);
-              });
-            } else {
-  
-              loading.dismiss();
-              this.db.registerCheckAccounts(googleInfo).then((foundAccount) => {
-                if(foundAccount) {
-                  this.presentAlert("Registration Info", "Your account is still being verified.");
-                } else if(type === "googleSignIn" && !foundAccount) {
-                  this.app.getRootNav().push(RegisterPage, {user: googleInfo});
-                } else {
-                  this.presentToast("Username or password is invalid");
-                }
-              })
-            }
-          });
-        }
-      });
+      if ((counselorFound || studentFound ) && !registerFound) {
+        this.presentAlert("Info", "This account already exist");
+        loading.dismiss();
+      } else if(registerFound){
+        loading.dismiss();
+        this.presentAlert("Registration Info", "Your account is still being verified.");
+      } else {
+        loading.dismiss();
+        this.app.getRootNav().push(RegisterPage, {user: googleInfo});
+      }
+    })
+
+  }
+
+  verifyLogin(username, password) {
+
+    let loading = this.loadingCtrl.create({
+      spinner: 'ios',
+      content: 'Please Wait...'
+    });
+
+    loading.present().then(async () => {
+      let counselorFound = await this.db.loginSearchCounselor(username, password);
+      let studentFound = await this.db.loginSearchStudent(username, password);
+      let registerFound = await this.db.registerCheckAccounts(username);
+
+      if ((counselorFound || studentFound ) && !registerFound) {
+        let currentIndex = this.navCtrl.getActive().index;
+        loading.dismiss();
+        this.app.getRootNav().push(HomePage).then(() => {
+          this.navCtrl.remove(currentIndex);
+        });
+      } else if(registerFound){
+        loading.dismiss();
+        this.presentAlert("Registration Info", "Your account is still being verified.");
+      } else {
+        loading.dismiss();
+        this.presentToast("Username or password is invalid");
+      }
     }).catch(error => {
 
     })//End of Loading Presentation

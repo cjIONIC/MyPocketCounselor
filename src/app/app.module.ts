@@ -67,6 +67,7 @@ import { HomePage } from '../pages/home/home';
 import { RegisterValidationPage } from '../pages/register-validation/register-validation';
 import { ModalFeedbackAddComponent } from '../components/modal-feedback-add/modal-feedback-add';
 import { ProfilePage } from '../pages/profile/profile';
+import { LoginForgotPage } from '../pages/login-forgot/login-forgot';
 
 const firebaseConfig = {
   apiKey: "AIzaSyAVITAZa_qU9vSHq_ASeHJ1JGt3Sy8s8a0",
@@ -82,6 +83,7 @@ const firebaseConfig = {
   declarations: [
     MyApp,
     LoginPage,
+    LoginForgotPage,
     RegisterPage,
     RegisterValidationPage,
     RequestPage,
@@ -132,6 +134,7 @@ const firebaseConfig = {
   entryComponents: [
     MyApp,
     LoginPage,
+    LoginForgotPage,
     RegisterPage,
     RegisterValidationPage,
     RequestPage,
