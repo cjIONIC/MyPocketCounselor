@@ -204,6 +204,7 @@ export class ModalRequestComponent {
           sEmail: request["rEmail"],
           sPicture: request["rPicture"],
           sPassword: request["rPassword"],
+          sDevice: "Offline",
           sStatus: request["rStatus"],
           acID: parseInt(request["acID"])
         })

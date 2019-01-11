@@ -11,7 +11,11 @@ import { AppointmentPage } from '../appointment/appointment';
 import { AngularFireDatabase } from 'angularfire2/database';
 import { DatabaseProvider } from '../../providers/database/database';
 import { updateDate } from 'ionic-angular/umd/util/datetime-util';
+import { AngularFireAuth } from 'angularfire2/auth';
+import firebase from 'firebase';
 
+import { Network} from '@ionic-native/network';
+import { Subscription } from 'rxjs/Subscription';
 /**
  * Generated class for the HomePage page.
  *
@@ -32,6 +36,7 @@ export class HomePage {
   updatedNotification: any = false;
 
   userInfo = [];
+  googleID:any;
 
   tab1 = PostPage;
   tab2 = PeoplePage;
@@ -42,8 +47,15 @@ export class HomePage {
   pushSearchPage: any;
   pushChatPage: any;
 
+  authState: any = null;
+
+  connected: Subscription;
+  disconnected: Subscription;
+
   constructor(public navCtrl: NavController, 
     public app: App,
+    public fireAuth: AngularFireAuth,
+    public network: Network,
     public fireDatabase: AngularFireDatabase,
     public db: DatabaseProvider,
     public navParams: NavParams) {
@@ -78,6 +90,7 @@ export class HomePage {
           this.userInfo = await this.db.getUserInfo();
           console.log("User information: ", this.userInfo);
           this.scanAppointmentChanges();
+
         }, error => console.log(error));
 
     }, error => console.log(error));

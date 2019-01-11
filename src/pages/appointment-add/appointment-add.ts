@@ -51,19 +51,17 @@ export class AppointmentAddPage {
     public alertCtrl: AlertController,
     public modalCtrl: ModalController) {
 
-      this.initializeSearch();
+      this.initialize();
   }
 
-  async initializeSearch() {
-    let date = this.navParams.get('date');
-    this.recipient = this.navParams.get('recipient');
-
-    console.log("Recipient: ", this.recipient);
+  async initialize() {
+    let date = await this.navParams.get('date');
     console.log("Date passed: ", date);
 
     await this.fetchUserProfile();
 
-   this.dateDefault = moment(date).format();
+    let dateFormat = new Date(date);
+   this.dateDefault = moment(dateFormat).format();
    this.timeDefault = moment().format();
 
   }
@@ -91,8 +89,9 @@ export class AppointmentAddPage {
 
               if(this.userInfo["type"] === "Student") {
                 this.fetchConcerns(this.userInfo["type"]);
-                this.fetchVenues(this.recipient["id"]);
+                this.fetchRecipient();
               } else  {
+                this.recipient = this.navParams.get('recipient');
                 this.fetchVenues(this.userInfo["id"]);
               }
             }, error => console.log(error))
@@ -100,6 +99,21 @@ export class AppointmentAddPage {
         }, error => console.log(error))
 
     })
+  }
+
+  fetchRecipient() {
+    let list = this.fireDatabase.list<Item>("counselor");
+    let item = list.valueChanges();
+
+    this.fireDatabase.list<Item>("academic")
+      .valueChanges().subscribe(academics => {
+        item.subscribe(async counselors => {
+          this.recipient = await this.db.fetchAppointmentRecipient(academics, counselors);
+          console.log("Recipient: ", this.recipient);
+          this.fetchVenues(this.recipient["id"]);
+        })
+      })
+
   }
 
   onSubmit(value) {

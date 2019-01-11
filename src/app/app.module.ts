@@ -67,6 +67,7 @@ import { RegisterValidationPage } from '../pages/register-validation/register-va
 import { ModalFeedbackAddComponent } from '../components/modal-feedback-add/modal-feedback-add';
 import { ProfilePage } from '../pages/profile/profile';
 import { LoginForgotPage } from '../pages/login-forgot/login-forgot';
+import { ModalAppointmentSearchComponent } from '../components/modal-appointment-search/modal-appointment-search';
 
 const firebaseConfig = {
   apiKey: "AIzaSyAVITAZa_qU9vSHq_ASeHJ1JGt3Sy8s8a0",
@@ -105,6 +106,7 @@ const firebaseConfig = {
     ChatMessagePage,
     AppointmentPage,
     AppointmentAddPage,
+    ModalAppointmentSearchComponent,
     PopScheduleComponent,
     ModalScheduleComponent,
     ModalSearchComponent,
@@ -158,6 +160,7 @@ const firebaseConfig = {
     ModalSearchComponent,
     AppointmentPage,
     AppointmentAddPage,
+    ModalAppointmentSearchComponent,
     ModalFeedbackAddComponent,
   ],
   providers: [

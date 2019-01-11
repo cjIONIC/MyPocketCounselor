@@ -1,0 +1,26 @@
+<ion-header>
+    <ion-navbar color="primary">
+      <ion-searchbar autocomplete="on" placeholder="Enter name here" (ionInput)="getSearchPerson($event)"> </ion-searchbar>
+      <ion-buttons end>
+        <button ion-button (click)="close()">Close</button>
+      </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+    <ion-list class="list" >
+      <button ion-item *ngFor="let person of peopleList" class="profile" (click)="dismiss(person)">
+                  <div class="profileLeft">
+                        <img src="{{ person.picture }}" class="avatar">
+                  </div>
+                  <div class="profileRight">
+                        <div class="name"> {{person.name}}</div>
+                  </div>
+      </button >
+    </ion-list>
+  
+    <div *ngIf="peopleList.length == 0">
+      <div class="status"> No results Found</div>
+    </div>
+  
+  </ion-content>

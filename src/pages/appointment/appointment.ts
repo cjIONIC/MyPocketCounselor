@@ -10,6 +10,7 @@ import moment from 'moment';
 import { ModalSearchComponent } from '../../components/modal-search/modal-search';
 
 import { AppointmentAddPage } from '../../pages/appointment-add/appointment-add'
+import { ModalAppointmentSearchComponent } from '../../components/modal-appointment-search/modal-appointment-search';
 /**
  * Generated class for the AppointmentPage page.
  *
@@ -249,14 +250,19 @@ export class AppointmentPage {
   }
 
   addAppointment() {
-    const modalOptions: ModalOptions = {
-      enableBackdropDismiss: false
-    }
     let datetime = moment(this.selectedDay).format("MMM DD YYYY") +" "+ moment().format("h:mm A");
     console.log("Date to be passed: ", datetime);
     
-    const modal = this.modalCtrl.create(ModalSearchComponent, { date: datetime}, modalOptions);
-    modal.present();
+    if(this.userInfo["type"] === "Student") {
+      this.app.getRootNav().push(AppointmentAddPage, {date: datetime});
+    } else {
+      const modalOptions: ModalOptions = {
+        enableBackdropDismiss: false
+      }
+      const modal = this.modalCtrl.create(ModalAppointmentSearchComponent, { date: datetime}, modalOptions);
+      modal.present();
+    }
+   
   }
 
   popOptions(myEvent, appointment) {

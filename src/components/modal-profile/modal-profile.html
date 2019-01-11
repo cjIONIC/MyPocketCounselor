@@ -11,27 +11,25 @@
   
 </ion-header>
   <ion-content class="content">
-    <div *ngFor="let details of profileInfo" class="profile">
-        <div><img src="{{ details.picture }}" class="avatar"></div>
+    <div class="profile">
+        <div><img src="{{ profileInfo['picture'] }}" class="avatar"></div>
         <div class="details">
-          <div class="name">{{details.name}}</div>
+          <div class="name">{{profileInfo["name"]}}</div>
           <div *ngIf="type === 'Counselor'" class="numberLabel">Mobile</div>
-          <div *ngIf="type === 'Counselor'" class="number">{{details.number}}</div>
+          <div *ngIf="type === 'Counselor'" class="number">{{profileInfo["number"]}}</div>
           <div class="academicLabel">Academic Unit</div>
           <div class="academic"> 
-            <div *ngFor="let units of details.academic">
+            <div *ngFor="let units of profileInfo['academic']">
               <div class="academicCounselor">{{units.name}}</div>
             </div>
           </div>
           <div class="status" *ngIf="type === 'Student'" >
             <div class="statusLabel">Status</div>
-            <div class="statusName">{{details.status}}</div>
+            <div class="statusName">{{profileInfo["status"]}}</div>
           </div>
   
           <div class="buttons">
-              <div><button *ngIf="type === 'Student'" ion-button class="changeButton"(click)="presentModal()" clear>Update Academic Info</button></div>
-              <div><button *ngIf="type !== 'Student'" ion-button class="appointmentButton" (click)="addAppointment()" clear> Request Appointment</button></div>
-              <div><button *ngIf="type === 'Student'" ion-button class="appointmentButton" (click)="addAppointment()" clear> Set Appointment</button></div>
+              <div><button *ngIf="type === 'Student' && update" ion-button class="changeButton"(click)="presentModal()" clear>Update Academic Info</button></div>
               <div><button ion-button class="messageButton" (click)="message()" clear> Message</button></div>
           </div>
         </div>

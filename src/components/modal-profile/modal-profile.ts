@@ -24,11 +24,17 @@ export class ModalProfileComponent {
   connected: Subscription;
   disconnected: Subscription;
 
+  userInfo = [];
+
   id: any;
   type: any;
 
+  academicList = [];
+
   profileInfo = [];
   academic = [];
+
+  update: Boolean = false;
 
   constructor(public navCtrl: NavController, 
       public fireDatabase: AngularFireDatabase,
@@ -46,10 +52,36 @@ export class ModalProfileComponent {
     try {
       this.id = this.navParams.get('id');
       this.type = this.navParams.get('type');
-      this.fetchProfile();
+      this.getUserInfo();
     } catch {
 
     }
+  }
+  
+  async getUserInfo() {
+    let userInfo = await this.db.getProfileInStorage();
+    console.log("Currently logged in: ", userInfo);
+    let table;
+
+    if(userInfo["type"] === "Student") table = "student"
+    else table = "counselor";
+
+    let list = this.fireDatabase.list<Item>(table);
+    let item = list.valueChanges();
+
+    this.fireDatabase.list<Item>("academic")
+      .valueChanges().subscribe(academics => {
+
+        item.subscribe(async accounts => {
+          await this.db.refreshUserInfo(accounts, userInfo);
+          this.userInfo = await this.db.getUserInfo();
+          console.log("User information: ", this.userInfo);
+          this.fetchProfile();
+          this.fetchAcademic();
+
+        }, error => console.log(error));
+
+    }, error => console.log(error));
   }
 
   presentToast(description) {
@@ -76,24 +108,43 @@ export class ModalProfileComponent {
 
     this.fireDatabase.list<Item>("academic")
       .valueChanges().subscribe(academics => {
-        item.subscribe(async accounts => this.profileInfo = await this.db.fetchPersonProfile(this.id, accounts, this.type)
-        , error => console.log(error))
+        item.subscribe(async accounts => {
+          this.profileInfo = await this.db.fetchPersonProfile(this.id, accounts, this.type);
+          this.verifyAcademic();
+          console.log("Profile: ", this.profileInfo);
+        }, error => console.log(error))
       }, error => console.log(error));
   }
 
-  addAppointment() {
-    let date = new Date(moment().format());
-    let profile = this.profileInfo[0];
-    let academic = profile["academic"];
-    //let recipient = this.profileInfo[0];
-    let recipient = [{
-      id: profile["id"],
-      name: profile["name"],
-      picture: profile["picture"],
-      academic: academic[0].code
-    }]
-    this.app.getRootNav().push(AppointmentAddPage, {date: date, recipient: recipient[0]});
-    this.viewCtrl.dismiss();
+  fetchAcademic() {
+    let list = this.fireDatabase.list<Item>("academic");
+    let item = list.valueChanges();
+    item.subscribe(academics => {
+      academics.forEach(academic => {
+        if(academic["cID"] === this.userInfo["id"]) {
+          this.academicList.push({
+            id: academic["acID"],
+            name: academic["acName"],
+            code: academic["acCode"]
+          })
+
+          console.log("Academics: ", this.academicList);
+        }
+      })
+    })
+  }
+
+  verifyAcademic() {
+    let found = false;
+    let profileUnit = this.profileInfo["academic"];
+      console.log("Unit: ", profileUnit);
+      let studentUnit = profileUnit[0];
+
+      this.academicList.forEach(academic => {
+        if(studentUnit["name"] === academic["name"]) found = true;
+       })
+
+       this.update = found;
 
   }
 

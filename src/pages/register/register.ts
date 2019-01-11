@@ -1,11 +1,13 @@
 import { Component, ViewChild } from '@angular/core';
 import { AngularFireDatabase } from 'angularfire2/database';
 import { DatabaseProvider } from '../../providers/database/database';
-import { IonicPage, NavController, NavParams, AlertController, Item, ViewController, ToastController, LoadingController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, AlertController, Item, ViewController, ToastController, LoadingController, Navbar } from 'ionic-angular';
 import { Camera, CameraOptions } from '@ionic-native/camera';
 import { Network} from '@ionic-native/network';
 import { Subscription } from 'rxjs/Subscription';
 import moment from 'moment';
+import { AngularFireAuth } from 'angularfire2/auth';
+import firebase from 'firebase';
 
 /**
  * Generated class for the RegisterPage page.
@@ -21,19 +23,18 @@ import moment from 'moment';
 })
 export class RegisterPage {
 
-  @ViewChild('fname') fname;
-  @ViewChild('fname') lname;
-  @ViewChild('username') username;
-  @ViewChild('password') password;
-  @ViewChild('academic') academic;
-  @ViewChild('status') status;
-
+  @ViewChild(Navbar) navbar: Navbar;
+  
   connected: Subscription;
   disconnected: Subscription;
+
+  academic: any;
 
   emailDefault: any;
   fNameDefault: any;
   lNameDefault: any;
+
+  googleUser: any;
 
   academicArray: any;
   googleInfo = [];
@@ -42,6 +43,7 @@ export class RegisterPage {
 
 
   constructor(private fireDatabase: AngularFireDatabase, 
+    public fireAuth: AngularFireAuth,
     public db: DatabaseProvider,
     public viewCtrl: ViewController,
     public network: Network,
@@ -58,6 +60,7 @@ export class RegisterPage {
 
   initialize() {
     try {
+      this.googleUser = firebase.auth().currentUser;
       this.googleInfo = this.navParams.get('user');
       this.emailDefault = this.googleInfo["email"];
       this.fNameDefault = this.googleInfo["firstname"];
@@ -171,12 +174,19 @@ export class RegisterPage {
     })
   }
 
+  dismissGoogleUser(){
+    this.fireAuth.auth.signOut()
+    this.googleUser.delete();
+  }
+
   ionViewWillLeave(){
     this.connected.unsubscribe();
     this.disconnected.unsubscribe();
   }
 
   ionViewDidEnter() {
+    this.navbar.backButtonClick = () => this.dismissGoogleUser();
+
     this.connected = this.network.onConnect().subscribe( data => {
       this.presentToast("You are online");
     }, error => console.log(error));

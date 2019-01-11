@@ -32,7 +32,7 @@ export class DatabaseProvider {
   
 
   constructor(public http: HttpClient,
-    private fire: AngularFireAuth,
+    private fireAuth: AngularFireAuth,
     private fireStorage: AngularFireStorage,
     private ionicStorage: Storage,
     public fireDatabase: AngularFireDatabase) {
@@ -296,15 +296,16 @@ export class DatabaseProvider {
     password, academic, status, image, type) {
     let acID = parseInt(academic);
     let imageURL;
+    
+    let currentUser = firebase.auth().currentUser;
+    let id = currentUser["uID"];
+    currentUser.updatePassword(password).then(() => {
+      this.fireAuth.auth.signOut();
+    });
 
     let today = moment().format();
     let date = new Date(today);
     console.log("Date: ", date);
-
-    let numeric = Math.random().toString().replace('0.', '').substring(0,2);
-    let timestamp = new Date().getTime().toString().substring(5, 13);
-    let id = numeric+timestamp;
-    
     if(image) {
       if(type === "fromDevice") {
         let filePath = await this.uploadImage("registration", image);
@@ -453,8 +454,19 @@ export class DatabaseProvider {
         let regID = reg.rID;
 
         if(regID === profile["id"]) {
-          ref.remove(regKey);
-          console.log("%cSuccessfully rejected account!", "color: white; background: violet; font-size: 10px");
+          let email = reg.rEmail;
+
+          firebase.auth().fetchProvidersForEmail(email)
+          .then(student => {
+            if (student.length === 0) {
+              // this email hasn't signed up yet
+            } else {
+              student.delete();
+              
+              ref.remove(regKey);
+              console.log("%cSuccessfully deleted request!", "color: white; background: violet; font-size: 10px");
+            }
+          });
         }
       }
     });
@@ -1008,7 +1020,7 @@ export class DatabaseProvider {
       }
     })
 
-    return profile;
+    return profile[0];
   }
 
   updateStudentInfo(id, unit, status) {
@@ -1041,6 +1053,27 @@ export class DatabaseProvider {
   /*********************/
   /*** A P P O I N T ***/
   /*********************/
+  async fetchAppointmentListStudent(students) {
+    let studentList = [];
+    let academics = await this.fetchAllNodesByTableInDatabase("academic");
+
+    students.forEach(student => {
+      academics.forEach(async academic => {
+        if(student["acID"] === academic["acID"] &&  academic["cID"] === this.userInfo["id"]) {
+          let name = student["sLastName"] +", "+ student["sFirstName"];
+            studentList.push({
+              id: student["sID"],
+              name: name,
+              academic: academic["acCode"],
+              picture: student["sPicture"]        
+            })
+        }
+      })
+    })
+
+    return await studentList;
+  }
+  
   async fetchAppointmentsOfCurrentMonth(type, id, appointments, month, year) {
     let currentAppointments = [];
     let keys = Object.keys(appointments);
@@ -1259,6 +1292,35 @@ export class DatabaseProvider {
     });
     console.log("Filtered Appointments: ", filteredAppointments);
     return filteredAppointments;
+  }
+
+  async fetchAppointmentRecipient(academics, counselors) {
+    let recipient = [];
+    let students = await this.fetchAllNodesByTableInDatabase("student");
+
+    students.forEach(student => {
+      if(student["sID"] === this.userInfo["id"]) {
+        academics.forEach(academic => {
+          if(student["acID"] === academic["acID"]) {
+            counselors.forEach(counselor => {
+              if(counselor["cID"] === academic["cID"]) {
+                let name = counselor["cLastName"] +", "+ counselor["cFirstName"];
+
+                recipient.push({
+                  id: counselor["cID"],
+                  name: name,
+                  picture: counselor["cPicture"]        
+                })
+
+                console.log("FOUND COUNSELOR!");
+              }
+            })
+          }
+        })
+      }
+    })
+
+    return recipient[0];
   }
 
   //Gets all academic unit from a counselor to display as venue

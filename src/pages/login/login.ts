@@ -106,9 +106,11 @@ export class LoginPage {
 
           this.googleUser = firebase.auth().currentUser;
           console.log("Google USER: ", this.googleUser);
-          this.fireAuth.auth.signOut();
-          this.googlePlus.logout();
-          this.googleUser.delete();
+          //this.fireAuth.auth.signOut();
+
+          this.googlePlus.logout(); //Clears token
+
+          //this.googleUser.delete();
   
           googleInfo.push({
             "name": action["displayName"],
@@ -164,7 +166,7 @@ export class LoginPage {
       } else if(!counselorFound && !studentFound  && registerFound){
         loading.dismiss();
         this.presentAlert("Registration Info", "Your account is still being verified.");
-      } else {
+      } else if (!counselorFound && !studentFound  && !registerFound) {
         loading.dismiss();
         this.app.getRootNav().push(RegisterPage, {user: googleInfo});
       }
@@ -186,10 +188,12 @@ export class LoginPage {
 
       if ((counselorFound || studentFound ) && !registerFound) {
         let currentIndex = this.navCtrl.getActive().index;
-        loading.dismiss();
-        this.app.getRootNav().push(HomePage).then(() => {
-          this.navCtrl.remove(currentIndex);
-        });
+        this.googleSignInwithEmail(email, password).then(()=> {
+          loading.dismiss();
+          this.app.getRootNav().push(HomePage).then(() => {
+            this.navCtrl.remove(currentIndex);
+          });
+        })
       } else if(registerFound){
         loading.dismiss();
         this.presentAlert("Registration Info", "Your account is still being verified.");
@@ -200,6 +204,16 @@ export class LoginPage {
     }).catch(error => {
 
     })//End of Loading Presentation
+  }
+
+  async googleSignInwithEmail(email, password) {
+    this.fireAuth.auth.signInWithEmailAndPassword(email, password).then(() => {
+      let user = firebase.auth().currentUser;
+
+      console.log("Google User: ", user);
+    });
+
+    return;
   }
 
   ionViewWillLeave(){

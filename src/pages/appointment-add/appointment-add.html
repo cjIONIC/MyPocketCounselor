@@ -18,12 +18,12 @@
   
   <ion-content padding>
       <ion-item>
-        <div class="header">Recipient</div>
+        <div class="header">Your Guidance Counselor</div>
         <ion-grid>
-          <ion-row>
-              <ion-col col-2><img src="{{ recipient.picture }}" class="avatar"></ion-col>
+          <ion-row *ngIf="recipient">
+              <ion-col col-2><img src="{{ recipient['picture'] }}" class="avatar"></ion-col>
               <ion-col col-10 class="recipientName">
-                  {{ recipient.name }}
+                  {{ recipient["name"] }}
               </ion-col>
           </ion-row>
         </ion-grid>
@@ -31,6 +31,7 @@
       </ion-item>
 
       <form #appointmentForm="ngForm" (ngSubmit)="onAdd(appointmentForm.value)" novalidate>
+        
         <ion-item>
           <ion-label color="primary" stacked> Date</ion-label>
           <ion-datetime pickerFormat="MMMM DD,YYYY" 
