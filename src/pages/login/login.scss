@@ -141,12 +141,22 @@ page-login {
         background-color: white;
         padding: 5px 10px;
         border-radius: 10px;
-        margin-top: 5px;
+        margin-bottom: 10px;
+    }
+
+    .footer {
+        position: fixed;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        text-align: center;
     }
 
     .forgot {
-        margin: 20px;
         font-size: 10pt;
         color: white;
+        margin: 30px;
     }
+
+
 }

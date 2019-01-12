@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, AlertController, App, ToastController, LoadingController } from 'ionic-angular';
+import { Component, ViewChild } from '@angular/core';
+import { IonicPage, NavController, NavParams, AlertController, App, ToastController, LoadingController, ModalController } from 'ionic-angular';
 import { Subscription } from 'rxjs/Subscription';
 //Pages
 import { RegisterPage } from '../register/register';
@@ -15,6 +15,9 @@ import firebase from 'firebase';
 import { GooglePlus } from '@ionic-native/google-plus';
 import { Network} from '@ionic-native/network';
 import { HomePage } from '../home/home';
+import { EmailComposer } from '@ionic-native/email-composer';
+import { ModalPasswordComponent } from '../../components/modal-password/modal-password';
+
 
 
 @IonicPage()
@@ -23,10 +26,10 @@ import { HomePage } from '../home/home';
   templateUrl: 'login.html',
 })
 export class LoginPage {
-  
 
-  username: any;
-  password: any;
+  @ViewChild("email") email;
+  
+  remember: any;
 
   googleUser: any;
 
@@ -39,15 +42,18 @@ export class LoginPage {
 
   constructor(private alertCtrl:AlertController, 
     public navCtrl: NavController, 
+    public emailComposer: EmailComposer,
     public navParams: NavParams,
     public googlePlus: GooglePlus,
     public db: DatabaseProvider,
     public app: App,
+    public modalCtrl: ModalController,
     public network: Network,
     private fireAuth: AngularFireAuth,
     private toastCtrl: ToastController,
     public loadingCtrl: LoadingController) {
 
+      
   }
 
   ionViewDidLoad() {
@@ -107,10 +113,7 @@ export class LoginPage {
           this.googleUser = firebase.auth().currentUser;
           console.log("Google USER: ", this.googleUser);
           //this.fireAuth.auth.signOut();
-
           this.googlePlus.logout(); //Clears token
-
-          //this.googleUser.delete();
   
           googleInfo.push({
             "name": action["displayName"],
@@ -126,7 +129,10 @@ export class LoginPage {
           let email = googleInfo["email"];
           let domain = email.substring(email.lastIndexOf("@") +1);
 
-          if(domain !== "su.edu.ph") this.presentAlert("Info", "Invalid SU Email Address");
+          if(domain !== "su.edu.ph") {
+            this.presentAlert("Info", "Invalid SU Email Address");
+            this.googleUser.delete();
+          }
           else this.verifyGoogleAccount(googleInfo);
 
         }).catch(err => {
@@ -147,12 +153,15 @@ export class LoginPage {
 
   forgotPassword() {
     console.log("Forgot Password");
+
+    const modal = this.modalCtrl.create(ModalPasswordComponent,  "",{ cssClass: 'custom-modal-password' });
+    modal.present();
   }
 
-  verifyGoogleAccount(googleInfo){
-    let counselorFound = this.db.searchGoogleAccount(googleInfo, "counselor");
-    let studentFound = this.db.searchGoogleAccount(googleInfo, "student");
-    let registerFound =  this.db.searchGoogleAccount(googleInfo, "registration");
+  async verifyGoogleAccount(googleInfo){
+    let counselorFound = await this.db.searchGoogleAccount(googleInfo, "counselor");
+    let studentFound = await this.db.searchGoogleAccount(googleInfo, "student");
+    let registerFound = await this.db.searchGoogleAccount(googleInfo, "registration");
 
     let loading = this.loadingCtrl.create({
       spinner: 'ios',
@@ -166,7 +175,7 @@ export class LoginPage {
       } else if(!counselorFound && !studentFound  && registerFound){
         loading.dismiss();
         this.presentAlert("Registration Info", "Your account is still being verified.");
-      } else if (!counselorFound && !studentFound  && !registerFound) {
+      } else if (!registerFound) {
         loading.dismiss();
         this.app.getRootNav().push(RegisterPage, {user: googleInfo});
       }

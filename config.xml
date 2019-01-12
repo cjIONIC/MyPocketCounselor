@@ -94,6 +94,7 @@
         <variable name="REVERSED_CLIENT_ID" value="com.googleusercontent.apps.578845672664-vo40upp9jd6qd4eauift56dgas0pn5qm" />
         <variable name="PLAY_SERVICES_VERSION" value="11.0.4" />
     </plugin>
+    <plugin name="cordova-plugin-email-composer" spec="0.9.1" />
     <engine name="ios" spec="4.5.5" />
     <engine name="android" spec="7.1.4" />
 </widget>

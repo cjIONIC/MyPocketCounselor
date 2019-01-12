@@ -297,11 +297,10 @@ export class DatabaseProvider {
     let acID = parseInt(academic);
     let imageURL;
     
-    let currentUser = firebase.auth().currentUser;
-    let id = currentUser["uID"];
-    currentUser.updatePassword(password).then(() => {
-      this.fireAuth.auth.signOut();
-    });
+    let currentUser = await firebase.auth().currentUser;
+    let id = currentUser["uid"];
+    await currentUser.updatePassword(password);
+    await this.fireAuth.auth.signOut();
 
     let today = moment().format();
     let date = new Date(today);
@@ -961,6 +960,36 @@ export class DatabaseProvider {
         }
       }
       
+    })
+
+    console.log("Counselors: ", counselorList);
+    return await counselorList
+  }
+
+  async fetchAllListCounselor(counselors) {
+    let counselorList = [];
+    let academics = await this.fetchAllNodesByTableInDatabase("academic");
+    let students = await this.fetchAllNodesByTableInDatabase("student");
+
+    counselors.forEach(async counselor => {
+      let academicList = []; //Handles all units of counselor
+      academics.forEach(academic => {
+        if(counselor["cID"] === academic["cID"]) {
+          academicList.push({
+            id: academic["acID"],
+            code: academic["acCode"]
+          })
+        }
+      })
+      
+      let name = counselor["cLastName"] +", "+ counselor["cFirstName"];
+
+      counselorList.push({
+        id: counselor["cID"],
+        name: name,
+        academic: academicList,
+        picture: counselor["cPicture"]        
+      })
     })
 
     console.log("Counselors: ", counselorList);

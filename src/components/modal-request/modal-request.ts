@@ -198,13 +198,12 @@ export class ModalRequestComponent {
     registrations.forEach( request => {
       if(request["rID"] === requestID) {
         requestInput.push({
-          sID: parseInt(id),
+          sID: id,
           sFirstName: request["rFirstName"],
           sLastName: request["rLastName"],
           sEmail: request["rEmail"],
           sPicture: request["rPicture"],
           sPassword: request["rPassword"],
-          sDevice: "Offline",
           sStatus: request["rStatus"],
           acID: parseInt(request["acID"])
         })

@@ -13,7 +13,7 @@
                         <div class="or">or</div>
                     <form #loginForm="ngForm" (ngSubmit)="upLogin(loginForm.value)" novalidate>
                         <ion-grid>
-                            <ion-row class="label">Enter SU Email here</ion-row>
+                            <ion-row class="label">Enter SU Email Address here</ion-row>
                             <ion-row class="item">
                                 <ion-col col-1><ion-icon class="icon" name="person"></ion-icon></ion-col>
                                 <ion-col col-11>
@@ -23,7 +23,8 @@
                                         #email="ngModel" 
                                         name="email" 
                                         pattern="^[a-zA-Z]+@(?:(?:[a-zA-Z0-9-]+\.)?[a-zA-Z]+\.)?(su.edu)\.ph$" 
-                                        ngModel required>
+                                        ngModel 
+                                        required>
                                     </ion-input>
                                 </ion-col>
                             </ion-row>
@@ -62,13 +63,17 @@
                                 </div>
                             </ion-row>
                         </ion-grid>
+
+
                         <button ion-button block class="login" [disabled]="!loginForm.form.valid" type="submit">Log in</button>
                         </form>
-                      
-                        <div class="forgot" (click)="forgotPassword()">Forgot Password?</div>
                       
                 </ion-list>
             </ion-card-content>
         </ion-card>
+        <div class="footer">
+              <div class="forgot" (click)="forgotPassword()">Forgot Password?</div>
+        </div>
   </ion-content>
+
   

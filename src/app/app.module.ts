@@ -41,6 +41,7 @@ import { PostPage } from '../pages/post/post';
 //Native Plugins
 import { File } from '@ionic-native/file';
 import { FileChooser } from '@ionic-native/file-chooser';
+import { EmailComposer } from '@ionic-native/email-composer';
 import { Camera } from '@ionic-native/camera';
 import { GooglePlus } from '@ionic-native/google-plus';
 import { IonicStorageModule } from '@ionic/storage';
@@ -68,7 +69,7 @@ import { ModalFeedbackAddComponent } from '../components/modal-feedback-add/moda
 import { ProfilePage } from '../pages/profile/profile';
 import { LoginForgotPage } from '../pages/login-forgot/login-forgot';
 import { ModalAppointmentSearchComponent } from '../components/modal-appointment-search/modal-appointment-search';
-
+import { ModalPasswordComponent } from '../components/modal-password/modal-password';
 const firebaseConfig = {
   apiKey: "AIzaSyAVITAZa_qU9vSHq_ASeHJ1JGt3Sy8s8a0",
   authDomain: "mpcapp-c01ec.firebaseapp.com",
@@ -84,6 +85,7 @@ const firebaseConfig = {
     MyApp,
     LoginPage,
     LoginForgotPage,
+    ModalPasswordComponent,
     RegisterPage,
     RegisterValidationPage,
     HomePage,
@@ -135,6 +137,7 @@ const firebaseConfig = {
     MyApp,
     LoginPage,
     LoginForgotPage,
+    ModalPasswordComponent,
     RegisterPage,
     RegisterValidationPage,
     HomePage,
@@ -171,6 +174,7 @@ const firebaseConfig = {
     Keyboard,
     GooglePlus,
     CallNumber,
+    EmailComposer,
     FileChooser, File,
     Camera,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
