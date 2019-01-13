@@ -208,7 +208,8 @@ export class ChatMessagePage {
         let refKey = messages[count].key;
         let message = messages[count].payload.val();
 
-        if(message.cID === counselor && message.sID === student) {
+        if(message.cID === counselor && message.sID === student
+            && message.mDevice === "Sent") {
           ref.update(refKey, { mDevice: "Received" });
         }
       }

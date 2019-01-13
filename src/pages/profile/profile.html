@@ -7,7 +7,7 @@
 <ion-header>
 
   <ion-navbar color="primary">
-    <ion-title>profile</ion-title>
+    <ion-title>Your Profile</ion-title>
   </ion-navbar>
 
 </ion-header>
@@ -17,11 +17,12 @@
   <ion-card>
     <div><img src="{{ userInfo['picture'] }}"></div>
     <div> {{ userInfo['firstname'] }} {{ userInfo['lastname'] }} </div>
+    
     <div> {{ rating }} </div>
   </ion-card>
 
   <!-- Shows a list of post in the application-->
-    <ion-list>
+    <ion-list *ngIf="userInfo['type'] !== 'Student'">
       <ion-card *ngFor="let post of postArray"> 
         <div>
           <ion-grid>

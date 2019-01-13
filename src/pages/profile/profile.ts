@@ -22,6 +22,8 @@ export class ProfilePage {
 
   postArray = [];
 
+  academicList = [];
+
   constructor(public navCtrl: NavController, 
       public db: DatabaseProvider,
       public fireDatabase: AngularFireDatabase,
