@@ -1,10 +1,12 @@
 import { Component, ViewChild } from '@angular/core';
-import { IonicPage, NavController, NavParams, Content } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, Content, ToastController } from 'ionic-angular';
 import { initializeApp } from 'firebase';
 import { AngularFireDatabase } from 'angularfire2/database';
 import { Item } from 'klaw';
 import { DatabaseProvider } from '../../providers/database/database';
 import moment from 'moment';
+import { Subscription } from 'rxjs/Subscription';
+import { Network} from '@ionic-native/network';
 
 /**
  * Generated class for the ChatMessagePage page.
@@ -19,6 +21,8 @@ import moment from 'moment';
   templateUrl: 'chat-message.html',
 })
 export class ChatMessagePage {
+  connected: Subscription;
+  disconnected: Subscription;
 
   scroll = false;
   currentDate: Date;
@@ -35,7 +39,9 @@ export class ChatMessagePage {
   @ViewChild(Content) content: Content;
 
   constructor(public navCtrl: NavController, 
+    public network: Network,
     public fireDatabase: AngularFireDatabase,
+    public toastCtrl: ToastController,
     public db: DatabaseProvider,
     public navParams: NavParams) {
       this.initialize()
@@ -92,6 +98,20 @@ export class ChatMessagePage {
       this.recipient = await this.db.fetchRecipient(this.recipientID, accounts);
       console.log("Fetched Recipient: ", this.recipient);
     })
+  }
+
+  presentToast(description) {
+    let toast = this.toastCtrl.create({
+      message: description,
+      duration: 3000,
+      position: 'bottom'
+    });
+  
+    toast.onDidDismiss(() => {
+      console.log('Dismissed toast');
+    });
+  
+    toast.present();
   }
 
   compareTime(messageDatetime) {
@@ -164,5 +184,38 @@ export class ChatMessagePage {
         console.log("Unable to send message");
       })
   }
+
+  updateMessageStatus(){
+    let student, counselor;
+    let list = this.fireDatabase.list<Item>("message");
+    let item = list.valueChanges();
+
+    if(this.userInfo["type"] === "Student") {
+      student = this.userInfo["id"];
+      counselor = this.recipient["id"];
+    } else {
+      counselor = this.userInfo["id"];
+      student = this.recipient["id"];
+    }
+  }
+
+  ionViewWillLeave(){
+    this.connected.unsubscribe();
+    this.disconnected.unsubscribe();
+  }
+
+  ionViewDidEnter() {
+
+    this.updateMessageStatus();
+
+    this.connected = this.network.onConnect().subscribe( data => {
+      this.presentToast("You are online");
+    }, error => console.log(error));
+
+    this.disconnected = this.network.onDisconnect().subscribe(data => {
+      this.presentToast("You are offline");
+    }, error => console.log(error));
+  }
+
 
 }

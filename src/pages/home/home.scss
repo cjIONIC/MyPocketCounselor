@@ -28,6 +28,21 @@ page-home {
         color: rgba(248, 248, 248, 0.507)
     }
 
+    .homeBadge {
+        position: absolute;
+        //background-color: white;
+        //: #ff6961;
+        border: 1px solid white;
+        width: auto;
+        padding: 2px 5px;
+		top: -0.2rem;
+		right: -0.2rem;
+		opacity: 0.9;
+    }
+
+    .homeChat {
+        margin-right: 3px;
+    }
 
     .tabTitle { 
         font-family: "Brusher";

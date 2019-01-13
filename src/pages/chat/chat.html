@@ -33,9 +33,19 @@
             
           </ion-row>
           <ion-row class="description">
-            <div class="text">
-            {{ chat.description }}
-            </div>
+            <ion-col col-11 *ngIf="status == 0">
+                <div class="text">
+                {{ chat.description }}
+                </div>
+            </ion-col>
+            <ion-col col-11  *ngIf="status != 0">
+                <div class="text2">
+                {{ chat.description }}
+                </div>
+            </ion-col>
+            <ion-col col-1 *ngIf="status != 0">
+                <div class="messageStatus">{{ chat.status}}</div>
+            </ion-col>
           </ion-row>
         </ion-col>
       </ion-row>

@@ -1611,16 +1611,17 @@ export class DatabaseProvider {
     let students = await this.fetchAllNodesByTableInDatabase("student");
 
     console.log("Chat List: ", chatList);
-    await messages1.forEach(async message1 => {
+    messages1.forEach(async message1 => {
       let duplicate = false;
-      let datetime, description, recipientName, recipientPicture, push = false;
+      let datetime, description, recipientName, recipientPicture, unread = 0;
 
       if(this.userInfo["type"] === "Student") {
 
         if(message1["sID"] === this.userInfo["id"]) {
 
           chatList.forEach(chat => {
-            if(chat["cID"] === message1["recipientID"]) {
+            console.log(chat, " ? ", message1);
+            if(chat["recipientID"] === message1["cID"]) {
               console.log("Duplicate!");
               duplicate = true;
             }
@@ -1634,6 +1635,9 @@ export class DatabaseProvider {
                 datetime = new Date(message2["mDatetime"]);
                 description = message2["mDescription"];
                 console.log("Info: ", datetime, description);
+
+                if(message2["mDevice"] === "Sent") unread++;
+
               }
             })
 
@@ -1650,6 +1654,7 @@ export class DatabaseProvider {
               name: recipientName,
               picture: recipientPicture,
               description: description,
+              status: unread,
               datetime: datetime,
               recipientID: message1["cID"]
             })
@@ -1659,7 +1664,7 @@ export class DatabaseProvider {
         if(message1["cID"] === this.userInfo["id"]) {
           
           chatList.forEach(chat => {
-            if(chat["sID"] === message1["recipientID"]) {
+            if(chat["recipientID"] === message1["sID"]) {
               console.log("Duplicate!");
               duplicate = true;
             }
@@ -1673,6 +1678,8 @@ export class DatabaseProvider {
                 datetime = new Date(message2["mDatetime"]);
                 description = message2["mDescription"];
                 console.log("Info: ", datetime, description);
+
+                if(message2["mDevice"] === "Sent") unread++;
               }
             })
 
@@ -1685,12 +1692,12 @@ export class DatabaseProvider {
 
             console.log("Pushed!");
 
-            let time = this.convertMessageDate(datetime);
             chatList.push({
               id: message1["mID"],
               name: recipientName,
               picture: recipientPicture,
               description: description,
+              status: unread,
               datetime: datetime,
               recipientID: message1["sID"]
             })
@@ -1759,12 +1766,11 @@ export class DatabaseProvider {
           } else {
             type = "Recipient"
           }
-          let date = this.convertMessageDate(message["mDatetime"]);
 
           messageList.push({
             id: message["mID"],
             message: message["mDescription"],
-            datetime: date,
+            datetime: message["mDatetime"],
             type: type
           })
         }
@@ -1776,8 +1782,6 @@ export class DatabaseProvider {
           } else {
             type = "Recipient"
           }
-
-          let date = this.convertMessageDate(message["mDatetime"]);
 
           messageList.push({
             id: message["mID"],
@@ -1842,6 +1846,7 @@ export class DatabaseProvider {
       mID: parseInt(id),
       mDescription: message,
       mType: type,
+      mDevice: "Sent",
       mDatetime: datetime.toString(),
       sID: student,
       cID: counselor

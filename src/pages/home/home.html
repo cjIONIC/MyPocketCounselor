@@ -19,7 +19,9 @@
 
         <ion-buttons end>
             <button ion-button icon-only (click)="chat()">
-              <ion-icon name="chatboxes"></ion-icon>
+              <ion-badge *ngIf="chatBadge" class="homeBadge" color="accent">{{ chatBadge }}</ion-badge>
+              <ion-icon *ngIf="chatBadge" class="homeChat" name="chatboxes"></ion-icon>
+              <ion-icon *ngIf="!chatBadge" name="chatboxes"></ion-icon>
             </button>
           </ion-buttons>
   </ion-toolbar>

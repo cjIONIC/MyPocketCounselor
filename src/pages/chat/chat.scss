@@ -48,4 +48,20 @@ page-chat {
         overflow: hidden;
         text-overflow: ellipsis;
     }
+
+    .text2 {
+        font-weight: bold;
+        color: black;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .messageStatus {
+        text-align: center;
+        color: white;
+        font-weight: bold;
+        background-color: #ff6961;
+        border-radius: 50px;
+    }
 }

@@ -35,6 +35,8 @@ export class HomePage {
   selectedPage: any;
   updatedNotification: any = false;
 
+  chatBadge: any;
+
   userInfo = [];
   googleID:any;
 
@@ -66,6 +68,8 @@ export class HomePage {
   initialize() {
     try {
       this.getUserInfo();
+
+      //this.chatBadge = 12;
     } catch {
 
     }
@@ -90,6 +94,7 @@ export class HomePage {
           this.userInfo = await this.db.getUserInfo();
           console.log("User information: ", this.userInfo);
           this.scanAppointmentChanges();
+          this.scanChatChanges();
 
         }, error => console.log(error));
 
@@ -104,6 +109,75 @@ export class HomePage {
 
   chat() {
     this.app.getRootNav().push(ChatPage);
+  }
+
+  scanChatChanges() {
+    let list = this.fireDatabase.list<Item>("message");
+    let item = list.valueChanges();
+
+    item.subscribe(messages => {
+      let chatBadge = 0;
+      let fetchedID = [];
+
+      messages.forEach(async message => {
+        if(this.userInfo["type"] === "Student") {
+          if(this.userInfo["id"] === message["sID"] 
+              && message["mType"] === "Counselor") {
+                let counselorID = message["cID"];
+                let push = false;
+
+                messages.forEach(message2 => {
+                  if(counselorID === message2["cID"]
+                    && message2["mType"] === "Counselor"
+                    && message2["mDevice"] === "Sent")
+                      push = true;
+                })
+
+                if(push) {
+                  let found = false;
+                  console.log("Currently fetched chat IDs: ", fetchedID);
+                  fetchedID.forEach(id => {
+                    if(id === message["cID"]) found = true;
+                  })
+  
+                  if(!found) {
+                    chatBadge++;
+                    fetchedID.push(message["cID"]);
+                  }
+                }
+          }
+        } else {
+          if(this.userInfo["id"] === message["cID"] 
+              && message["mType"] === "Student") {
+                let studentID = message["sID"];
+                let push = false;
+
+                messages.forEach(message2 => {
+                  if(studentID === message2["sID"]
+                    && message2["mType"] === "Student"
+                    && message2["mDevice"] === "Sent")
+                      push = true;
+                })
+
+                if(push) {
+                  let found = false;
+                  fetchedID.forEach(id => {
+                    if(id === message["sID"]) found = false;
+                  })
+  
+                  if(!found) {
+                    chatBadge++;
+                    fetchedID.push(message["sID"]);
+                  }
+                }
+          }
+        }
+      })
+
+      if(chatBadge != 0)this.chatBadge = chatBadge;
+      else this.chatBadge = null;
+      
+    }, error => console.log("Error"))
   }
   
   scanAppointmentChanges() {
@@ -136,7 +210,7 @@ export class HomePage {
         else this.notificationBadge = null;
   
         console.log("Notification badge: ", notificationBadge);
-      })
+      }, error => console.log("Error"))
    
   }
 
