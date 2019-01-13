@@ -197,6 +197,22 @@ export class ChatMessagePage {
       counselor = this.userInfo["id"];
       student = this.recipient["id"];
     }
+
+    let ref =this.fireDatabase.list("message");
+    ref.snapshotChanges()
+    .subscribe( async messages => {
+      let keys = Object.keys(messages);
+
+      for(let i = 0; i < keys.length; i++) {
+        let count = keys[i];
+        let refKey = messages[count].key;
+        let message = messages[count].payload.val();
+
+        if(message.cID === counselor && message.sID === student) {
+          ref.update(refKey, { mDevice: "Received" });
+        }
+      }
+    });
   }
 
   ionViewWillLeave(){
