@@ -25,8 +25,6 @@ import { AngularFireDatabaseModule } from 'angularfire2/database';
 import { AngularFireStorageModule } from 'angularfire2/storage';
 
 //Extra imports for Native Apps
-//import { Calendar } from '@ionic-native/calendar';
-import { DatePicker } from '@ionic-native/date-picker'; 
 import { DatabaseProvider } from '../providers/database/database';
 
 import {TimeAgoPipe} from 'time-ago-pipe';
@@ -70,6 +68,9 @@ import { ProfilePage } from '../pages/profile/profile';
 import { LoginForgotPage } from '../pages/login-forgot/login-forgot';
 import { ModalAppointmentSearchComponent } from '../components/modal-appointment-search/modal-appointment-search';
 import { ModalPasswordComponent } from '../components/modal-password/modal-password';
+
+import { Firebase } from '@ionic-native/firebase';
+
 const firebaseConfig = {
   apiKey: "AIzaSyAVITAZa_qU9vSHq_ASeHJ1JGt3Sy8s8a0",
   authDomain: "mpcapp-c01ec.firebaseapp.com",
@@ -170,7 +171,7 @@ const firebaseConfig = {
     StatusBar,
     SplashScreen,
     Network,
-    DatePicker,
+    Firebase,
     Keyboard,
     GooglePlus,
     CallNumber,

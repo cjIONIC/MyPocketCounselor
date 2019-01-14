@@ -80,8 +80,6 @@
     <plugin name="cordova-plugin-device" spec="2.0.2" />
     <plugin name="cordova-plugin-splashscreen" spec="5.0.2" />
     <plugin name="cordova-plugin-ionic-webview" spec="^2.0.0" />
-    <plugin name="cordova-plugin-calendar" spec="^5.1.2" />
-    <plugin name="cordova-plugin-datepicker" spec="^0.9.3" />
     <plugin name="mx.ferreyra.callnumber" spec="~0.0.2" />
     <plugin name="cordova-plugin-filechooser" spec="^1.0.1" />
     <plugin name="cordova-plugin-file" spec="^6.0.1" />
@@ -94,7 +92,7 @@
         <variable name="REVERSED_CLIENT_ID" value="com.googleusercontent.apps.578845672664-vo40upp9jd6qd4eauift56dgas0pn5qm" />
         <variable name="PLAY_SERVICES_VERSION" value="11.0.4" />
     </plugin>
-    <plugin name="cordova-plugin-email-composer" spec="0.9.1" />
+    <plugin name="cordova-plugin-firebase" spec="2.0.5" />
     <engine name="ios" spec="4.5.5" />
     <engine name="android" spec="7.1.4" />
 </widget>

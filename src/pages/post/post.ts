@@ -87,7 +87,6 @@ export class PostPage {
         this.feedList = await this.db.filterFeedForCounselor(posts, counselorAcademic, allAcademicUnits, allCounselors)
       }
 
-      this.feedList = await this.feedList.reverse();
       console.log("Filtered Feed: ", this.feedList);
     }, error => console.log(error));
   }

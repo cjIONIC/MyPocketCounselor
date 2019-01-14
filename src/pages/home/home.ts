@@ -215,6 +215,7 @@ export class HomePage {
   }
 
   ionViewDidLoad() {
+    this.db.getTokenForNotification();
     console.log('ionViewDidLoad TabPage');
   }
 }

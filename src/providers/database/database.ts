@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Item } from 'ionic-angular';
+import { Item, Platform } from 'ionic-angular';
 //Firebase
 import firebase, { app } from 'firebase';
 import { AngularFireAuth} from 'angularfire2/auth';
@@ -13,6 +13,8 @@ import { Storage } from '@ionic/storage';
 import moment from 'moment';
 import { not } from '@angular/compiler/src/output/output_ast';
 import { isGeneratedFile } from '@angular/compiler/src/aot/util';
+
+import { Firebase } from '@ionic-native/firebase';
 
 /*
   Generated class for the DatabaseProvider provider.
@@ -32,6 +34,8 @@ export class DatabaseProvider {
   
 
   constructor(public http: HttpClient,
+    public firePlugin: Firebase,
+    public platform: Platform,
     private fireAuth: AngularFireAuth,
     private fireStorage: AngularFireStorage,
     private ionicStorage: Storage,
@@ -1923,6 +1927,45 @@ export class DatabaseProvider {
 
     console.log("Rate: ", averageRate);
     return averageRate;
+  }
+
+  /*********************/
+  /***** N O T I F *****/
+  /*********************/
+  async getTokenForNotification() {
+    let token;
+
+    if(this.platform.is('android')) {
+      token = await this.firePlugin.getToken();
+    }
+
+    if(this.platform.is('ios')) {
+      token = await this.firePlugin.getToken();
+      await this.firePlugin.grantPermission();
+    }
+
+    return this.saveTokenToFirebase(token);
+  }
+
+  saveTokenToFirebase(token) {
+    if (!token) return;
+
+    let numeric = Math.random().toString().replace('0.', '').substring(0,2);
+    let timestamp = new Date().getTime().toString().substring(5, 13);
+    const id = numeric+timestamp;
+    console.log(timestamp+" ? "+numeric);
+
+    this.fireDatabase.list('/devices').push({
+      dID: parseInt(id),
+      dToken: token,
+      dUserID: this.userInfo["id"]
+    })
+
+    return;
+  }
+
+  listenToNotifications() {
+     this.firePlugin.onNotificationOpen();
   }
 
   /*********************/
