@@ -327,6 +327,8 @@ export class DatabaseProvider {
       rPicture: imageURL,
       rPassword: password,
       rStatus: status,
+      rDeviceCounselor: "Sent",
+      rDeviceHead: "Sent",
       rDatetime: date.toString(),
       acID: acID
     });
@@ -475,6 +477,14 @@ export class DatabaseProvider {
     });
   }
 
+  scanRegistrations(registrations, type){
+    let badge = 0;
+
+    if(badge === 0) return null;
+
+    return badge;
+  }
+
   /*********************/
   /** A C A D E M I C **/
   /*********************/
@@ -565,6 +575,7 @@ export class DatabaseProvider {
     posts.forEach(async post => {
       let pushPost = false;
       let postAcademic, counselorAvatar, counselorName;
+      let opt = false;
 
       if(this.userInfo["type"] === "GTD Head" || post["acID"] === 1) {
         pushPost = true;
@@ -577,7 +588,8 @@ export class DatabaseProvider {
         academics.forEach(assign => {
           if(assign["acID"] === post["acID"]) {
             postAcademic = assign["acCode"]
-            pushPost = true
+            pushPost = true;
+            opt = true;
           }
         })
       }
@@ -616,7 +628,8 @@ export class DatabaseProvider {
           like : post["pLike"],
           datetime :post["pDatetime"],
           academic : postAcademic,
-          type: post["pType"]
+          type: post["pType"],
+          opt: opt
         });
       }
     });
@@ -1937,12 +1950,19 @@ export class DatabaseProvider {
 
     if(this.platform.is('android')) {
       token = await this.firePlugin.getToken();
-    }
-
+    } 
+    
     if(this.platform.is('ios')) {
       token = await this.firePlugin.getToken();
       await this.firePlugin.grantPermission();
+    } 
+    
+    if(this.platform.is('cordova')) {
+      token = null;
+      console.log("Accessing application through web view");
     }
+
+    
 
     return this.saveTokenToFirebase(token);
   }
@@ -1955,7 +1975,7 @@ export class DatabaseProvider {
     const id = numeric+timestamp;
     console.log(timestamp+" ? "+numeric);
 
-    this.fireDatabase.list('/devices').push({
+    this.fireDatabase.list('/device').push({
       dID: parseInt(id),
       dToken: token,
       dUserID: this.userInfo["id"]

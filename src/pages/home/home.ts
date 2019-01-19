@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, App, Item } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, App, Item, Platform } from 'ionic-angular';
 
 import { PostPage } from '../post/post';
 import { PeoplePage } from '../people/people';
@@ -57,6 +57,7 @@ export class HomePage {
   constructor(public navCtrl: NavController, 
     public app: App,
     public fireAuth: AngularFireAuth,
+    private platform: Platform,
     public network: Network,
     public fireDatabase: AngularFireDatabase,
     public db: DatabaseProvider,
@@ -215,7 +216,11 @@ export class HomePage {
   }
 
   ionViewDidLoad() {
-    this.db.getTokenForNotification();
+    if(this.platform.is('cordova')) {
+      this.db.getTokenForNotification();
+    } else {
+      console.log("Opened in browser");
+    }
     console.log('ionViewDidLoad TabPage');
   }
 }

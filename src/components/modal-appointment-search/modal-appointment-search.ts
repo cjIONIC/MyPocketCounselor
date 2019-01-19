@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { NavParams, NavController, App, Item, ToastController, ViewController } from 'ionic-angular';
+import { Component, ViewChild } from '@angular/core';
+import { NavParams, NavController, App, Item, ToastController, ViewController, Navbar, Searchbar } from 'ionic-angular';
 import { AngularFireDatabase } from 'angularfire2/database';
 import { DatabaseProvider } from '../../providers/database/database';
 import { Network} from '@ionic-native/network';
@@ -18,6 +18,9 @@ import { AppointmentAddPage } from '../../pages/appointment-add/appointment-add'
 export class ModalAppointmentSearchComponent {
   connected: Subscription;
   disconnected: Subscription;
+
+  @ViewChild(Navbar) navbar: Navbar;
+  @ViewChild('searchbar') searchbar: Searchbar;
 
   userInfo = [];
   completePeopleList = []; //Handles all people
@@ -39,25 +42,10 @@ export class ModalAppointmentSearchComponent {
 
   async initialize() {
     try {
-      this.date = this.navParams.get('date');
       await this.getUserInfo();
     } catch {
 
     }
-  }
-
-  presentToast(description) {
-    let toast = this.toastCtrl.create({
-      message: description,
-      duration: 3000,
-      position: 'bottom'
-    });
-  
-    toast.onDidDismiss(() => {
-      console.log('Dismissed toast');
-    });
-  
-    toast.present();
   }
   
   async getUserInfo() {
@@ -83,19 +71,33 @@ export class ModalAppointmentSearchComponent {
     }, error => console.log(error))
   }
 
-  async fetchList() {
-    await this.fetchListOfStudents();
-   
+  presentToast(description) {
+    let toast = this.toastCtrl.create({
+      message: description,
+      duration: 3000,
+      position: 'bottom'
+    });
+  
+    toast.onDidDismiss(() => {
+      console.log('Dismissed toast');
+    });
+  
+    toast.present();
   }
 
-  async fetchListOfStudents() {
+  async fetchList() {
+    await this.fetchListOfStudents(false, "All");
+  }
+
+  async fetchListOfStudents(filter: Boolean, unit) {
     let list = this.fireDatabase.list<Item>('student');
     let item = list.valueChanges();
 
     item.subscribe( async students => {
       console.log('%c Fetching Students...','color: white; background: green; font-size: 16px');
-      let tempArray = await this.db.fetchAppointmentListStudent(students);
-      tempArray.sort(function(a,b) {
+      let tempArray = await this.db.fetchListStudent(students, filter, unit);
+
+      await tempArray.sort(function(a,b) {
         console.log(a, " ? ", b);
         if(a.name < b.name) { return -1; }
         if(a.name > b.name) { return 1; }
@@ -103,10 +105,13 @@ export class ModalAppointmentSearchComponent {
       });
       
       this.peopleList = tempArray;
+      if(!filter) this.completePeopleList = tempArray;
+      console.log("People list: ", this.peopleList);
     }, error => console.log(error));
   }
 
   getSearchPerson(ev: any) {
+    console.log("Input detected!");
     try {
         //Displays back all person in list
         this.peopleList = this.completePeopleList;
@@ -141,7 +146,7 @@ export class ModalAppointmentSearchComponent {
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad SearchPage');
+    console.log('ionViewDidLoad ModalAppointmentSearch');
   }
 
   ionViewWillLeave(){
@@ -150,6 +155,10 @@ export class ModalAppointmentSearchComponent {
   }
 
   ionViewDidEnter() {
+    setTimeout(() => {
+      this.searchbar.setFocus();
+    });
+
     this.connected = this.network.onConnect().subscribe( data => {
       this.presentToast("You are online");
     }, error => console.log(error));

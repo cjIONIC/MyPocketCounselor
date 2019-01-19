@@ -26,7 +26,7 @@
                       <ion-row class="headerName">{{post.counselor}}</ion-row>
                       <ion-row><div  class="headerAcademic">{{post.academic}}</div></ion-row>
                   </ion-col>
-                  <ion-col class="headerOptions" col-2 *ngIf="userInfo['type'] != 'Student'">
+                  <ion-col class="headerOptions" col-2 *ngIf="userInfo['type'] != 'Student' && post.opt">
                     <div class="iconBox">
                         <button class = "optionButton" (click)=" popOptions($event, post)">
                             <ion-icon name="more"></ion-icon>

@@ -46,7 +46,6 @@ export class ModalStudentUpdateComponent {
 
   async getCurrentData() {
     let profile = this.navParams.get('profile');
-    profile = await profile[0];
     console.log("Fetched Profile: ", profile);
     
     let table;
@@ -60,7 +59,6 @@ export class ModalStudentUpdateComponent {
       .valueChanges().subscribe(academics => {
         item.subscribe(async accounts => {
           this.profile = await this.db.fetchPersonProfile(profile["id"], accounts, this.type);
-          this.profile = this.profile[0];
           console.log("Profile: ", this.profile);
 
           this.currentStatus = await this.profile["status"];

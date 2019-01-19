@@ -84,7 +84,9 @@ export class PostPage {
         this.feedList = await this.db.filterFeedForStudent(posts, studentLikes, allAcademicUnits, allCounselors)
       } else { //Gets and matches post for counselor
         let counselorAcademic = await this.db.fetchMatchAcademicUnit();
-        this.feedList = await this.db.filterFeedForCounselor(posts, counselorAcademic, allAcademicUnits, allCounselors)
+        this.feedList = await this.db.filterFeedForCounselor(posts, counselorAcademic, allAcademicUnits, allCounselors);
+        
+        this.feedList.reverse();
       }
 
       console.log("Filtered Feed: ", this.feedList);

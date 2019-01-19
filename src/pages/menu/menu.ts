@@ -27,6 +27,8 @@ export class MenuPage {
   account: Subscription;
   userInfo = [];
 
+  registrationBadge: any;
+
   constructor(public navCtrl: NavController,
     public fireDatabase: AngularFireDatabase,
     public db: DatabaseProvider,
@@ -80,6 +82,16 @@ export class MenuPage {
 
   registration() {
     this.app.getRootNav().push(RegisterValidationPage);
+  }
+
+  scanRegistrations() {
+    let list = this.fireDatabase.list<Item>("registrations");
+    let item = list.valueChanges();
+
+    item.subscribe(async registrations => {
+      this.registrationBadge = await this.db.scanRegistrations(registrations, this.userInfo["type"]);
+    })
+
   }
 
   logout() {

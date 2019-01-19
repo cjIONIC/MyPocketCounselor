@@ -136,6 +136,7 @@ export class SearchPage {
   }
 
   getSearchPerson(ev: any) {
+    console.log("Input detected!");
     try {
         //Displays back all person in list
         this.peopleList = this.completePeopleList;

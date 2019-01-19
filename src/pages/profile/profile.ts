@@ -58,6 +58,7 @@ export class ProfilePage {
       if(this.userInfo["type"] !== "Student") {
         this.fetchRating();
         this.fetchPersonalPosts();
+        this.fetchAcademic();
       }
     }, error => console.log(error));
   }
@@ -68,6 +69,8 @@ export class ProfilePage {
 
     item.subscribe(async feedbacks => {
       this.rating = await this.db.fetchFeedbackRating(this.userInfo["id"], feedbacks);
+
+      if(!this.rating) console.log("No rating available");
     })
   }
 
@@ -78,6 +81,16 @@ export class ProfilePage {
     item.subscribe( async posts => {
       this.postArray = await this.db.fetchPostForProfile(posts);
     })
+  }
+
+  async fetchAcademic() {
+    this.academicList = await this.db.fetchMatchAcademicUnit();
+
+    console.log("Current listed academics: ", this.academicList);
+  }
+
+  viewFeedbacks() {
+    console.log("Viewing feedback");
   }
 
   ionViewDidLoad() {

@@ -14,11 +14,23 @@
 
 
 <ion-content >
-  <ion-card>
-    <div><img src="{{ userInfo['picture'] }}"></div>
-    <div> {{ userInfo['firstname'] }} {{ userInfo['lastname'] }} </div>
+  <ion-card class="profileInfo">
+    <div class="profilePicture"><img src="{{ userInfo['picture'] }}" class="profileAvatar"></div>
+    <div class="profileName"> {{ userInfo['firstname'] }} {{ userInfo['lastname'] }} </div>
     
-    <div> {{ rating }} </div>
+    <div *ngIf="userInfo['type'] !== 'Student' && rating" class="profileRating"> {{ rating }} </div>
+    <div *ngIf="userInfo['type'] !== 'Student' && !rating" class="profileRating"> No Ratings Yet </div>
+
+    <div class="profileAcademic"> 
+      <div>Academic Unit</div>
+      <div *ngFor="let units of academicList">
+        <div class="academicUnits">{{units.acName}}</div>
+      </div>
+    </div>
+  </ion-card>
+
+  <ion-card class="feedback" (click)="viewFeedbacks()">
+    <div> View Feedbacks </div>
   </ion-card>
 
   <!-- Shows a list of post in the application-->
@@ -26,9 +38,9 @@
       <ion-card *ngFor="let post of postArray"> 
         <div>
           <ion-grid>
-              <ion-row class = "header" >
+              <ion-row class = "postHeader" >
                   <ion-col class="headerLeft" col-2>
-                      <img src="{{ post.avatar }}" class="avatar">
+                      <img src="{{ post.avatar }}" class="postAvatar">
                   </ion-col>
                   <ion-col class="headerInfo" col-8>
                       <ion-row class="headerName">{{post.counselor}}</ion-row>

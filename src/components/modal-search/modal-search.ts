@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { NavParams, NavController, App, Item, ToastController, ViewController } from 'ionic-angular';
+import { Component, ViewChild } from '@angular/core';
+import { NavParams, NavController, App, Item, ToastController, ViewController, Navbar, Searchbar } from 'ionic-angular';
 import { AngularFireDatabase } from 'angularfire2/database';
 import { DatabaseProvider } from '../../providers/database/database';
 import { Network} from '@ionic-native/network';
@@ -21,6 +21,9 @@ export class ModalSearchComponent {
   connected: Subscription;
   disconnected: Subscription;
 
+  @ViewChild(Navbar) navbar: Navbar;
+  @ViewChild('searchbar') searchbar: Searchbar;
+
   userInfo = [];
   completePeopleList = []; //Handles all people
   peopleList = []; //Modifiable List
@@ -37,29 +40,12 @@ export class ModalSearchComponent {
     public viewCtrl: ViewController) {
 
       this.initialize();
-  }
-
-  async initialize() {
+  }async initialize() {
     try {
-      this.date = this.navParams.get('date');
       await this.getUserInfo();
     } catch {
 
     }
-  }
-
-  presentToast(description) {
-    let toast = this.toastCtrl.create({
-      message: description,
-      duration: 3000,
-      position: 'bottom'
-    });
-  
-    toast.onDidDismiss(() => {
-      console.log('Dismissed toast');
-    });
-  
-    toast.present();
   }
   
   async getUserInfo() {
@@ -85,13 +71,22 @@ export class ModalSearchComponent {
     }, error => console.log(error))
   }
 
+  presentToast(description) {
+    let toast = this.toastCtrl.create({
+      message: description,
+      duration: 3000,
+      position: 'bottom'
+    });
+  
+    toast.onDidDismiss(() => {
+      console.log('Dismissed toast');
+    });
+  
+    toast.present();
+  }
+
   async fetchList() {
-    if(this.userInfo["type"] === "Student") {
-      await this.fetchListOfCounselors(false, "All");
-    } else {
-      await this.fetchListOfStudents(false, "All");
-    }
-   
+    await this.fetchListOfStudents(false, "All");
   }
 
   async fetchListOfStudents(filter: Boolean, unit) {
@@ -101,38 +96,22 @@ export class ModalSearchComponent {
     item.subscribe( async students => {
       console.log('%c Fetching Students...','color: white; background: green; font-size: 16px');
       let tempArray = await this.db.fetchListStudent(students, filter, unit);
-      tempArray.sort(function(a,b) {
+
+      await tempArray.sort(function(a,b) {
         console.log(a, " ? ", b);
         if(a.name < b.name) { return -1; }
         if(a.name > b.name) { return 1; }
         return 0;
       });
       
-      if(!filter) this.completePeopleList = tempArray;
       this.peopleList = tempArray;
-    }, error => console.log(error));
-  }
-
-  async fetchListOfCounselors(filter: Boolean, unit) {
-    let list = this.fireDatabase.list<Item>('counselor');
-    let item = list.valueChanges();
-
-    item.subscribe( async counselors => {
-      console.log('%c Fetching Students...','color: white; background: green; font-size: 16px');
-      let tempArray = await this.db.fetchListCounselor(counselors, filter, unit);
-      tempArray.sort(function(a,b) {
-        console.log(a, " ? ", b);
-        if(a.name < b.name) { return -1; }
-        if(a.name > b.name) { return 1; }
-        return 0;
-      });
-      
       if(!filter) this.completePeopleList = tempArray;
-      this.peopleList = tempArray;
+      console.log("People list: ", this.peopleList);
     }, error => console.log(error));
   }
 
   getSearchPerson(ev: any) {
+    console.log("Input detected!");
     try {
         //Displays back all person in list
         this.peopleList = this.completePeopleList;
