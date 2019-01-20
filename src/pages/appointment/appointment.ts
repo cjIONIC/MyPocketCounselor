@@ -7,7 +7,6 @@ import { Subscription } from 'rxjs/Subscription';
 import { Network} from '@ionic-native/network';
 import { PopScheduleComponent } from '../../components/pop-schedule/pop-schedule';
 import moment from 'moment';
-import { ModalSearchComponent } from '../../components/modal-search/modal-search';
 
 import { AppointmentAddPage } from '../../pages/appointment-add/appointment-add'
 import { ModalAppointmentSearchComponent } from '../../components/modal-appointment-search/modal-appointment-search';

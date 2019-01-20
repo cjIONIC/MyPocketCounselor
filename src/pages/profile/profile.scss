@@ -13,6 +13,7 @@ page-profile {
         border-radius: 5px;
     }
 
+    //Profile
     .profileInfo {
         padding: 10px;
     }
@@ -34,6 +35,24 @@ page-profile {
         font-weight: bold;
     }
 
+    .profileNumber {
+        
+    }
+
+    .rowNumber {
+        width: 150px !important;
+        margin: 0px auto;
+    }
+
+    .numberIcon {
+        color: #91ffa7;
+    }
+
+    .numberNumber {
+        padding-left: 10px;
+        color: darkgray;
+    }
+
     .profileAcademic {
         margin-top: 20px;
         text-align: center;
@@ -52,12 +71,26 @@ page-profile {
         font-size: 12pt;
     }
 
-    .feedback {
+    //Feedback
+    .feedback,
+    .feedback:focus {
         padding: 10px;
         font-size: 12pt;
         font-weight: bold;
         background-color: #6961ff;
         color: white;
+    }
+
+    .feedback:active {
+        padding: 10px;
+        font-size: 12pt;
+        font-weight: bold;
+        background-color: #837df8;
+        color: white;
+    }
+
+    .feedbackIcon {
+        text-align: end;
     }
     
 

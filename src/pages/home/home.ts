@@ -35,6 +35,8 @@ export class HomePage {
   selectedPage: any;
   updatedNotification: any = false;
 
+  registrationBadge: any;
+
   chatBadge: any;
 
   userInfo = [];
@@ -213,6 +215,26 @@ export class HomePage {
         console.log("Notification badge: ", notificationBadge);
       }, error => console.log("Error"))
    
+  }async scanRegistrations() {
+    let list = this.fireDatabase.list<Item>("registration");
+    let item = list.valueChanges();
+
+    
+    let academicList = [];
+
+    let academics = await this.db.fetchAllNodesByTableInDatabase("academic");
+
+    academics.forEach(academic => {
+      if(academic["cID"] === this.userInfo["id"]) {
+        academicList.push(academic);
+      }
+    })
+
+    item.subscribe(async registrations => {
+      this.registrationBadge = await this.db.scanRegistrations(academicList, registrations);
+      console.log("Current no. of registrations: ", this.registrationBadge);
+    })
+
   }
 
   ionViewDidLoad() {

@@ -159,7 +159,7 @@ export class ModalNotificationComponent {
   }
 
   reschedule(){
-    let notification = this.notificationInfo[0];
+    let notification = this.notificationInfo;
     console.log("Reschedule: ", notification);
     const modal = this.modalCtrl.create(ModalScheduleComponent,  { appointment: notification},{ cssClass: 'custom-modal-schedule' });
     modal.present().then(() => this.viewCtrl.dismiss());

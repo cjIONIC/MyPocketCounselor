@@ -7,7 +7,6 @@ import { AngularFireDatabase } from 'angularfire2/database';
 
 //Native Plugins
 import { Item } from 'klaw';
-import { ModalSearchComponent } from '../../components/modal-search/modal-search';
 import { DatabaseProvider } from '../../providers/database/database';
 import { Network} from '@ionic-native/network';
 import { Subscription } from 'rxjs/Subscription';

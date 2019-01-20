@@ -28,6 +28,7 @@ export class MenuPage {
   userInfo = [];
 
   registrationBadge: any;
+  popBadge: any;
 
   constructor(public navCtrl: NavController,
     public fireDatabase: AngularFireDatabase,
@@ -73,6 +74,8 @@ export class MenuPage {
       await this.db.refreshUserInfo(accounts, userInfo);
       this.userInfo = await this.db.getUserInfo();
       console.log("User information: ", this.userInfo);
+
+      this.scanRegistrations();
     }, error => console.log(error));
   }
 
@@ -84,12 +87,26 @@ export class MenuPage {
     this.app.getRootNav().push(RegisterValidationPage);
   }
 
-  scanRegistrations() {
-    let list = this.fireDatabase.list<Item>("registrations");
+  async scanRegistrations() {
+    let list = this.fireDatabase.list<Item>("registration");
     let item = list.valueChanges();
 
+    
+    let academicList = [];
+
+    let academics = await this.db.fetchAllNodesByTableInDatabase("academic");
+
+    academics.forEach(academic => {
+      if(academic["cID"] === this.userInfo["id"]) {
+        academicList.push(academic);
+      }
+    })
+
     item.subscribe(async registrations => {
-      this.registrationBadge = await this.db.scanRegistrations(registrations, this.userInfo["type"]);
+      this.popBadge = false;
+      this.registrationBadge = await this.db.scanRegistrations(academicList, registrations);
+      console.log("Current no. of registrations: ", this.registrationBadge);
+      this.popBadge = true;
     })
 
   }
@@ -125,6 +142,7 @@ export class MenuPage {
   }
 
   ionViewDidLoad() {
+    this.popBadge = false;
     console.log('ionViewDidLoad MenuPage');
   }
   

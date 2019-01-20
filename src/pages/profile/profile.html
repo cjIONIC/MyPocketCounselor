@@ -19,7 +19,17 @@
     <div class="profileName"> {{ userInfo['firstname'] }} {{ userInfo['lastname'] }} </div>
     
     <div *ngIf="userInfo['type'] !== 'Student' && rating" class="profileRating"> {{ rating }} </div>
-    <div *ngIf="userInfo['type'] !== 'Student' && !rating" class="profileRating"> No Ratings Yet </div>
+    <div *ngIf="userInfo['type'] !== 'Student' && !rating" class="profileRating"> No Ratings </div>
+    
+    
+    <div *ngIf="userInfo['type'] !== 'Student'" class="profileNumber"> 
+        <ion-grid>
+            <ion-row class="rowNumber">
+                <ion-col col-1 class="numberIcon"><ion-icon name="call"></ion-icon></ion-col>
+                <ion-col col-11 class="numberNumber">{{ userInfo['number'] }} </ion-col>
+              </ion-row >
+        </ion-grid>
+    </div>
 
     <div class="profileAcademic"> 
       <div>Academic Unit</div>
@@ -30,7 +40,12 @@
   </ion-card>
 
   <ion-card class="feedback" (click)="viewFeedbacks()">
-    <div> View Feedbacks </div>
+    <ion-grid>
+      <ion-row>
+        <ion-col col-10 class="feedbackName"> View Feedbacks</ion-col>
+        <ion-col col-2 class="feedbackIcon"> <ion-icon name="arrow-forward"></ion-icon> </ion-col>
+      </ion-row>
+    </ion-grid>
   </ion-card>
 
   <!-- Shows a list of post in the application-->

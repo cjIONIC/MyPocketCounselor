@@ -50,17 +50,22 @@ export class ProfilePage {
     let list = this.fireDatabase.list<Item>(table);
     let item = list.valueChanges();
 
-    item.subscribe(async accounts => {
-      await this.db.refreshUserInfo(accounts, userInfo);
-      this.userInfo = await this.db.getUserInfo();
-      console.log("User information: ", this.userInfo);
-
-      if(this.userInfo["type"] !== "Student") {
-        this.fetchRating();
-        this.fetchPersonalPosts();
-        this.fetchAcademic();
-      }
+    this.fireDatabase.list<Item>("academic")
+    .valueChanges().subscribe(() => {
+      item.subscribe(async accounts => {
+        await this.db.refreshUserInfo(accounts, userInfo);
+        this.userInfo = await this.db.getUserInfo();
+        console.log("User information: ", this.userInfo);
+  
+        if(this.userInfo["type"] !== "Student") {
+          this.fetchRating();
+          this.fetchPersonalPosts();
+          this.fetchAcademic();
+        }
+      }, error => console.log(error));
+      
     }, error => console.log(error));
+
   }
 
   fetchRating() {

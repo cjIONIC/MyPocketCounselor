@@ -14,8 +14,18 @@
                     </ion-grid>
                 </button>
             </div>
-            <div class="item" *ngIf="userInfo['type'] !== 'Student'">
-                <button class="button btnRegister" (click)="registration()">Registration</button>
+            <div class="item" *ngIf="userInfo['type'] !== 'Student'" (click)="registration()">
+                <ion-grid class="button btnRegister">
+                    <ion-row>
+                        <ion-col col-10 class="registrationLabel">
+                            Registration
+                        </ion-col>
+                        <ion-col col-2 class="registrationBadge" *ngIf="popBadge">
+                            <ion-badge class="badge" *ngIf="registrationBadge !== null"> {{ registrationBadge }} </ion-badge>
+                        </ion-col>
+                    </ion-row>
+                </ion-grid>
+                
             </div>
             <div class="item" *ngIf="userInfo['type'] === 'GTD Head'">
                 <button class="button btnControl">Head Controls</button>

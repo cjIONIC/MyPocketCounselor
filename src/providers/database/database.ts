@@ -62,7 +62,6 @@ export class DatabaseProvider {
             "id": account["sID"],
             "firstname": account["sFirstName"],
             "lastname": account["sLastName"],
-            "username": account["sUsername"],
             "password":account["sPassword"],
             "academic": account["acID"],
             "picture": account["sPicture"],
@@ -77,7 +76,7 @@ export class DatabaseProvider {
             "firstname": account["cFirstName"],
             "lastname": account["cLastName"],
             "picture": account["cPicture"],
-            "username": account["cUsername"],
+            "number": account["cNumber"],
             "password":account["cPassword"],
             "type": account["cType"]
           });
@@ -477,8 +476,29 @@ export class DatabaseProvider {
     });
   }
 
-  scanRegistrations(registrations, type){
+  async scanRegistrations(academics, requests){
     let badge = 0;
+    
+    let allAcademics = await this.fetchAllNodesByTableInDatabase("academic");
+
+    requests.forEach(request => {
+
+      if(this.userInfo["type"] === "Counselor") {
+        academics.forEach(academic => {
+          if(request["acID"] === academic["acID"]) {
+            if(request["rDeviceCounselor"] === "Sent") badge++;
+          }
+        })
+      } else if(this.userInfo["type"] === "GTD Head"){
+        allAcademics.forEach(academic => {
+          if(request["acID"] === academic["acID"]) {
+            if(request["rDeviceHead"] === "Sent") badge++;
+          }
+        });
+      }
+     
+    })
+
 
     if(badge === 0) return null;
 

@@ -43,7 +43,6 @@ import { EmailComposer } from '@ionic-native/email-composer';
 import { Camera } from '@ionic-native/camera';
 import { GooglePlus } from '@ionic-native/google-plus';
 import { IonicStorageModule } from '@ionic/storage';
-import { ModalSearchComponent } from '../components/modal-search/modal-search';
 import { ModalProfileComponent } from '../components/modal-profile/modal-profile';
 import { Keyboard } from '@ionic-native/keyboard';
 import { Network } from '@ionic-native/network'
@@ -55,9 +54,6 @@ import { ChatPeopleListPage } from '../pages/chat-people-list/chat-people-list';
 import { ChatMessagePage } from '../pages/chat-message/chat-message';
 import { AppointmentAddPage } from '../pages/appointment-add/appointment-add';
 
-
-
-
 import { ReactiveFormsModule } from '@angular/forms';
 import { PostAddPage } from '../pages/post-add/post-add';
 import { PostEditPage } from '../pages/post-edit/post-edit';
@@ -65,7 +61,6 @@ import { HomePage } from '../pages/home/home';
 import { RegisterValidationPage } from '../pages/register-validation/register-validation';
 import { ModalFeedbackAddComponent } from '../components/modal-feedback-add/modal-feedback-add';
 import { ProfilePage } from '../pages/profile/profile';
-import { LoginForgotPage } from '../pages/login-forgot/login-forgot';
 import { ModalAppointmentSearchComponent } from '../components/modal-appointment-search/modal-appointment-search';
 import { ModalPasswordComponent } from '../components/modal-password/modal-password';
 
@@ -85,7 +80,6 @@ const firebaseConfig = {
   declarations: [
     MyApp,
     LoginPage,
-    LoginForgotPage,
     ModalPasswordComponent,
     RegisterPage,
     RegisterValidationPage,
@@ -112,7 +106,6 @@ const firebaseConfig = {
     ModalAppointmentSearchComponent,
     PopScheduleComponent,
     ModalScheduleComponent,
-    ModalSearchComponent,
     ModalFeedbackAddComponent,
     TimeAgoPipe
   ],
@@ -137,7 +130,6 @@ const firebaseConfig = {
   entryComponents: [
     MyApp,
     LoginPage,
-    LoginForgotPage,
     ModalPasswordComponent,
     RegisterPage,
     RegisterValidationPage,
@@ -161,7 +153,6 @@ const firebaseConfig = {
     ChatMessagePage,
     PopScheduleComponent,
     ModalScheduleComponent,
-    ModalSearchComponent,
     AppointmentPage,
     AppointmentAddPage,
     ModalAppointmentSearchComponent,
