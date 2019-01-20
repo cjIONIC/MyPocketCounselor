@@ -98,6 +98,7 @@ export class HomePage {
           console.log("User information: ", this.userInfo);
           this.scanAppointmentChanges();
           this.scanChatChanges();
+          this.scanRegistrations();
 
         }, error => console.log(error));
 
@@ -215,7 +216,9 @@ export class HomePage {
         console.log("Notification badge: ", notificationBadge);
       }, error => console.log("Error"))
    
-  }async scanRegistrations() {
+  }
+  
+  async scanRegistrations() {
     let list = this.fireDatabase.list<Item>("registration");
     let item = list.valueChanges();
 
@@ -235,6 +238,18 @@ export class HomePage {
       console.log("Current no. of registrations: ", this.registrationBadge);
     })
 
+  }
+
+  scanTabChange(ev:any) {
+    let page = ev.root.name;
+
+    console.log("Tab selected: ", page);
+
+    if(page === "NotificationPage")
+      this.notificationBadge = null;
+
+    if(page === "MenuPage")
+      this.registrationBadge = null;
   }
 
   ionViewDidLoad() {

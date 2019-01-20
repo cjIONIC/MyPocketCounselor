@@ -499,6 +499,8 @@ export class DatabaseProvider {
      
     })
 
+    console.log("Badge: ", badge);
+
 
     if(badge === 0) return null;
 
@@ -513,9 +515,7 @@ export class DatabaseProvider {
     let academics = await this.fetchAllNodesByTableInDatabase("academic");
 
     academics.forEach(academic => {
-      if(academic["cID"] === this.userInfo["id"] && this.userInfo["type"] !== "GTD Head")
-        academicList.push(academic)
-      if(this.userInfo["type"] == "GTD Head")
+      if(academic["cID"] === this.userInfo["id"])
         academicList.push(academic)
     })
 
@@ -527,6 +527,8 @@ export class DatabaseProvider {
 
     return await academicList;
   }
+
+
 
   /*********************/
   /****** F E E D ******/

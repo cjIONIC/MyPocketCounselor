@@ -28,7 +28,7 @@
 </ion-header>
 
 <ion-content no-bounce>
-  <ion-tabs>
+  <ion-tabs (ionChange)="scanTabChange($event)">
       <ion-tab [root]="tab1" tabIcon="paper"></ion-tab>
       <ion-tab [root]="tab2" tabIcon="people"></ion-tab>
       <ion-tab [root]="tab3" tabIcon="calendar"></ion-tab>
@@ -38,7 +38,7 @@
           tabBadgeStyle="danger"></ion-tab>
       <ion-tab  [root]="tab5" 
           tabIcon="menu" 
-          tabBadge = "{{ notificationBadge }}"
+          tabBadge = "{{ registrationBadge }}"
           tabBadgeStyle="danger"></ion-tab>
   </ion-tabs>
 </ion-content>
