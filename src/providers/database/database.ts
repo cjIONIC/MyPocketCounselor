@@ -616,6 +616,8 @@ export class DatabaseProvider {
         })
       }
 
+      if(this.userInfo["type"] === "GTD Head") opt = true;
+
       if(await pushPost) {
 
         counselors.forEach(counselor => {

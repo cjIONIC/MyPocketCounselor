@@ -1,4 +1,5 @@
 <ion-content class="body">
+    <ion-list>
     <!-- Login Page-->
         <ion-card class="card">
             <ion-card-header class="header">
@@ -28,16 +29,6 @@
                                     </ion-input>
                                 </ion-col>
                             </ion-row>
-                            <!--
-                            <ion-row *ngIf="email.errors && (email.dirty || email.touched)">
-                               <div [hidden]="!email.errors.required" class="alert">
-                                 SU Email is required
-                                </div>
-                                <div [hidden]="!email.errors.pattern" class="alert">
-                                 Invalid SU Email Address
-                                </div>
-                            </ion-row>
-                            -->
                             <ion-row class="label">Enter password here</ion-row>
                             <ion-row class="item">
                                 <ion-col col-1><ion-icon class="icon" name="lock"></ion-icon></ion-col>
@@ -53,19 +44,6 @@
                                     </ion-input>
                                 </ion-col>
                             </ion-row>
-                            <!--
-                            <ion-row *ngIf="password.errors && (password.dirty || password.touched)">
-                               <div [hidden]="!password.errors.required" class="alert">
-                                    Password is required
-                                </div>
-                                <div [hidden]="!password.errors.pattern" class="alert">
-                                    Password must only contain letters and numbers
-                                </div>
-                                <div [hidden]="!password.errors.minlength" class="alert">
-                                    Password must contain atleast six characters
-                                </div>
-                            </ion-row>
-                            -->
                         </ion-grid>
 
 
@@ -78,6 +56,7 @@
         <div class="footer">
               <div class="forgot" (click)="forgotPassword()">Forgot Password?</div>
         </div>
+    </ion-list>
   </ion-content>
 
   
