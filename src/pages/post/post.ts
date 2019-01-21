@@ -121,8 +121,19 @@ export class PostPage {
   }
 
   likePost(post) {
-    console.log('%c Liking Post','color: black; background: yellow; font-size: 16px');
-    this.db.likePost(post["id"]);
+    let timeout = Math.floor(Math.random() * 500) + 50;
+
+    let list = this.fireDatabase.list<Item>("like");
+    let item = list.valueChanges();
+
+    item.subscribe(likes => {
+      setTimeout(() => {
+        console.log('%c Liking Post','color: black; background: yellow; font-size: 16px');
+        this.db.likePost(post["id"], likes);
+      }, timeout);
+    })
+
+    
   }
 
   unlikePost(post) {

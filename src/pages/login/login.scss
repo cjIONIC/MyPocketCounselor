@@ -5,6 +5,7 @@ page-login {
     }
 
     .scroll-content {
+        padding-top: 15%;
         align-content: center;
         display: flex;
         flex-direction: column;
@@ -24,6 +25,7 @@ page-login {
     }
 
     ion-card.card {
+        padding-top: 20px;
         box-shadow: none;
         background: transparent;
     }
@@ -145,9 +147,6 @@ page-login {
     }
 
     .footer {
-        position: fixed;
-        left: 0;
-        bottom: 0;
         width: 100%;
         text-align: center;
     }

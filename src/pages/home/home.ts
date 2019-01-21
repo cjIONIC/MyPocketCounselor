@@ -254,7 +254,7 @@ export class HomePage {
 
   ionViewDidLoad() {
     if(this.platform.is('cordova')) {
-      this.db.getTokenForNotification();
+      this.db.getDeviceToken();
     } else {
       console.log("Opened in browser");
     }

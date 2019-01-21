@@ -11,9 +11,9 @@ import * as admin from 'firebase-admin';
 
 admin.initializeApp(functions.config().firebase);
 
-    exports.addAppointmentNotificaton = functions.database
+exports.addAppointmentNotificaton = functions.database
         .ref('/appointment/{appointmentID}')
-        .onCreate((snapshot, context) => {
+        .onCreate(async (snapshot, context) => {
             const appointmentID = context.params.appointmentID;
 
             console.log(`New message ${appointmentID}`);
@@ -22,9 +22,9 @@ admin.initializeApp(functions.config().firebase);
             const appointment = snapshot.val();
 
             if(appointment.aStatus === "Pending") {
-                const student = fetchStudentName(appointment.sID);
+                const student = await fetchStudentName(appointment.sID);
                 console.log("Student name: ", student);
-                token = fetchDevice(appointment.cID);
+                token = await fetchDevice(appointment.cID);
 
                 payload = {
                     notification: {
@@ -36,9 +36,9 @@ admin.initializeApp(functions.config().firebase);
             }
 
             if(appointment.aStatus === "Accepted") {
-                const counselor = fetchCounselorName(appointment.cID);
+                const counselor = await fetchCounselorName(appointment.cID);
                 console.log("Student name: ", counselor);
-                token = fetchDevice(appointment.sID);
+                token = await fetchDevice(appointment.sID);
 
                 payload = {
                     notification: {
@@ -54,9 +54,9 @@ admin.initializeApp(functions.config().firebase);
             return admin.messaging().sendToDevice(token, payload);
         })
 
-    exports.updateAppointmentNotification = functions.database
+exports.updateAppointmentNotification = functions.database
         .ref('/appointment/{appointmentID}')
-        .onUpdate((change, context) => {
+        .onUpdate(async(change, context) => {
             const before = change.before.val();
             const after = change.after.val();
     
@@ -68,9 +68,9 @@ admin.initializeApp(functions.config().firebase);
             }
     
             if(after.aStatus === "Accepted") {
-                const counselor = fetchCounselorName(after.cID);
+                const counselor = await fetchCounselorName(after.cID);
                 console.log("Counselor name: ", counselor);
-                token = fetchDevice(after.sID);
+                token = await fetchDevice(after.sID);
     
                 payload = {
                     notification: {
@@ -82,9 +82,9 @@ admin.initializeApp(functions.config().firebase);
             }
     
             if(after.aStatus === "Finished") {
-                const counselor = fetchCounselorName(after.cID);
+                const counselor = await fetchCounselorName(after.cID);
                 console.log("Counselor name: ", counselor);
-                token = fetchDevice(after.sID);
+                token = await fetchDevice(after.sID);
     
                 payload = {
                     notification: {
@@ -99,27 +99,133 @@ admin.initializeApp(functions.config().firebase);
             return admin.messaging().sendToDevice(token, payload);
         })
 
+        exports.newMessageNotification = functions.database
+                .ref('/message/{messageID}')
+                .onCreate(async(snapshot, context) => {
+                    const messageID = context.params.messageID;
+        
+                    console.log(`New message ${messageID}`);
+                    let token, payload;
+        
+                    const message = snapshot.val();
+
+                    if(message.mType === "Student") {
+                        const student = await fetchStudentName(message.sID);
+                        console.log("Student name: ", student);
+                        token = await fetchDevice(message.cID);
+        
+                        payload = {
+                            notification: {
+                                title: `${student}`,
+                                body: `${message.mDescription}`
+                            }
+                        }
+                    } else {
+                        const counselor = await fetchCounselorName(message.cID);
+                        console.log("Student name: ", counselor);
+                        token = await fetchDevice(message.sID);
+        
+                        payload = {
+                            notification: {
+                                title: ` ${counselor}`,
+                                body: `${message.mDescription}`
+                            }
+                        }
+                    }
+        
+                    //sends notification
+                    return admin.messaging().sendToDevice(token, payload);
+                })
+
+exports.newRegistrationNotificationForCounselor = functions.database
+        .ref('/registration/{registrationID}')
+        .onCreate(async(snapshot, context) => {
+            const registrationID = context.params.registrationID;
+
+            console.log(`New message ${registrationID}`);
+            let token, payload;
+
+            const registration = snapshot.val();
+
+            const student = registration.rLastName + ", " + registration.rFirstName;
+            const counselorID = await fetchAcademicUnitCounselor(registration.acID);
+            token = await fetchDevice(counselorID);
+        
+            payload = {
+                notification: {
+                    title: ` New registration request`,
+                    body: `${student} request for registration.`
+                }
+            }
+
+            //sends notification
+            return admin.messaging().sendToDevice(token, payload);
+        })
+
+exports.newRegistrationNotificationForGTDHead = functions.database
+        .ref('/registration/{registrationID}')
+        .onCreate(async(snapshot, context) => {
+            const registrationID = context.params.registrationID;
+
+            console.log(`New message ${registrationID}`);
+            let token, payload;
+
+            const registration = snapshot.val();
+
+            const student = registration.rLastName + ", " + registration.rFirstName;
+            const counselorID = await fetchGTDHead();
+            token = await fetchDevice(counselorID);
+        
+            payload = {
+                notification: {
+                    title: ` New registration request`,
+                    body: `${student} request for registration.`
+                }
+            }
+
+            //sends notification
+            return admin.messaging().sendToDevice(token, payload);
+        })
+
 function fetchCounselorName(id) {
     return admin.database()
-        .ref('/counselor/{counselorID}')
+        .ref('/counselor')
         .orderByChild("cID").equalTo(id)
-        .once('value').then(function(snapshot) {
+        .once('value').then(async snapshot => {
             return snapshot.val().cLastName + ", " + snapshot.val().cFirstName;
         })
 }
 
 function fetchStudentName(id) {
     return admin.database()
-        .ref('/student/{studentID}')
+        .ref('/student')
         .orderByChild("sID").equalTo(id)
-        .once('value').then(function(snapshot) {
+        .once('value').then(async snapshot => {
             return snapshot.val().sLastName + ", " + snapshot.val().sFirstName;
+        })
+}
+
+function fetchAcademicUnitCounselor(id) {
+    return admin.database()
+        .ref('/academic')
+        .orderByChild("acID").equalTo(id)
+        .once('value').then(async snapshot => {
+            return snapshot.val().cID;
+        })
+}
+
+function fetchGTDHead() {
+    return admin.database()
+        .ref('/academic')
+        .orderByChild("acCode").equalTo("Guidance Center")
+        .once('value').then(async snapshot => {
+            return snapshot.val().cID;
         })
 }
 
 function fetchDevice(id) {
     return admin.database()
-        .ref('/device/{deviceID}')
+        .ref('/device')
         .orderByChild("dUserID").equalTo(id)
         .once('value').then(function(snapshot) {
             return snapshot.val().dToken;

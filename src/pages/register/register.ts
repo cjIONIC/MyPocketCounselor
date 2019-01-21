@@ -1,7 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { AngularFireDatabase } from 'angularfire2/database';
 import { DatabaseProvider } from '../../providers/database/database';
-import { IonicPage, NavController, NavParams, AlertController, Item, ViewController, ToastController, LoadingController, Navbar } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, AlertController, Item, ViewController, ToastController, LoadingController, Navbar, Platform } from 'ionic-angular';
 import { Camera, CameraOptions } from '@ionic-native/camera';
 import { Network} from '@ionic-native/network';
 import { Subscription } from 'rxjs/Subscription';
@@ -49,6 +49,7 @@ export class RegisterPage {
     public network: Network,
     public navCtrl: NavController, 
     public navParams: NavParams,
+    public platform: Platform,
     public alertCtrl: AlertController,
     private toastCtrl: ToastController,
     private loadingCtrl: LoadingController,
@@ -60,7 +61,6 @@ export class RegisterPage {
 
   initialize() {
     try {
-      this.googleUser = firebase.auth().currentUser;
       this.googleInfo = this.navParams.get('user');
       this.emailDefault = this.googleInfo["email"];
       this.fNameDefault = this.googleInfo["firstname"];
@@ -175,17 +175,22 @@ export class RegisterPage {
   }
 
   dismissGoogleUser(){
+    this.googleUser = firebase.auth().currentUser;
+    console.log("Google user: ", this.googleUser);
     this.fireAuth.auth.signOut()
     this.googleUser.delete();
   }
 
   ionViewWillLeave(){
+    this.dismissGoogleUser();
     this.connected.unsubscribe();
     this.disconnected.unsubscribe();
+    
+    let currentIndex = this.navCtrl.getActive().index;
+    this.navCtrl.remove(currentIndex);
   }
 
   ionViewDidEnter() {
-    this.navbar.backButtonClick = () => this.dismissGoogleUser();
 
     this.connected = this.network.onConnect().subscribe( data => {
       this.presentToast("You are online");

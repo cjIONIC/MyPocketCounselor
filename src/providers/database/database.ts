@@ -105,6 +105,69 @@ export class DatabaseProvider {
   }
 
   /*********************/
+  /**** D E V I C E ****/
+  /*********************/
+  async getDeviceToken() {
+    let token;
+
+    if(this.platform.is('android')) {
+      token = await this.firePlugin.getToken();
+    } 
+    
+    if(this.platform.is('ios')) {
+      token = await this.firePlugin.getToken();
+      await this.firePlugin.grantPermission();
+    } 
+    
+    if(this.platform.is('cordova')) {
+      token = null;
+      console.log("Accessing application through web view");
+    }
+
+    
+
+    return this.saveTokenToStorage(token);
+  }
+
+  saveTokenToStorage(token) {
+    if (!token) return;
+    
+    this.ionicStorage.set('token', token);
+
+    let numeric = Math.random().toString().replace('0.', '').substring(0,2);
+    let timestamp = new Date().getTime().toString().substring(5, 13);
+    const id = numeric+timestamp;
+    console.log(timestamp+" ? "+numeric);
+
+    this.fireDatabase.list('/device').push({
+      dID: parseInt(id),
+      dToken: token,
+      dUserID: this.userInfo["id"]
+    })
+
+    return;
+  }
+
+  async deleteDeviceToken() {
+    let token = this.ionicStorage.get('token');
+    
+   let devices = await this.fetchAllNodesBySnapshot("device");
+   let ref = this.fireDatabase.list('devices');
+
+   let keys = Object.keys(devices);
+
+   for(let a = 0; a < keys.length; a++) {
+     let count = keys[a];
+
+     if(devices[count].payload.val().dToken === token) {
+        ref.remove(devices[count].key);
+        console.log("Deleted Device Token!");
+     }
+   }
+
+  }
+
+  /*********************/
   /** A C C O U N T S **/
   /*********************/
   //Returns an array with only values of the table
@@ -319,7 +382,7 @@ export class DatabaseProvider {
     
 
     this.fireDatabase.list('/registration').push({
-      rID: parseInt(id),
+      rID: id,
       rFirstName: fname,
       rLastName: lname,
       rEmail: email,
@@ -766,29 +829,37 @@ export class DatabaseProvider {
     });
   }
 
-  async likePost(postID) {
+  async likePost(postID, likes) {
+
+   let push = true;
+   likes.forEach(like => {
+     if(like["pID"] === postID && like["sID"] === this.userInfo["id"]) push = false;
+   })
+
+   if(push) {
+
+    let posts = await this.fetchAllNodesBySnapshot("post");
+    let ref = this.fireDatabase.list('post');
     let numeric = Math.random().toString().replace('0.', '').substring(0,2);
     let timestamp = new Date().getTime().toString().substring(5, 13);
     const id = numeric+timestamp;
     console.log(timestamp+" ? "+numeric);
 
-   let posts = await this.fetchAllNodesBySnapshot("post");
-   let ref = this.fireDatabase.list('post');
-
-   let keys = Object.keys(posts);
-   for(let i = 0; i < keys.length; i++) {
-     let count = keys[i];
-     console.log(postID +"? "+posts[count].payload.val().pID);
-     if(posts[count].payload.val().pID === postID) {
-        let addLike = posts[count].payload.val().pLike + 1
-        ref.update(posts[count].key, { pLike: addLike });
-        this.fireDatabase.list('/like').push({
-          "lID": parseInt(id),
-          "pID": postID,
-          "sID": parseInt(this.userInfo["id"])
-        });
-       console.log("Liked!");
-     }
+    let keys = Object.keys(posts);
+    for(let i = 0; i < keys.length; i++) {
+      let count = keys[i];
+      console.log(postID +"? "+posts[count].payload.val().pID);
+      if(posts[count].payload.val().pID === postID) {
+         let addLike = posts[count].payload.val().pLike + 1
+         ref.update(posts[count].key, { pLike: addLike });
+         this.fireDatabase.list('/like').push({
+           "lID": parseInt(id),
+           "pID": postID,
+           "sID": this.userInfo["id"]
+         });
+        console.log("Liked!");
+      }
+    }
    }
   }
 
@@ -1969,44 +2040,6 @@ export class DatabaseProvider {
   /*********************/
   /***** N O T I F *****/
   /*********************/
-  async getTokenForNotification() {
-    let token;
-
-    if(this.platform.is('android')) {
-      token = await this.firePlugin.getToken();
-    } 
-    
-    if(this.platform.is('ios')) {
-      token = await this.firePlugin.getToken();
-      await this.firePlugin.grantPermission();
-    } 
-    
-    if(this.platform.is('cordova')) {
-      token = null;
-      console.log("Accessing application through web view");
-    }
-
-    
-
-    return this.saveTokenToFirebase(token);
-  }
-
-  saveTokenToFirebase(token) {
-    if (!token) return;
-
-    let numeric = Math.random().toString().replace('0.', '').substring(0,2);
-    let timestamp = new Date().getTime().toString().substring(5, 13);
-    const id = numeric+timestamp;
-    console.log(timestamp+" ? "+numeric);
-
-    this.fireDatabase.list('/device').push({
-      dID: parseInt(id),
-      dToken: token,
-      dUserID: this.userInfo["id"]
-    })
-
-    return;
-  }
 
   listenToNotifications() {
      this.firePlugin.onNotificationOpen();

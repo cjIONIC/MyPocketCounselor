@@ -89,20 +89,21 @@ export class LoginPage {
     var googleInfo = [];
     let firstname, lastname;
     //Opens dialog to choose account
-    this.googlePlus.login({
-      'webClientId':'578845672664-vo40upp9jd6qd4eauift56dgas0pn5qm.apps.googleusercontent.com',
-      'offline':true
-    }).then(res => {
-      console.log("Result: ", res );
-      firstname = res["givenName"];
-      lastname = res["familyName"];
 
-      let loading = this.loadingCtrl.create({
-        spinner: 'ios',
-        content: 'Please Wait...'
-      });
+    let loading = this.loadingCtrl.create({
+      spinner: 'ios',
+      content: 'Please Wait...'
+    });
 
-      loading.present().then(()=> {
+    loading.present().then(() => {
+      this.googlePlus.login({
+        'webClientId':'578845672664-vo40upp9jd6qd4eauift56dgas0pn5qm.apps.googleusercontent.com',
+        'offline':true
+      }).then(res => {
+        console.log("Result: ", res );
+        firstname = res["givenName"];
+        lastname = res["familyName"];
+  
         firebase.auth().signInWithCredential(firebase.auth.GoogleAuthProvider.credential(res.idToken))
         .then(action => {
   
@@ -137,10 +138,12 @@ export class LoginPage {
 
         }).catch(err => {
           console.log("Error: ", err);
+          loading.dismiss();
         })
+      }).catch(err => {
+        console.log("Error: ", err);
+        loading.dismiss();
       })
-    }).catch(err => {
-      console.log("Error: ", err);
     })
   }
 
