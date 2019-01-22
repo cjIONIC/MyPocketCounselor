@@ -36,6 +36,8 @@ export class HomePage {
   updatedNotification: any = false;
 
   registrationBadge: any;
+  tempRegistrationBadge: any;
+  menuHasEnter: any = false;
 
   chatBadge: any;
 
@@ -243,13 +245,22 @@ export class HomePage {
   scanTabChange(ev:any) {
     let page = ev.root.name;
 
+
     console.log("Tab selected: ", page);
 
     if(page === "NotificationPage")
       this.notificationBadge = null;
 
-    if(page === "MenuPage")
+    if(page === "MenuPage") {
+      this.menuHasEnter = true;
+      this.tempRegistrationBadge = this.registrationBadge;
       this.registrationBadge = null;
+    }
+
+    if(page !== "MenuPage" && this.menuHasEnter){
+      this.menuHasEnter = false;
+      this.registrationBadge = this.tempRegistrationBadge;
+    }
   }
 
   ionViewDidLoad() {

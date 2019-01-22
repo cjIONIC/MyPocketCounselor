@@ -19,7 +19,10 @@
                         <div class="avatar"></div>
                   </ion-col>
                   <ion-col class="profileRight" col-9>
-                      <ion-row class="name">{{person.name}}</ion-row>
+                      <ion-row class="name">
+                        <ion-col col-11>{{person.name}}</ion-col>
+                        <ion-col col-1 *ngIf="person.pop"><div class="badge"></div></ion-col>
+                      </ion-row>
                       <ion-row class="academic"><div class="unit">{{person.academic}}</div></ion-row>
                       <ion-row class="time"><div class="pipe">{{person.datetime | timeAgo}}</div> </ion-row>
                   </ion-col>

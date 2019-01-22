@@ -408,13 +408,18 @@ export class DatabaseProvider {
         academics.forEach(academic => {
           if(request["acID"] === academic["acID"]) {
             let name = request["rLastName"] +", "+ request["rFirstName"];
+
+            let pop = false;
+
+            if(request["rDeviceCounselor"] === "Sent") pop = true;
   
             requestList.push({
               id: request["rID"],
               name: name,
               picture: request["rPicture"],
               academic: academic["acCode"],
-              datetime: request["rDatetime"]
+              datetime: request["rDatetime"],
+              pop: pop
             });
           }
         })
@@ -422,13 +427,18 @@ export class DatabaseProvider {
         allAcademics.forEach(academic => {
           if(request["acID"] === academic["acID"]) {
             let name = request["rLastName"] +", "+ request["rFirstName"];
+
+            let pop = false;
+
+            if(request["rDeviceHead"] === "Sent") pop = true;
   
             requestList.push({
               id: request["rID"],
               name: name,
               picture: request["rPicture"],
               academic: academic["acCode"],
-              datetime: request["rDatetime"]
+              datetime: request["rDatetime"],
+              pop: pop
             });
           }
         });
@@ -477,7 +487,7 @@ export class DatabaseProvider {
 
     console.log("Profile: ", profile);
 
-    return profile;
+    return profile[0];
   }
 
   async acceptStudentRequest(profile, id) {

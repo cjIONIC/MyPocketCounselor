@@ -5,21 +5,21 @@
             <button ion-button icon-only clear round (click)="close()"><ion-icon name="arrow-back"></ion-icon></button>
         </ion-buttons>
     </div>
-    <div *ngFor="let details of profileInfo" class="profile">
-        <div *ngIf="details.picture !== 'No image'"><img src="{{ details.picture }}" class="avatar"></div>
-        <div *ngIf="details.picture === 'No image'"><div class="avatar"></div></div>
+    <div class="profile">
+        <div *ngIf="profileInfo['picture'] !== 'No image'"><img src="{{ profileInfo['picture'] }}" class="avatar"></div>
+        <div *ngIf="profileInfo['picture'] === 'No image'"><div class="avatar"></div></div>
         <div class="details">
-          <div class="name">{{details.name}}</div>
+          <div class="name">{{profileInfo["name"]}}</div>
           <div class="academicLabel">Academic Unit</div>
           <div class="academic"> 
-            <div *ngFor="let units of details.academic">
+            <div *ngFor="let units of profileInfo['academic']">
               <div class="academicCounselor">{{units.name}}</div>
             </div>
           </div>
           <div class="emailLabel">Email</div>
-          <div class="emailName">{{details.email}}</div>
+          <div class="emailName">{{profileInfo["email"]}}</div>
           <div class="statusLabel">Status</div>
-          <div class="statusName">{{details.status}}</div>
+          <div class="statusName">{{profileInfo["status"]}}</div>
         </div>
     </div>
     <ion-grid class="button">

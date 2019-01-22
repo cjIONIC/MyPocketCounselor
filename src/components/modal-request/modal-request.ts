@@ -97,7 +97,7 @@ export class ModalRequestComponent {
           text: 'Continue',
           handler: () => {
             try {
-              this.db.rejectStudentRequest(this.profileInfo[0]).then(() => this.close());
+              this.db.rejectStudentRequest(this.profileInfo).then(() => this.close());
             } catch {
               
             }
@@ -124,7 +124,7 @@ export class ModalRequestComponent {
           text: 'Continue',
           handler:  () => {
             try {
-             
+             this.accept();
             } catch {
               
             }
@@ -143,7 +143,7 @@ export class ModalRequestComponent {
 
     let timeout = Math.floor(Math.random() * 1500) + 500;
     
-    let profile = this.profileInfo[0];
+    let profile = this.profileInfo;
     let email = profile["email"];
     console.log("Email: ", email);
     
@@ -171,8 +171,8 @@ export class ModalRequestComponent {
   
         if(!found) {
           let id = profile["id"];
-          console.log("To be added: ", request[0]);
-          this.db.acceptStudentRequest(request[0], id).then(() => this.close());
+          console.log("To be added: ", request);
+          this.db.acceptStudentRequest(request, id).then(() => this.close());
         } else {
           this.viewCtrl.dismiss().then(() => {
             this.presentAlert("Info","Account was already verified");
@@ -188,17 +188,14 @@ export class ModalRequestComponent {
 
   async inputs() {
     let requestInput = [];
-    let numeric = Math.random().toString().replace('0.', '').substring(0,2);
-    let timestamp = new Date().getTime().toString().substring(5, 13);
-    let id = numeric+timestamp;
-    let requestID = this.profileInfo[0].id;
+    let requestID = this.profileInfo["id"];
 
     let registrations = await this.db.fetchAllNodesByTableInDatabase("registration");
 
     registrations.forEach( request => {
       if(request["rID"] === requestID) {
         requestInput.push({
-          sID: id,
+          sID: request["rID"],
           sFirstName: request["rFirstName"],
           sLastName: request["rLastName"],
           sEmail: request["rEmail"],
@@ -210,7 +207,7 @@ export class ModalRequestComponent {
       }
     })
 
-    return requestInput;
+    return requestInput[0];
   }
 
   close() {

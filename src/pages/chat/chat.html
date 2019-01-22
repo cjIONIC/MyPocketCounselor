@@ -44,6 +44,7 @@
                 </div>
             </ion-col>
             <ion-col col-1 *ngIf="chat.status !== 0">
+              <!-- Counts all unread messages in the chatbox-->
                 <div class="messageStatus">{{ chat.status}}</div>
             </ion-col>
           </ion-row>

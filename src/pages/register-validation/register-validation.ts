@@ -1,8 +1,10 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, Item, Modal, ModalController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, Item, Modal, ModalController, ToastController } from 'ionic-angular';
 import { AngularFireDatabase } from 'angularfire2/database';
 import { DatabaseProvider } from '../../providers/database/database';
 import { ModalRequestComponent } from '../../components/modal-request/modal-request';
+import { Network } from '@ionic-native/network';
+import { Subscription } from 'rxjs/Subscription';
 
 
 /**
@@ -19,6 +21,9 @@ import { ModalRequestComponent } from '../../components/modal-request/modal-requ
 })
 export class RegisterValidationPage {
 
+  connected: Subscription;
+  disconnected: Subscription;
+
   requestList = [];
   userInfo = [];
 
@@ -26,6 +31,8 @@ export class RegisterValidationPage {
     public fireDatabase: AngularFireDatabase,
     public db: DatabaseProvider,
     public modalCtrl: ModalController,
+    public toastCtrl: ToastController,
+    public network: Network,
     public navParams: NavParams) {
   
       this.initialize();
@@ -59,6 +66,20 @@ export class RegisterValidationPage {
     }, error => console.log(error));
   }
 
+  presentToast(description) {
+    let toast = this.toastCtrl.create({
+      message: description,
+      duration: 3000,
+      position: 'bottom'
+    });
+  
+    toast.onDidDismiss(() => {
+      console.log('Dismissed toast');
+    });
+  
+    toast.present();
+  }
+
   async fetchRequests() {
     let academicList = [];
 
@@ -87,8 +108,56 @@ export class RegisterValidationPage {
     }
   }
 
+  async updateRegistrationStatus() {
+
+    let registrations = await this.db.fetchAllNodesBySnapshot("registration");
+    let ref = this.fireDatabase.list('registrations');
+
+    let keys = Object.keys(registrations);
+
+    for(let i = 0; i < keys.length; i++) {
+      let count = keys[i];
+      let registration = registrations[count].payload.val();
+
+      if (this.userInfo["type"] === "Counselor") {
+        if(registration["cID"] === this.userInfo["id"]
+            && registration["rDeviceCounselor"] === "Sent")
+            ref.update(registrations[count].key, { rDeviceCounselor: "Received" });
+
+      }
+
+      if (this.userInfo["type"] === "GTD Head") {
+        if(registration["rDeviceHead"] === "Sent")
+            ref.update(registrations[count].key, { rDeviceHead: "Received" });
+
+      }
+    }
+
+    return;
+  }
+
+  ionViewWillLeave(){
+    this.connected.unsubscribe();
+    this.disconnected.unsubscribe();
+
+    this.updateRegistrationStatus();
+  }
+
   ionViewDidLoad() {
     console.log('ionViewDidLoad RegisterValidationPage');
+  }
+
+  ionViewDidEnter() {
+    this.initialize();
+    
+    this.connected = this.network.onConnect().subscribe( data => {
+      this.presentToast("You are online");
+      this.initialize();
+    }, error => console.log(error));
+
+    this.disconnected = this.network.onDisconnect().subscribe(data => {
+      this.presentToast("You are offline");
+    }, error => console.log(error));
   }
 
 }

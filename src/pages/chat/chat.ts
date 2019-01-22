@@ -1,10 +1,13 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, App, Item } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, App, Item, ToastController } from 'ionic-angular';
 import { ChatPeopleListPage } from '../chat-people-list/chat-people-list';
 import { AngularFireDatabase } from 'angularfire2/database';
 import { DatabaseProvider } from '../../providers/database/database';
 import moment from 'moment';
 import { ChatMessagePage } from '../chat-message/chat-message';
+import { Subscription } from 'rxjs/Subscription';
+import { Network } from '@ionic-native/network';
+import { userInfo } from 'os';
 
 /**
  * Generated class for the ChatPage page.
@@ -20,13 +23,20 @@ import { ChatMessagePage } from '../chat-message/chat-message';
 })
 export class ChatPage {
 
+  connected: Subscription;
+  disconnected: Subscription;
+
   chatList = [];
   currentDate: Date;
   week: any;
 
+  userInfo = [];
+
   constructor(public navCtrl: NavController, 
     public navParams: NavParams,
+    public toastCtrl: ToastController,
     public fireDatabase: AngularFireDatabase,
+    public network: Network,
     public db: DatabaseProvider,
     public app: App) {
 
@@ -36,11 +46,48 @@ export class ChatPage {
   initialize() {
     try {
       this.currentDate = new Date(moment().format());
-
-      this.fetchChats();
+      this.getUserInfo();
     } catch {
 
     }
+  }
+  
+  async getUserInfo() {
+    let userInfo = await this.db.getProfileInStorage();
+    console.log("Currently logged in: ", userInfo);
+    let table;
+
+    if(userInfo["type"] === "Student") table = "student"
+    else table = "counselor";
+
+    let list = this.fireDatabase.list<Item>(table);
+    let item = list.valueChanges();
+
+    this.fireDatabase.list<Item>("academic")
+      .valueChanges().subscribe(academics => {
+
+        item.subscribe(async accounts => {
+          await this.db.refreshUserInfo(accounts, userInfo);
+          this.userInfo = await this.db.getUserInfo();
+          console.log("User information: ", this.userInfo);
+          await this.fetchChats();
+        }, error => console.log(error));
+
+    }, error => console.log(error));
+  }
+
+  presentToast(description) {
+    let toast = this.toastCtrl.create({
+      message: description,
+      duration: 3000,
+      position: 'bottom'
+    });
+  
+    toast.onDidDismiss(() => {
+      console.log('Dismissed toast');
+    });
+  
+    toast.present();
   }
 
   addChat() {
@@ -83,8 +130,53 @@ export class ChatPage {
       this.app.getRootNav().push(ChatMessagePage, {person: recipient});
   }
 
+  async updateChatStatus() {
+
+    let messages = await this.db.fetchAllNodesBySnapshot("message");
+    let ref = this.fireDatabase.list('messages');
+
+    let keys = Object.keys(messages);
+
+    for(let i = 0; i < keys.length; i++) {
+      let count = keys[i];
+      let message = messages[count].payload.val();
+
+      if(message.mType=== "Student") {
+        if(message.cID === this.userInfo["id"] &&
+            message.mDevice === "Sent")
+              ref.update(messages[count].key, { mDevice: "Received" });
+      } else {
+        if(message.sID === this.userInfo["id"] &&
+            message.mDevice === "Sent")
+              ref.update(messages[count].key, { mDevice: "Received" });
+      }
+    }
+
+    return;
+  }
+
+  ionViewWillLeave(){
+    this.connected.unsubscribe();
+    this.disconnected.unsubscribe();
+
+    this.updateChatStatus();
+  }
+
   ionViewDidLoad() {
     console.log('ionViewDidLoad ChatPage');
+  }
+
+  ionViewDidEnter() {
+    this.initialize();
+    
+    this.connected = this.network.onConnect().subscribe( data => {
+      this.presentToast("You are online");
+      this.initialize();
+    }, error => console.log(error));
+
+    this.disconnected = this.network.onDisconnect().subscribe(data => {
+      this.presentToast("You are offline");
+    }, error => console.log(error));
   }
 
 }
