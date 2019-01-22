@@ -20,6 +20,7 @@ exports.addAppointmentNotificaton = functions.database
             let token, payload;
 
             const appointment = snapshot.val();
+            console.log("Appointment values: ", appointment);
 
             if(appointment.aStatus === "Pending") {
                 const student = await fetchStudentName(appointment.sID);
@@ -49,7 +50,6 @@ exports.addAppointmentNotificaton = functions.database
         
             }
             
-
             //sends notification
             return admin.messaging().sendToDevice(token, payload);
         })
@@ -99,43 +99,46 @@ exports.updateAppointmentNotification = functions.database
             return admin.messaging().sendToDevice(token, payload);
         })
 
-        exports.newMessageNotification = functions.database
-                .ref('/message/{messageID}')
-                .onCreate(async(snapshot, context) => {
-                    const messageID = context.params.messageID;
         
-                    console.log(`New message ${messageID}`);
-                    let token, payload;
-        
-                    const message = snapshot.val();
+    exports.newMessageNotification = functions.database
+        .ref('/message/{messageID}')
+        .onCreate(async(snapshot, context) => {
+            const messageID = context.params.messageID;
 
-                    if(message.mType === "Student") {
-                        const student = await fetchStudentName(message.sID);
-                        console.log("Student name: ", student);
-                        token = await fetchDevice(message.cID);
-        
-                        payload = {
-                            notification: {
-                                title: `${student}`,
-                                body: `${message.mDescription}`
-                            }
-                        }
-                    } else {
-                        const counselor = await fetchCounselorName(message.cID);
-                        console.log("Student name: ", counselor);
-                        token = await fetchDevice(message.sID);
-        
-                        payload = {
-                            notification: {
-                                title: ` ${counselor}`,
-                                body: `${message.mDescription}`
-                            }
-                        }
+            console.log(`New message ${messageID}`);
+            let token, payload;
+
+            const message = snapshot.val();
+            console.log("Message values: ", message);
+
+            if(message.mType === "Student") {
+                const student = await fetchStudentName(message.sID);
+                console.log("Student name: ", student);
+                token = await fetchDevice(message.cID);
+
+                payload = {
+                    notification: {
+                        title: `${student}`,
+                        body: `${message.mDescription}`
                     }
-        
-                    //sends notification
-                    return admin.messaging().sendToDevice(token, payload);
-                })
+                }
+            } else {
+                const counselor = await fetchCounselorName(message.cID);
+                console.log("Student name: ", counselor);
+                token = await fetchDevice(message.sID);
+
+                payload = {
+                    notification: {
+                        title: ` ${counselor}`,
+                        body: `${message.mDescription}`
+                    }
+                }
+            }
+
+            //sends notification
+            return admin.messaging().sendToDevice(token, payload);
+        })
+
 
 exports.newRegistrationNotificationForCounselor = functions.database
         .ref('/registration/{registrationID}')
@@ -146,6 +149,7 @@ exports.newRegistrationNotificationForCounselor = functions.database
             let token, payload;
 
             const registration = snapshot.val();
+            console.log("Registration for COUNSELOR values: ", registration);
 
             const student = registration.rLastName + ", " + registration.rFirstName;
             const counselorID = await fetchAcademicUnitCounselor(registration.acID);
@@ -171,6 +175,7 @@ exports.newRegistrationNotificationForGTDHead = functions.database
             let token, payload;
 
             const registration = snapshot.val();
+            console.log("Registration for HEAD values: ", registration);
 
             const student = registration.rLastName + ", " + registration.rFirstName;
             const counselorID = await fetchGTDHead();

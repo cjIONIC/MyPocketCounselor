@@ -304,6 +304,7 @@ export class DatabaseProvider {
   async logoutUser() {
     this.userInfo = [];
     this.ionicStorage.set('profile', this.userInfo);
+    this.deleteDeviceToken();
 
     return;
   }

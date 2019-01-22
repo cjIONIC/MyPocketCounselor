@@ -109,30 +109,39 @@ export class RegisterValidationPage {
   }
 
   async updateRegistrationStatus() {
+    console.log("Updating registrations");
 
-    let registrations = await this.db.fetchAllNodesBySnapshot("registration");
-    let ref = this.fireDatabase.list('registrations');
+    let ref = this.fireDatabase.list('registration');
+    let academics = await this.db.fetchAllNodesByTableInDatabase("academic");
 
-    let keys = Object.keys(registrations);
+    ref.snapshotChanges()
+    .subscribe(registrations => {
+      let keys = Object.keys(registrations);
 
-    for(let i = 0; i < keys.length; i++) {
-      let count = keys[i];
-      let registration = registrations[count].payload.val();
+      for(let i = 0; i < keys.length; i++) {
+        let count = keys[i];
+        let registration = registrations[count].payload.val();
 
-      if (this.userInfo["type"] === "Counselor") {
-        if(registration["cID"] === this.userInfo["id"]
-            && registration["rDeviceCounselor"] === "Sent")
-            ref.update(registrations[count].key, { rDeviceCounselor: "Received" });
+        let counselor;
 
+        academics.forEach(academic => {
+          if(registration.acID === academic["acID"]) counselor = academic["cID"];
+        })
+  
+        if (this.userInfo["type"] === "Counselor") {
+          if(counselor === this.userInfo["id"]
+              && registration.rDeviceCounselor === "Sent")
+              ref.update(registrations[count].key, { rDeviceCounselor: "Received" });
+  
+        }
+  
+        if (this.userInfo["type"] === "GTD Head") {
+          if(registration.rDeviceHead === "Sent")
+              ref.update(registrations[count].key, { rDeviceHead: "Received" });
+  
+        }
       }
-
-      if (this.userInfo["type"] === "GTD Head") {
-        if(registration["rDeviceHead"] === "Sent")
-            ref.update(registrations[count].key, { rDeviceHead: "Received" });
-
-      }
-    }
-
+    })
     return;
   }
 
@@ -141,6 +150,7 @@ export class RegisterValidationPage {
     this.disconnected.unsubscribe();
 
     this.updateRegistrationStatus();
+
   }
 
   ionViewDidLoad() {

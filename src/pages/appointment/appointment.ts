@@ -192,7 +192,7 @@ export class AppointmentPage {
   //Loads the last month of the currently displayed month
   loadLastMonth() {
     this.date = new Date(this.date.getFullYear(), this.date.getMonth(), 0);
-    this.daySelected = "";
+    this.selectedDay = null;
     this.fired = false;
     this.appointmentsOfSelectedDate = [];
     this.fetchAppointmentsOfCurrentMonth();
@@ -201,7 +201,7 @@ export class AppointmentPage {
   //Loads the next month of the currently displayed month
   loadNextMonth() {
     this.date = new Date(this.date.getFullYear(), this.date.getMonth()+2, 0);
-    this.daySelected = "";
+    this.selectedDay = null;
     this.fired = false;
     this.appointmentsOfSelectedDate = [];
     this.fetchAppointmentsOfCurrentMonth();

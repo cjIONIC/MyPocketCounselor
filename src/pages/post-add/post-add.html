@@ -49,7 +49,7 @@
                 <ion-select #academic="ngModel" 
                     name="academic" 
                     placeholder="Choose Academic Unit/s to Post to"
-                    multiple="true"
+                    multiple="false"
                     ngModel required>
                     <ion-option *ngFor="let unit of academicList" value ="{{unit.acID}}"> {{unit.acName}}</ion-option>
                 </ion-select>

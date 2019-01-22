@@ -52,4 +52,9 @@
       </ion-row>
     </ion-grid>
   </ion-card>
+
+  <ion-card class="unavailable" *ngIf="chatList.length === 0">
+    No Chats Available
+  </ion-card>
+
 </ion-content>

@@ -142,6 +142,12 @@ export class RegisterPage {
             academicList.push(unit);
         })
 
+        await academicList.sort(function(a,b) {
+          if(a.acCode < b.acCode) { return -1; }
+          if(a.acCode > b.acCode) { return 1; }
+          return 0;
+        });
+
         resolve(await academicList);
       }, error => console.log(error) );
     });
@@ -182,12 +188,8 @@ export class RegisterPage {
   }
 
   ionViewWillLeave(){
-    this.dismissGoogleUser();
     this.connected.unsubscribe();
     this.disconnected.unsubscribe();
-    
-    let currentIndex = this.navCtrl.getActive().index;
-    this.navCtrl.remove(currentIndex);
   }
 
   ionViewDidEnter() {

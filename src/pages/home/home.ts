@@ -250,17 +250,6 @@ export class HomePage {
 
     if(page === "NotificationPage")
       this.notificationBadge = null;
-
-    if(page === "MenuPage") {
-      this.menuHasEnter = true;
-      this.tempRegistrationBadge = this.registrationBadge;
-      this.registrationBadge = null;
-    }
-
-    if(page !== "MenuPage" && this.menuHasEnter){
-      this.menuHasEnter = false;
-      this.registrationBadge = this.tempRegistrationBadge;
-    }
   }
 
   ionViewDidLoad() {

@@ -106,6 +106,7 @@ export class NotificationPage {
 
     }
   }
+  
   async updateAppointmentStatus() {
 
     let appointments = await this.db.fetchAllNodesBySnapshot("appointment");

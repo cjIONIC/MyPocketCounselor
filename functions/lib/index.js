@@ -24,6 +24,7 @@ exports.addAppointmentNotificaton = functions.database
     console.log(`New message ${appointmentID}`);
     let token, payload;
     const appointment = snapshot.val();
+    console.log("Appointment values: ", appointment);
     if (appointment.aStatus === "Pending") {
         const student = yield fetchStudentName(appointment.sID);
         console.log("Student name: ", student);
@@ -91,6 +92,7 @@ exports.newMessageNotification = functions.database
     console.log(`New message ${messageID}`);
     let token, payload;
     const message = snapshot.val();
+    console.log("Message values: ", message);
     if (message.mType === "Student") {
         const student = yield fetchStudentName(message.sID);
         console.log("Student name: ", student);
@@ -123,6 +125,7 @@ exports.newRegistrationNotificationForCounselor = functions.database
     console.log(`New message ${registrationID}`);
     let token, payload;
     const registration = snapshot.val();
+    console.log("Registration for COUNSELOR values: ", registration);
     const student = registration.rLastName + ", " + registration.rFirstName;
     const counselorID = yield fetchAcademicUnitCounselor(registration.acID);
     token = yield fetchDevice(counselorID);
@@ -142,6 +145,7 @@ exports.newRegistrationNotificationForGTDHead = functions.database
     console.log(`New message ${registrationID}`);
     let token, payload;
     const registration = snapshot.val();
+    console.log("Registration for HEAD values: ", registration);
     const student = registration.rLastName + ", " + registration.rFirstName;
     const counselorID = yield fetchGTDHead();
     token = yield fetchDevice(counselorID);

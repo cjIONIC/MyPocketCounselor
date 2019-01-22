@@ -53,22 +53,27 @@ export class PopFilterComponent {
     toast.present();
   }
 
-  fetchAllAcademics() {
+  async fetchAllAcademics() {
     let list = this.fireDatabase.list<Item>('academic');
     let item = list.valueChanges();
 
+
     item.subscribe(academics => {
+
       this.academicList = [];
 
       academics.forEach(academic => {
         let check = false;
 
         if(this.unit["id"] === academic["acID"]) check = true;
-        this.academicList.push({
-          id: academic["acID"],
-          code: academic["acCode"],
-          check: check
-        })
+
+        if(academic["acName"] !== "Guidance Center" || academic["acID"] !== 1) {
+          this.academicList.push({
+            id: academic["acID"],
+            code: academic["acCode"],
+            check: check
+          })
+        }
       });
 
 

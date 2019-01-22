@@ -130,36 +130,9 @@ export class ChatPage {
       this.app.getRootNav().push(ChatMessagePage, {person: recipient});
   }
 
-  async updateChatStatus() {
-
-    let messages = await this.db.fetchAllNodesBySnapshot("message");
-    let ref = this.fireDatabase.list('messages');
-
-    let keys = Object.keys(messages);
-
-    for(let i = 0; i < keys.length; i++) {
-      let count = keys[i];
-      let message = messages[count].payload.val();
-
-      if(message.mType=== "Student") {
-        if(message.cID === this.userInfo["id"] &&
-            message.mDevice === "Sent")
-              ref.update(messages[count].key, { mDevice: "Received" });
-      } else {
-        if(message.sID === this.userInfo["id"] &&
-            message.mDevice === "Sent")
-              ref.update(messages[count].key, { mDevice: "Received" });
-      }
-    }
-
-    return;
-  }
-
   ionViewWillLeave(){
     this.connected.unsubscribe();
     this.disconnected.unsubscribe();
-
-    this.updateChatStatus();
   }
 
   ionViewDidLoad() {

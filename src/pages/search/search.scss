@@ -6,7 +6,8 @@ page-search {
 
     .searchbar-search-icon { display:none; width:0; height:0; padding: 0; }
 
-    .searchbar-input {
+    .searchbar-input,
+    .searchbar-ios {
         padding-left: 10px !important;
         font-size: 15pt !important;
         padding: 3px 20px !important;
