@@ -119,33 +119,29 @@ export class DatabaseProvider {
       await this.firePlugin.grantPermission();
     } 
     
-    if(this.platform.is('cordova')) {
+    if(!this.platform.is('cordova')) {
       token = null;
       console.log("Accessing application through web view");
     }
 
+    console.log('%c Fetching device token','color: white; background: blue; font-size: 16px');
+    console.log("Token Fetched: ", token);
+
+    if(token) {
+      this.ionicStorage.set('token', token);
+
+      let numeric = Math.random().toString().replace('0.', '').substring(0,2);
+      let timestamp = new Date().getTime().toString().substring(5, 13);
+      const id = numeric+timestamp;
+      console.log(timestamp+" ? "+numeric);
+  
+      this.fireDatabase.list('/device').push({
+        dID: parseInt(id),
+        dToken: token,
+        dUserID: this.userInfo["id"]
+      })
+    }
     
-
-    return this.saveTokenToStorage(token);
-  }
-
-  saveTokenToStorage(token) {
-    if (!token) return;
-    
-    this.ionicStorage.set('token', token);
-
-    let numeric = Math.random().toString().replace('0.', '').substring(0,2);
-    let timestamp = new Date().getTime().toString().substring(5, 13);
-    const id = numeric+timestamp;
-    console.log(timestamp+" ? "+numeric);
-
-    this.fireDatabase.list('/device').push({
-      dID: parseInt(id),
-      dToken: token,
-      dUserID: this.userInfo["id"]
-    })
-
-    return;
   }
 
   async deleteDeviceToken() {
@@ -162,6 +158,8 @@ export class DatabaseProvider {
      if(devices[count].payload.val().dToken === token) {
         ref.remove(devices[count].key);
         console.log("Deleted Device Token!");
+        this.ionicStorage.set('token', null);
+
      }
    }
 
@@ -249,6 +247,7 @@ export class DatabaseProvider {
         if(foundAccount) {
           this.userInfo = await  user[0];
           await this.setProfileInStorage();
+          this.getDeviceToken();
           console.log("User info: ", this.userInfo)
         }
 
@@ -294,6 +293,7 @@ export class DatabaseProvider {
         if(foundAccount == true) { 
           this.userInfo = await  user[0];
           await this.setProfileInStorage();
+          this.getDeviceToken();
           console.log("User info: ", this.userInfo)
         }
         resolve(foundAccount);

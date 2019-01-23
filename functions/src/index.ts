@@ -24,19 +24,35 @@ exports.addAppointmentNotificaton = functions.database
 
             if(appointment.aStatus === "Pending") {
                 const student = await fetchStudentName(appointment.sID);
-                console.log("Student name: ", student);
-                token = await fetchDevice(appointment.cID);
 
-                payload = {
-                    notification: {
-                        title: ` ${student} requested for an appointment`,
-                        body: `${appointment.aDescription}`
-                    }
-                }
+                return Promise.all([student]).then(async function(studentName) {
+                    console.log("Retrieved data: ", studentName);
+                    token = await fetchDevice(appointment.cID);
+
+                    return Promise.all([token]).then(function(deviceToken) {
+                        console.log("Fetched device: ", deviceToken);
+
+                        const name = studentName[0];
+                        const device = deviceToken[0];
+
+                        payload = {
+                            notification: {
+                                title: `${name} requested for an appointment`,
+                                body: `${appointment.aDescription}`
+                            }
+                        }
+
+                        console.log(device, " ? ", payload);
+
+                        return admin.messaging().sendToDevice(device, payload);
+                    })
+    
+                })
         
             }
 
             if(appointment.aStatus === "Accepted") {
+                /*
                 const counselor = await fetchCounselorName(appointment.cID);
                 console.log("Student name: ", counselor);
                 token = await fetchDevice(appointment.sID);
@@ -47,6 +63,33 @@ exports.addAppointmentNotificaton = functions.database
                         body: `${appointment.aDescription}`
                     }
                 }
+                */
+
+                const counselor = await fetchCounselorName(appointment.cID);
+
+                return Promise.all([counselor]).then(async function(counselorName) {
+                    console.log("Retrieved data: ", counselorName);
+                    token = await fetchDevice(appointment.sID);
+
+                    return Promise.all([token]).then(function(deviceToken) {
+                        console.log("Fetched device: ", deviceToken);
+
+                        const name = counselorName[0];
+                        const device = deviceToken[0];
+
+                        payload = {
+                            notification: {
+                                title: `${name} made an appointment with you`,
+                                body: `${appointment.aDescription}`
+                            }
+                        }
+
+                        console.log(device, " ? ", payload);
+
+                        return admin.messaging().sendToDevice(device, payload);
+                    })
+    
+                })
         
             }
             
@@ -68,6 +111,7 @@ exports.updateAppointmentNotification = functions.database
             }
     
             if(after.aStatus === "Accepted") {
+                /*
                 const counselor = await fetchCounselorName(after.cID);
                 console.log("Counselor name: ", counselor);
                 token = await fetchDevice(after.sID);
@@ -78,6 +122,33 @@ exports.updateAppointmentNotification = functions.database
                         body: `${after.aDescription}`
                     }
                 }
+                */
+
+                const counselor = await fetchCounselorName(after.cID);
+
+                return Promise.all([counselor]).then(async function(counselorName) {
+                    console.log("Retrieved data: ", counselorName);
+                    token = await fetchDevice(after.sID);
+
+                    return Promise.all([token]).then(function(deviceToken) {
+                        console.log("Fetched device: ", deviceToken);
+
+                        const name = counselorName[0];
+                        const device = deviceToken[0];
+
+                        payload = {
+                            notification: {
+                                title: `${name} accepted your request`,
+                                body: `${after.aDescription}`
+                            }
+                        }
+
+                        console.log(device, " ? ", payload);
+
+                        return admin.messaging().sendToDevice(device, payload);
+                    })
+    
+                })
         
             }
     
@@ -92,6 +163,30 @@ exports.updateAppointmentNotification = functions.database
                         body: `${after.aDescription}`
                     }
                 }
+
+                return Promise.all([counselor]).then(async function(counselorName) {
+                    console.log("Retrieved data: ", counselorName);
+                    token = await fetchDevice(after.sID);
+
+                    return Promise.all([token]).then(function(deviceToken) {
+                        console.log("Fetched device: ", deviceToken);
+
+                        const name = counselorName[0];
+                        const device = deviceToken[0];
+
+                        payload = {
+                            notification: {
+                                title: `${name} has marked your appointment finished`,
+                                body: `${after.aDescription}`
+                            }
+                        }
+
+                        console.log(device, " ? ", payload);
+
+                        return admin.messaging().sendToDevice(device, payload);
+                    })
+    
+                })
         
             }
     
@@ -100,7 +195,7 @@ exports.updateAppointmentNotification = functions.database
         })
 
         
-    exports.newMessageNotification = functions.database
+exports.newMessageNotification = functions.database
         .ref('/message/{messageID}')
         .onCreate(async(snapshot, context) => {
             const messageID = context.params.messageID;
@@ -193,46 +288,98 @@ exports.newRegistrationNotificationForGTDHead = functions.database
         })
 
 function fetchCounselorName(id) {
-    return admin.database()
-        .ref('/counselor')
-        .orderByChild("cID").equalTo(id)
-        .once('value').then(async snapshot => {
-            return snapshot.val().cLastName + ", " + snapshot.val().cFirstName;
+    console.log("Fetched ID: ", id);
+
+    return new Promise (function(resolve) {
+
+        return admin.database()
+        .ref(`/counselor`)
+        .orderByChild("cID")
+        .equalTo(id)
+        .once("value", (snapshot) => {
+            let counselors;
+
+            snapshot.forEach(counselor => {
+                counselors = counselor.val();
+
+                return false;
+            })
+
+            const name = counselors.cLastName + ", " + counselors.cFirstName;
+
+            resolve(name);
         })
+    });
+
 }
 
 function fetchStudentName(id) {
-    return admin.database()
-        .ref('/student')
-        .orderByChild("sID").equalTo(id)
-        .once('value').then(async snapshot => {
-            return snapshot.val().sLastName + ", " + snapshot.val().sFirstName;
+    console.log("Fetched ID: ", id);
+
+    return new Promise (function(resolve) {
+
+        return admin.database()
+        .ref(`/student`)
+        .orderByChild("sID")
+        .equalTo(id)
+        .once("value", (snapshot) => {
+            let students;
+
+            snapshot.forEach(student => {
+                students = student.val();
+
+                return false;
+            })
+
+            const name = students.sLastName + ", " + students.sFirstName;
+
+            resolve(name);
         })
+    });
+    
 }
 
 function fetchAcademicUnitCounselor(id) {
+    console.log("Fetched ID: ", id);
+    
     return admin.database()
-        .ref('/academic')
+        .ref('/academic/{academicID}')
         .orderByChild("acID").equalTo(id)
         .once('value').then(async snapshot => {
+            console.log("Academic information: ", snapshot.val());
             return snapshot.val().cID;
         })
 }
 
 function fetchGTDHead() {
     return admin.database()
-        .ref('/academic')
+        .ref('/academic/{academicID}')
         .orderByChild("acCode").equalTo("Guidance Center")
         .once('value').then(async snapshot => {
+            console.log("Academic information: ", snapshot.val());
             return snapshot.val().cID;
         })
 }
 
 function fetchDevice(id) {
-    return admin.database()
-        .ref('/device')
-        .orderByChild("dUserID").equalTo(id)
-        .once('value').then(function(snapshot) {
-            return snapshot.val().dToken;
+     console.log("Fetched ID: ", id);
+
+    return new Promise (function(resolve) {
+
+        return admin.database()
+        .ref(`/device`)
+        .orderByChild("dUserID")
+        .equalTo(id)
+        .once("value", (snapshot) => {
+            let devices;
+
+            snapshot.forEach(device => {
+                devices = device.val();
+
+                return false;
+            })
+
+            resolve(devices.dToken);
         })
+    });
 }

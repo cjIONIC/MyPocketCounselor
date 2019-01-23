@@ -253,11 +253,6 @@ export class HomePage {
   }
 
   ionViewDidLoad() {
-    if(this.platform.is('cordova')) {
-      this.db.getDeviceToken();
-    } else {
-      console.log("Opened in browser");
-    }
     console.log('ionViewDidLoad TabPage');
   }
 }
