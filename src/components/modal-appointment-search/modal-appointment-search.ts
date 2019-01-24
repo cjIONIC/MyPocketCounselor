@@ -158,9 +158,11 @@ export class ModalAppointmentSearchComponent {
   }
 
   ionViewDidEnter() {
+    /*
     setTimeout(() => {
       this.searchbar.setFocus();
     });
+    */
 
     this.connected = this.network.onConnect().subscribe( data => {
       this.presentToast("You are online");

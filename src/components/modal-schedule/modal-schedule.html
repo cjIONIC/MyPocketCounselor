@@ -12,8 +12,19 @@
   
 </ion-header>
 <ion-content padding class="content">
-  
-    <ion-item> {{studentDefault}} </ion-item>
+
+    <ion-item>
+      <div class="header">Student Name</div>
+      <ion-grid>
+        <ion-row>
+            <ion-col col-3><img src="{{ appointment['picture'] }}" class="avatar"></ion-col>
+            <ion-col col-9 class="recipientName">
+                {{studentDefault}} 
+            </ion-col>
+        </ion-row>
+      </ion-grid>
+        
+    </ion-item>
 
     <form #appointmentForm="ngForm" (ngSubmit)="onReschedule(appointmentForm.value)" novalidate>
       <ion-item>
@@ -22,20 +33,28 @@
             max="2050" 
             #date="ngModel" 
             name="date" 
+            (ionChange)="compareDatetime($event, 'date')"
             [(ngModel)]="dateDefault" 
             required>
           </ion-datetime>
         </ion-item>
+        <div *ngIf="!dateValid" class="alert">
+          Date has already passed
+        </div>
     
         <ion-item>
           <ion-label color="primary" stacked> Time</ion-label>
           <ion-datetime pickerFormat="h:mm A" 
             #time="ngModel" 
             name="time"
+            (ionChange)="compareDatetime($event, 'time')"
             [(ngModel)]="timeDefault" 
             required>
           </ion-datetime>
         </ion-item>
+        <div *ngIf="!timeValid" class="alert">
+          Time has already passed
+        </div>
         
       <ion-item class="item">
           <ion-label color="primary" stacked>Venue</ion-label>

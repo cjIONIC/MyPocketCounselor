@@ -121,7 +121,6 @@ export class PostPage {
   }
 
   likePost(post) {
-    let timeout = Math.floor(Math.random() * 1000) + 500;
 
     let list = this.fireDatabase.list<Item>("like");
     let item = list.valueChanges(["child_added"]);
@@ -131,7 +130,7 @@ export class PostPage {
         console.log('%c Liking Post','color: black; background: yellow; font-size: 16px');
         this.db.likePost(post["id"], likes);
       })
-    }, 500)
+    }, 100)
 
     
   }
@@ -147,7 +146,7 @@ export class PostPage {
         console.log('%c Unliking Post','color: black; background: yellow; font-size: 16px');
         this.db.unlikePost(post["id"], likes);
       })
-    }, 500)
+    }, 100)
   }
 
   ionViewDidLoad() {

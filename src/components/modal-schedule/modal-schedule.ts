@@ -27,6 +27,12 @@ export class ModalScheduleComponent {
   timeDefault: any;
   venue: any = "Sample";
 
+  tempDate: any;
+  tempTime: any;
+
+  dateValid: any = true;
+  timeValid: any = true;
+
   venuesArray = [];
   appointment = [];
   
@@ -67,14 +73,17 @@ export class ModalScheduleComponent {
       this.fireDatabase.list<Item>("appointment")
         .valueChanges().subscribe( async appointments => {
 
-          this.appointment = await this.db.filterAppointmentDetails(appointment["id"], appointments);
+          this.appointment = await this.db.fetchAppointmentRescheduleDetails(appointment["id"], appointments);
           console.log("Fetched appointment: ", this.appointment);
           this.studentDefault = this.appointment["studentName"];
           this.venue =  await this.appointment["venue"];
 
           this.dateDefault =  moment(new Date(this.appointment["schedule"])).format();
           this.timeDefault =  moment(new Date(this.appointment["schedule"])).format();
-      
+          
+          this.tempDate = this.dateDefault;
+          this.tempTime = this.timeDefault;
+
           this.fetchVenue()
         })
     } catch {
@@ -179,6 +188,34 @@ export class ModalScheduleComponent {
     }) //End of Promise
 
     return await found;
+  }
+
+  compareDatetime(datetime, type) {
+
+    console.log("Fetched datetime", datetime);
+
+    if(type === "date") {
+      let date = new Date();
+      date.setFullYear(datetime["year"], datetime["month"]-1, datetime["day"]);
+
+      let currentDate = new Date((new Date(moment().format())).setHours(0,0,0));
+
+      if(currentDate > new Date((new Date(this.dateDefault)).setHours(0,0,0)))
+        this.dateValid = false;
+      else
+        this.dateValid = true;
+    } else {
+      let time = new Date();
+      time.setHours(datetime["hour"], datetime["time"]);
+
+      let currentTime = new Date((new Date(moment().format())));
+
+      if(currentTime > new Date((new Date(this.timeDefault)))) 
+        this.timeValid = false;
+      else
+        this.timeValid = true;
+
+    }
   }
 
   dismiss() {

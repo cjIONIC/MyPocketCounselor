@@ -59,13 +59,13 @@
         <ion-grid class="schedule">
             <ion-row>
                 <ion-col class="colTime" col-3>
-                    <div class="datetime">
+                    <ion-row class="datetime">
                         <ion-row><div class="time"> {{ appointment.schedule | date: 'hh:mm' }} </div></ion-row>
                         <ion-row><div class="meridian">{{ appointment.schedule | date: 'aa' }} </div> </ion-row>
-                    </div>
+                    </ion-row>
                 </ion-col> 
                 
-                <ion-col col-9>
+                <ion-col col-9 class="appointmentContent">
                     <!-- Name and Photo -->
                     <ion-row>
                         <ion-col col-3>
@@ -99,9 +99,18 @@
                     
                     <!-- Content-->
                     <ion-row class="description">{{ appointment.description }}</ion-row>
-                    <ion-row class="scheduleContent">Venue:<div class="venue">{{ appointment.venue }}</div></ion-row>
-                    <ion-row class="scheduleContent" *ngIf="appointment.concern">Concern:<div class="concern">{{ appointment.concern }}</div></ion-row>
+                    <ion-row class="scheduleContent">
+                        <ion-col col-3 class="venueLabel">Venue: </ion-col>
+                        <ion-col col-9 class="venue">{{ appointment.venue }}</ion-col>
+                    </ion-row>
+                    <ion-row class="scheduleContent" *ngIf="appointment.concern">
+                            <ion-col col-3 class="concernLabel">Concern:</ion-col>
+                            <ion-col col-9 class="concern">{{ appointment.concern }}</ion-col>
+                    </ion-row>
                 </ion-col>
+            </ion-row>
+            <ion-row  *ngIf="appointment['status'] === 'Finished'" class="finished">
+                    <div class="finishSection"><ion-icon name="checkmark-circle"></ion-icon></div>
             </ion-row>
         </ion-grid>
       </ion-card>

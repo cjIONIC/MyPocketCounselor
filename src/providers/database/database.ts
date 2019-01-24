@@ -303,7 +303,7 @@ export class DatabaseProvider {
 
   async logoutUser() {
     this.userInfo = [];
-    this.ionicStorage.set('profile', this.userInfo);
+    this.ionicStorage.set('profile', []);
     this.deleteDeviceToken();
 
     return;
@@ -1443,6 +1443,7 @@ export class DatabaseProvider {
             counselor: cName,
             counselorPhoto: cPicture,
             concern:coName,
+            status: appointment["aStatus"],
             academic: matchAcademic
         });
     });
@@ -1528,7 +1529,7 @@ export class DatabaseProvider {
     }) //End of promise
   }
 
-  async filterAppointmentDetails(id, appointments) { //Fetches and fills other details
+  async fetchAppointmentRescheduleDetails(id, appointments) { //Fetches and fills other details
     let details = [];
     let students = await this.fetchAllNodesByTableInDatabase("student");
     let academics = await this.fetchAllNodesByTableInDatabase("academic");
@@ -1548,6 +1549,7 @@ export class DatabaseProvider {
               id: appointment["aID"],
               studentName: name,
               sID: student["sID"],
+              picture: student["sPicture"],
               cID: appointment["cID"],
               schedule: appointment["aSchedule"],
               venue: venue

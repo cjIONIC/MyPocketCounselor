@@ -18,7 +18,8 @@
   
   <ion-content padding>
       <ion-item>
-        <div class="header">Your Guidance Counselor</div>
+        <div class="header" *ngIf="userInfo['type'] === 'Student'">Your Guidance Counselor</div>
+        <div class="header" *ngIf="userInfo['type'] !== 'Student'">Student Name</div>
         <ion-grid>
           <ion-row *ngIf="recipient">
               <ion-col col-2><img src="{{ recipient['picture'] }}" class="avatar"></ion-col>
@@ -44,7 +45,7 @@
           </ion-datetime>
         </ion-item>
         <div *ngIf="!dateValid" class="alert">
-            Selected date is in the past
+          Date has already passed
         </div>
     
         <ion-item>
@@ -58,7 +59,7 @@
           </ion-datetime>
         </ion-item>
         <div *ngIf="!timeValid" class="alert">
-            Selected time is in the past
+            Time has already passed
         </div>
 
         <ion-item *ngIf="userInfo['type'] === 'Student'">
