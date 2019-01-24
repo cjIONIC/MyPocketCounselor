@@ -72,7 +72,7 @@ export class PeoplePage {
           await this.db.refreshUserInfo(accounts, userInfo);
           this.userInfo = await this.db.getUserInfo();
           console.log("User information: ", this.userInfo);
-          await this.fetchHotline();
+          if(this.userInfo["type"] === "Student") this.fetchHotline();
           await this.fetchList();
         }, error => console.log(error));
 
@@ -151,7 +151,8 @@ export class PeoplePage {
 
     item.subscribe( counselors => {
       counselors.forEach(counselor => {
-        if(counselor["type"] === "GTD Head") this.hotlineNumber = counselor["cNumber"];
+        if(counselor["cType"] === "GTD Head") this.hotlineNumber = counselor["cNumber"];
+        console.log("HOTLINE NUMBER: ", this.hotlineNumber);
       })
     }, error => console.log(error));
   }
