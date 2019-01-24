@@ -52,18 +52,6 @@ exports.addAppointmentNotificaton = functions.database
             }
 
             if(appointment.aStatus === "Accepted") {
-                /*
-                const counselor = await fetchCounselorName(appointment.cID);
-                console.log("Student name: ", counselor);
-                token = await fetchDevice(appointment.sID);
-
-                payload = {
-                    notification: {
-                        title: ` ${counselor} made an appointment with you`,
-                        body: `${appointment.aDescription}`
-                    }
-                }
-                */
 
                 const counselor = await fetchCounselorName(appointment.cID);
 
@@ -111,18 +99,6 @@ exports.updateAppointmentNotification = functions.database
             }
     
             if(after.aStatus === "Accepted") {
-                /*
-                const counselor = await fetchCounselorName(after.cID);
-                console.log("Counselor name: ", counselor);
-                token = await fetchDevice(after.sID);
-    
-                payload = {
-                    notification: {
-                        title: ` ${counselor} accepted your request`,
-                        body: `${after.aDescription}`
-                    }
-                }
-                */
 
                 const counselor = await fetchCounselorName(after.cID);
 
@@ -155,15 +131,8 @@ exports.updateAppointmentNotification = functions.database
             if(after.aStatus === "Finished") {
                 const counselor = await fetchCounselorName(after.cID);
                 console.log("Counselor name: ", counselor);
-                token = await fetchDevice(after.sID);
-    
-                payload = {
-                    notification: {
-                        title: ` ${counselor} has marked your appointment finished`,
-                        body: `${after.aDescription}`
-                    }
-                }
 
+                token = await fetchDevice(after.sID);
                 return Promise.all([counselor]).then(async function(counselorName) {
                     console.log("Retrieved data: ", counselorName);
                     token = await fetchDevice(after.sID);
@@ -201,37 +170,70 @@ exports.newMessageNotification = functions.database
             const messageID = context.params.messageID;
 
             console.log(`New message ${messageID}`);
-            let token, payload;
+            let payload;
 
             const message = snapshot.val();
             console.log("Message values: ", message);
 
             if(message.mType === "Student") {
-                const student = await fetchStudentName(message.sID);
-                console.log("Student name: ", student);
-                token = await fetchDevice(message.cID);
+                const students = await fetchStudentName(message.sID);
+                console.log("Student name: ", students);
 
-                payload = {
-                    notification: {
-                        title: `${student}`,
-                        body: `${message.mDescription}`
-                    }
-                }
+                return Promise.all([students]).then(async function(studentName) {
+                    console.log("Fetched student name: ", studentName);
+
+                    let name, device;
+
+                    const token = await fetchDevice(message.cID);
+
+                    return Promise.all([token]).then(function(deviceToken) {
+                        console.log("Fetched device: ", deviceToken);
+                        name = studentName[0];
+                        device = deviceToken[0];
+                        
+                        payload = {
+                            notification: {
+                                title: `${name}`,
+                                body: `${message.mDescription}`
+                            }
+                        }
+
+                        //sends notification
+                        return admin.messaging().sendToDevice(device, payload);
+                    })
+
+                })
+                
             } else {
-                const counselor = await fetchCounselorName(message.cID);
-                console.log("Student name: ", counselor);
-                token = await fetchDevice(message.sID);
+                const counselors = await fetchCounselorName(message.cID);
+                console.log("Counselor name: ", counselors);
 
-                payload = {
-                    notification: {
-                        title: ` ${counselor}`,
-                        body: `${message.mDescription}`
-                    }
-                }
+                return Promise.all([counselors]).then(async function(counselorName) {
+                    console.log("Fetched student name: ", counselorName);
+
+                    let name, device;
+
+                    const token = await fetchDevice(message.sID);
+
+                    return Promise.all([token]).then(function(deviceToken) {
+                        console.log("Fetched device: ", deviceToken);
+                        name = counselorName[0];
+                        device = deviceToken[0];
+                        
+                        payload = {
+                            notification: {
+                                title: `${name}`,
+                                body: `${message.mDescription}`
+                            }
+                        }
+
+                        //sends notification
+                        return admin.messaging().sendToDevice(device, payload);
+                    })
+
+                })
             }
 
-            //sends notification
-            return admin.messaging().sendToDevice(token, payload);
         })
 
 
@@ -241,24 +243,34 @@ exports.newRegistrationNotificationForCounselor = functions.database
             const registrationID = context.params.registrationID;
 
             console.log(`New message ${registrationID}`);
-            let token, payload;
+            let payload;
 
             const registration = snapshot.val();
             console.log("Registration for COUNSELOR values: ", registration);
 
             const student = registration.rLastName + ", " + registration.rFirstName;
             const counselorID = await fetchAcademicUnitCounselor(registration.acID);
-            token = await fetchDevice(counselorID);
-        
-            payload = {
-                notification: {
-                    title: ` New registration request`,
-                    body: `${student} request for registration.`
-                }
-            }
 
-            //sends notification
-            return admin.messaging().sendToDevice(token, payload);
+            return Promise.all([counselorID]).then(async function(id) {
+                console.log("Fetched ID: ", id);
+
+                let counselor = id[0], device;
+                const token = await fetchDevice(counselor);
+
+                return Promise.all([token]).then(function(deviceToken) {
+                    device = deviceToken[0];
+
+                    payload = {
+                        notification: {
+                            title: ` New registration request`,
+                            body: `${student} request for registration.`
+                        }
+                    }
+
+                    return admin.messaging().sendToDevice(device, payload);
+                })
+
+            })
         })
 
 exports.newRegistrationNotificationForGTDHead = functions.database
@@ -267,24 +279,34 @@ exports.newRegistrationNotificationForGTDHead = functions.database
             const registrationID = context.params.registrationID;
 
             console.log(`New message ${registrationID}`);
-            let token, payload;
+            let payload;
 
             const registration = snapshot.val();
-            console.log("Registration for HEAD values: ", registration);
+            console.log("Registration for COUNSELOR values: ", registration);
 
             const student = registration.rLastName + ", " + registration.rFirstName;
             const counselorID = await fetchGTDHead();
-            token = await fetchDevice(counselorID);
-        
-            payload = {
-                notification: {
-                    title: ` New registration request`,
-                    body: `${student} request for registration.`
-                }
-            }
 
-            //sends notification
-            return admin.messaging().sendToDevice(token, payload);
+            return Promise.all([counselorID]).then(async function(id) {
+                console.log("Fetched ID: ", id);
+
+                let counselor = id[0], device;
+                const token = await fetchDevice(counselor);
+
+                return Promise.all([token]).then(function(deviceToken) {
+                    device = deviceToken[0];
+
+                    payload = {
+                        notification: {
+                            title: ` New registration request`,
+                            body: `${student} request for registration.`
+                        }
+                    }
+
+                    return admin.messaging().sendToDevice(device, payload);
+                })
+
+            })
         })
 
 function fetchCounselorName(id) {
@@ -341,24 +363,47 @@ function fetchStudentName(id) {
 
 function fetchAcademicUnitCounselor(id) {
     console.log("Fetched ID: ", id);
-    
-    return admin.database()
-        .ref('/academic/{academicID}')
-        .orderByChild("acID").equalTo(id)
-        .once('value').then(async snapshot => {
-            console.log("Academic information: ", snapshot.val());
-            return snapshot.val().cID;
+
+    return new Promise (function(resolve) {
+
+        return admin.database()
+        .ref(`/academic`)
+        .orderByChild("acID")
+        .equalTo(id)
+        .once("value", (snapshot) => {
+            let academics;
+
+            snapshot.forEach(academic => {
+                academics = academic.val();
+
+                return false;
+            })
+
+            resolve(academics.cID);
         })
+    });
 }
 
 function fetchGTDHead() {
-    return admin.database()
-        .ref('/academic/{academicID}')
-        .orderByChild("acCode").equalTo("Guidance Center")
-        .once('value').then(async snapshot => {
-            console.log("Academic information: ", snapshot.val());
-            return snapshot.val().cID;
+
+    return new Promise (function(resolve) {
+
+        return admin.database()
+        .ref(`/academic`)
+        .orderByChild("acID")
+        .equalTo(1)
+        .once("value", (snapshot) => {
+            let academics;
+
+            snapshot.forEach(academic => {
+                academics = academic.val();
+
+                return false;
+            })
+
+            resolve(academics.cID);
         })
+    });
 }
 
 function fetchDevice(id) {

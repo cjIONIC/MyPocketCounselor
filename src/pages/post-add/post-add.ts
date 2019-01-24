@@ -58,6 +58,7 @@ export class PostAddPage {
   tempStartDate: any;
 
   dateValid = true;
+  timeValid = true;
 
   timeBalance = true;
   dateBalance = true;
@@ -204,6 +205,15 @@ export class PostAddPage {
         this.tempStartTime = moment(time).format();
         this.endTimeDefault = moment(newEndTime).format()
       }
+      let currentTime = new Date((new Date(moment().format())));
+
+
+      if(currentTime > new Date((new Date(this.startTimeDefault)))) 
+        this.timeValid = false;
+      else
+        this.timeValid = true;
+
+
     } else {
       if(time < startTime) this.timeBalance = false;
       else this.timeBalance = true;

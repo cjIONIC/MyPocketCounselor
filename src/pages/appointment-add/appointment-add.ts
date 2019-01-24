@@ -31,6 +31,12 @@ export class AppointmentAddPage {
 
   dateDefault:any;
   timeDefault:any;
+
+  tempDate: any;
+  tempTime: any;
+
+  dateValid: any = true;
+  timeValid: any = true;
   
   userInfo = [];
   recipient:any;
@@ -38,6 +44,8 @@ export class AppointmentAddPage {
   venuesArray = [];
 
   passDate: any;
+
+  academicDefault = [];
 
   appointmentArray = [];
 
@@ -63,6 +71,9 @@ export class AppointmentAddPage {
     let dateFormat = new Date(date);
    this.dateDefault = moment(dateFormat).format();
    this.timeDefault = moment().format();
+
+   this.tempDate = this.dateDefault;
+   this.tempTime = this.timeDefault;
 
   }
 
@@ -110,14 +121,61 @@ export class AppointmentAddPage {
         item.subscribe(async counselors => {
           this.recipient = await this.db.fetchAppointmentRecipient(academics, counselors);
           console.log("Recipient: ", this.recipient);
-          this.fetchVenues(this.recipient["id"]);
+          this.fetchStudentAcademic(this.userInfo["id"]);
         })
       })
 
   }
 
+  async fetchStudentAcademic(id) {
+    let students = await this.db.fetchAllNodesByTableInDatabase("student");
+    let academics = await this.db.fetchAllNodesByTableInDatabase("academic");
+
+    students.forEach(student => {
+      if(student["sID"] === id) {
+        academics.forEach(academic => {
+          if(academic["acID"] === student["acID"]) {
+            this.academicDefault.push(academic);
+
+            this.academicDefault = this.academicDefault[0];
+            console.log("Academic: ", this.academicDefault);
+
+          }
+        })
+      }
+    })
+  }
+
   onSubmit(value) {
     console.log("Value: ", value);
+  }
+
+  compareDatetime(datetime, type) {
+
+    console.log("Fetched datetime", datetime);
+
+    if(type === "date") {
+      let date = new Date();
+      date.setFullYear(datetime["year"], datetime["month"]-1, datetime["day"]);
+
+      let currentDate = new Date((new Date(moment().format())).setHours(0,0,0));
+
+      if(currentDate > new Date((new Date(this.dateDefault)).setHours(0,0,0)))
+        this.dateValid = false;
+      else
+        this.dateValid = true;
+    } else {
+      let time = new Date();
+      time.setHours(datetime["hour"], datetime["time"]);
+
+      let currentTime = new Date((new Date(moment().format())));
+
+      if(currentTime > new Date((new Date(this.timeDefault)))) 
+        this.timeValid = false;
+      else
+        this.timeValid = true;
+
+    }
   }
 
   presentToast(description) {
@@ -227,16 +285,18 @@ export class AppointmentAddPage {
     let timestamp = new Date().getTime().toString().substring(0,4);
     const id = numeric+timestamp;
 
-    let concern;
+    let concern, academic;
 
     if(this.userInfo["type"] != "Student") {
       student = this.recipient["id"];
       counselor = this.userInfo["id"];
       concern = "None";
+      academic = this.appointmentDetails["vanue"];
     } else {
       student = this.userInfo["id"];
       counselor = this.recipient["id"];
       concern = parseInt(this.appointmentDetails["concern"]);
+      academic = this.academicDefault["acID"];
     }
 
     //Identifies which semestral period the appointment is set
@@ -259,7 +319,7 @@ export class AppointmentAddPage {
       "sID": student,
       "cID": counselor,
       "coID": concern,
-      "acID": parseInt(this.appointmentDetails["venue"])
+      "acID": parseInt(academic)
     })
 
 

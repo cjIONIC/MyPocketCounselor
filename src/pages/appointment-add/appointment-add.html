@@ -38,55 +38,39 @@
             max="2050" 
             #date="ngModel" 
             name="date" 
+            (ionChange)="compareDatetime($event, 'date')"
             [(ngModel)]="dateDefault" 
             required>
           </ion-datetime>
         </ion-item>
+        <div *ngIf="!dateValid" class="alert">
+            Selected date is in the past
+        </div>
     
         <ion-item>
           <ion-label color="primary" stacked> Time</ion-label>
           <ion-datetime pickerFormat="h:mm A" 
             #time="ngModel" 
             name="time"
+            (ionChange)="compareDatetime($event, 'time')"
             [(ngModel)]="timeDefault" 
             required>
           </ion-datetime>
         </ion-item>
-    
-        <ion-item>
-            <ion-label color="primary" stacked>Desciption</ion-label>
-            <ion-textarea type="text" class="description"  
-              type="text" 
-              #description="ngModel" 
-              name="description" 
-              ngModel required>
-            </ion-textarea>
+        <div *ngIf="!timeValid" class="alert">
+            Selected time is in the past
+        </div>
+
+        <ion-item *ngIf="userInfo['type'] === 'Student'">
+            <ion-label color="primary" stacked>Venue</ion-label>
+            <ion-input #venue="ngModel" 
+                name="venue" 
+                [(ngModel)]="academicDefault['acName']"
+                readonly>
+            </ion-input>
         </ion-item>
-        <div *ngIf="description.errors && (description.dirty || description.touched)">
-          <div [hidden]="!description.errors.required" class="alert">
-            Description is required
-          </div>
-        </div>
-
-        <div *ngIf="userInfo['type'] !== 'Student'">
-          <ion-item>
-              <ion-label color="primary" stacked>Venue</ion-label>
-              <ion-select #venue="ngModel" 
-                  name="venue" 
-                  placeholder="Choose Venue"
-                  ngModel required>
-                  <ion-option *ngFor="let place of venuesArray" value ="{{place.acID}}"> {{place.acName}}</ion-option>
-              </ion-select>
-          </ion-item>
-
-          <div *ngIf="venue.errors && (venue.dirty || venue.touched)">
-              <div [hidden]="!venue.errors.required" class="alert">
-                Venue is required
-              </div>
-            </div>
-        </div>
     
-        <div *ngIf="userInfo['type'] === 'Student' && recipient">
+        <div *ngIf="userInfo['type'] !== 'Student'">
           <ion-item>
               <ion-label color="primary" stacked>Venue</ion-label>
               <ion-select #venue="ngModel" 
@@ -119,6 +103,21 @@
             <div [hidden]="!concern.errors.required" class="alert">
               Concern is required
             </div>
+          </div>
+        </div>
+    
+        <ion-item>
+            <ion-label color="primary" stacked>Desciption</ion-label>
+            <ion-textarea type="text" class="description"  
+              type="text" 
+              #description="ngModel" 
+              name="description" 
+              ngModel required>
+            </ion-textarea>
+        </ion-item>
+        <div *ngIf="description.errors && (description.dirty || description.touched)">
+          <div [hidden]="!description.errors.required" class="alert">
+            Description is required
           </div>
         </div>
         

@@ -1092,7 +1092,6 @@ export class DatabaseProvider {
   async fetchAllListCounselor(counselors) {
     let counselorList = [];
     let academics = await this.fetchAllNodesByTableInDatabase("academic");
-    let students = await this.fetchAllNodesByTableInDatabase("student");
 
     counselors.forEach(async counselor => {
       let academicList = []; //Handles all units of counselor

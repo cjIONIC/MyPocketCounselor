@@ -116,6 +116,7 @@ export class AppointmentPage {
       today = true;
     } else {
       this.currentDate = 999;
+      this.daySelected = null;
     }
     this.currentYear = this.date.getFullYear();
     this.currentMonth = this.date.getMonth();

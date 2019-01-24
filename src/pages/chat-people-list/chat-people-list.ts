@@ -118,10 +118,10 @@ export class ChatPeopleListPage {
   async fetchListOfCounselors(filter: Boolean, unit) {
     let list = this.fireDatabase.list<Item>('counselor');
     let item = list.valueChanges();
-
+    
     item.subscribe( async counselors => {
       console.log('%c Fetching Students...','color: white; background: green; font-size: 16px');
-      let tempArray = await this.db.fetchListCounselor(counselors, filter, unit);
+      let tempArray = await this.db.fetchAllListCounselor(counselors);
       tempArray.sort(function(a,b) {
         console.log(a, " ? ", b);
         if(a.name < b.name) { return -1; }
