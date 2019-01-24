@@ -250,8 +250,15 @@ export class AppointmentPage {
   }
 
   addAppointment() {
-    let datetime = moment(this.selectedDay).format("MMM DD YYYY") +" "+ moment().format("h:mm A");
-    console.log("Date to be passed: ", datetime);
+    let datetime;
+
+    if(this.daySelected !== null) {
+      datetime = moment(this.selectedDay).format("MMM DD YYYY") +" "+ moment().format("h:mm A");
+      console.log("Date to be passed: ", datetime);
+    } else {
+      datetime = moment(new Date()).format("MMM DD YYYY") +" "+ moment().format("h:mm A");
+      console.log("Date to be passed: ", datetime);
+    }
     
     if(this.userInfo["type"] === "Student") {
       this.app.getRootNav().push(AppointmentAddPage, {date: datetime});

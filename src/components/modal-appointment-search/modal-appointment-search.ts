@@ -49,6 +49,9 @@ export class ModalAppointmentSearchComponent {
   }
   
   async getUserInfo() {
+    let date = this.navParams.get('date');
+    this.date = new Date(date);
+    
     let userInfo = await this.db.getUserInfo();
     let table;
 

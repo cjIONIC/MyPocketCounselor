@@ -291,7 +291,7 @@ export class AppointmentAddPage {
       student = this.recipient["id"];
       counselor = this.userInfo["id"];
       concern = "None";
-      academic = this.appointmentDetails["vanue"];
+      academic = this.appointmentDetails["venue"];
     } else {
       student = this.userInfo["id"];
       counselor = this.recipient["id"];
