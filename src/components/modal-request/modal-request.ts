@@ -172,8 +172,12 @@ export class ModalRequestComponent {
         if(!found) {
           let id = profile["id"];
           console.log("To be added: ", request);
-          this.db.acceptStudentRequest(request, id).then(() => this.close());
+          this.db.acceptStudentRequest(request, id).then(() => {
+            loading.dismiss();
+            this.close();
+          });
         } else {
+          loading.dismiss();
           this.viewCtrl.dismiss().then(() => {
             this.presentAlert("Info","Account was already verified");
           });

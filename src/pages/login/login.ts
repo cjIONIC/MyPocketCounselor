@@ -35,6 +35,8 @@ export class LoginPage {
 
   passwordDefault = "sample";
 
+  connection = false;
+
   connected: Subscription;
   disconnected: Subscription;
 
@@ -150,6 +152,7 @@ export class LoginPage {
   //Logs in using username and password
   upLogin(loginInfo) {
     console.log('%c Logging in with username and password','color: white; background: blue; font-size: 16px');
+
     this.verifyLogin(loginInfo["email"], loginInfo["password"]);
 
   }
@@ -205,13 +208,13 @@ export class LoginPage {
           this.app.getRootNav().push(HomePage).then(() => {
             this.navCtrl.remove(currentIndex);
           });
-        })
+        }, error => loading.dismiss())
       } else if(registerFound){
         loading.dismiss();
         this.presentAlert("Registration Info", "Your account is still being verified.");
       } else {
         loading.dismiss();
-        this.presentToast("Username or password is invalid");
+        this.presentToast("Email or password is invalid");
       }
     }).catch(error => {
 
