@@ -121,24 +121,33 @@ export class PostPage {
   }
 
   likePost(post) {
-    let timeout = Math.floor(Math.random() * 500) + 50;
+    let timeout = Math.floor(Math.random() * 1000) + 500;
 
     let list = this.fireDatabase.list<Item>("like");
-    let item = list.valueChanges();
+    let item = list.valueChanges(["child_added"]);
 
-    item.subscribe(likes => {
-      setTimeout(() => {
+    setTimeout(() => {
+      item.subscribe(likes => {
         console.log('%c Liking Post','color: black; background: yellow; font-size: 16px');
         this.db.likePost(post["id"], likes);
-      }, timeout);
-    })
+      })
+    }, 500)
 
     
   }
 
   unlikePost(post) {
     console.log('%c Unliking Post','color: black; background: yellow; font-size: 16px');
-    this.db.unlikePost(post["id"]);
+    
+    let list = this.fireDatabase.list<Item>("like");
+    let item = list.valueChanges(["child_removed"]);
+
+    setTimeout(() => {
+      item.subscribe(likes => {
+        console.log('%c Unliking Post','color: black; background: yellow; font-size: 16px');
+        this.db.unlikePost(post["id"], likes);
+      })
+    }, 500)
   }
 
   ionViewDidLoad() {

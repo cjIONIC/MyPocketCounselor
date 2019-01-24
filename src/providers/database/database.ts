@@ -874,30 +874,41 @@ export class DatabaseProvider {
    }
   }
 
-  async unlikePost(postID) {
-   let likes = await this.fetchAllNodesBySnapshot("like");
-   let posts = await this.fetchAllNodesBySnapshot("post");
-    console.log(likes +" ? "+ posts);
-   let refLike = this.fireDatabase.list('like');
-   let refPost = this.fireDatabase.list('post');
+  async unlikePost(postID, tempLike) {
 
-   let keysLike = Object.keys(likes);
-   let keysPost = Object.keys(posts);
+    
+   let push = false;
+   tempLike.forEach(like => {
+      if(like["pID"] === postID && like["sID"] === this.userInfo["id"]) push = true;
+   })
 
-   for(let a = 0; a < keysLike.length; a++) {
-     let countLike = keysLike[a];
-     for(let b = 0; b < keysPost.length; b++) {
-        let countPost = keysPost[b];
-        console.log(likes[countLike].payload.val() +" ? "+ posts[countPost].payload.val());
-        if(likes[countLike].payload.val().pID === posts[countPost].payload.val().pID &&
-            posts[countPost].payload.val().pID === postID) {
-                let minusLike = posts[countPost].payload.val().pLike - 1
-                refPost.update(posts[countPost].key, { pLike: minusLike });
-                refLike.remove(likes[countLike].key);
-                console.log("Unliked!");
-        }
-     }
+   if(push) {
+
+    let likes = await this.fetchAllNodesBySnapshot("like");
+    let posts = await this.fetchAllNodesBySnapshot("post");
+     console.log(likes +" ? "+ posts);
+    let refLike = this.fireDatabase.list('like');
+    let refPost = this.fireDatabase.list('post');
+ 
+    let keysLike = Object.keys(likes);
+    let keysPost = Object.keys(posts);
+ 
+    for(let a = 0; a < keysLike.length; a++) {
+      let countLike = keysLike[a];
+      for(let b = 0; b < keysPost.length; b++) {
+         let countPost = keysPost[b];
+         console.log(likes[countLike].payload.val() +" ? "+ posts[countPost].payload.val());
+         if(likes[countLike].payload.val().pID === posts[countPost].payload.val().pID &&
+             posts[countPost].payload.val().pID === postID) {
+                 let minusLike = posts[countPost].payload.val().pLike - 1
+                 refPost.update(posts[countPost].key, { pLike: minusLike });
+                 refLike.remove(likes[countLike].key);
+                 console.log("Unliked!");
+         }
+      }
+    }
    }
+
 
   }
 

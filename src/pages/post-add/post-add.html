@@ -48,7 +48,7 @@
                 <ion-label color="primary" stacked>Academic</ion-label>
                 <ion-select #academic="ngModel" 
                     name="academic" 
-                    placeholder="Choose Academic Unit/s to Post to"
+                    placeholder="Choose Academic"
                     multiple="false"
                     ngModel required>
                     <ion-option *ngFor="let unit of academicList" value ="{{unit.acID}}"> {{unit.acName}}</ion-option>
@@ -182,7 +182,7 @@
       
     <div class="buttons">
             <button ion-button class="btnAdd" 
-                [disabled]="!postForm.form.valid || !dateValid || !dateBalance || !timeBalance" 
+                [disabled]="!postForm.form.valid || !dateValid || (!dateBalance && includeEndDate) || (!timeBalance && includeEndDate)" 
                 type="submit">Post</button>
         </div>
     </form>

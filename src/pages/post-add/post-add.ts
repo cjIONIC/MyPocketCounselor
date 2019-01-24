@@ -115,8 +115,18 @@ export class PostAddPage {
       item.subscribe(async academics => {
         let academicList = [];
         academics.forEach(academic => {
-          if(academic["cID"] === this.userInfo["id"])
-            academicList.push(academic)
+          if(academic["cID"] === this.userInfo["id"]) {
+            if(academic["acID"] === 1) {
+              academicList.push({
+                acID: academic["acID"],
+                acCode: academic["acCode"],
+                acName: "Guidance Center (All)",
+                cID: academic["cID"]
+              })
+              } else {   
+                academicList.push(academic)
+            }
+          }
         }, error => console.log(error))
     
         await academicList.sort(function(a,b) {
