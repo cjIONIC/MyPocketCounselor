@@ -43,9 +43,9 @@ exports.addAppointmentNotificaton = functions.database
                     };
                     console.log(device, " ? ", payload);
                     return admin.messaging().sendToDevice(device, payload);
-                });
+                }, (error) => console.log("Error"));
             });
-        });
+        }, (error) => console.log("Error"));
     }
     if (appointment.aStatus === "Accepted") {
         const counselor = yield fetchCounselorName(appointment.cID);
@@ -65,9 +65,9 @@ exports.addAppointmentNotificaton = functions.database
                     };
                     console.log(device, " ? ", payload);
                     return admin.messaging().sendToDevice(device, payload);
-                });
+                }, (error) => console.log("Error"));
             });
-        });
+        }, (error) => console.log("Error"));
     }
     //sends notification
     return admin.messaging().sendToDevice(token, payload);
@@ -100,9 +100,9 @@ exports.updateAppointmentNotification = functions.database
                     };
                     console.log(device, " ? ", payload);
                     return admin.messaging().sendToDevice(device, payload);
-                });
+                }, (error) => console.log("Error"));
             });
-        });
+        }, (error) => console.log("Error"));
     }
     if (after.aStatus === "Finished") {
         const counselor = yield fetchCounselorName(after.cID);
@@ -124,9 +124,9 @@ exports.updateAppointmentNotification = functions.database
                     };
                     console.log(device, " ? ", payload);
                     return admin.messaging().sendToDevice(device, payload);
-                });
+                }, (error) => console.log("Error"));
             });
-        });
+        }, (error) => console.log("Error"));
     }
     //sends notification
     return admin.messaging().sendToDevice(token, payload);
@@ -159,9 +159,9 @@ exports.newMessageNotification = functions.database
                     };
                     //sends notification
                     return admin.messaging().sendToDevice(device, payload);
-                });
+                }, (error) => console.log("Error"));
             });
-        });
+        }, (error) => console.log("Error"));
     }
     else {
         const counselors = yield fetchCounselorName(message.cID);
@@ -183,9 +183,9 @@ exports.newMessageNotification = functions.database
                     };
                     //sends notification
                     return admin.messaging().sendToDevice(device, payload);
-                });
+                }, (error) => console.log("Error"));
             });
-        });
+        }, (error) => console.log("Error"));
     }
 }));
 exports.newRegistrationNotificationForCounselor = functions.database
@@ -212,9 +212,9 @@ exports.newRegistrationNotificationForCounselor = functions.database
                     }
                 };
                 return admin.messaging().sendToDevice(device, payload);
-            });
+            }, (error) => console.log("Error"));
         });
-    });
+    }, (error) => console.log("Error"));
 }));
 exports.newRegistrationNotificationForGTDHead = functions.database
     .ref('/registration/{registrationID}')
@@ -240,9 +240,9 @@ exports.newRegistrationNotificationForGTDHead = functions.database
                     }
                 };
                 return admin.messaging().sendToDevice(device, payload);
-            });
+            }, (error) => console.log("Error"));
         });
-    });
+    }, (error) => console.log("Error"));
 }));
 function fetchCounselorName(id) {
     console.log("Fetched ID: ", id);
@@ -259,7 +259,7 @@ function fetchCounselorName(id) {
             });
             const name = counselors.cLastName + ", " + counselors.cFirstName;
             resolve(name);
-        });
+        }, () => resolve(null));
     });
 }
 function fetchStudentName(id) {
@@ -277,7 +277,7 @@ function fetchStudentName(id) {
             });
             const name = students.sLastName + ", " + students.sFirstName;
             resolve(name);
-        });
+        }, () => resolve(null));
     });
 }
 function fetchAcademicUnitCounselor(id) {
@@ -294,7 +294,7 @@ function fetchAcademicUnitCounselor(id) {
                 return false;
             });
             resolve(academics.cID);
-        });
+        }, () => resolve(null));
     });
 }
 function fetchGTDHead() {
@@ -310,7 +310,7 @@ function fetchGTDHead() {
                 return false;
             });
             resolve(academics.cID);
-        });
+        }, () => resolve(null));
     });
 }
 function fetchDevice(id) {
@@ -327,7 +327,7 @@ function fetchDevice(id) {
                 return false;
             });
             resolve(devices.dToken);
-        });
+        }, () => resolve(null));
     });
 }
 //# sourceMappingURL=index.js.map

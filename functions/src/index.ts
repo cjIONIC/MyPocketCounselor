@@ -45,9 +45,9 @@ exports.addAppointmentNotificaton = functions.database
                         console.log(device, " ? ", payload);
 
                         return admin.messaging().sendToDevice(device, payload);
-                    })
+                    }, (error) => console.log("Error"))
     
-                })
+                }, (error) => console.log("Error"))
         
             }
 
@@ -75,9 +75,9 @@ exports.addAppointmentNotificaton = functions.database
                         console.log(device, " ? ", payload);
 
                         return admin.messaging().sendToDevice(device, payload);
-                    })
+                    }, (error) => console.log("Error"))
     
-                })
+                }, (error) => console.log("Error"));
         
             }
             
@@ -122,9 +122,9 @@ exports.updateAppointmentNotification = functions.database
                         console.log(device, " ? ", payload);
 
                         return admin.messaging().sendToDevice(device, payload);
-                    })
+                    }, (error) => console.log("Error"))
     
-                })
+                }, (error) => console.log("Error"))
         
             }
     
@@ -153,9 +153,9 @@ exports.updateAppointmentNotification = functions.database
                         console.log(device, " ? ", payload);
 
                         return admin.messaging().sendToDevice(device, payload);
-                    })
+                    }, (error) => console.log("Error"))
     
-                })
+                }, (error) => console.log("Error"))
         
             }
     
@@ -200,9 +200,9 @@ exports.newMessageNotification = functions.database
 
                         //sends notification
                         return admin.messaging().sendToDevice(device, payload);
-                    })
+                    }, (error) => console.log("Error"))
 
-                })
+                }, (error) => console.log("Error"))
                 
             } else {
                 const counselors = await fetchCounselorName(message.cID);
@@ -229,9 +229,9 @@ exports.newMessageNotification = functions.database
 
                         //sends notification
                         return admin.messaging().sendToDevice(device, payload);
-                    })
+                    }, (error) => console.log("Error"))
 
-                })
+                }, (error) => console.log("Error"))
             }
 
         })
@@ -268,9 +268,9 @@ exports.newRegistrationNotificationForCounselor = functions.database
                     }
 
                     return admin.messaging().sendToDevice(device, payload);
-                })
+                }, (error) => console.log("Error"))
 
-            })
+            }, (error) => console.log("Error"))
         })
 
 exports.newRegistrationNotificationForGTDHead = functions.database
@@ -304,9 +304,9 @@ exports.newRegistrationNotificationForGTDHead = functions.database
                     }
 
                     return admin.messaging().sendToDevice(device, payload);
-                })
+                }, (error) => console.log("Error"))
 
-            })
+            }, (error) => console.log("Error"))
         })
 
 function fetchCounselorName(id) {
@@ -330,7 +330,7 @@ function fetchCounselorName(id) {
             const name = counselors.cLastName + ", " + counselors.cFirstName;
 
             resolve(name);
-        })
+        }, () => resolve(null));
     });
 
 }
@@ -356,7 +356,7 @@ function fetchStudentName(id) {
             const name = students.sLastName + ", " + students.sFirstName;
 
             resolve(name);
-        })
+        }, () => resolve(null))
     });
     
 }
@@ -380,7 +380,7 @@ function fetchAcademicUnitCounselor(id) {
             })
 
             resolve(academics.cID);
-        })
+        }, () => resolve(null))
     });
 }
 
@@ -402,7 +402,7 @@ function fetchGTDHead() {
             })
 
             resolve(academics.cID);
-        })
+        }, () => resolve(null))
     });
 }
 
@@ -425,6 +425,6 @@ function fetchDevice(id) {
             })
 
             resolve(devices.dToken);
-        })
+        }, () => resolve(null))
     });
 }

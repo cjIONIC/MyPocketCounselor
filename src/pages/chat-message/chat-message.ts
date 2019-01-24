@@ -189,17 +189,20 @@ export class ChatMessagePage {
     let student, counselor;
     let list = this.fireDatabase.list<Item>("message");
     let item = list.valueChanges();
+    let type;
 
     if(this.userInfo["type"] === "Student") {
       student = this.userInfo["id"];
       counselor = this.recipient["id"];
+      type = "Counselor";
     } else {
       counselor = this.userInfo["id"];
       student = this.recipient["id"];
+      type = "Student";
     }
 
     let ref =this.fireDatabase.list("message");
-    ref.snapshotChanges()
+    ref.snapshotChanges(["child_removed"])
     .subscribe( async messages => {
       let keys = Object.keys(messages);
 
@@ -209,7 +212,8 @@ export class ChatMessagePage {
         let message = messages[count].payload.val();
 
         if(message.cID === counselor && message.sID === student
-            && message.mDevice === "Sent") {
+            && message.mDevice === "Sent"
+            && message.mType === type) {
           ref.update(refKey, { mDevice: "Received" });
         }
       }
@@ -222,7 +226,6 @@ export class ChatMessagePage {
   }
 
   ionViewDidEnter() {
-
     this.updateMessageStatus();
 
     this.connected = this.network.onConnect().subscribe( data => {

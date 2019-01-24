@@ -143,7 +143,7 @@
                   Description is required
             </div>
         </div>
-  
+
         <button ion-item class="imageContainer" [hidden]="true">
             <div class="imageHeader">
                 <button ion-button icon-only round class="closeImage"  (click)="removePic()"><ion-icon class="close" name="close"></ion-icon></button>
@@ -155,7 +155,7 @@
             </ion-input>
         </button>
   
-        <ion-item *ngIf="imageFile !== 'No image' || !imageFile" no-lines class="imageContainer">
+        <ion-item *ngIf="imageFile !== 'No image' || imageFile" no-lines class="imageContainer">
             <div class="imageHeader">
                 <button ion-button icon-only round class="closeImage"  (click)="removePic()"><ion-icon class="close" name="close"></ion-icon></button>
             </div>

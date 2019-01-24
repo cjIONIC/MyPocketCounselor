@@ -127,6 +127,7 @@ export class HomePage {
 
       messages.forEach(async message => {
         if(this.userInfo["type"] === "Student") {
+
           if(this.userInfo["id"] === message["sID"] 
               && message["mType"] === "Counselor") {
                 let counselorID = message["cID"];
@@ -167,8 +168,9 @@ export class HomePage {
 
                 if(push) {
                   let found = false;
+                  console.log("Currently fetched chat IDs: ", fetchedID);
                   fetchedID.forEach(id => {
-                    if(id === message["sID"]) found = false;
+                    if(id === message["sID"]) found = true;
                   })
   
                   if(!found) {

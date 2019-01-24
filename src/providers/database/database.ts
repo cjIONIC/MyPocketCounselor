@@ -1754,11 +1754,12 @@ export class DatabaseProvider {
 
             messages2.forEach(async message2 => {
               if(message2["cID"] === message1["cID"]) {
-                datetime = new Date(message2["mDatetime"]);
+                datetime = message2["mDatetime"];
                 description = message2["mDescription"];
                 console.log("Info: ", datetime, description);
 
-                if(message2["mDevice"] === "Sent") unread++;
+                if(message2["mDevice"] === "Sent"
+                    && message2["mType"] === "Counselor") unread++;
 
               }
             })
@@ -1797,11 +1798,12 @@ export class DatabaseProvider {
 
             messages2.forEach(async message2 => {
               if(message2["sID"] === message1["sID"]) {
-                datetime = new Date(message2["mDatetime"]);
+                datetime = message2["mDatetime"];
                 description = message2["mDescription"];
                 console.log("Info: ", datetime, description);
 
-                if(message2["mDevice"] === "Sent") unread++;
+                if(message2["mDevice"] === "Sent"
+                    && message2["mType"] === "Student") unread++;
               }
             })
 
@@ -1828,11 +1830,12 @@ export class DatabaseProvider {
       }
     })
 
-    await chatList.sort(function(a,b) {
-      if(a.datetime < b.datetime) { return -1; }
-      if(a.datetime > b.datetime) { return 1; }
+    chatList.sort(function(a,b) {
+      if((new Date(a.datetime)) < (new Date(b.datetime))) { return -1; }
+      if((new Date(a.datetime)) > (new Date(b.datetime))) { return 1; }
       return 0;
     });
+
     return chatList;
   }
 

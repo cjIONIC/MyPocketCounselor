@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavParams, ViewController, ModalController } from 'ionic-angular';
+import { NavParams, ViewController, ModalController, LoadingController } from 'ionic-angular';
 import { DatabaseProvider } from '../../providers/database/database';
 import { AngularFireDatabase } from 'angularfire2/database';
 import { Item } from 'klaw';
@@ -28,6 +28,7 @@ export class ModalNotificationComponent {
   constructor(public navParams: NavParams,
       public viewCtrl: ViewController,
       public modalCtrl: ModalController,
+      public loadingCtrl: LoadingController,
       public db: DatabaseProvider,
       public fireDatabase: AngularFireDatabase) {
     this.initialize();
@@ -80,16 +81,27 @@ export class ModalNotificationComponent {
   }
 
   async accept() {
-    let schedule = new Date(moment(this.notificationInfo["schedule"]).format());
-    console.log("Schedule: ", schedule);
-    const appointmentsOfCounselor = await this.checkDuplicateForCounselor(this.notificationInfo["cID"], schedule);
-    const appointmentsOfStudent =  await this.checkDuplicateForStudent(this.notificationInfo["sID"], schedule);
 
-    if (await appointmentsOfCounselor && await  appointmentsOfStudent) {
-      this.reschedule();
-    } else {
-      this.addAppointment();
-    }
+    
+    let loading = this.loadingCtrl.create({
+      spinner: 'ios',
+      content: 'Please Wait...'
+    });
+
+    loading.present().then(async () => {
+      let schedule = new Date(moment(this.notificationInfo["schedule"]).format());
+      console.log("Schedule: ", schedule);
+      const appointmentsOfCounselor = await this.checkDuplicateForCounselor(this.notificationInfo["cID"], schedule);
+      const appointmentsOfStudent =  await this.checkDuplicateForStudent(this.notificationInfo["sID"], schedule);
+  
+      if (appointmentsOfCounselor &&  appointmentsOfStudent) {
+        loading.dismiss();
+        this.reschedule();
+      } else {
+        loading.dismiss();
+        this.addAppointment();
+      }
+    })
   }
 
   async checkDuplicateForCounselor(id, datetime) {
@@ -155,14 +167,18 @@ export class ModalNotificationComponent {
   }
 
   addAppointment(){
-    //this.db.appointmentConfirmation(this.appointmentInfo["id"], this.notificationInfo["id"]);
+    console.log("Adding appointments...");
+    this.db.appointmentConfirmation(this.notificationInfo["id"])
+      .then(() => this.close());
   }
 
   reschedule(){
     let notification = this.notificationInfo;
     console.log("Reschedule: ", notification);
     const modal = this.modalCtrl.create(ModalScheduleComponent,  { appointment: notification},{ cssClass: 'custom-modal-schedule' });
-    modal.present().then(() => this.viewCtrl.dismiss());
+    modal.present().then(() => {
+      this.viewCtrl.dismiss();
+    });
   }
   
   appointmentFeedback() {

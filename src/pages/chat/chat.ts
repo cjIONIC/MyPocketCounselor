@@ -101,28 +101,9 @@ export class ChatPage {
 
     item.subscribe( async messages => {
       this.chatList = await this.db.fetchChats(messages);
+      this.chatList.reverse();
       console.log("Chats: ", this.chatList);
     })
-  }
-
-  compareDate(date) {
-    console.log("Comparing...");
-    let status, datetime = new Date(date);
-    let currentDate = this.currentDate;
-    let yesterday = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate()-1)
-
-    if(moment(this.currentDate).format('MM/dd/yy') === moment(datetime).format('MM/dd/yy')) {
-      status = "today";
-    } else if(moment(yesterday).format('MM/dd/yy') === moment(datetime).format('MM/dd/yy')) {
-    } else if(moment(this.currentDate).format('ww') === moment(datetime).format('ww')) {
-      status = "week";
-    } else if(moment(this.currentDate).format('yyyy') === moment(datetime).format('yyyy')) {
-      status = "year";
-    } else {
-      status = "past"
-    }
-
-    return status;
   }
 
   openChat(recipient) {
@@ -140,7 +121,6 @@ export class ChatPage {
   }
 
   ionViewDidEnter() {
-    this.initialize();
     
     this.connected = this.network.onConnect().subscribe( data => {
       this.presentToast("You are online");

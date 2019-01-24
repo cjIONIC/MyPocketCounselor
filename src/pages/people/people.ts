@@ -151,7 +151,7 @@ export class PeoplePage {
 
     item.subscribe( counselors => {
       counselors.forEach(counselor => {
-        if(counselor["type"] === "GTD Head") this.hotlineNumber = counselor["cNUmber"];
+        if(counselor["type"] === "GTD Head") this.hotlineNumber = counselor["cNumber"];
       })
     }, error => console.log(error));
   }
