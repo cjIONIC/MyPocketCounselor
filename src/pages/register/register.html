@@ -20,39 +20,57 @@
     <form #registrationForm="ngForm" (ngSubmit)="onSubmit(registrationForm.value)" novalidate>
 
           <ion-item>
-            <ion-label color="primary" floating> Email </ion-label>
+            <ion-label color="primary" stacked> Email </ion-label>
             <ion-input type="text" #email="ngModel" name="email" [(ngModel)]="emailDefault" readonly></ion-input>
           </ion-item>
 
           <ion-item>
-            <ion-label color="primary" floating> First name </ion-label>
+            <ion-label color="primary" stacked> First name </ion-label>
             <ion-input type="text" #firstname="ngModel" name="firstname" [(ngModel)]="fNameDefault" readonly></ion-input>
           </ion-item>
 
           <ion-item>
-            <ion-label color="primary" floating> Last name </ion-label>
+            <ion-label color="primary" stacked> Last name </ion-label>
             <ion-input type="text" #lastname="ngModel" name="lastname" [(ngModel)]="lNameDefault" readonly></ion-input>
           </ion-item>
           
 
           <ion-item>
-              <ion-label color="primary" floating> Password</ion-label>
-              <ion-input type="password" #password="ngModel" name="password" minlength="6" pattern="^[a-zA-Z0-9]*$" ngModel required></ion-input>
-            </ion-item>
-            <div *ngIf="password.errors && (password.dirty || password.touched)">
-              <div [hidden]="!password.errors.required" class="alert">
-                Password is required
+            <ion-label color="primary" stacked> Password</ion-label>
+            <ion-input type="password" #password="ngModel" name="password" 
+                  minlength="6" pattern="^[a-zA-Z0-9]*$" 
+                  [(ngModel)]="passwordDefault" required></ion-input>
+          </ion-item>
+          <div *ngIf="password.errors && (password.dirty || password.touched)">
+            <div [hidden]="!password.errors.required" class="alert">
+              Password is required
+            </div>
+            <div [hidden]="!password.errors.pattern" class="alert">
+              Password must only contain letters and numbers
+            </div>
+            <div [hidden]="!password.errors.minlength" class="alert">
+              Password must contain atleast six characters
+            </div>
+          </div>
+
+          <ion-item>
+              <ion-label color="primary" stacked> Confirm Pasword</ion-label>
+              <ion-input type="password" #match="ngModel" name="match" 
+                    ngModel
+                    (ionChange)="passwordConfirmation($event)" 
+                    required></ion-input>
+          </ion-item>
+            <div *ngIf="match.errors && (match.dirty || match.touched)">
+              <div [hidden]="!match.errors.required" class="alert">
+                Confirm password is required
               </div>
-              <div [hidden]="!password.errors.pattern" class="alert">
-                Password must only contain letters and numbers
-              </div>
-              <div [hidden]="!password.errors.minlength" class="alert">
-                Password must contain atleast six characters
-              </div>
+            </div>
+            <div *ngIf="!matchPassword && !match.errors" class="alert">
+              Mismatch
             </div>
             
           <ion-item>
-            <ion-label color="primary" floating> Academic Unit </ion-label>
+            <ion-label color="primary" stacked> Academic Unit </ion-label>
             <ion-select  #academic="ngModel" name="academic" ngModel required>
               <ion-option *ngFor="let unit of academicArray" value ="{{unit.acID}}"> {{unit.acCode}}</ion-option>
             </ion-select>
@@ -64,7 +82,7 @@
           </div>
           
           <ion-item>
-            <ion-label color="primary" floating> Status </ion-label>
+            <ion-label color="primary" stacked> Status </ion-label>
             <ion-select #status="ngModel" name="status" ngModel required>
                 <ion-option value="Enrolled">Enrolled</ion-option>
                 <ion-option value="Not Enrolled">Not Enrolled</ion-option>
@@ -76,7 +94,7 @@
             </div>
           </div>
           <div class="button">
-            <button class="btn" block ion-button [disabled]="!registrationForm.form.valid" type="submit">Register</button>
+            <button class="btn" block ion-button [disabled]="!registrationForm.form.valid && matchPassword" type="submit">Register</button>
           </div>
       </form>
      

@@ -34,6 +34,9 @@ export class RegisterPage {
   fNameDefault: any;
   lNameDefault: any;
 
+  matchPassword: any;
+  passwordDefault: any;
+
   googleUser: any;
 
   academicArray: any;
@@ -122,6 +125,17 @@ export class RegisterPage {
 
   removeProfilePic() {
     this.profilePic= null;
+  }
+
+  passwordConfirmation(event) {
+    let password = event["value"];
+    console.log("Password: ", password , " ? ", this.passwordDefault);
+    if(!this.passwordDefault) this.matchPassword = true;
+
+    if(this.passwordDefault) {
+      if(password !== this.passwordDefault) this.matchPassword = false;
+      else this.matchPassword = true;
+    } else this.matchPassword = true;
   }
 
   ionViewDidLoad() {
