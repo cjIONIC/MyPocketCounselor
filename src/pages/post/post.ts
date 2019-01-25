@@ -25,6 +25,8 @@ export class PostPage {
   academic: Subscription;
   post: Subscription
 
+  spinner: any = true;
+
   //Array of posts
   userInfo = [];
   feedList = [];
@@ -42,6 +44,7 @@ export class PostPage {
   }
 
   async initialize() {
+    this.spinner = true;
     await this.getUserInfo();
   }
   
@@ -88,6 +91,9 @@ export class PostPage {
         
         this.feedList.reverse();
       }
+      
+      //Loading icon
+      this.spinner = false;
 
       console.log("Filtered Feed: ", this.feedList);
     }, error => console.log(error));

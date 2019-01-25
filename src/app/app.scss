@@ -25,6 +25,14 @@
       display:none;
   }
 
+  .spinnerContent {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      -ms-transform: translate(-50%, -50%);
+      transform: translate(-50%, -50%);
+  }
+
   
   .custom-popover .popover-content{
     width: 100px !important;

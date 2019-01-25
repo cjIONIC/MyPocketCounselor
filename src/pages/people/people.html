@@ -1,73 +1,77 @@
 <ion-content class = "people">
-
-   <ion-card *ngIf = " userInfo['type'] === 'Student' " class="hotlineCard">
-      <div class="cardContent">
-            <div class="hLabel1">Incase of emergency, press button to call Hotline</div>
-            
-            <div class="hotlineContentButton">
-                        <button (click) = "callHotline()" class="hotlineButton">
-                        <div class="buttonContent">
-                                    <div class="customPlus"><ion-icon name = "add" class="plus"></ion-icon></div>
-                              <div class="customCall"><ion-icon name = "call" class="call"></ion-icon></div>
-                              
+   <div *ngIf="spinner" class="spinnerContent">
+            <ion-spinner color="primary"></ion-spinner>
+    </div>
+    <div  *ngIf="!spinner">
+      <ion-card *ngIf = " userInfo['type'] === 'Student' " class="hotlineCard">
+            <div class="cardContent">
+                  <div class="hLabel1">Incase of emergency, press button to call Hotline</div>
+                  
+                  <div class="hotlineContentButton">
+                              <button (click) = "callHotline()" class="hotlineButton">
+                              <div class="buttonContent">
+                                          <div class="customPlus"><ion-icon name = "add" class="plus"></ion-icon></div>
+                                    <div class="customCall"><ion-icon name = "call" class="call"></ion-icon></div>
+                                    
+                              </div>
+                              </button>
                         </div>
-                        </button>
-                  </div>
-            <div class="hLabel2">Hotline is available 24/7</div>
-      </div>
-     
-   </ion-card>
+                  <div class="hLabel2">Hotline is available 24/7</div>
+            </div>
+      
+      </ion-card>
 
-   <ion-card class="counselorCard2">
-      <ion-list class="list" >
-         <ion-grid class="optionBar">
-            <ion-row>
-                  <ion-col col-8>
-                        <div *ngIf="userInfo['type'] === 'Student'" class="type"><div class="label">Counselor List</div></div>
-                        <div *ngIf="userInfo['type'] != 'Student'" class="type"><div class="label">Student List</div></div>
-                  </ion-col>
-                  <ion-col col-4 class="filter">
-                        <button class = "filterBtn" (click)="filterButton($event)">
-                              Filter <ion-icon name="options" class="options"></ion-icon>
-                        </button>
-                  </ion-col>
-            </ion-row>
-          </ion-grid>
-          
-         </ion-list>           
-  </ion-card>
-
-  <ion-card *ngIf="userInfo['type'] === 'Student'" (click)="profile(counselorUnit)">
-        <ion-grid  class="profile1" >
-              <ion-row class="unitLabel">Your Guidance Counselor</ion-row>
-                <ion-row class="contact">
-                      <ion-col class="profileLeft" col-3>
-                            <img src="{{ counselorUnit['picture'] }}" class="avatar1">
+      <ion-card class="counselorCard2">
+            <ion-list class="list" >
+            <ion-grid class="optionBar">
+                  <ion-row>
+                        <ion-col col-8>
+                              <div *ngIf="userInfo['type'] === 'Student'" class="type"><div class="label">Counselor List</div></div>
+                              <div *ngIf="userInfo['type'] != 'Student'" class="type"><div class="label">Student List</div></div>
                         </ion-col>
-                        <ion-col class="profileRight" col-9>
-                               <ion-row class="name1"> {{ counselorUnit["name"] }} </ion-row>
-                               <ion-row>
-                                      <ion-col  *ngFor="let academic of counselorUnit['academic']" class="academicCounselor" col-auto>
-                                            <div class="academicName">{{academic.code}}</div>
-                                          </ion-col>
+                        <ion-col col-4 class="filter">
+                              <button class = "filterBtn" (click)="filterButton($event)">
+                                    Filter <ion-icon name="options" class="options"></ion-icon>
+                              </button>
+                        </ion-col>
+                  </ion-row>
+            </ion-grid>
+            
+            </ion-list>           
+      </ion-card>
+
+      <ion-card *ngIf="userInfo['type'] === 'Student'" (click)="profile(counselorUnit)">
+            <ion-grid  class="profile1" >
+                  <ion-row class="unitLabel">Your Guidance Counselor</ion-row>
+                  <ion-row class="contact">
+                        <ion-col class="profileLeft" col-3>
+                              <img src="{{ counselorUnit['picture'] }}" class="avatar1">
+                              </ion-col>
+                              <ion-col class="profileRight" col-9>
+                                    <ion-row class="name1"> {{ counselorUnit["name"] }} </ion-row>
+                                    <ion-row>
+                                          <ion-col  *ngFor="let academic of counselorUnit['academic']" class="academicCounselor" col-auto>
+                                                <div class="academicName">{{academic.code}}</div>
+                                                </ion-col>
+                                    </ion-row>
+                                    <ion-row class="phone"><ion-icon name = "call" class="call2"></ion-icon> {{ counselorUnit["number"] }} </ion-row>
+                                    </ion-col>
                               </ion-row>
-                              <ion-row class="phone"><ion-icon name = "call" class="call2"></ion-icon> {{ counselorUnit["number"] }} </ion-row>
+            </ion-grid>
+      </ion-card>
+      <ion-card>
+            <ion-grid  class="optionBar">
+                  <ion-row class="contact"  *ngFor="let person of peopleList" class="profile" (click)="profile(person)">
+                        <ion-col class="profileLeft" col-3>
+                              <img src="{{ person.picture }}" class="avatar2">
                               </ion-col>
-                        </ion-row>
-          </ion-grid>
-  </ion-card>
-  <ion-card>
-      <ion-grid  class="optionBar">
-                <ion-row class="contact"  *ngFor="let person of peopleList" class="profile" (click)="profile(person)">
-                      <ion-col class="profileLeft" col-3>
-                            <img src="{{ person.picture }}" class="avatar2">
-                        </ion-col>
-                        <ion-col class="profileRight" col-9>
-                               <ion-row class="name2"> {{person.name}} </ion-row>
-                              </ion-col>
-                        </ion-row>
-          </ion-grid>
-          <div class="status" *ngIf="peopleList.length === 0 && userInfo['type'] === 'Student'">No Counselor Found</div>
-          <div class="status" *ngIf="peopleList.length === 0 && userInfo['type'] !== 'Student'">No Student Found</div>
-  </ion-card>
+                              <ion-col class="profileRight" col-9>
+                                    <ion-row class="name2"> {{person.name}} </ion-row>
+                                    </ion-col>
+                              </ion-row>
+            </ion-grid>
+            <div class="status" *ngIf="peopleList.length === 0 && userInfo['type'] === 'Student'">No Counselor Found</div>
+            <div class="status" *ngIf="peopleList.length === 0 && userInfo['type'] !== 'Student'">No Student Found</div>
+      </ion-card>
+  </div>
 </ion-content>

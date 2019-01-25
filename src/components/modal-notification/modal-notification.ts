@@ -25,6 +25,8 @@ export class ModalNotificationComponent {
 
   proceedFeedback: any;
 
+  spinner: any = true;
+
   constructor(public navParams: NavParams,
       public viewCtrl: ViewController,
       public modalCtrl: ModalController,
@@ -36,6 +38,7 @@ export class ModalNotificationComponent {
 
   initialize() {
     try {
+      this.spinner = true;
       this.id = this.navParams.get('id');
       console.log("ID: ", this.id);
       this.getUserInfo();
@@ -76,7 +79,9 @@ export class ModalNotificationComponent {
       console.log("Fetching appointment...");
       this.notificationInfo = await this.db.fetchAppointmentForNotificationInfo(this.id, appointments);
       console.log("Notification Info: ",await this.notificationInfo);
-      this.appointmentFeedback();
+
+      if(this.userInfo["type"] === "Student") this.appointmentFeedback();
+      else this.spinner = false;
     }, error => console.log(error))
   }
 
@@ -189,6 +194,7 @@ export class ModalNotificationComponent {
       appointmentSubscription.subscribe(appointments => {
         item.subscribe(async feedbacks => {
           this.proceedFeedback = await this.db.searchFeedback(feedbacks, appointments, this.notificationInfo["id"]);
+          this.spinner = false;
           console.log("Result: ", this.proceedFeedback);
         })
       })

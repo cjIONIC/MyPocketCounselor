@@ -4,7 +4,13 @@
     </ion-fab>
 
     <ion-card class="calendar">
-      <ion-grid class = "calendarHeader">
+
+    <div *ngIf="spinner" class="spinnerContent">
+        <ion-spinner color="primary"></ion-spinner>
+    </div>
+
+    <div *ngIf="!spinner" >
+<ion-grid class = "calendarHeader">
           <ion-row>
               <ion-col class="arrow" (click)="loadLastMonth()" col-2><ion-icon name="arrow-back"></ion-icon></ion-col>
               <ion-col col-8>
@@ -45,7 +51,9 @@
           </ion-row>
       </ion-grid>
     </div>
+    </div>
   </ion-card>
+
   <ion-card class="cardSelect" *ngIf="selectedDay">
         <div class="selectedTitle">Date Selected:</div>
         <div class="selected">{{ selectedDay | date: 'EEEE, MMMM dd, yyyy'}}</div>
@@ -87,11 +95,14 @@
                                     </ion-col>
                             </ion-row>
                         </ion-col>
-                        <ion-col col-2 class="colClose" *ngIf="userInfo['type'] !== 'Student'">
-                                <div  class="iconBox">
+                        <ion-col col-2 class="colClose">
+                                <div *ngIf="appointment['status'] !== 'Finished' && userInfo['type'] !== 'Student'"  class="iconBox">
                                     <button class="finish"(click)=" popOptions($event, appointment)">
                                         <ion-icon name="more"></ion-icon>
                                     </button>
+                                </div>
+                                <div *ngIf="appointment['status'] === 'Finished'" class="finishSection">
+                                    <ion-icon name="checkmark-circle"></ion-icon>
                                 </div>
                             </ion-col>
                     </ion-row>
@@ -108,9 +119,6 @@
                             <ion-col col-9 class="concern">{{ appointment.concern }}</ion-col>
                     </ion-row>
                 </ion-col>
-            </ion-row>
-            <ion-row  *ngIf="appointment['status'] === 'Finished'" class="finished">
-                    <div class="finishSection"><ion-icon name="checkmark-circle"></ion-icon></div>
             </ion-row>
         </ion-grid>
       </ion-card>

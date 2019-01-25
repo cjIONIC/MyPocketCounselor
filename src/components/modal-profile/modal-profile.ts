@@ -29,6 +29,8 @@ export class ModalProfileComponent {
   id: any;
   type: any;
 
+  spinner: any = true;
+
   academicList = [];
 
   profileInfo = [];
@@ -50,6 +52,7 @@ export class ModalProfileComponent {
 
   initialize() {
     try {
+      this.spinner = true;
       this.id = this.navParams.get('id');
       this.type = this.navParams.get('type');
       this.getUserInfo();
@@ -77,7 +80,10 @@ export class ModalProfileComponent {
           this.userInfo = await this.db.getUserInfo();
           console.log("User information: ", this.userInfo);
           this.fetchProfile();
-          this.fetchAcademic();
+          await this.fetchAcademic();
+          
+          //Loading icon
+          this.spinner = false;
 
         }, error => console.log(error));
 

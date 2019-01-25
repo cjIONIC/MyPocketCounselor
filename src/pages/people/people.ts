@@ -29,6 +29,8 @@ export class PeoplePage {
 
   unit: any;
 
+  spinner: any = true;
+
   counselorUnit = [];
 
   userInfo = [];
@@ -51,6 +53,7 @@ export class PeoplePage {
   }
 
   async initialize() {
+    this.spinner = true;
     await this.getUserInfo();
     this.unit = "All";
   }
@@ -117,6 +120,9 @@ export class PeoplePage {
         return 0;
       });
       
+      //Loading icon
+      this.spinner = false;
+
       if(!filter) this.completePeopleList = tempArray;
       this.peopleList = tempArray;
     }, error => console.log(error));
@@ -139,6 +145,9 @@ export class PeoplePage {
         if(a.name > b.name) { return 1; }
         return 0;
       });
+
+      //Loading icon
+      this.spinner = false;
      
       if(!filter) this.completePeopleList = tempArray;
       this.peopleList = tempArray;

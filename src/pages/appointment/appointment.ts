@@ -49,6 +49,8 @@ export class AppointmentPage {
   selectedDay:any;
   daySelected: any;
 
+  spinner:any = true;
+
   constructor(public alertCtrl: AlertController,
     public navCtrl: NavController,
     public fireDatabase: AngularFireDatabase,
@@ -64,6 +66,7 @@ export class AppointmentPage {
   }
 
   async initialize() {
+    this.spinner = true;
     await this.getUserInfo();
   }
 
@@ -185,6 +188,9 @@ export class AppointmentPage {
         this.daysNextMonth.push(d);
       }
     }
+
+      //Loading icon 
+      this.spinner = false;
 
     console.log("Finish loading calendar");
     

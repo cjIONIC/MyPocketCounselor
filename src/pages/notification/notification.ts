@@ -28,6 +28,8 @@ export class NotificationPage {
   notificationList = [];
   userInfo=[];
 
+  spinner: any = true;
+
   constructor(public navCtrl: NavController,
       public db: DatabaseProvider,
       public network: Network,
@@ -40,6 +42,7 @@ export class NotificationPage {
   }
 
   async initialize() {
+    this.spinner = true;
     await this.getUserInfo();
   }
 
@@ -87,6 +90,7 @@ export class NotificationPage {
         console.log('%c Fetching Notifications','color: white; background: red; font-size: 16px');
         this.notificationList = await this.db.fetchAppointmentsForNotification(appointment);
         this.notificationList.reverse();
+        this.spinner = false;
         console.log("Notifications: ", await this.notificationList);
       }, error => console.log("Error!"));
   }
@@ -148,7 +152,6 @@ export class NotificationPage {
   }
 
   ionViewDidEnter() {
-    this.initialize();
     
     this.connected = this.network.onConnect().subscribe( data => {
       this.presentToast("You are online");

@@ -1,30 +1,36 @@
 <ion-content>
-  <ion-list class="list" >
-    <ion-card class="card" *ngFor="let detail of notificationList" (click)="openNotification(detail)">
-        <ion-grid>
-                <ion-row class="notification">
-                        <ion-col col-2>
-                              <img src="{{ detail.picture }}" class="avatar">
-                        </ion-col>
-                        <ion-col col-10>
-                            <ion-row class="name">
-                              <ion-col col-11>{{ detail.name }}</ion-col>
-                              <ion-col col-1 *ngIf="detail.notification === 'Sent'" class="new">
-                                <div class="contentNew">
-                                </div>
-                              </ion-col>
-                            </ion-row>
-                            <ion-row *ngIf="detail.status === 'Pending'" class="description">You have an appointment request</ion-row>
-                            <ion-row *ngIf="detail.status === 'Accepted'" class="description">Your request has been confirmed</ion-row>
-                            <ion-row *ngIf="detail.status === 'Finished'" class="description">Your appointment has been marked finished</ion-row>
-                            <ion-row class="time"><div class="datetime">{{detail.datetime | timeAgo}}</div></ion-row>
-                        </ion-col>
-                  </ion-row>
-        </ion-grid>
-        
-    </ion-card>
-    <div *ngIf="notificationList.length === 0">
-            <div class="status"> No notification</div>
+    <div *ngIf="spinner" class="spinnerContent">
+        <ion-spinner color="primary"></ion-spinner>
     </div>
-  </ion-list>
+
+    <div *ngIf="!spinner">
+        <ion-list class="list" >
+            <ion-card class="card" *ngFor="let detail of notificationList" (click)="openNotification(detail)">
+                <ion-grid>
+                        <ion-row class="notification">
+                                <ion-col col-2>
+                                      <img src="{{ detail.picture }}" class="avatar">
+                                </ion-col>
+                                <ion-col col-10>
+                                    <ion-row class="name">
+                                      <ion-col col-11>{{ detail.name }}</ion-col>
+                                      <ion-col col-1 *ngIf="detail.notification === 'Sent'" class="new">
+                                        <div class="contentNew">
+                                        </div>
+                                      </ion-col>
+                                    </ion-row>
+                                    <ion-row *ngIf="detail.status === 'Pending'" class="description">You have an appointment request</ion-row>
+                                    <ion-row *ngIf="detail.status === 'Accepted'" class="description">Your request has been confirmed</ion-row>
+                                    <ion-row *ngIf="detail.status === 'Finished'" class="description">Your appointment has been marked finished</ion-row>
+                                    <ion-row class="time"><div class="datetime">{{detail.datetime | timeAgo}}</div></ion-row>
+                                </ion-col>
+                          </ion-row>
+                </ion-grid>
+                
+            </ion-card>
+            <div *ngIf="notificationList.length === 0">
+                    <div class="status"> No notification</div>
+            </div>
+          </ion-list>
+    </div>
 </ion-content>
