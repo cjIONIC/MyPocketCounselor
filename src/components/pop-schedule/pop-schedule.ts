@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { AlertController, ViewController, NavParams, ModalController } from 'ionic-angular';
+import { AlertController, ViewController, NavParams, ModalController, LoadingController } from 'ionic-angular';
 import { ModalScheduleComponent } from '../modal-schedule/modal-schedule';
 import { DatabaseProvider } from '../../providers/database/database';
 
@@ -19,6 +19,7 @@ export class PopScheduleComponent {
 
   constructor(public alertCtrl: AlertController,
     public navParams: NavParams,
+    public loadingCtrl: LoadingController,
     public db: DatabaseProvider,
     public modalCtrl: ModalController,
     public viewCtrl: ViewController) {
@@ -46,8 +47,18 @@ export class PopScheduleComponent {
           text: 'Continue',
           handler: () => {
             try {
-              this.db.finishAppointment(this.appointment)
-                .then(() => this.viewCtrl.dismiss());
+              let loading = this.loadingCtrl.create({
+                spinner: 'ios',
+                content: 'Please Wait...'
+              });
+              
+              loading.present().then(() => {
+                this.db.finishAppointment(this.appointment)
+                  .then(() => {
+                    loading.dismiss();
+                    this.viewCtrl.dismiss();
+                  });
+              })
             } catch {
               
             }

@@ -65,15 +65,18 @@ export class AppointmentAddPage {
   async initialize() {
     let date = await this.navParams.get('date');
     console.log("Date passed: ", date);
-
-    await this.fetchUserProfile();
-
     let dateFormat = new Date(date);
+    dateFormat.setMinutes(dateFormat.getMinutes()-1);
+
+    console.log("Date passed: ", dateFormat);
    this.dateDefault = moment(dateFormat).format();
    this.timeDefault = moment().format();
 
    this.tempDate = this.dateDefault;
    this.tempTime = this.timeDefault;
+
+    await this.fetchUserProfile();
+
 
   }
 
@@ -187,6 +190,7 @@ export class AppointmentAddPage {
       time.setHours(datetime["hour"], datetime["minute"], 0);
 
       let currentTime = new Date((new Date(moment().format())));
+      currentTime.setMinutes(0);
 
       let timeSelected =  new Date((new Date(this.dateDefault)).setHours(datetime["hour"], datetime["minute"],0));
 

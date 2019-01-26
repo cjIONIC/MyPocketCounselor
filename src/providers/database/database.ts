@@ -602,8 +602,6 @@ export class DatabaseProvider {
     return await academicList;
   }
 
-
-
   /*********************/
   /****** F E E D ******/
   /*********************/
@@ -969,6 +967,32 @@ export class DatabaseProvider {
   /*********************/
   /**** P E O P L E ****/
   /*********************/
+  async fetchUnitStudents(students, academicList) {
+    let studentList = [];
+
+    students.forEach(async student => {
+      let push = false, code;
+      academicList.forEach(async academic => {
+        if(student["acID"] === academic["acID"]) {
+          push = true;
+          code = academic["acCode"];
+        }
+
+      })
+
+      if(push) {
+        let name = student["sLastName"] +", "+ student["sFirstName"];
+        studentList.push({
+          id: student["sID"],
+          name: name,
+          academic: code,
+          picture: student["sPicture"]        
+        })
+      }
+    })
+
+    return studentList;
+  }
   async fetchListStudent(students, filter: Boolean, unit) {
     let studentList = [];
     let academics = await this.fetchAllNodesByTableInDatabase("academic");

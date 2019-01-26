@@ -98,9 +98,13 @@ export class ModalAppointmentSearchComponent {
     let list = this.fireDatabase.list<Item>('student');
     let item = list.valueChanges();
 
+
     item.subscribe( async students => {
       console.log('%c Fetching Students...','color: white; background: green; font-size: 16px');
-      let tempArray = await this.db.fetchListStudent(students, filter, unit);
+      let academicList = await this.db.fetchMatchAcademicUnit();
+      console.log("Academic list: ", academicList);
+      let tempArray = await this.db.fetchUnitStudents(students, academicList);
+
 
       await tempArray.sort(function(a,b) {
         console.log(a, " ? ", b);

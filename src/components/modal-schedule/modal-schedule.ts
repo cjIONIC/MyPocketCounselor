@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
-import { NavParams, ViewController, ToastController } from 'ionic-angular';
+import { NavParams, ViewController, ToastController, LoadingController } from 'ionic-angular';
 import { DatabaseProvider } from '../../providers/database/database';
 import { AngularFireDatabase } from 'angularfire2/database';
 import { Item } from 'klaw';
 import moment from 'moment';
 import { Network} from '@ionic-native/network';
 import { Subscription } from 'rxjs/Subscription';
+import { async } from '@firebase/util';
 
 /**
  * Generated class for the ModalScheduleComponent component.
@@ -40,6 +41,7 @@ export class ModalScheduleComponent {
     public network: Network,
     public viewCtrl: ViewController,
     public fireDatabase: AngularFireDatabase,
+    public loadingCtrl: LoadingController,
     public toastCtrl: ToastController,
     public db: DatabaseProvider) {
     try {
@@ -108,25 +110,35 @@ export class ModalScheduleComponent {
   }
 
   async reschedule(schedule, venue) {
-    console.log('%c Rescheduling Appointment','color: white; background: red; font-size: 16px');
-    let appointmentsOfCounselor, appointmentsOfStudent; //Variables used in checking
-    console.log("Schedule: ", schedule);
+    
+    let loading = this.loadingCtrl.create({
+      spinner: 'ios',
+      content: 'Please Wait...'
+    });
 
-    try {
-      appointmentsOfCounselor = await this.checkDuplicateForCounselor(this.appointment["cID"], schedule);
-      appointmentsOfStudent =  await this.checkDuplicateForStudent(this.appointment["sID"], schedule);
-
-      console.log("Statusfinding: ", appointmentsOfCounselor, appointmentsOfStudent)
-      if(await appointmentsOfStudent && await appointmentsOfCounselor) 
-        this.presentToast("Date and time has already been occupied!");
-      else {
-        await this.db.rescheduleAppointment(this.appointment["id"], schedule, venue).then(() => {
-            this.viewCtrl.dismiss();
-          }).catch(err => console.log("Error: ", err));
+    loading.present().then(async () => {
+      console.log('%c Rescheduling Appointment','color: white; background: red; font-size: 16px');
+      let appointmentsOfCounselor, appointmentsOfStudent; //Variables used in checking
+      console.log("Schedule: ", schedule);
+  
+      try {
+        appointmentsOfCounselor = await this.checkDuplicateForCounselor(this.appointment["cID"], schedule);
+        appointmentsOfStudent =  await this.checkDuplicateForStudent(this.appointment["sID"], schedule);
+  
+        console.log("Statusfinding: ", appointmentsOfCounselor, appointmentsOfStudent)
+        if(await appointmentsOfStudent && await appointmentsOfCounselor) 
+          this.presentToast("Date and time has already been occupied!");
+        else {
+          await this.db.rescheduleAppointment(this.appointment["id"], schedule, venue).then(() => {
+              this.viewCtrl.dismiss();
+              loading.dismiss();
+            }).catch(err => console.log("Error: ", err));
+        }
+      } catch {
+  
       }
-    } catch {
-
-    }
+    })
+    
   }
 
   async checkDuplicateForCounselor(id, datetime) {
@@ -226,6 +238,7 @@ export class ModalScheduleComponent {
       console.log("Time: ", time);
 
       let currentTime = new Date((new Date(moment().format())));
+      currentTime.setMinutes(0);
 
       let timeSelected =  new Date((new Date(this.dateDefault)).setHours(datetime["hour"], datetime["minute"],0));
       

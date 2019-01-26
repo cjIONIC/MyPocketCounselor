@@ -18,9 +18,8 @@
 
   <div *ngIf="!spinner">
     <ion-list class="list" >
-      <ion-card class="card">
-        <ion-grid>
-            <ion-row class="contact"  *ngFor="let person of peopleList" class="profile" (click)="dismiss(person)">
+      <ion-grid>
+            <ion-row  *ngFor="let person of peopleList" class="profile" (click)="dismiss(person)">
                   <ion-col class="profileLeft" col-2>
                         <img src="{{ person.picture }}" class="avatar">
                   </ion-col>
@@ -31,7 +30,6 @@
         <div *ngIf="peopleList.length === 0">
           <div class="status"> No results Found</div>
         </div>
-      </ion-card>
     </ion-list>
   </div>
     

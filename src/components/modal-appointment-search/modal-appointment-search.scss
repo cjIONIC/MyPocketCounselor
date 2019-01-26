@@ -18,7 +18,7 @@ modal-appointment-search {
 }
 
 .content {
-    background-color: #EFF0F1;
+    background-color: white;
     align-content: center;
 }
 
@@ -35,7 +35,7 @@ modal-appointment-search {
 
 .profile:active,
 .profile {
-    padding: 0px !important;
+    padding: 0px 15px!important;
     width: 100%;
     margin: 0px !important;
 }
@@ -45,12 +45,13 @@ modal-appointment-search {
 }
 
 .grid {
-    margin: 0px !important;
+    margin: 10px 0px !important;
     width: 100%;
 }
 
 .contact {
     margin: 0%;
+    padding: 0px 100px;
 }
 
 .profileLeft {
@@ -59,13 +60,13 @@ modal-appointment-search {
 }
 
 .profileRight {
-    padding-top: 9px; 
+    padding-top: 12px; 
 }
 
 .avatar {
     margin: 3px auto;
-    width: 35px;
-    height: 35px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     border: 1px solid rgb(179, 179, 179);
 }

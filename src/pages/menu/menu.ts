@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, App, AlertController, Item, ToastController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, App, AlertController, Item, ToastController, LoadingController } from 'ionic-angular';
 import { DatabaseProvider } from '../../providers/database/database';
 import { LoginPage } from '../login/login';
 import { AngularFireDatabase } from 'angularfire2/database';
@@ -35,6 +35,7 @@ export class MenuPage {
   constructor(public navCtrl: NavController,
     public fireDatabase: AngularFireDatabase,
     public db: DatabaseProvider,
+    public loadingCtrl: LoadingController,
     public network: Network,
     public toastCtrl: ToastController,
     public alertCtrl: AlertController,
@@ -132,9 +133,17 @@ export class MenuPage {
           text: 'Continue',
           handler: () => {
             try {
-              this.db.logoutUser().then(() => {
-                let nav = this.app.getRootNav();
-                nav.setRoot(LoginPage);
+              
+              let loading = this.loadingCtrl.create({
+                spinner: 'ios',
+                content: 'Please Wait...'
+              });
+
+              loading.present().then(()=> {
+                this.db.logoutUser().then(() => {
+                  let nav = this.app.getRootNav();
+                  nav.setRoot(LoginPage);
+                })
               })
             } catch {
               
