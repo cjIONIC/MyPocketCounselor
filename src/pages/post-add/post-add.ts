@@ -188,6 +188,18 @@ export class PostAddPage {
         this.dateValid = false;
       else this.dateValid = true;
 
+      let currentTime = new Date((new Date(moment().format())));
+      let timeSelected = new Date((new Date(this.startDateDefault))
+                          .setHours(new Date(this.startTimeDefault).getHours(),
+                                    new Date(this.startTimeDefault).getMinutes(),0))
+                                    
+      console.log(currentTime.toDateString(), " ? ", timeSelected.toDateString());
+
+      if(currentTime > timeSelected) 
+        this.timeValid = false;
+      else
+        this.timeValid = true;
+
     } else {
       if(date < startDate) this.dateBalance = false;
       else this.dateBalance = true;
@@ -196,11 +208,10 @@ export class PostAddPage {
   }
 
   compareTime(value, type) {
-    let time = new Date();
+    let time = new Date((new Date(this.startDateDefault)).setHours(value["hour"], value["minute"],0));
     let newEndTime = new Date();
     console.log("Value: ", value);
 
-    time.setHours(value["hour"], value["minute"]);
     let startTime = new Date(this.tempStartTime);
 
     if(type === 'start') {
@@ -217,8 +228,9 @@ export class PostAddPage {
       }
       let currentTime = new Date((new Date(moment().format())));
 
+      console.log(currentTime.toDateString(), " ? ", time.toDateString());
 
-      if(currentTime > new Date((new Date(this.startTimeDefault)))) 
+      if(currentTime > time) 
         this.timeValid = false;
       else
         this.timeValid = true;

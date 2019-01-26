@@ -153,6 +153,7 @@ export class AppointmentAddPage {
   compareDatetime(datetime, type) {
 
     console.log("Fetched datetime", datetime);
+    console.log("Type: ", type);
 
     if(type === "date") {
       let date = new Date();
@@ -164,13 +165,33 @@ export class AppointmentAddPage {
         this.dateValid = false;
       else
         this.dateValid = true;
-    } else {
+
+      //Check time
       let time = new Date();
-      time.setHours(datetime["hour"], datetime["time"]);
+      time.setHours(datetime["hour"], datetime["minute"], 0);
 
       let currentTime = new Date((new Date(moment().format())));
 
-      if(currentTime > new Date((new Date(this.timeDefault)))) 
+      let timeSelected =  new Date((new Date(this.dateDefault)).setHours(datetime["hour"], datetime["minute"],0));
+
+      console.log(currentTime.toDateString(), " ? ", timeSelected.toDateString());
+      if(currentTime > timeSelected) 
+        this.timeValid = false;
+      else
+        this.timeValid = true;
+      
+    } 
+    
+    if(type === "time"){
+      let time = new Date();
+      time.setHours(datetime["hour"], datetime["minute"], 0);
+
+      let currentTime = new Date((new Date(moment().format())));
+
+      let timeSelected =  new Date((new Date(this.dateDefault)).setHours(datetime["hour"], datetime["minute"],0));
+
+      console.log(currentTime.toDateString(), " ? ", timeSelected.toDateString());
+      if(currentTime > timeSelected) 
         this.timeValid = false;
       else
         this.timeValid = true;

@@ -26,7 +26,8 @@
               <div class="academicLabel">Academic Unit</div>
               <div class="academic"> 
                 <div *ngFor="let units of profileInfo['academic']">
-                  <div class="academicCounselor">{{units.name}}</div>
+                    <div class="academicCounselor1" *ngIf="!update">{{units.name}}</div>
+                    <div class="academicCounselor2" *ngIf="update">{{units.name}}</div>
                 </div>
               </div>
               <div class="status" *ngIf="type === 'Student'" >
@@ -35,7 +36,7 @@
               </div>
       
               <div class="buttons">
-                  <div><button *ngIf="type === 'Student' && update" ion-button class="changeButton"(click)="presentModal()" clear>Update Academic Info</button></div>
+                  <div><button *ngIf="type === 'Student' && update" ion-button class="changeButton" (click)="presentModal()" clear>Update Academic Info</button></div>
                   <div><button ion-button class="messageButton" (click)="message()" clear> Message</button></div>
               </div>
             </div>

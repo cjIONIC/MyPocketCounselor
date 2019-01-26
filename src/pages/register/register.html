@@ -71,7 +71,11 @@
             
           <ion-item>
             <ion-label color="primary" stacked> Academic Unit </ion-label>
-            <ion-select  #academic="ngModel" name="academic" ngModel required>
+            <ion-select  #academic="ngModel" 
+                name="academic" 
+                placeholder="Choose Academic"
+                ngModel 
+                required>
               <ion-option *ngFor="let unit of academicArray" value ="{{unit.acID}}"> {{unit.acCode}}</ion-option>
             </ion-select>
           </ion-item>
@@ -83,7 +87,11 @@
           
           <ion-item>
             <ion-label color="primary" stacked> Status </ion-label>
-            <ion-select #status="ngModel" name="status" ngModel required>
+            <ion-select #status="ngModel" 
+                name="status" 
+                placeholder="Choose Status"
+                ngModel 
+                required>
                 <ion-option value="Enrolled">Enrolled</ion-option>
                 <ion-option value="Not Enrolled">Not Enrolled</ion-option>
             </ion-select>

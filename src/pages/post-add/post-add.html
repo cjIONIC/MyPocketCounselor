@@ -97,11 +97,11 @@
                     </ion-col>
                 </ion-row>
             </ion-grid>
+            <div *ngIf="!dateValid" class="alert">
+                Starting date has passed
+            </div>
             <div *ngIf="!dateBalance && includeEndDate" class="alert">
                 Ending date must be greater
-            </div>
-            <div *ngIf="!dateValid" class="alert">
-                Starting Date is in the past
             </div>
 
             <div class="custom-label">Time</div>
@@ -138,11 +138,11 @@
                     </ion-col>
                 </ion-row>
             </ion-grid>
+            <div *ngIf="!timeValid" class="alert">
+                Starting time has passed
+            </div>
             <div *ngIf="!timeBalance && includeEndTime" class="alert">
                 Ending time must be greater
-            </div>
-            <div *ngIf="!timeValid" class="alert">
-                Starting Time is in the past
             </div>
       </div>
         

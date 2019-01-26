@@ -32,6 +32,7 @@ export class PostEditPage {
 
   checkDate = true;
   checkTime = true;
+  
 
   titleDefault:any;
   locationDefault:any;
@@ -50,6 +51,7 @@ export class PostEditPage {
   tempStartDate: any;
 
   dateValid = true;
+  timeValid = true;
 
   timeBalance = true;
   dateBalance = true;
@@ -138,15 +140,27 @@ export class PostEditPage {
           this.tempStartDate = moment(date).format();
           console.log("Lesser");
         }
-        else if (date > startDate) {
+        else if (date > startDate || date === (new Date(this.endDateDefault))) {
           this.tempStartDate = moment(date).format();
           this.endDateDefault = moment(newEndDate).format()
         }
-  
+    
         let currentDate = new Date((new Date(moment().format())).setHours(0,0,0));
         if (currentDate > new Date((new Date(this.startDateDefault)).setHours(0,0,0))) 
           this.dateValid = false;
         else this.dateValid = true;
+  
+        let currentTime = new Date((new Date(moment().format())));
+        let timeSelected = new Date((new Date(this.startDateDefault))
+                            .setHours(new Date(this.startTimeDefault).getHours(),
+                                      new Date(this.startTimeDefault).getMinutes(),0))
+                                      
+        console.log(currentTime.toDateString(), " ? ", timeSelected.toDateString());
+  
+        if(currentTime > timeSelected) 
+          this.timeValid = false;
+        else
+          this.timeValid = true;
   
       } else {
         if(date < startDate) this.dateBalance = false;
@@ -160,11 +174,10 @@ export class PostEditPage {
   }
 
   compareTime(value, type) {
-    let time = new Date();
+    let time = new Date((new Date(this.startDateDefault)).setHours(value["hour"], value["minute"],0));
     let newEndTime = new Date();
     console.log("Value: ", value);
 
-    time.setHours(value["hour"], value["minute"]);
     let startTime = new Date(this.tempStartTime);
 
     if(!this.fetchedTime) {
@@ -180,7 +193,17 @@ export class PostEditPage {
           this.tempStartTime = moment(time).format();
           this.endTimeDefault = moment(newEndTime).format()
         }
-      }  else {
+        let currentTime = new Date((new Date(moment().format())));
+  
+        console.log(currentTime.toDateString(), " ? ", time.toDateString());
+  
+        if(currentTime > time) 
+          this.timeValid = false;
+        else
+          this.timeValid = true;
+  
+  
+      } else {
         if(time < startTime) this.timeBalance = false;
         else this.timeBalance = true;
       }
@@ -190,6 +213,7 @@ export class PostEditPage {
    
 
   }
+
 
   endDateInclude(event) {
     console.log("Event: ", event);

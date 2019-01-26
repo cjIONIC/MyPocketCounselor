@@ -272,10 +272,8 @@ export class AppointmentPage {
     if(this.userInfo["type"] === "Student") {
       this.app.getRootNav().push(AppointmentAddPage, {date: datetime});
     } else {
-      const modalOptions: ModalOptions = {
-        enableBackdropDismiss: false
-      }
-      const modal = this.modalCtrl.create(ModalAppointmentSearchComponent, { date: datetime}, modalOptions);
+      
+      const modal = this.modalCtrl.create(ModalAppointmentSearchComponent, { date: datetime},{ cssClass: 'custom-modal-appointment-search' });
       modal.present();
     }
    

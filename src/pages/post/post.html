@@ -3,9 +3,8 @@
         <ion-spinner color="primary"></ion-spinner>
     </div>
 
-    <div *ngIf="!spinner">
        <!-- Floating button -->
-      <ion-fab right bottom *ngIf = " userInfo['type'] === 'GTD Head' ">
+      <ion-fab right bottom *ngIf = " userInfo['type'] === 'GTD Head' && !spinner">
           <button ion-fab ><ion-icon name = "add"></ion-icon></button>
           <ion-fab-list side = "top">
               <button ion-fab class="fabList" (click) = "addPost('Event')"><ion-icon name = "calendar"></ion-icon></button>
@@ -13,10 +12,11 @@
           </ion-fab-list>
         </ion-fab>
 
-        <ion-fab right bottom *ngIf = " userInfo['type'] === 'Counselor' ">
+        <ion-fab right bottom *ngIf = " userInfo['type'] === 'Counselor' && !spinner ">
           <button ion-fab (click) = "addPost('Event')"><ion-icon name = "calendar"></ion-icon></button>
         </ion-fab>
 
+    <div *ngIf="!spinner">
       <!-- Shows a list of post in the application-->
       <ion-list>
         <ion-card *ngFor="let post of feedList"> 
