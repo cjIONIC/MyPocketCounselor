@@ -151,10 +151,12 @@ export class PostAddPage {
       this.date = result;
       console.log("Fetched Date: ", this.date);
 
+      let endTime = new Date();
+
       this.startDateDefault = moment(new Date()).format();
       this.endDateDefault = moment(new Date()).format();
       this.startTimeDefault = moment(new Date()).format();
-      this.endTimeDefault = moment(new Date()).format();
+      this.endTimeDefault = moment(new Date(endTime.setHours(endTime.getHours()+1))).format();
 
       this.tempStartDate = this.startDateDefault;
       this.tempStartTime =  this.startTimeDefault;
@@ -174,11 +176,10 @@ export class PostAddPage {
     if(type === 'start') {
       newEndDate.setFullYear(value["year"], value["month"]-1, value["day"]+1);
   
-      if(date < startDate) {
+      if(date < startDate || date < (new Date(this.endDateDefault))) {
         this.tempStartDate = moment(date).format();
         console.log("Lesser");
-      }
-      else if (date > startDate || date === (new Date(this.endDateDefault))) {
+      } else if (date > startDate || date === (new Date(this.endDateDefault))) {
         this.tempStartDate = moment(date).format();
         this.endDateDefault = moment(newEndDate).format()
       }
@@ -188,57 +189,119 @@ export class PostAddPage {
         this.dateValid = false;
       else this.dateValid = true;
 
+
+      //Time
       let currentTime = new Date((new Date(moment().format())));
-      let timeSelected = new Date((new Date(this.startDateDefault))
+      currentTime.setSeconds(0);
+
+      let startTime = new Date((new Date(this.startDateDefault))
                           .setHours(new Date(this.startTimeDefault).getHours(),
                                     new Date(this.startTimeDefault).getMinutes(),0))
-                                    
-      console.log(currentTime.toDateString(), " ? ", timeSelected.toDateString());
+                
+      let endTime =  new Date;
+      
+      if(!this.includeEndDate) {
+        console.log("Date not end included!!!");
+        endTime = new Date((new Date(this.startDateDefault))
+        .setHours(new Date(this.endTimeDefault).getHours(),
+                  new Date(this.endTimeDefault).getMinutes(),0));
+      } else {
+        console.log("Date end included!!!");
+        endTime = new Date((new Date(this.endDateDefault))
+        .setHours(new Date(this.endTimeDefault).getHours(),
+                  new Date(this.endTimeDefault).getMinutes(),0));
+      }                         
 
-      if(currentTime > timeSelected) 
+      
+      this.endTimeDefault = new Date(endTime);
+
+      console.log("Compare time: ", currentTime.toString(), " ? ", startTime.toString());
+
+      if(currentTime > startTime) 
         this.timeValid = false;
-      else
+      else if (currentTime === startTime || currentTime < startTime)
         this.timeValid = true;
+      
 
     } else {
-      if(date < startDate) this.dateBalance = false;
-      else this.dateBalance = true;
+      let endTime;
+      if(!this.includeEndDate) {
+        console.log("Date not end included!!!");
+        endTime = new Date((new Date(this.startDateDefault))
+        .setHours(new Date(this.endTimeDefault).getHours(),
+                  new Date(this.endTimeDefault).getMinutes(),0));
+      } else {
+        console.log("Date end included!!!");
+        endTime = new Date((new Date(this.endDateDefault))
+        .setHours(new Date(this.endTimeDefault).getHours(),
+                  new Date(this.endTimeDefault).getMinutes(),0));
+      }                 
+      
+      this.endTimeDefault = new Date(endTime);
+
+      if(date > startDate) this.dateBalance = true;
+      else this.dateBalance = false;
     }
 
   }
 
   compareTime(value, type) {
-    let time = new Date((new Date(this.startDateDefault)).setHours(value["hour"], value["minute"],0));
-    let newEndTime = new Date();
+    let timeSelected, newEndTime = new Date();
+    if(type === "start") {
+      timeSelected = new Date((new Date(this.startDateDefault))
+      .setHours(new Date(this.startTimeDefault).getHours(),
+                new Date(this.startTimeDefault).getMinutes(),0));
+    } else {
+      if(!this.includeEndDate) {
+        timeSelected = new Date((new Date(this.startDateDefault))
+        .setHours(new Date(this.endTimeDefault).getHours(),
+                  new Date(this.endTimeDefault).getMinutes(),0));
+      } else {
+        timeSelected = new Date((new Date(this.endDateDefault))
+        .setHours(new Date(this.endTimeDefault).getHours(),
+                  new Date(this.endTimeDefault).getMinutes(),0));
+      }
+    }
+
     console.log("Value: ", value);
 
     let startTime = new Date(this.tempStartTime);
 
     if(type === 'start') {
-      newEndTime.setHours(value["hour"]+1, value["minute"]);
+      newEndTime.setHours(value["hour"]+1, value["minute"], 0);
 
-      console.log("Date: ", time, " ? ", this.startTimeDefault);
-  
-      if(time < startTime) {
-        this.tempStartTime = moment(time).format();
-      }
-      else if (time > startTime) {
-        this.tempStartTime = moment(time).format();
+      console.log("Date: ", timeSelected, " ? ", this.startTimeDefault);
+      let endTime = new Date(new Date(this.endTimeDefault));
+      endTime.setSeconds(0);
+
+      console.log("Start vs End: ", timeSelected ," ? ", endTime)
+
+      if(timeSelected < startTime || timeSelected < endTime) {
+        this.tempStartTime = moment(timeSelected).format();
+      } else if (timeSelected > startTime || timeSelected == endTime) {
+        this.tempStartTime = moment(timeSelected).format();
         this.endTimeDefault = moment(newEndTime).format()
       }
+
       let currentTime = new Date((new Date(moment().format())));
+      currentTime.setSeconds(0);
+      //currentTime.setDate(currentTime.getDate()-1);
+                                    
+      console.log("Compare time: ", currentTime.toString(), " ? ", timeSelected.toString());
 
-      console.log(currentTime.toDateString(), " ? ", time.toDateString());
+      console.log(currentTime.toDateString(), " ? ", timeSelected.toDateString());
 
-      if(currentTime > time) 
+      if(currentTime > timeSelected) 
         this.timeValid = false;
-      else
+        else if (currentTime === timeSelected || currentTime < timeSelected)
         this.timeValid = true;
+        else this.timeValid = true;
 
 
     } else {
-      if(time < startTime) this.timeBalance = false;
-      else this.timeBalance = true;
+      console.log("Ending time: ", timeSelected ," ? ", startTime)
+      if(timeSelected >  startTime)this.timeBalance = true;
+      else this.timeBalance = false;
     }
 
   }
@@ -246,6 +309,27 @@ export class PostAddPage {
   endDateInclude(event) {
     console.log("Event: ", event)
     this.includeEndDate = event;
+    let endTime;
+
+    let startTime = new Date((new Date(this.startDateDefault))
+                        .setHours(new Date(this.startTimeDefault).getHours(),
+                                  new Date(this.startTimeDefault).getMinutes(),0))
+     
+
+    if(!this.includeEndDate) {
+      console.log("Date not end included!!!");
+      endTime = new Date((new Date(this.startDateDefault))
+      .setHours(new Date(this.endTimeDefault).getHours(),
+                new Date(this.endTimeDefault).getMinutes(),0));
+    } else {
+      console.log("Date end included!!!");
+      endTime = new Date((new Date(this.endDateDefault))
+      .setHours(new Date(this.endTimeDefault).getHours(),
+                new Date(this.endTimeDefault).getMinutes(),0));
+    }                         
+    console.log("Ending time: ", endTime ," ? ", startTime)
+    if(endTime >  startTime)this.timeBalance = true;
+    else this.timeBalance = false;
   }
 
   endTimeInclude(event) {
