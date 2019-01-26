@@ -28,6 +28,8 @@ export class ModalAppointmentSearchComponent {
 
   date: any;
 
+  spinner: any = true;
+
   constructor(public navCtrl: NavController, 
     public fireDatabase: AngularFireDatabase,
     public navParams: NavParams,
@@ -106,6 +108,8 @@ export class ModalAppointmentSearchComponent {
         if(a.name > b.name) { return 1; }
         return 0;
       });
+
+      this.spinner = false;
       
       this.peopleList = tempArray;
       if(!filter) this.completePeopleList = tempArray;

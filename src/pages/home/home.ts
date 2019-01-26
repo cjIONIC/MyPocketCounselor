@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, App, Item, Platform } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, App, Item, Platform, LoadingController } from 'ionic-angular';
 
 import { PostPage } from '../post/post';
 import { PeoplePage } from '../people/people';
@@ -65,6 +65,7 @@ export class HomePage {
     public network: Network,
     public fireDatabase: AngularFireDatabase,
     public db: DatabaseProvider,
+    public loadingCtrl: LoadingController,
     public navParams: NavParams) {
 
       this.initialize();
@@ -81,30 +82,41 @@ export class HomePage {
   }
   
   async getUserInfo() {
-    let userInfo = await this.db.getProfileInStorage();
-    console.log("Currently logged in: ", userInfo);
-    let table;
+    
+    let loading = this.loadingCtrl.create({
+      spinner: 'ios',
+      content: 'Please Wait...'
+    });
 
-    if(userInfo["type"] === "Student") table = "student"
-    else table = "counselor";
+    loading.present().then(async () => {
+      let userInfo = await this.db.getProfileInStorage();
+      console.log("Currently logged in: ", userInfo);
+      let table;
+  
+      if(userInfo["type"] === "Student") table = "student"
+      else table = "counselor";
+  
+      let list = this.fireDatabase.list<Item>(table);
+      let item = list.valueChanges();
+  
+      this.fireDatabase.list<Item>("academic")
+        .valueChanges().subscribe(academics => {
+  
+          item.subscribe(async accounts => {
+            await this.db.refreshUserInfo(accounts, userInfo);
+            this.userInfo = await this.db.getUserInfo();
 
-    let list = this.fireDatabase.list<Item>(table);
-    let item = list.valueChanges();
+            loading.dismiss();
 
-    this.fireDatabase.list<Item>("academic")
-      .valueChanges().subscribe(academics => {
-
-        item.subscribe(async accounts => {
-          await this.db.refreshUserInfo(accounts, userInfo);
-          this.userInfo = await this.db.getUserInfo();
-          console.log("User information: ", this.userInfo);
-          this.scanAppointmentChanges();
-          this.scanChatChanges();
-          this.scanRegistrations();
-
-        }, error => console.log(error));
-
-    }, error => console.log(error));
+            console.log("User information: ", this.userInfo);
+            this.scanAppointmentChanges();
+            this.scanChatChanges();
+            this.scanRegistrations();
+  
+          }, error => console.log(error));
+  
+      }, error => console.log(error));
+    })
   }
 
   search() {

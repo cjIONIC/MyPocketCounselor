@@ -22,6 +22,8 @@ export class ProfilePage {
 
   postArray = [];
 
+  spinner: any = true;  
+
   academicList = [];
 
   constructor(public navCtrl: NavController, 
@@ -33,6 +35,7 @@ export class ProfilePage {
 
   initialize() {
     try {
+      this.spinner = true;
       this.getUserInfo();
     } catch {
 
@@ -61,6 +64,9 @@ export class ProfilePage {
           this.fetchRating();
           this.fetchPersonalPosts();
           this.fetchAcademic();
+          this.spinner = false;
+        } else {
+          this.spinner = false;
         }
       }, error => console.log(error));
       

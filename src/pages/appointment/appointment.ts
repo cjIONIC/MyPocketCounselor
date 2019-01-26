@@ -50,6 +50,7 @@ export class AppointmentPage {
   daySelected: any;
 
   spinner:any = true;
+  hasRun:Boolean = false;
 
   constructor(public alertCtrl: AlertController,
     public navCtrl: NavController,
@@ -67,6 +68,7 @@ export class AppointmentPage {
 
   async initialize() {
     this.spinner = true;
+    this.hasRun = false;
     await this.getUserInfo();
   }
 
@@ -191,6 +193,7 @@ export class AppointmentPage {
 
       //Loading icon 
       this.spinner = false;
+      this.hasRun = true;
 
     console.log("Finish loading calendar");
     
@@ -296,6 +299,8 @@ export class AppointmentPage {
   }
 
   ionViewDidEnter() {
+    if(!this.hasRun) this.initialize();
+    
     this.connected = this.network.onConnect().subscribe( data => {
       this.initialize();
       this.presentToast("You are online");

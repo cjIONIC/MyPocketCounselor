@@ -27,6 +27,8 @@ export class PostPage {
 
   spinner: any = true;
 
+  hasRun:Boolean = false;
+
   //Array of posts
   userInfo = [];
   feedList = [];
@@ -45,6 +47,7 @@ export class PostPage {
 
   async initialize() {
     this.spinner = true;
+    this.hasRun = false;
     await this.getUserInfo();
   }
   
@@ -94,6 +97,7 @@ export class PostPage {
       
       //Loading icon
       this.spinner = false;
+      this.hasRun = true;
 
       console.log("Filtered Feed: ", this.feedList);
     }, error => console.log(error));
@@ -166,6 +170,8 @@ export class PostPage {
   }
 
   ionViewDidEnter() {
+    if(!this.hasRun) this.initialize();
+
     this.connected = this.network.onConnect().subscribe( data => {
       this.presentToast("You are online");
       this.initialize();

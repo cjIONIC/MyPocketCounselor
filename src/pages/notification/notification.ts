@@ -29,6 +29,7 @@ export class NotificationPage {
   userInfo=[];
 
   spinner: any = true;
+  hasRun:Boolean = false;
 
   constructor(public navCtrl: NavController,
       public db: DatabaseProvider,
@@ -43,6 +44,8 @@ export class NotificationPage {
 
   async initialize() {
     this.spinner = true;
+    this.hasRun = false;
+
     await this.getUserInfo();
   }
 
@@ -90,7 +93,10 @@ export class NotificationPage {
         console.log('%c Fetching Notifications','color: white; background: red; font-size: 16px');
         this.notificationList = await this.db.fetchAppointmentsForNotification(appointment);
         this.notificationList.reverse();
+
         this.spinner = false;
+        this.hasRun = true;
+
         console.log("Notifications: ", await this.notificationList);
       }, error => console.log("Error!"));
   }
@@ -153,6 +159,8 @@ export class NotificationPage {
 
   ionViewDidEnter() {
     
+    if(!this.hasRun) this.initialize();
+
     this.connected = this.network.onConnect().subscribe( data => {
       this.presentToast("You are online");
       this.initialize();

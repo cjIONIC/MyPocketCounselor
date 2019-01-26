@@ -27,6 +27,8 @@ export class RegisterValidationPage {
   requestList = [];
   userInfo = [];
 
+  spinner: any = true;
+
   constructor(public navCtrl: NavController, 
     public fireDatabase: AngularFireDatabase,
     public db: DatabaseProvider,
@@ -39,6 +41,7 @@ export class RegisterValidationPage {
   }
 
   async initialize() {
+    this.spinner = true;
     await this.getUserInfo();
   }
   
@@ -96,6 +99,9 @@ export class RegisterValidationPage {
         console.log("Request:", requests);
         this.requestList = await this.db.fetchRegistrations(academicList, requests);
         console.log("Request fetched: ", this.requestList);
+
+        this.spinner = false;
+
       }, error => console.log("Error"));
   }
   

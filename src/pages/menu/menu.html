@@ -1,40 +1,47 @@
 <ion-content class="content">
-    <ion-list>
-        <ion-card>
-            <div class="item">
-                <button class="button btnProfile" (click)="openProfile()">
-                    <ion-grid>
+        <div *ngIf="spinner" class="spinnerContent">
+            <ion-spinner color="primary"></ion-spinner>
+        </div>
+    
+    <div *ngIf="!spinner">
+        <ion-list>
+            <ion-card>
+                <div class="item">
+                    <button class="button btnProfile" (click)="openProfile()">
+                        <ion-grid>
+                            <ion-row>
+                                <ion-col col-3><img src = "{{ userInfo['picture']}}" class="avatar"></ion-col>
+                                <ion-col col-7>
+                                    <ion-row class="name">{{userInfo["firstname"]}} {{userInfo["lastname"]}}</ion-row>
+                                    <ion-row class="label">View your profile</ion-row>
+                                </ion-col>
+                            </ion-row>
+                        </ion-grid>
+                    </button>
+                </div>
+                <div class="item" *ngIf="userInfo['type'] !== 'Student'" (click)="registration()">
+                    <ion-grid class="button btnRegister">
                         <ion-row>
-                            <ion-col col-3><img src = "{{ userInfo['picture']}}" class="avatar"></ion-col>
-                            <ion-col col-7>
-                                <ion-row class="name">{{userInfo["firstname"]}} {{userInfo["lastname"]}}</ion-row>
-                                <ion-row class="label">View your profile</ion-row>
+                            <ion-col col-10 class="registrationLabel">
+                                Registration
+                            </ion-col>
+                            <ion-col col-2 class="registrationBadge" *ngIf="popBadge">
+                                <ion-badge class="badge" *ngIf="registrationBadge !== null"> {{ registrationBadge }} </ion-badge>
                             </ion-col>
                         </ion-row>
                     </ion-grid>
-                </button>
-            </div>
-            <div class="item" *ngIf="userInfo['type'] !== 'Student'" (click)="registration()">
-                <ion-grid class="button btnRegister">
-                    <ion-row>
-                        <ion-col col-10 class="registrationLabel">
-                            Registration
-                        </ion-col>
-                        <ion-col col-2 class="registrationBadge" *ngIf="popBadge">
-                            <ion-badge class="badge" *ngIf="registrationBadge !== null"> {{ registrationBadge }} </ion-badge>
-                        </ion-col>
-                    </ion-row>
-                </ion-grid>
-                
-            </div>
-            <div class="item" *ngIf="userInfo['type'] === 'GTD Head'">
-                <button class="button btnControl">Head Controls</button>
-            </div>
-            <div class="item">
-                <div class="button">
-                    <button class="btnLogout" (click)="logout()">Logout</button>
+                    
                 </div>
-            </div>
-        </ion-card>
-    </ion-list>
+                <div class="item" *ngIf="userInfo['type'] === 'GTD Head'">
+                    <button class="button btnControl">Head Controls</button>
+                </div>
+                <div class="item">
+                    <div class="button">
+                        <button class="btnLogout" (click)="logout()">Logout</button>
+                    </div>
+                </div>
+            </ion-card>
+        </ion-list>
+    </div>
+    
 </ion-content>

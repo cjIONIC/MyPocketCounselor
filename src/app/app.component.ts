@@ -36,6 +36,8 @@ export class MyApp {
     const user = await this.db.getProfileInStorage();
     //this.db.setProfileInStorage();
     const nowUser = await this.db.getUserInfo();
+
+    
     console.log("Users: ", user, nowUser);
     if(user === null || user === undefined || user.length === 0) {
     console.log("Not logged in");

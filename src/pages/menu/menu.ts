@@ -30,6 +30,8 @@ export class MenuPage {
   registrationBadge: any;
   popBadge: any;
 
+  spinner: any = true;
+
   constructor(public navCtrl: NavController,
     public fireDatabase: AngularFireDatabase,
     public db: DatabaseProvider,
@@ -42,6 +44,7 @@ export class MenuPage {
   }
 
   initialize() {
+    this.spinner = true;
     this.getUserInfo();
   }
 
@@ -75,7 +78,8 @@ export class MenuPage {
       this.userInfo = await this.db.getUserInfo();
       console.log("User information: ", this.userInfo);
 
-      this.scanRegistrations();
+      if(this.userInfo["type"] !== "Student") this.scanRegistrations();
+      else this.spinner = false;
     }, error => console.log(error));
   }
 
@@ -107,6 +111,7 @@ export class MenuPage {
       this.registrationBadge = await this.db.scanRegistrations(academicList, registrations);
       console.log("Current no. of registrations: ", this.registrationBadge);
       this.popBadge = true;
+      this.spinner = false;
     })
 
   }

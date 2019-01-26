@@ -23,7 +23,8 @@ import { Network} from '@ionic-native/network';
 })
 export class PeoplePage {
 
-
+  hasRun:Boolean = false;
+  
   connected: Subscription;
   disconnected: Subscription;
 
@@ -53,6 +54,7 @@ export class PeoplePage {
   }
 
   async initialize() {
+    this.hasRun = false;
     this.spinner = true;
     await this.getUserInfo();
     this.unit = "All";
@@ -122,6 +124,7 @@ export class PeoplePage {
       
       //Loading icon
       this.spinner = false;
+      this.hasRun = true;
 
       if(!filter) this.completePeopleList = tempArray;
       this.peopleList = tempArray;
@@ -148,6 +151,7 @@ export class PeoplePage {
 
       //Loading icon
       this.spinner = false;
+      this.hasRun = true;
      
       if(!filter) this.completePeopleList = tempArray;
       this.peopleList = tempArray;
@@ -267,6 +271,9 @@ export class PeoplePage {
   }
 
   ionViewDidEnter() {
+
+    if(!this.hasRun) this.initialize();
+
     this.connected = this.network.onConnect().subscribe( data => {
       this.presentToast("You are online");
       this.initialize();

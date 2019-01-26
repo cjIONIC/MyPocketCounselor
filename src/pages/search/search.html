@@ -16,22 +16,26 @@
 
 
 <ion-content>
-  <ion-list class="list" >
-    <ion-card class="card">
-        <ion-grid>
-            <ion-row class="contact"  *ngFor="let person of peopleList" class="profile" (click)="profile(person)">
-                  <ion-col class="profileLeft" col-2>
-                        <img src="{{ person.picture }}" class="avatar">
-                  </ion-col>
-                  <ion-col class="profileRight" col-10> <div class="name"> {{person.name}} </div></ion-col>
-            </ion-row>
-      </ion-grid>
-      
-        <div *ngIf="peopleList.length === 0">
-          <div class="status"> No results Found</div>
-        </div>
-    </ion-card>
-  </ion-list>
-     
+  <div *ngIf="spinner" class="spinnerContent">
+      <ion-spinner color="primary"></ion-spinner>
+  </div>
 
+  <div *ngIf="!spinner">
+    <ion-list class="list" >
+      <ion-card class="card">
+          <ion-grid>
+              <ion-row class="contact"  *ngFor="let person of peopleList" class="profile" (click)="profile(person)">
+                    <ion-col class="profileLeft" col-2>
+                          <img src="{{ person.picture }}" class="avatar">
+                    </ion-col>
+                    <ion-col class="profileRight" col-10> <div class="name"> {{person.name}} </div></ion-col>
+              </ion-row>
+        </ion-grid>
+        
+          <div *ngIf="peopleList.length === 0">
+            <div class="status"> No results Found</div>
+          </div>
+      </ion-card>
+    </ion-list>
+  </div>
 </ion-content>

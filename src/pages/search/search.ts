@@ -31,6 +31,7 @@ export class SearchPage {
   completePeopleList = []; //Handles all people
   peopleList = []; //Modifiable List
 
+  spinner: any = true;
 
   constructor(public navCtrl: NavController, 
     private fireDatabase: AngularFireDatabase,
@@ -45,6 +46,7 @@ export class SearchPage {
 
   async initialize() {
     try {
+      this.spinner = true;
       await this.getUserInfo();
     } catch {
 
@@ -111,6 +113,9 @@ export class SearchPage {
         return 0;
       });
       
+      //Loading icon
+      this.spinner = false;
+      
       if(!filter) this.completePeopleList = tempArray;
       this.peopleList = tempArray;
     }, error => console.log(error));
@@ -130,6 +135,9 @@ export class SearchPage {
         return 0;
       });
       
+      //Loading icon
+      this.spinner = false;
+
       if(!filter) this.completePeopleList = tempArray;
       this.peopleList = tempArray;
     }, error => console.log(error));

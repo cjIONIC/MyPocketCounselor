@@ -21,110 +21,117 @@
 
 
 <ion-content >
-  <ion-card class="profileInfo">
-    <div class="profilePicture"><img src="{{ userInfo['picture'] }}" class="profileAvatar"></div>
-    <div class="profileName"> {{ userInfo['firstname'] }} {{ userInfo['lastname'] }} </div>
-    
-    <div *ngIf="userInfo['type'] !== 'Student' && rating" class="profileRating"> {{ rating }} </div>
-    <div *ngIf="userInfo['type'] !== 'Student' && !rating" class="profileRating"> No Ratings </div>
-    
-    
-    <div *ngIf="userInfo['type'] !== 'Student'" class="profileNumber"> 
-        <ion-grid>
-            <ion-row class="rowNumber">
-                <ion-col col-1 class="numberIcon"><ion-icon name="call"></ion-icon></ion-col>
-                <ion-col col-11 class="numberNumber">{{ userInfo['number'] }} </ion-col>
-              </ion-row >
-        </ion-grid>
-    </div>
+  <div *ngIf="spinner" class="spinnerContent">
+      <ion-spinner color="primary"></ion-spinner>
+  </div>
 
-    <div class="profileAcademic"> 
-      <div>Academic Unit</div>
-      <div *ngFor="let units of academicList">
-        <div class="academicUnits">{{units.acName}}</div>
-      </div>
-    </div>
-
-    <div class="profileEdit">Edit Profile</div>
-  </ion-card>
-
-  <ion-card class="feedback" (click)="viewFeedbacks()">
-    <ion-grid>
-      <ion-row>
-        <ion-col col-10 class="feedbackName"> View Feedbacks</ion-col>
-        <ion-col col-2 class="feedbackIcon"> <ion-icon name="arrow-forward"></ion-icon> </ion-col>
-      </ion-row>
-    </ion-grid>
-  </ion-card>
-
-  <!-- Shows a list of post in the application-->
-    <ion-list *ngIf="userInfo['type'] !== 'Student'">
-      <ion-card *ngFor="let post of postArray"> 
-        <div>
+  <div *ngIf="!spinner"> 
+    <ion-card class="profileInfo">
+      <div class="profilePicture"><img src="{{ userInfo['picture'] }}" class="profileAvatar"></div>
+      <div class="profileName"> {{ userInfo['firstname'] }} {{ userInfo['lastname'] }} </div>
+      
+      <div *ngIf="userInfo['type'] !== 'Student' && rating" class="profileRating"> {{ rating }} </div>
+      <div *ngIf="userInfo['type'] !== 'Student' && !rating" class="profileRating"> No Ratings </div>
+      
+      
+      <div *ngIf="userInfo['type'] !== 'Student'" class="profileNumber"> 
           <ion-grid>
-              <ion-row class = "postHeader" >
-                  <ion-col class="headerLeft" col-2>
-                      <img src="{{ post.avatar }}" class="postAvatar">
+              <ion-row class="rowNumber">
+                  <ion-col col-1 class="numberIcon"><ion-icon name="call"></ion-icon></ion-col>
+                  <ion-col col-11 class="numberNumber">{{ userInfo['number'] }} </ion-col>
+                </ion-row >
+          </ion-grid>
+      </div>
+
+      <div class="profileAcademic"> 
+        <div>Academic Unit</div>
+        <div *ngFor="let units of academicList">
+          <div class="academicUnits">{{units.acName}}</div>
+        </div>
+      </div>
+
+      <div class="profileEdit">Edit Profile</div>
+    </ion-card>
+
+    <ion-card class="feedback" (click)="viewFeedbacks()">
+      <ion-grid>
+        <ion-row>
+          <ion-col col-10 class="feedbackName"> View Feedbacks</ion-col>
+          <ion-col col-2 class="feedbackIcon"> <ion-icon name="arrow-forward"></ion-icon> </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-card>
+
+    <!-- Shows a list of post in the application-->
+      <ion-list *ngIf="userInfo['type'] !== 'Student'">
+        <ion-card *ngFor="let post of postArray"> 
+          <div>
+            <ion-grid>
+                <ion-row class = "postHeader" >
+                    <ion-col class="headerLeft" col-2>
+                        <img src="{{ post.avatar }}" class="postAvatar">
+                    </ion-col>
+                    <ion-col class="headerInfo" col-8>
+                        <ion-row class="headerName">{{post.counselor}}</ion-row>
+                        <ion-row><div  class="headerAcademic">{{post.academic}}</div></ion-row>
+                    </ion-col>
+                    <ion-col class="headerOptions" col-2 *ngIf="userInfo['type'] != 'Student'">
+                      <div class="iconBox">
+                          <button class = "optionButton" (click)=" popOptions($event, post)">
+                              <ion-icon name="more"></ion-icon>
+                          </button>
+                        </div>
+                    </ion-col>
+                </ion-row>
+            </ion-grid>
+            <!-- IMAGE -->
+            <div *ngIf="post.picture != 'No image'" class="image">
+              <img src="{{ post.picture }}" >
+            </div>
+            <ion-grid>
+              <ion-row class="contentHeader"> 
+                  <ion-col class="title" col-9>
+                      {{post.title}}
                   </ion-col>
-                  <ion-col class="headerInfo" col-8>
-                      <ion-row class="headerName">{{post.counselor}}</ion-row>
-                      <ion-row><div  class="headerAcademic">{{post.academic}}</div></ion-row>
-                  </ion-col>
-                  <ion-col class="headerOptions" col-2 *ngIf="userInfo['type'] != 'Student'">
-                    <div class="iconBox">
-                        <button class = "optionButton" (click)=" popOptions($event, post)">
-                            <ion-icon name="more"></ion-icon>
-                        </button>
+                  <ion-col class="type" col-3>
+                      <div  *ngIf = "post.type === 'Event'" class="event">
+                        {{post.type}}
+                      </div>
+                      <div  *ngIf = "post.type === 'Quotes'" class="quote">
+                        {{post.type}}
                       </div>
                   </ion-col>
+                </ion-row >
+              <ion-row  *ngIf = "post.type === 'Event'" class="item">
+                <ion-col col-1 class="detailIcon"><ion-icon name="pin"></ion-icon></ion-col>
+                <ion-col col-11>{{post.location}}</ion-col>
               </ion-row>
-          </ion-grid>
-          <!-- IMAGE -->
-          <div *ngIf="post.picture != 'No image'" class="image">
-            <img src="{{ post.picture }}" >
-          </div>
-          <ion-grid>
-            <ion-row class="contentHeader"> 
-                <ion-col class="title" col-9>
-                    {{post.title}}
-                </ion-col>
-                <ion-col class="type" col-3>
-                    <div  *ngIf = "post.type === 'Event'" class="event">
-                      {{post.type}}
-                    </div>
-                    <div  *ngIf = "post.type === 'Quotes'" class="quote">
-                      {{post.type}}
-                    </div>
-                </ion-col>
+              <ion-row  *ngIf = "post.type === 'Event'" class="item">
+                <ion-col col-1 class="detailIcon"><ion-icon name="calendar"></ion-icon></ion-col>
+                <ion-col col-11 *ngIf="!post.pushEndDate">{{post.startDate | date: 'EE, MMM dd' }}</ion-col>
+                <ion-col col-11 *ngIf="post.pushEndDate">{{post.startDate | date: 'EE, MMM dd' }} - {{post.endDate | date: 'EE, MMM dd' }}</ion-col>
               </ion-row >
-            <ion-row  *ngIf = "post.type === 'Event'" class="item">
-              <ion-col col-1 class="detailIcon"><ion-icon name="pin"></ion-icon></ion-col>
-              <ion-col col-11>{{post.location}}</ion-col>
-            </ion-row>
-            <ion-row  *ngIf = "post.type === 'Event'" class="item">
-              <ion-col col-1 class="detailIcon"><ion-icon name="calendar"></ion-icon></ion-col>
-              <ion-col col-11 *ngIf="!post.pushEndDate">{{post.startDate | date: 'EE, MMM dd' }}</ion-col>
-              <ion-col col-11 *ngIf="post.pushEndDate">{{post.startDate | date: 'EE, MMM dd' }} - {{post.endDate | date: 'EE, MMM dd' }}</ion-col>
-            </ion-row >
-            <ion-row  *ngIf = "post.type === 'Event'" class="item">
-              <ion-col col-1 class="detailIcon"><ion-icon name="time"></ion-icon></ion-col>
-              <ion-col col-11 *ngIf="!post.pushEndTime">{{post.startDate | date: 'hh:mm aa' }}</ion-col>
-              <ion-col col-11 *ngIf="post.pushEndTime">{{post.startDate | date: 'hh:mm aa' }} - {{post.endDate | date: 'hh:mm aa' }}</ion-col>
-            </ion-row >
-            <ion-row  class="description">
-                {{post.description}}
-            </ion-row >
-          </ion-grid>
-        </div>
-          <div class="divider"></div>
-        <div>
-          <div class="footer">
-            <div class="like">
-              <div class="likeNumber">{{post.like}} Like</div>
-            </div>
-            <div class="datetime">{{post.datetime | timeAgo}}</div>
+              <ion-row  *ngIf = "post.type === 'Event'" class="item">
+                <ion-col col-1 class="detailIcon"><ion-icon name="time"></ion-icon></ion-col>
+                <ion-col col-11 *ngIf="!post.pushEndTime">{{post.startDate | date: 'hh:mm aa' }}</ion-col>
+                <ion-col col-11 *ngIf="post.pushEndTime">{{post.startDate | date: 'hh:mm aa' }} - {{post.endDate | date: 'hh:mm aa' }}</ion-col>
+              </ion-row >
+              <ion-row  class="description">
+                  {{post.description}}
+              </ion-row >
+            </ion-grid>
           </div>
-        </div>
-      </ion-card>
+            <div class="divider"></div>
+          <div>
+            <div class="footer">
+              <div class="like">
+                <div class="likeNumber">{{post.like}} Like</div>
+              </div>
+              <div class="datetime">{{post.datetime | timeAgo}}</div>
+            </div>
+          </div>
+        </ion-card>
     </ion-list>
+  </div>
+ 
 </ion-content>

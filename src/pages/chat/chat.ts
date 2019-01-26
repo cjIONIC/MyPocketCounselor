@@ -32,6 +32,8 @@ export class ChatPage {
 
   userInfo = [];
 
+  spinner: any = true;
+
   constructor(public navCtrl: NavController, 
     public navParams: NavParams,
     public toastCtrl: ToastController,
@@ -45,6 +47,7 @@ export class ChatPage {
 
   initialize() {
     try {
+      this.spinner = true;
       this.currentDate = new Date(moment().format());
       this.getUserInfo();
     } catch {
@@ -102,6 +105,9 @@ export class ChatPage {
     item.subscribe( async messages => {
       this.chatList = await this.db.fetchChats(messages);
       this.chatList.reverse();
+
+      this.spinner = false;
+
       console.log("Chats: ", this.chatList);
     })
   }
