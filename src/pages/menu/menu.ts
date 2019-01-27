@@ -141,6 +141,7 @@ export class MenuPage {
 
               loading.present().then(()=> {
                 this.db.logoutUser().then(() => {
+                  loading.dismiss();
                   let nav = this.app.getRootNav();
                   nav.setRoot(LoginPage);
                 })
