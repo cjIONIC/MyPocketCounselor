@@ -27,7 +27,7 @@
     "@ionic-native/file": "4.17.0",
     "@ionic-native/file-chooser": "4.17.0",
     "@ionic-native/firebase": "^4.20.0",
-    "@ionic-native/google-plus": "4.17.0",
+    "@ionic-native/google-plus": "^4.17.0",
     "@ionic-native/keyboard": "4.17.0",
     "@ionic-native/native-page-transitions": "4.18.0",
     "@ionic-native/network": "4.17.0",
