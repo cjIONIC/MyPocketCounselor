@@ -1673,6 +1673,7 @@ export class DatabaseProvider {
 
   async appointmentConfirmation(id) {
     let ref = this.fireDatabase.list("appointment");
+    let date = new Date(moment().format());
 
     ref.snapshotChanges(['child_added']).subscribe(appointments => {
       let keys = Object.keys(appointments);
@@ -1684,6 +1685,7 @@ export class DatabaseProvider {
           let appointment = appointments[count].payload.val();
           
           ref.update(appointments[count].key, { 
+            aDatetime: date.toString(),
             aStatus: "Accepted"
           }).then(()=> {
             console.log("Confirmed!");
@@ -1715,6 +1717,7 @@ export class DatabaseProvider {
 
   async rescheduleAppointment(id, schedule, venue) {
     let ref = this.fireDatabase.list("appointment");
+    let date = new Date(moment().format())
 
     ref.snapshotChanges(['child_added']).subscribe(appointments => {
       let keys = Object.keys(appointments);
@@ -1728,6 +1731,7 @@ export class DatabaseProvider {
           ref.update(appointments[count].key, { 
             aSchedule: schedule.toString(),
             aVenue: venue,
+            aDatetime: date.toString(),
             aNotification: "Sent",
             aStatus: "Reschedule"
           }).then(()=> {
@@ -1740,6 +1744,7 @@ export class DatabaseProvider {
 
   async finishAppointment(appointment) {
     let ref = this.fireDatabase.list("appointment");
+    let date = new Date(moment().format());
 
     ref.snapshotChanges(['child_added']).subscribe(appointments => {
       let keys = Object.keys(appointments);
@@ -1751,6 +1756,7 @@ export class DatabaseProvider {
           let appointment = appointments[count].payload.val();
           
           ref.update(appointments[count].key, { 
+            aDatetime: date.toString(),
             aStatus: "Finished"
           }).then(()=> {
             console.log("Finished!");
