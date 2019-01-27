@@ -17,7 +17,7 @@ import { Network} from '@ionic-native/network';
 import { HomePage } from '../home/home';
 import { EmailComposer } from '@ionic-native/email-composer';
 import { ModalPasswordComponent } from '../../components/modal-password/modal-password';
-import { GooglePlus, GooglePlusOriginal } from '@ionic-native/google-plus'
+import { GooglePlus } from '@ionic-native/google-plus/ngx';
 
 
 @IonicPage()
@@ -46,7 +46,7 @@ export class LoginPage {
     public navCtrl: NavController, 
     public emailComposer: EmailComposer,
     public navParams: NavParams,
-    public googlePlus: GooglePlusOriginal,
+    public googlePlus: GooglePlus,
     public db: DatabaseProvider,
     public app: App,
     public modalCtrl: ModalController,

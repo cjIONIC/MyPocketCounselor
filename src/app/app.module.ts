@@ -41,7 +41,6 @@ import { File } from '@ionic-native/file';
 import { FileChooser } from '@ionic-native/file-chooser';
 import { EmailComposer } from '@ionic-native/email-composer';
 import { Camera } from '@ionic-native/camera';
-import { GooglePlus, GooglePlusOriginal } from '@ionic-native/google-plus';
 import { IonicStorageModule } from '@ionic/storage';
 import { ModalProfileComponent } from '../components/modal-profile/modal-profile';
 import { Keyboard } from '@ionic-native/keyboard';
@@ -65,6 +64,7 @@ import { ModalAppointmentSearchComponent } from '../components/modal-appointment
 import { ModalPasswordComponent } from '../components/modal-password/modal-password';
 
 import { Firebase } from '@ionic-native/firebase';
+import { GooglePlus } from '@ionic-native/google-plus/ngx';
 
 const firebaseConfig = {
   apiKey: "AIzaSyAVITAZa_qU9vSHq_ASeHJ1JGt3Sy8s8a0",
@@ -164,7 +164,7 @@ const firebaseConfig = {
     Network,
     Firebase,
     Keyboard,
-    GooglePlusOriginal,
+    GooglePlus,
     CallNumber,
     EmailComposer,
     FileChooser, File,
