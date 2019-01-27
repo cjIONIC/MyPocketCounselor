@@ -140,7 +140,7 @@ export class PostPage {
         console.log('%c Liking Post','color: black; background: yellow; font-size: 16px');
         this.db.likePost(post["id"], likes);
       })
-    }, 100)
+    }, 300)
 
     
   }
@@ -156,7 +156,7 @@ export class PostPage {
         console.log('%c Unliking Post','color: black; background: yellow; font-size: 16px');
         this.db.unlikePost(post["id"], likes);
       })
-    }, 100)
+    }, 300)
   }
 
   ionViewDidLoad() {
