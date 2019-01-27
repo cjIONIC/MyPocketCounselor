@@ -137,80 +137,61 @@ export class PostEditPage {
     date.setFullYear(value["year"], value["month"]-1, value["day"]);
     let startDate = new Date(this.tempStartDate);
 
-    if (!this.fetchedDate) {
-      if(type === 'start') {
-        newEndDate.setFullYear(value["year"], value["month"]-1, value["day"]+1);
-    
-        if(date < startDate || date < (new Date(this.endDateDefault))) {
-          this.tempStartDate = moment(date).format();
-          console.log("Lesser");
-        } else if (date > startDate || date === (new Date(this.endDateDefault))) {
-          this.tempStartDate = moment(date).format();
-          this.endDateDefault = moment(newEndDate).format()
-        }
-    
-        let currentDate = new Date((new Date(moment().format())).setHours(0,0,0));
-        if (currentDate > new Date((new Date(this.startDateDefault)).setHours(0,0,0))) 
-          this.dateValid = false;
-        else this.dateValid = true;
+    if(type === 'start') {
+      newEndDate.setFullYear(value["year"], value["month"]-1, value["day"]+1);
   
-  
-        //Time
-        let currentTime = new Date((new Date(moment().format())));
-        currentTime.setSeconds(0);
-  
-        let startTime = new Date((new Date(this.startDateDefault))
-                            .setHours(new Date(this.startTimeDefault).getHours(),
-                                      new Date(this.startTimeDefault).getMinutes(),0))
-                  
-        let endTime =  new Date;
-        
-        if(!this.includeEndDate) {
-          console.log("Date not end included!!!");
-          endTime = new Date((new Date(this.startDateDefault))
-          .setHours(new Date(this.endTimeDefault).getHours(),
-                    new Date(this.endTimeDefault).getMinutes(),0));
-        } else {
-          console.log("Date end included!!!");
-          endTime = new Date((new Date(this.endDateDefault))
-          .setHours(new Date(this.endTimeDefault).getHours(),
-                    new Date(this.endTimeDefault).getMinutes(),0));
-        }                         
-  
-        
-        this.endTimeDefault = new Date(endTime);
-  
-        console.log("Compare time: ", currentTime.toString(), " ? ", startTime.toString());
-  
-        if(currentTime > startTime) 
-          this.timeValid = false;
-        else if (currentTime === startTime || currentTime < startTime)
-          this.timeValid = true;
-        
-  
-      } else {
-        let endTime;
-        if(!this.includeEndDate) {
-          console.log("Date not end included!!!");
-          endTime = new Date((new Date(this.startDateDefault))
-          .setHours(new Date(this.endTimeDefault).getHours(),
-                    new Date(this.endTimeDefault).getMinutes(),0));
-        } else {
-          console.log("Date end included!!!");
-          endTime = new Date((new Date(this.endDateDefault))
-          .setHours(new Date(this.endTimeDefault).getHours(),
-                    new Date(this.endTimeDefault).getMinutes(),0));
-        }                 
-        
-        this.endTimeDefault = new Date(endTime);
-  
-        if(date > startDate) this.dateBalance = true;
-        else this.dateBalance = false;
+      if(date < startDate || date < (new Date(this.endDateDefault))) {
+        this.tempStartDate = moment(date).format();
+        console.log("Lesser");
+      } else if (date > startDate || date === (new Date(this.endDateDefault))) {
+        this.tempStartDate = moment(date).format();
+        this.endDateDefault = moment(newEndDate).format()
       }
+  
+      let currentDate = new Date((new Date(moment().format())).setHours(0,0,0));
+      if (currentDate > new Date((new Date(this.startDateDefault)).setHours(0,0,0))) 
+        this.dateValid = false;
+      else this.dateValid = true;
+
+
+      //Time
+      let currentTime = new Date((new Date(moment().format())));
+      currentTime.setSeconds(0);
+
+      let startTime = new Date((new Date(this.startDateDefault))
+                          .setHours(new Date(this.startTimeDefault).getHours(),
+                                    new Date(this.startTimeDefault).getMinutes(),0))
+                
+      let endTime =  new Date();
+      
+      console.log("Date not end included!!!");
+        endTime = new Date((new Date(this.startDateDefault))
+        .setHours(new Date(this.endTimeDefault).getHours(),
+                  new Date(this.endTimeDefault).getMinutes(),0));
+
+      
+      this.endTimeDefault = new Date(endTime);
+
+      console.log("Compare time: ", currentTime.toString(), " ? ", startTime.toString());
+
+      if(currentTime > startTime) 
+        this.timeValid = false;
+      else if (currentTime === startTime || currentTime < startTime)
+        this.timeValid = true;
+      
+
     } else {
-      this.fetchedDate = false;
+      let endTime;
+      console.log("Date not end included!!!");
+        endTime = new Date((new Date(this.startDateDefault))
+        .setHours(new Date(this.endTimeDefault).getHours(),
+                  new Date(this.endTimeDefault).getMinutes(),0));
+      
+      this.endTimeDefault = new Date(endTime);
+
+      if(date > startDate) this.dateBalance = true;
+      else this.dateBalance = false;
     }
-    
 
   }
 
@@ -221,65 +202,53 @@ export class PostEditPage {
       .setHours(new Date(this.startTimeDefault).getHours(),
                 new Date(this.startTimeDefault).getMinutes(),0));
     } else {
-      if(!this.includeEndDate) {
-        timeSelected = new Date((new Date(this.startDateDefault))
+      timeSelected = new Date((new Date(this.startDateDefault))
         .setHours(new Date(this.endTimeDefault).getHours(),
                   new Date(this.endTimeDefault).getMinutes(),0));
-      } else {
-        timeSelected = new Date((new Date(this.endDateDefault))
-        .setHours(new Date(this.endTimeDefault).getHours(),
-                  new Date(this.endTimeDefault).getMinutes(),0));
-      }
     }
 
     console.log("Value: ", value);
 
     let startTime = new Date(this.tempStartTime);
 
-    if(!this.fetchedTime) {
-      if(type === 'start') {
-        newEndTime.setHours(value["hour"]+1, value["minute"], 0);
-  
-        console.log("Date: ", timeSelected, " ? ", this.startTimeDefault);
-        let endTime = new Date(new Date(this.endTimeDefault));
-        endTime.setSeconds(0);
-  
-        console.log("Start vs End: ", timeSelected ," ? ", endTime)
-  
-        if(timeSelected < startTime || timeSelected < endTime) {
-          this.tempStartTime = moment(timeSelected).format();
-        } else if (timeSelected > startTime || timeSelected === endTime) {
-          this.tempStartTime = moment(timeSelected).format();
-          this.endTimeDefault = moment(newEndTime).format()
-        }
-  
-        let currentTime = new Date((new Date(moment().format())));
-        currentTime.setSeconds(0);
-        //currentTime.setDate(currentTime.getDate()-1);
-                                      
-        console.log("Compare time: ", currentTime.toString(), " ? ", timeSelected.toString());
-  
-        console.log(currentTime.toDateString(), " ? ", timeSelected.toDateString());
-  
-        if(currentTime > timeSelected) 
-          this.timeValid = false;
-          else if (currentTime === timeSelected || currentTime < timeSelected)
-          this.timeValid = true;
-          else this.timeValid = true;
-  
-  
-      } else {
-        console.log("Ending time: ", timeSelected ," ? ", startTime)
-        if(timeSelected >  startTime)this.timeBalance = true;
-        else this.timeBalance = false;
+    if(type === 'start') {
+      newEndTime.setHours(value["hour"]+1, value["minute"], 0);
+
+      console.log("Date: ", timeSelected, " ? ", this.startTimeDefault);
+      let endTime = new Date(new Date(this.endTimeDefault));
+      endTime.setSeconds(0);
+
+      console.log("Start vs End: ", timeSelected ," ? ", endTime)
+
+      if(timeSelected < startTime || timeSelected < endTime) {
+        this.tempStartTime = moment(timeSelected).format();
+      } else if (timeSelected > startTime || timeSelected == endTime) {
+        this.tempStartTime = moment(timeSelected).format();
+        this.endTimeDefault = moment(newEndTime).format()
       }
+
+      let currentTime = new Date((new Date(moment().format())));
+      currentTime.setSeconds(0);
+      //currentTime.setDate(currentTime.getDate()-1);
+                                    
+      console.log("Compare time: ", currentTime.toString(), " ? ", timeSelected.toString());
+
+      console.log(currentTime.toDateString(), " ? ", timeSelected.toDateString());
+
+      if(currentTime > timeSelected) 
+        this.timeValid = false;
+        else if (currentTime === timeSelected || currentTime < timeSelected)
+        this.timeValid = true;
+        else this.timeValid = true;
+
+
     } else {
-      this.fetchedTime = false;
+      console.log("Ending time: ", timeSelected ," ? ", startTime)
+      if(timeSelected >  startTime)this.timeBalance = true;
+      else this.timeBalance = false;
     }
-   
 
   }
-
 
   endDateInclude(event) {
     console.log("Event: ", event)
@@ -291,39 +260,20 @@ export class PostEditPage {
                                   new Date(this.startTimeDefault).getMinutes(),0))
      
 
-    if(!this.includeEndDate) {
-      console.log("Date not end included!!!");
-      endTime = new Date((new Date(this.startDateDefault))
+  endTime = new Date((new Date(this.startDateDefault))
       .setHours(new Date(this.endTimeDefault).getHours(),
                 new Date(this.endTimeDefault).getMinutes(),0));
-    } else {
-      console.log("Date end included!!!");
-      endTime = new Date((new Date(this.endDateDefault))
-      .setHours(new Date(this.endTimeDefault).getHours(),
-                new Date(this.endTimeDefault).getMinutes(),0));
-    }                             
+                
     console.log("Ending time: ", endTime ," ? ", startTime)
     if(endTime >  startTime)this.timeBalance = true;
     else this.timeBalance = false;
-
-    console.log("Check: ", this.checkDate);
-    console.log("Include: ", this.includeEndDate);
   }
 
   endTimeInclude(event) {
     console.log("Event: ", event)
-    
-    console.log("Fetched: ", this.fetchedTime);
-
-    if(!this.checkTime) {
-      this.includeEndTime = event;
-    } else {
-      this.includeEndTime = false;
-      this.checkTime = false;
-    }
-    console.log("Check: ", this.checkTime);
-    console.log("Include: ", this.includeEndTime);
+    this.includeEndTime = event;
   }
+
 
   presentToast(description) {
     let toast = this.toastCtrl.create({

@@ -187,15 +187,15 @@ export class ChatMessagePage {
 
   updateMessageStatus(){
     let student, counselor;
-    let list = this.fireDatabase.list<Item>("message");
-    let item = list.valueChanges();
     let type;
 
     if(this.userInfo["type"] === "Student") {
+      console.log("Type Student");
       student = this.userInfo["id"];
       counselor = this.recipient["id"];
       type = "Counselor";
     } else {
+      console.log("Type Student");
       counselor = this.userInfo["id"];
       student = this.recipient["id"];
       type = "Student";
@@ -215,6 +215,7 @@ export class ChatMessagePage {
             && message.mDevice === "Sent"
             && message.mType === type) {
           ref.update(refKey, { mDevice: "Received" });
+          console.log("UPDATED!")
         }
       }
     });

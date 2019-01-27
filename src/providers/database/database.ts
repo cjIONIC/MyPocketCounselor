@@ -1727,7 +1727,8 @@ export class DatabaseProvider {
           
           ref.update(appointments[count].key, { 
             aSchedule: schedule.toString(),
-            aVenue: venue
+            aVenue: venue,
+            aStatus: "Reschedule"
           }).then(()=> {
             console.log("Rescheduled!");
           });

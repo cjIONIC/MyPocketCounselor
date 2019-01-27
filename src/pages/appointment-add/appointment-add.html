@@ -123,8 +123,8 @@
         </div>
         
         <div class="buttons">
-            <button ion-button class="btnAdd" *ngIf="userInfo['type'] !== 'Student'" [disabled]="!appointmentForm.form.valid" type="submit">Set</button>
-            <button ion-button class="btnAdd" *ngIf="userInfo['type'] === 'Student'" [disabled]="!appointmentForm.form.valid" type="submit">Request</button>
+            <button ion-button class="btnAdd" *ngIf="userInfo['type'] !== 'Student'" [disabled]="!appointmentForm.form.valid || !dateValid || !timeValid " type="submit">Set</button>
+            <button ion-button class="btnAdd" *ngIf="userInfo['type'] === 'Student'" [disabled]="!appointmentForm.form.valid || !dateValid || !timeValid" type="submit">Request</button>
         </div>
       </form>
   </ion-content>

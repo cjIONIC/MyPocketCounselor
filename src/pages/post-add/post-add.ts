@@ -198,19 +198,12 @@ export class PostAddPage {
                           .setHours(new Date(this.startTimeDefault).getHours(),
                                     new Date(this.startTimeDefault).getMinutes(),0))
                 
-      let endTime =  new Date;
+      let endTime =  new Date();
       
-      if(!this.includeEndDate) {
-        console.log("Date not end included!!!");
+      console.log("Date not end included!!!");
         endTime = new Date((new Date(this.startDateDefault))
         .setHours(new Date(this.endTimeDefault).getHours(),
                   new Date(this.endTimeDefault).getMinutes(),0));
-      } else {
-        console.log("Date end included!!!");
-        endTime = new Date((new Date(this.endDateDefault))
-        .setHours(new Date(this.endTimeDefault).getHours(),
-                  new Date(this.endTimeDefault).getMinutes(),0));
-      }                         
 
       
       this.endTimeDefault = new Date(endTime);
@@ -225,17 +218,10 @@ export class PostAddPage {
 
     } else {
       let endTime;
-      if(!this.includeEndDate) {
-        console.log("Date not end included!!!");
+      console.log("Date not end included!!!");
         endTime = new Date((new Date(this.startDateDefault))
         .setHours(new Date(this.endTimeDefault).getHours(),
                   new Date(this.endTimeDefault).getMinutes(),0));
-      } else {
-        console.log("Date end included!!!");
-        endTime = new Date((new Date(this.endDateDefault))
-        .setHours(new Date(this.endTimeDefault).getHours(),
-                  new Date(this.endTimeDefault).getMinutes(),0));
-      }                 
       
       this.endTimeDefault = new Date(endTime);
 
@@ -252,15 +238,9 @@ export class PostAddPage {
       .setHours(new Date(this.startTimeDefault).getHours(),
                 new Date(this.startTimeDefault).getMinutes(),0));
     } else {
-      if(!this.includeEndDate) {
-        timeSelected = new Date((new Date(this.startDateDefault))
+      timeSelected = new Date((new Date(this.startDateDefault))
         .setHours(new Date(this.endTimeDefault).getHours(),
                   new Date(this.endTimeDefault).getMinutes(),0));
-      } else {
-        timeSelected = new Date((new Date(this.endDateDefault))
-        .setHours(new Date(this.endTimeDefault).getHours(),
-                  new Date(this.endTimeDefault).getMinutes(),0));
-      }
     }
 
     console.log("Value: ", value);
@@ -316,17 +296,10 @@ export class PostAddPage {
                                   new Date(this.startTimeDefault).getMinutes(),0))
      
 
-    if(!this.includeEndDate) {
-      console.log("Date not end included!!!");
-      endTime = new Date((new Date(this.startDateDefault))
+  endTime = new Date((new Date(this.startDateDefault))
       .setHours(new Date(this.endTimeDefault).getHours(),
                 new Date(this.endTimeDefault).getMinutes(),0));
-    } else {
-      console.log("Date end included!!!");
-      endTime = new Date((new Date(this.endDateDefault))
-      .setHours(new Date(this.endTimeDefault).getHours(),
-                new Date(this.endTimeDefault).getMinutes(),0));
-    }                         
+                
     console.log("Ending time: ", endTime ," ? ", startTime)
     if(endTime >  startTime)this.timeBalance = true;
     else this.timeBalance = false;

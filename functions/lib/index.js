@@ -128,6 +128,30 @@ exports.updateAppointmentNotification = functions.database
             });
         }, (error) => console.log("Error"));
     }
+    if (after.aStatus === "Reschedule") {
+        const counselor = yield fetchCounselorName(after.cID);
+        console.log("Counselor name: ", counselor);
+        token = yield fetchDevice(after.sID);
+        return Promise.all([counselor]).then(function (counselorName) {
+            return __awaiter(this, void 0, void 0, function* () {
+                console.log("Retrieved data: ", counselorName);
+                token = yield fetchDevice(after.sID);
+                return Promise.all([token]).then(function (deviceToken) {
+                    console.log("Fetched device: ", deviceToken);
+                    const name = counselorName[0];
+                    const device = deviceToken[0];
+                    payload = {
+                        notification: {
+                            title: `${name} has rescheduled your appointment`,
+                            body: `${after.aDescription}`
+                        }
+                    };
+                    console.log(device, " ? ", payload);
+                    return admin.messaging().sendToDevice(device, payload);
+                }, (error) => console.log("Error"));
+            });
+        }, (error) => console.log("Error"));
+    }
     //sends notification
     return admin.messaging().sendToDevice(token, payload);
 }));

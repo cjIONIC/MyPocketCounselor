@@ -159,6 +159,37 @@ exports.updateAppointmentNotification = functions.database
         
             }
     
+            if(after.aStatus === "Reschedule") {
+                const counselor = await fetchCounselorName(after.cID);
+                console.log("Counselor name: ", counselor);
+
+                token = await fetchDevice(after.sID);
+                return Promise.all([counselor]).then(async function(counselorName) {
+                    console.log("Retrieved data: ", counselorName);
+                    token = await fetchDevice(after.sID);
+
+                    return Promise.all([token]).then(function(deviceToken) {
+                        console.log("Fetched device: ", deviceToken);
+
+                        const name = counselorName[0];
+                        const device = deviceToken[0];
+
+                        payload = {
+                            notification: {
+                                title: `${name} has rescheduled your appointment`,
+                                body: `${after.aDescription}`
+                            }
+                        }
+
+                        console.log(device, " ? ", payload);
+
+                        return admin.messaging().sendToDevice(device, payload);
+                    }, (error) => console.log("Error"))
+    
+                }, (error) => console.log("Error"))
+        
+            }
+    
             //sends notification
             return admin.messaging().sendToDevice(token, payload);
         })

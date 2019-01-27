@@ -73,7 +73,7 @@
           </div>
         
       <div class="buttons">
-        <button ion-button class="btnReschedule" [disabled]="!appointmentForm.form.valid" type="submit">Reschedule</button>
+        <button ion-button class="btnReschedule" [disabled]="!appointmentForm.form.valid  || !dateValid || !timeValid" type="submit">Reschedule</button>
       </div>
   </form>
 </ion-content>
