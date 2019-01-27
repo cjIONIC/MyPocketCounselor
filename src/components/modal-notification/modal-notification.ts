@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavParams, ViewController, ModalController, LoadingController } from 'ionic-angular';
+import { NavParams, ViewController, ModalController, LoadingController, AlertController } from 'ionic-angular';
 import { DatabaseProvider } from '../../providers/database/database';
 import { AngularFireDatabase } from 'angularfire2/database';
 import { Item } from 'klaw';
@@ -31,6 +31,7 @@ export class ModalNotificationComponent {
       public viewCtrl: ViewController,
       public modalCtrl: ModalController,
       public loadingCtrl: LoadingController,
+      public alertCtrl: AlertController,
       public db: DatabaseProvider,
       public fireDatabase: AngularFireDatabase) {
     this.initialize();
@@ -101,7 +102,7 @@ export class ModalNotificationComponent {
   
       if (appointmentsOfCounselor &&  appointmentsOfStudent) {
         loading.dismiss();
-        this.reschedule();
+        this.rescheduleVerify();
       } else {
         loading.dismiss();
         this.addAppointment();
@@ -175,6 +176,33 @@ export class ModalNotificationComponent {
     console.log("Adding appointments...");
     this.db.appointmentConfirmation(this.notificationInfo["id"])
       .then(() => this.close());
+  }
+
+  rescheduleVerify() {
+    let alert = this.alertCtrl.create({
+      title: 'Occupied',
+      message: 'Date and time has already been occupied! Do you want to reschedule?',
+      buttons: [
+        {
+          text: 'No',
+          role: 'cancel',
+          handler: () => {
+            console.log('Cancel clicked');
+          }
+        },
+        {
+          text: 'Reschedule',
+          handler: () => {
+            try {
+              this.reschedule();
+            } catch {
+              
+            }
+          }
+        }
+      ]
+    });
+    alert.present();
   }
 
   reschedule(){
