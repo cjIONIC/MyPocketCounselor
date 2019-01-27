@@ -41,7 +41,7 @@ import { File } from '@ionic-native/file';
 import { FileChooser } from '@ionic-native/file-chooser';
 import { EmailComposer } from '@ionic-native/email-composer';
 import { Camera } from '@ionic-native/camera';
-import { GooglePlus } from '@ionic-native/google-plus';
+import { GooglePlus, GooglePlusOriginal } from '@ionic-native/google-plus';
 import { IonicStorageModule } from '@ionic/storage';
 import { ModalProfileComponent } from '../components/modal-profile/modal-profile';
 import { Keyboard } from '@ionic-native/keyboard';
@@ -164,7 +164,7 @@ const firebaseConfig = {
     Network,
     Firebase,
     Keyboard,
-    GooglePlus,
+    GooglePlusOriginal,
     CallNumber,
     EmailComposer,
     FileChooser, File,
