@@ -50,9 +50,12 @@
     
         <ion-item>
           <ion-label color="primary" stacked> Time</ion-label>
-          <ion-datetime pickerFormat="h:mm A" 
+          <ion-datetime pickerFormat="h:mm" 
+            displayFormat="h:mm A" 
             #time="ngModel" 
             name="time"
+            hourValues=" 8, 9, 10, 11, 12, 13, 14, 15, 16, 17"
+            minuteValues="00, 10, 20, 30, 40, 50"
             (ionChange)="compareDatetime($event, 'time')"
             [(ngModel)]="timeDefault" 
             required>

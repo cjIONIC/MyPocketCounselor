@@ -104,6 +104,25 @@ export class DatabaseProvider {
     return Promise.resolve(profile);
   }
 
+  async fetchStudentUnit() {
+    let academics = await this.fetchAllNodesByTableInDatabase("academic");
+    let students = await this.fetchAllNodesByTableInDatabase("student");
+    let academicList = [];
+    
+    students.forEach(student => {
+      if(student["sID"] === this.userInfo["id"]) {
+
+        academics.forEach(academic => {
+          if(student["acID"] === academic["acID"])
+            academicList.push(academic)
+        })
+
+      }
+    })
+
+    return academicList;
+  }
+
   /*********************/
   /**** D E V I C E ****/
   /*********************/
@@ -403,6 +422,7 @@ export class DatabaseProvider {
     let allAcademics = await this.fetchAllNodesByTableInDatabase("academic");
     let requestList = [];
 
+    /*
     requests.forEach(request => {
 
       if(this.userInfo["type"] === "Counselor") {
@@ -444,6 +464,27 @@ export class DatabaseProvider {
           }
         });
       }
+     
+    }) */
+    requests.forEach(request => {
+      allAcademics.forEach(academic => {
+        if(request["acID"] === academic["acID"]) {
+          let name = request["rLastName"] +", "+ request["rFirstName"];
+
+          let pop = false;
+
+          if(request["rDeviceHead"] === "Sent") pop = true;
+
+          requestList.push({
+            id: request["rID"],
+            name: name,
+            picture: request["rPicture"],
+            academic: academic["acCode"],
+            datetime: request["rDatetime"],
+            pop: pop
+          });
+        }
+      });
      
     })
 
@@ -1047,7 +1088,6 @@ export class DatabaseProvider {
                 unitCounselor.push({
                   id: counselor["cID"],
                   name: name,
-                  number: counselor["cNumber"],
                   academic: academicList,
                   picture: counselor["cPicture"]
                 })
@@ -1192,7 +1232,6 @@ export class DatabaseProvider {
           profile.push({
             id: account["cID"],
             name: name,
-            number: account["cNumber"],
             picture: account["cPicture"],
             status: account["cStatus"],
             academic: academicUnit
@@ -1474,6 +1513,25 @@ export class DatabaseProvider {
     });
     console.log("Filtered Appointments: ", filteredAppointments);
     return filteredAppointments;
+  }
+
+  async scanAppointmentFeedbacks(appointments) {
+    let feedbacks = await this.fetchAllNodesByTableInDatabase("feedback");
+    let found = true;
+
+    appointments.forEach(appointment => {
+      if(appointment["sID"] === this.userInfo["id"]
+          && appointment["aStatus"] === "Finished") {
+        found = false;
+        feedbacks.forEach(feedback => {
+          if(feedback["aID"] === appointment["aID"]) {
+            found = true;
+          }
+        })
+      }
+    })
+
+    return found;
   }
 
   async fetchAppointmentRecipient(academics, counselors) {

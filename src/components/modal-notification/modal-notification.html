@@ -46,7 +46,7 @@
                         </ion-row>
                         <ion-row class="buttons" *ngIf="userInfo['type'] === 'Student'">
                             <ion-col>
-                                <button ion-button clear *ngIf="proceedFeedback" (click)="addFeedback()">Add Feedback</button>
+                                <button ion-button clear *ngIf="proceedFeedback"  class="feedback" (click)="addFeedback()">Add Feedback</button>
                             </ion-col>
                         </ion-row>
                       </ion-grid>

@@ -17,14 +17,14 @@
         <ion-label color="primary" stacked>Rating</ion-label>
         <ion-select #rate="ngModel"
           name="rate"
-          placeholder="Select rating"
+          placeholder="Choose rating"
           ngModel
           required>
-          <ion-option value="1">1</ion-option>
-          <ion-option value="2">2</ion-option>
-          <ion-option value="3">3</ion-option>
-          <ion-option value="4">4</ion-option>
-          <ion-option value="5">5</ion-option>
+          <ion-option value="5">Very Satisfied</ion-option>
+          <ion-option value="4">Satisfied</ion-option>
+          <ion-option value="3">Neutral</ion-option>
+          <ion-option value="2">Dissatisfied</ion-option>
+          <ion-option value="1">Very Dissatisfied</ion-option>
         </ion-select>
       </ion-item>
       <div *ngIf="rate.errors && (rate.dirty || rate.touched)">
@@ -34,12 +34,21 @@
       </div>
       
       <ion-item>
-        <ion-label color="primary" stacked>Description (optional)</ion-label>
+        <ion-label color="primary" stacked>Description</ion-label>
         <ion-textarea type="text"
           #description="ngModel"
           name="description"
-          ngModel></ion-textarea>
+          ngModel
+          required></ion-textarea>
       </ion-item>
-      <button ion-button [disabled]="!rateForm.form.valid" type="submit">Submit</button>
+      <div *ngIf="description.errors && (description.dirty || description.touched)">
+          <div [hidden]="!description.errors.required" class="alert">
+           Description is required
+          </div>
+      </div>
+
+      <div class="buttons">
+        <button ion-button [disabled]="!rateForm.form.valid" class="submit" type="submit">Submit</button>
+      </div>
     </form>
 </ion-content>

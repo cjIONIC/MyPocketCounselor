@@ -217,6 +217,15 @@ export class AppointmentAddPage {
     toast.present();
   }
 
+  presentAlert(title, description) {
+    const alert = this.alertCtrl.create({
+      title: title,
+      subTitle: description,
+      buttons: ['OK']
+    });
+    alert.present();
+  }
+
   fetchConcerns(type) {
     if(type == "Student") {
       this.db.fetchAppointmentConcerns().then( result => {
@@ -280,7 +289,9 @@ export class AppointmentAddPage {
             console.log("Statusfinding: ", appointmentsOfCounselor, appointmentsOfStudent)
             if(await appointmentsOfStudent && await appointmentsOfCounselor && !pushed) {
               loading.dismiss();
-              this.presentToast("Date and time has already been occupied!");
+              //this.presentToast("Date and time has already been occupied!");
+              this.presentAlert("Appointment Conflict", "Please choose another date or time.");
+
             } else if(await !appointmentsOfStudent && await !appointmentsOfCounselor && !pushed){
               pushed = true;
               loading.dismiss();

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, AlertController, ToastController, Item, App, ModalOptions, ModalController , PopoverController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, AlertController, ToastController, Item, App, ModalOptions, ModalController , PopoverController, LoadingController } from 'ionic-angular';
 import { DatabaseProvider } from '../../providers/database/database';
-import { AngularFireDatabase } from 'angularfire2/database';
+import { AngularFireDatabase, listChanges } from 'angularfire2/database';
 import { Subscription } from 'rxjs/Subscription';
 
 import { Network} from '@ionic-native/network';
@@ -57,6 +57,7 @@ export class AppointmentPage {
     public fireDatabase: AngularFireDatabase,
     public toastCtrl: ToastController,
     public popoverCtrl: PopoverController,
+    public loadingCtrl: LoadingController,
     public network: Network,
     public modalCtrl: ModalController,
     public db: DatabaseProvider,
@@ -109,6 +110,15 @@ export class AppointmentPage {
     });
   
     toast.present();
+  }
+
+  presentAlert(title, description) {
+    const alert = this.alertCtrl.create({
+      title: title,
+      subTitle: description,
+      buttons: ['OK']
+    });
+    alert.present();
   }
 
 
@@ -258,7 +268,7 @@ export class AppointmentPage {
     return false;
   }
 
-  addAppointment() {
+  async addAppointment() {
     let datetime;
 
     if(this.daySelected !== null) {
@@ -270,13 +280,47 @@ export class AppointmentPage {
     }
     
     if(this.userInfo["type"] === "Student") {
-      this.app.getRootNav().push(AppointmentAddPage, {date: datetime});
+      let loading = this.loadingCtrl.create({
+        spinner: 'ios',
+        content: 'Please Wait...'
+      });
+
+      loading.present().then(async () => {
+        let found = await this.verifyAppointment();
+        
+        if(found) {
+          loading.dismiss();
+          //this.presentToast("")
+          this.app.getRootNav().push(AppointmentAddPage, {date: datetime});
+        } else {
+          loading.dismiss();
+          this.presentAlert("Feedback Required", "Some of your appointments doesn't have a feedback");
+        }
+      })
     } else {
       
       const modal = this.modalCtrl.create(ModalAppointmentSearchComponent, { date: datetime},{ cssClass: 'custom-modal-appointment-search' });
       modal.present();
     }
    
+  }
+
+  //Verifies for feedbacks
+  async verifyAppointment() {
+    let list = this.fireDatabase.list<Item>("appointment");
+    let item = list.valueChanges();
+
+    let found = await new Promise((resolve) => {
+      item.subscribe(async appointments => {
+        let exist = await this.db.scanAppointmentFeedbacks(appointments);
+        console.log("Found: ", exist);
+        
+        resolve(exist);
+      })
+    })
+
+
+    return found;
   }
 
   popOptions(myEvent, appointment) {

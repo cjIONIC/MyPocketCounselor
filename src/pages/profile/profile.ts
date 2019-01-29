@@ -63,9 +63,10 @@ export class ProfilePage {
         if(this.userInfo["type"] !== "Student") {
           this.fetchRating();
           this.fetchPersonalPosts();
-          this.fetchAcademic();
+          this.fetchAcademic("Counselor");
           this.spinner = false;
         } else {
+          this.fetchAcademic("Student");
           this.spinner = false;
         }
       }, error => console.log(error));
@@ -94,8 +95,9 @@ export class ProfilePage {
     })
   }
 
-  async fetchAcademic() {
-    this.academicList = await this.db.fetchMatchAcademicUnit();
+  async fetchAcademic(type) {
+    if(type === "Counselor") this.academicList = await this.db.fetchMatchAcademicUnit();
+    else this.academicList = await this.db.fetchStudentUnit();
 
     console.log("Current listed academics: ", this.academicList);
   }
