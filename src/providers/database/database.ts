@@ -2151,20 +2151,30 @@ export class DatabaseProvider {
   async fetchFeedbackStudent(feedbacks) {
     let feedbackList = [];
     let appointments = await this.fetchAllNodesByTableInDatabase("appointment");
-    let counselors = await this.fetchAllNodesByTableInDatabase("appointment");
+    let counselors = await this.fetchAllNodesByTableInDatabase("counselor");
+    let academics = await this.fetchAllNodesByTableInDatabase("academic");
     
     feedbacks.forEach(feedback => {
       if(feedback["sID"] === this.userInfo["id"]) {
         let schedule, counselorName, counselorAvatar;
+        let academicList = [];
 
         appointments.forEach(appointment => {
           if(appointment["aID"] === feedback["aID"]) {
             schedule = appointment["aSchedule"];
 
+
             counselors.forEach(counselor => {
               if(counselor["cID"] === appointment["cID"]) {
                 counselorName = counselor["cFirstName"] + " " + counselor["cLastName"];
                 counselorAvatar = counselor["cPicture"];
+
+                academics.forEach(academic => {
+                  if(academic["cID"] === counselor["cID"]) {
+                    academicList.push(academic);
+                  }
+                })
+
               }
             })
 
@@ -2178,6 +2188,7 @@ export class DatabaseProvider {
           datetime: feedback["fDatetime"],
           schedule: schedule,
           avatar: counselorAvatar,
+          academic: academicList,
           name: counselorName
         })
 
@@ -2185,7 +2196,66 @@ export class DatabaseProvider {
     })
 
     await feedbackList.reverse();
+    
+    return feedbackList;
+  }
 
+
+  async fetchFeedbackCounselor(feedbacks) {
+    let feedbackList = [];
+    let appointments = await this.fetchAllNodesByTableInDatabase("appointment");
+    let students = await this.fetchAllNodesByTableInDatabase("student");
+    let academics = await this.fetchAllNodesByTableInDatabase("academic");
+
+    appointments.forEach(appointment => {
+      if(appointment["cID"] === this.userInfo["id"]
+          && appointment["aStatus"] === "Finished") {
+            let id, rating, description, datetime, push = false;
+
+            feedbacks.forEach(feedback => {
+              if(feedback["aID"] === appointment["aID"])  {
+                id = feedback["fID"];
+                rating = feedback["fRate"];
+                description = feedback["fDescription"];
+                datetime = feedback["fDatetime"];
+                push = true;
+              }
+            })
+
+            if(push) {
+              let studentName, studentAvatar;
+              let academicList = [];
+
+              students.forEach(student=> {
+                if(appointment["sID"] === student["sID"]) {
+                  studentName = student["sFirstName"] + " " + student["sLastName"];
+                  studentAvatar = student["sPicture"];
+
+                  academics.forEach(academic => {
+                    if(academic["acID"] === student["acID"]) 
+                      academicList.push(academic);
+                  })
+
+                }
+              })
+              
+              feedbackList.push({
+                id: parseInt(id),
+                rating: rating,
+                description: description,
+                datetime: datetime,
+                schedule: appointment["aSchedule"],
+                avatar: studentAvatar,
+                academic: academicList,
+                name: studentName
+              })
+            }
+
+        }
+    })
+
+    await feedbackList.reverse();
+    
     return feedbackList;
   }
 

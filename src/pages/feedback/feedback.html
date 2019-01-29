@@ -6,7 +6,7 @@
 -->
 <ion-header>
 
-  <ion-navbar>
+  <ion-navbar color="primary">
     <ion-title>Feedback</ion-title>
   </ion-navbar>
 
@@ -14,5 +14,43 @@
 
 
 <ion-content padding>
+
+  <ion-list>
+    <ion-card *ngFor="let feedback of feedbackList">
+      <ion-grid>
+        <ion-row>
+          <ion-col col-3>
+
+          </ion-col>
+          <!-- Information -->
+          <ion-col col-9>
+            <ion-row>
+              <ion-col col-3>
+                <img src="{{ feedback.avatar }}" class="avatar">
+              </ion-col>
+              <ion-col col-9>
+                <ion-row> {{ feedback.name}} </ion-row>
+                <ion-row> 
+                  <ion-col *ngFor="let unit of feedback.academic" class="academic" col-auto>
+                    <div class="unit">{{unit.acCode}}</div>
+                  </ion-col>
+                </ion-row>
+              </ion-col>
+            </ion-row>
+            <!-- Date and Time-->
+            <ion-row>
+              <ion-col col-3>Date: </ion-col>
+              <ion-col col-9>{{ feedback.schedule }}</ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col col-3>Time: </ion-col>
+              <ion-col col-9>{{ feedback.schedule }}</ion-col>
+            </ion-row>
+            <ion-row>{{feedback.description}}</ion-row>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-card>
+  </ion-list>
 
 </ion-content>
