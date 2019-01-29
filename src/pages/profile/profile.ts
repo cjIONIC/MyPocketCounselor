@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, Item } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, Item, App } from 'ionic-angular';
 import { DatabaseProvider } from '../../providers/database/database';
 import { AngularFireDatabase } from 'angularfire2/database';
+import { FeedbackPage } from '../feedback/feedback';
 
 /**
  * Generated class for the ProfilePage page.
@@ -30,6 +31,7 @@ export class ProfilePage {
 
   constructor(public navCtrl: NavController, 
       public db: DatabaseProvider,
+      public app: App,
       public fireDatabase: AngularFireDatabase,
       public navParams: NavParams) {
     this.initialize();
@@ -116,6 +118,8 @@ export class ProfilePage {
 
   viewFeedbacks() {
     console.log("Viewing feedback");
+    
+    this.app.getRootNav().push(FeedbackPage);
   }
 
   ionViewDidLoad() {

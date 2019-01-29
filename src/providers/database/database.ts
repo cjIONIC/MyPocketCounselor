@@ -2148,6 +2148,47 @@ export class DatabaseProvider {
     return averageRate;
   }
 
+  async fetchFeedbackStudent(feedbacks) {
+    let feedbackList = [];
+    let appointments = await this.fetchAllNodesByTableInDatabase("appointment");
+    let counselors = await this.fetchAllNodesByTableInDatabase("appointment");
+    
+    feedbacks.forEach(feedback => {
+      if(feedback["sID"] === this.userInfo["id"]) {
+        let schedule, counselorName, counselorAvatar;
+
+        appointments.forEach(appointment => {
+          if(appointment["aID"] === feedback["aID"]) {
+            schedule = appointment["aSchedule"];
+
+            counselors.forEach(counselor => {
+              if(counselor["cID"] === appointment["cID"]) {
+                counselorName = counselor["cFirstName"] + " " + counselor["cLastName"];
+                counselorAvatar = counselor["cPicture"];
+              }
+            })
+
+          }
+        })
+
+        feedbackList.push({
+          id: feedback["fID"],
+          rating: feedback["fRate"],
+          description: feedback["fDescription"],
+          datetime: feedback["fDatetime"],
+          schedule: schedule,
+          avatar: counselorAvatar,
+          name: counselorName
+        })
+
+      }
+    })
+
+    await feedbackList.reverse();
+
+    return feedbackList;
+  }
+
   /*********************/
   /***** N O T I F *****/
   /*********************/

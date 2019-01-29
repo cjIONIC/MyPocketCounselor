@@ -65,6 +65,7 @@ import { ModalAppointmentSearchComponent } from '../components/modal-appointment
 import { ModalPasswordComponent } from '../components/modal-password/modal-password';
 
 import { Firebase } from '@ionic-native/firebase';
+import { FeedbackPage } from '../pages/feedback/feedback';
 
 const firebaseConfig = {
   apiKey: "AIzaSyAVITAZa_qU9vSHq_ASeHJ1JGt3Sy8s8a0",
@@ -97,6 +98,7 @@ const firebaseConfig = {
     ModalNotificationComponent,
     MenuPage,
     ProfilePage,
+    FeedbackPage,
     SearchPage,
     ChatPage,
     ChatPeopleListPage,
@@ -147,6 +149,7 @@ const firebaseConfig = {
     ModalNotificationComponent,
     MenuPage,
     ProfilePage,
+    FeedbackPage,
     SearchPage,
     ChatPage,
     ChatPeopleListPage,
