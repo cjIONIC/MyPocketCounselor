@@ -24,6 +24,8 @@ export class ProfilePage {
 
   spinner: any = true;  
 
+  studentStatus: any;
+
   academicList = [];
 
   constructor(public navCtrl: NavController, 
@@ -67,6 +69,7 @@ export class ProfilePage {
           this.spinner = false;
         } else {
           this.fetchAcademic("Student");
+          this.fetchStatus();
           this.spinner = false;
         }
       }, error => console.log(error));
@@ -100,6 +103,15 @@ export class ProfilePage {
     else this.academicList = await this.db.fetchStudentUnit();
 
     console.log("Current listed academics: ", this.academicList);
+  }
+
+  async fetchStatus() {
+    let students = await this.db.fetchAllNodesByTableInDatabase("student");
+
+    students.forEach(student => {
+      if(student["sID"] === this.userInfo["id"])
+        this.studentStatus = student["sStatus"];
+    })
   }
 
   viewFeedbacks() {
