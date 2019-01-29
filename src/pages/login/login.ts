@@ -12,12 +12,12 @@ import { AngularFireAuth } from 'angularfire2/auth';
 import firebase from 'firebase';
 
 //Plugin
-
+import { GooglePlus } from '@ionic-native/google-plus';
 import { Network} from '@ionic-native/network';
 import { HomePage } from '../home/home';
 import { EmailComposer } from '@ionic-native/email-composer';
 import { ModalPasswordComponent } from '../../components/modal-password/modal-password';
-import { GooglePlus } from '@ionic-native/google-plus/ngx';
+
 
 
 @IonicPage()

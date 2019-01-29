@@ -136,6 +136,8 @@ export class PostAddPage {
         });
   
         this.academicList = await academicList;
+
+        console.log("Fetched academic units: ", academicList);
       })
     } catch {
 

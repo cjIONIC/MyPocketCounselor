@@ -742,7 +742,6 @@ export class DatabaseProvider {
     console.log("Image: ", image);
 
     console.log("Academics: ", academic);
-    let keys = Object.keys(academic);
     let imageURL;
     
     if(image) {
@@ -750,11 +749,8 @@ export class DatabaseProvider {
       imageURL = await this.downloadImage(filePath);
     } else imageURL = "No image";
     console.log("Image URL: ", imageURL);
-    
-    for( var i = 0; i < keys.length; i++) {
-      let count  = keys[i];
 
-      let numeric = Math.random().toString().replace('0.', '').substring(0,2);
+    let numeric = Math.random().toString().replace('0.', '').substring(0,2);
       let timestamp = new Date().getTime().toString().substring(5, 13);
       let id = numeric+timestamp;
 
@@ -770,9 +766,8 @@ export class DatabaseProvider {
         pLike: 0,
         pType: type,
         cID: this.userInfo["id"],
-        acID:  parseInt(academic[count])
+        acID:  parseInt(academic)
       });
-    }
 
     return true;
   }

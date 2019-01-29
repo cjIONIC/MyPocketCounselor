@@ -11,11 +11,10 @@ import { AngularFireAuth } from 'angularfire2/auth';
 import firebase from 'firebase';
 
 //Plugin
+import { GooglePlus } from '@ionic-native/google-plus';
 import { Network} from '@ionic-native/network';
 import { EmailComposer } from '@ionic-native/email-composer';
 import { addListener } from 'cluster';
-import { GooglePlus } from '@ionic-native/google-plus/ngx';
-
 
 /**
  * Generated class for the ModalPasswordComponent component.
