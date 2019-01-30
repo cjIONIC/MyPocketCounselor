@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, Item, App } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, Item, App, ModalController, ViewController } from 'ionic-angular';
 import { DatabaseProvider } from '../../providers/database/database';
 import { AngularFireDatabase } from 'angularfire2/database';
 import { FeedbackPage } from '../feedback/feedback';
-import { ProfileEditPage } from '../profile-edit/profile-edit';
+import { ModalProfileEditComponent } from '../../components/modal-profile-edit/modal-profile-edit';
 
 /**
  * Generated class for the ProfilePage page.
@@ -34,6 +34,8 @@ export class ProfilePage {
       public db: DatabaseProvider,
       public app: App,
       public fireDatabase: AngularFireDatabase,
+      public modalCtrl: ModalController,
+      public viewCtrl: ViewController,
       public navParams: NavParams) {
     this.initialize();
   }
@@ -118,7 +120,8 @@ export class ProfilePage {
   }
 
   editProfile() {
-    this.app.getRootNav().push(ProfileEditPage);
+    const modal = this.modalCtrl.create(ModalProfileEditComponent,  "",{ cssClass: 'custom-modal-profile-edit' });
+    modal.present();
   }
 
   viewFeedbacks() {
