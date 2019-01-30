@@ -2183,7 +2183,7 @@ export class DatabaseProvider {
 
         feedbackList.push({
           id: feedback["fID"],
-          rating: feedback["fRate"],
+          rate: feedback["fRate"],
           description: feedback["fDescription"],
           datetime: feedback["fDatetime"],
           schedule: schedule,
@@ -2241,7 +2241,7 @@ export class DatabaseProvider {
               
               feedbackList.push({
                 id: parseInt(id),
-                rating: rating,
+                rate: rating,
                 description: description,
                 datetime: datetime,
                 schedule: appointment["aSchedule"],
