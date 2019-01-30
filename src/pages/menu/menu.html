@@ -32,7 +32,7 @@
                     </ion-grid>
                     
                 </div>
-                <div class="item" *ngIf="userInfo['type'] === 'GTD Head'">
+                <div class="item" *ngIf="userInfo['type'] === 'GTD Head'" (click)="controls()">
                     <button class="button btnControl">Head Controls</button>
                 </div>
                 <div class="item">

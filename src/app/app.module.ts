@@ -67,6 +67,8 @@ import { ModalPasswordComponent } from '../components/modal-password/modal-passw
 import { Firebase } from '@ionic-native/firebase';
 import { FeedbackPage } from '../pages/feedback/feedback';
 import { ModalProfileEditComponent } from '../components/modal-profile-edit/modal-profile-edit';
+import { HeadControlsPage } from '../pages/head-controls/head-controls';
+import { HeadControlsStatisticsPage } from '../pages/head-controls-statistics/head-controls-statistics';
 
 const firebaseConfig = {
   apiKey: "AIzaSyAVITAZa_qU9vSHq_ASeHJ1JGt3Sy8s8a0",
@@ -101,6 +103,8 @@ const firebaseConfig = {
     ProfilePage,
     ModalProfileEditComponent,
     FeedbackPage,
+    HeadControlsPage,
+    HeadControlsStatisticsPage,
     SearchPage,
     ChatPage,
     ChatPeopleListPage,
@@ -153,6 +157,8 @@ const firebaseConfig = {
     ProfilePage,
     ModalProfileEditComponent,
     FeedbackPage,
+    HeadControlsPage,
+    HeadControlsStatisticsPage,
     SearchPage,
     ChatPage,
     ChatPeopleListPage,

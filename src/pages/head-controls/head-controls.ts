@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, App } from 'ionic-angular';
+import { HeadControlsStatisticsPage } from '../head-controls-statistics/head-controls-statistics';
 
 /**
  * Generated class for the HeadControlsPage page.
@@ -15,7 +16,14 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class HeadControlsPage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  constructor(public navCtrl: NavController, 
+      public navParams: NavParams,
+      public app: App) {
+  }
+
+  //Views Statistics
+  statistics() {
+    this.app.getRootNav().push(HeadControlsStatisticsPage);
   }
 
   ionViewDidLoad() {

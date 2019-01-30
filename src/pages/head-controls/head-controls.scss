@@ -1,3 +1,37 @@
 page-head-controls {
 
+    .content {
+        background-color: #EFF0F1;
+        align-content: center;
+        padding: 0%;
+    }
+
+    .statistics,
+    .concern,
+    .counselor {
+        height: 50px;
+        margin-bottom: 30px;
+        padding: 10px;
+        padding-top: 15px;
+        font-size: 12pt;
+        border-radius: 5px;
+        font-weight: bold;
+        color: #ff6961;
+        border: 1px solid #ff6961;
+    }
+
+    .card:active {
+        background-color: rgb(247, 247, 247);
+    }
+
+    /*
+    .concern {
+        background-color: #ff6961;
+    }
+
+    .counselor {
+        background-color: #ff6961;
+    }
+    */
+
 }

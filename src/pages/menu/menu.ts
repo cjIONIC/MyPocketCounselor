@@ -7,6 +7,7 @@ import { Network} from '@ionic-native/network';
 import { Subscription } from 'rxjs/Subscription';
 import { RegisterValidationPage } from '../register-validation/register-validation';
 import { ProfilePage } from '../profile/profile';
+import { HeadControlsPage } from '../head-controls/head-controls';
 
 /**
  * Generated class for the MenuPage page.
@@ -90,6 +91,10 @@ export class MenuPage {
 
   registration() {
     this.app.getRootNav().push(RegisterValidationPage);
+  }
+
+  controls() {
+    this.app.getRootNav().push(HeadControlsPage);
   }
 
   async scanRegistrations() {
