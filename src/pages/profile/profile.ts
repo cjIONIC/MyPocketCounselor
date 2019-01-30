@@ -3,6 +3,7 @@ import { IonicPage, NavController, NavParams, Item, App } from 'ionic-angular';
 import { DatabaseProvider } from '../../providers/database/database';
 import { AngularFireDatabase } from 'angularfire2/database';
 import { FeedbackPage } from '../feedback/feedback';
+import { ProfileEditPage } from '../profile-edit/profile-edit';
 
 /**
  * Generated class for the ProfilePage page.
@@ -114,6 +115,10 @@ export class ProfilePage {
       if(student["sID"] === this.userInfo["id"])
         this.studentStatus = student["sStatus"];
     })
+  }
+
+  editProfile() {
+    this.app.getRootNav().push(ProfileEditPage);
   }
 
   viewFeedbacks() {

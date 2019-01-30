@@ -19,7 +19,7 @@
                         </ion-grid>
                     </button>
                 </div>
-                <div class="item" *ngIf="userInfo['type'] === 'GTD Head'" (click)="registration()">
+                <div class="item" *ngIf="userInfo['type'] !== 'Student'" (click)="registration()">
                     <ion-grid class="button btnRegister">
                         <ion-row>
                             <ion-col col-10 class="registrationLabel">
