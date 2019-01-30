@@ -173,8 +173,10 @@ export class DatabaseProvider {
 
    for(let a = 0; a < keys.length; a++) {
      let count = keys[a];
+     let device = devices[count].payload.val().dToken;
+     console.log("Token: ", device, " ? ", token);
 
-     if(devices[count].payload.val().dToken === token) {
+     if(device === token) {
         ref.remove(devices[count].key);
         console.log("Deleted Device Token!");
         this.ionicStorage.set('token', null);

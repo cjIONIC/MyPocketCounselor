@@ -19,11 +19,11 @@
     <ion-card *ngFor="let feedback of feedbackList">
       <ion-grid>
         <ion-row>
-          <ion-col col-3>
-            <ion-row class="star">
-              <ion-icon name="star"></ion-icon>
-            </ion-row>
-            <ion-row class="rate">{{ feedback.rate }}</ion-row>
+          <ion-col col-3 class="rateInfo">
+            <div class="schedule">
+              <div class="star"><ion-icon name="star"></ion-icon></div>
+              <div class="rate">Very Unsatisfied</div>
+            </div>
           </ion-col>
           <!-- Information -->
           <ion-col col-9>
@@ -52,7 +52,9 @@
               <ion-col col-10 class="timeInfo">{{ feedback.schedule | date: 'hh:mm aa' }}</ion-col>
             </ion-row>
             <ion-row class="description">{{feedback.description}}</ion-row>
-            <ion-row class="datetime">{{feedback.datetime | timeAgo}}</ion-row>
+            <ion-row>
+              <div class="datetime"> {{feedback.datetime | timeAgo}} </div>
+            </ion-row>
           </ion-col>
         </ion-row>
       </ion-grid>
