@@ -38,12 +38,42 @@ export class HeadControlsStatisticsPage {
   April: any;
   May: any;
 
+  //Months
+  juneFinish: any;
+  julyFinish: any;
+  augustFinish: any;
+  septemberFinish: any;
+  octoberFinish: any;
+  novemberFinish: any;
+  decemberFinish: any;
+  januaryFinish: any;
+  februaryFinish: any;
+  marchFinish: any;
+  aprilFinish: any;
+  mayFinish: any;
+
+  //Months
+  junePending: any;
+  julyPending: any;
+  augustPending: any;
+  septemberPending: any;
+  octoberPending: any;
+  novemberPending: any;
+  decemberPending: any;
+  januaryPending: any;
+  februaryPending: any;
+  marchPending: any;
+  aprilPending: any;
+  mayPending: any;
+
   year: any;
   yearPlus: any;
   dateDefault: any;
 
   academic: any;
   semester: any;
+
+  schoolYear: any;
 
   academicList = [];
 
@@ -60,14 +90,14 @@ export class HeadControlsStatisticsPage {
     try {
       let date = new Date(moment().format());
       date.setFullYear(date.getFullYear()-1)
-      this.dateDefault = moment(date).format();
-      this.yearPlus = date.getFullYear()+1;
       this.year = date.getFullYear();
+      this.schoolYear = this.year + " - " + (this.year+1);
+      console.log("School Year: ", this.schoolYear);
 
       this.academic = 99;
 
-      this.fetchAllAcademicUnits();
-      this.verifyDate(date);
+     // this.verifyDate(date);
+      this.fetchAllAppointments();
     } catch {
 
     }
@@ -110,11 +140,12 @@ export class HeadControlsStatisticsPage {
     else if (month.toString().match(/^(0|1|2|10|11)$/)) this.semester = "Second";
     else this.semester = "Summer";
 
-    this.fetchAppointments();
+    //this.fetchAppointments();
 
 
   }
 
+  /*
   fetchAppointments() {
     console.log("Semester: ", this.semester);
     let list = this.fireDatabase.list<Item>("appointment");
@@ -132,18 +163,59 @@ export class HeadControlsStatisticsPage {
     })
 
   }
+  */
+
+  fetchAllAppointments() {
+    let list = this.fireDatabase.list<Item>("appointment");
+    let item = list.valueChanges();
+
+    item.subscribe(async appointments => {
+      await this.fetchFinishYear(appointments);
+      await this.fetchAcceptYear(appointments);
+      await this.loadLineAppointmentsYear();
+
+      this.loadBarAppointmentsFirstSemester();
+      this.loadBarAppointmentsSecondSemester();
+      this.loadBarAppointmentsSummer();
+    })
+  }
+
+  async fetchFinishYear(appointments) {
+    this.juneFinish = await this.db.fetchAppointmentFinishOfMonth(5, this.year, appointments, this.academic);
+    this.julyFinish = await this.db.fetchAppointmentFinishOfMonth(6, this.year, appointments, this.academic);
+    this.augustFinish = await this.db.fetchAppointmentFinishOfMonth(7, this.year, appointments, this.academic);
+    this.septemberFinish = await this.db.fetchAppointmentFinishOfMonth(8, this.year, appointments, this.academic);
+    this.octoberFinish = await this.db.fetchAppointmentFinishOfMonth(9, this.year, appointments, this.academic);
+    this.novemberFinish = await this.db.fetchAppointmentFinishOfMonth(10, this.year, appointments, this.academic);
+    this.decemberFinish = await this.db.fetchAppointmentFinishOfMonth(11, this.year, appointments, this.academic);
+    this.januaryFinish = await this.db.fetchAppointmentFinishOfMonth(0, this.year+1, appointments, this.academic);
+    this.februaryFinish = await this.db.fetchAppointmentFinishOfMonth(1, this.year+1, appointments, this.academic);
+    this.marchFinish = await this.db.fetchAppointmentFinishOfMonth(2, this.year+1, appointments, this.academic);
+  }
+
+  async fetchAcceptYear(appointments) {
+    this.junePending = await this.db.fetchAppointmentAcceptOfMonth(5, this.year, appointments, this.academic);
+    this.julyPending = await this.db.fetchAppointmentAcceptOfMonth(6, this.year, appointments, this.academic);
+    this.augustPending = await this.db.fetchAppointmentAcceptOfMonth(7, this.year, appointments, this.academic);
+    this.septemberPending = await this.db.fetchAppointmentAcceptOfMonth(8, this.year, appointments, this.academic);
+    this.octoberPending = await this.db.fetchAppointmentAcceptOfMonth(9, this.year, appointments, this.academic);
+    this.novemberPending = await this.db.fetchAppointmentAcceptOfMonth(10, this.year, appointments, this.academic);
+    this.decemberPending = await this.db.fetchAppointmentAcceptOfMonth(11, this.year, appointments, this.academic);
+    this.januaryPending = await this.db.fetchAppointmentAcceptOfMonth(0, this.year+1, appointments, this.academic);
+    this.februaryPending = await this.db.fetchAppointmentAcceptOfMonth(1, this.year+1, appointments, this.academic);
+    this.marchPending = await this.db.fetchAppointmentAcceptOfMonth(2, this.year+1, appointments, this.academic);
+  }
 
   fetchConcerns() {
     
   }
 
   async fetchFirstSemester(appointments) {
-    this.June = await this.db.fetchAppointmentOfMonth(6, this.year, appointments, this.academic);
-    this.July = await this.db.fetchAppointmentOfMonth(7, this.year, appointments, this.academic);
-    this.August = await this.db.fetchAppointmentOfMonth(8, this.year, appointments, this.academic);
-    this.September = await this.db.fetchAppointmentOfMonth(9, this.year, appointments, this.academic);
-    this.October = await this.db.fetchAppointmentOfMonth(10, this.year, appointments, this.academic);
-    this.loadBarAppointments();
+    this.June = await this.db.fetchAppointmentOfMonth(5, this.year, appointments, this.academic);
+    this.July = await this.db.fetchAppointmentOfMonth(6, this.year, appointments, this.academic);
+    this.August = await this.db.fetchAppointmentOfMonth(7, this.year, appointments, this.academic);
+    this.September = await this.db.fetchAppointmentOfMonth(8, this.year, appointments, this.academic);
+    this.October = await this.db.fetchAppointmentOfMonth(9, this.year, appointments, this.academic);
   }
 
   async fetchSecondSemester(appointments) {
@@ -152,11 +224,9 @@ export class HeadControlsStatisticsPage {
     this.January = await this.db.fetchAppointmentOfMonth(0, this.year+1, appointments, this.academic);
     this.February = await this.db.fetchAppointmentOfMonth(1, this.year+1, appointments, this.academic);
     this.March = await this.db.fetchAppointmentOfMonth(3, this.year+1, appointments, this.academic);
-    this.loadBarAppointments();
   }
 
   fetchSummer() {
-
   }
 
   loadBarAppointments() {
@@ -226,6 +296,241 @@ export class HeadControlsStatisticsPage {
             }
 
     });
+  }
+
+  loadBarAppointmentsFirstSemester() {
+    let ctx = document.getElementById("firstSemChart");
+    
+    this.barChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+          labels: ["Jun", "Jul", "Aug", "Sep", "Oct"],
+          datasets: [{
+                    data: [this.juneFinish, this.julyFinish, this.augustFinish, 
+                      this.septemberFinish, this.octoberFinish],
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(255,99,132,1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)'
+                    ],
+                    borderWidth: 1
+                },
+                {
+                  data: [this.junePending, this.julyPending, this.augustPending, 
+                    this.septemberPending, this.octoberPending,],
+                  backgroundColor: [
+                      'rgba(255, 99, 132, 0.2)',
+                      'rgba(54, 162, 235, 0.2)',
+                      'rgba(255, 206, 86, 0.2)',
+                      'rgba(75, 192, 192, 0.2)',
+                      'rgba(153, 102, 255, 0.2)'
+                  ],
+                  borderColor: [
+                      'rgba(255,99,132,1)',
+                      'rgba(54, 162, 235, 1)',
+                      'rgba(255, 206, 86, 1)',
+                      'rgba(75, 192, 192, 1)',
+                      'rgba(153, 102, 255, 1)'
+                  ],
+                  borderWidth: 1
+              }]
+            },
+            options: { 
+                legend: { display: false },
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero:true
+                        }
+                    }]
+                }
+            }
+
+    });
+  }
+
+  loadBarAppointmentsSecondSemester() {
+    let ctx = document.getElementById("secondSemChart");
+
+    this.barChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+          labels: ["Nov", "Dec", "Jan", "Feb", "March"],
+          datasets: [{
+                    data: [this.novemberFinish,
+                      this.decemberFinish, this.januaryFinish, this.februaryFinish,
+                      this.marchFinish],
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(255,99,132,1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)'
+                    ],
+                    borderWidth: 1
+                },
+                {
+                  data: [this.novemberPending,
+                    this.decemberPending, this.januaryPending, this.februaryPending,
+                    this.marchFinish],
+                  backgroundColor: [
+                      'rgba(255, 99, 132, 0.2)',
+                      'rgba(54, 162, 235, 0.2)',
+                      'rgba(255, 206, 86, 0.2)',
+                      'rgba(75, 192, 192, 0.2)',
+                      'rgba(153, 102, 255, 0.2)'
+                  ],
+                  borderColor: [
+                      'rgba(255,99,132,1)',
+                      'rgba(54, 162, 235, 1)',
+                      'rgba(255, 206, 86, 1)',
+                      'rgba(75, 192, 192, 1)',
+                      'rgba(153, 102, 255, 1)'
+                  ],
+                  borderWidth: 1
+              }]
+            },
+            options: { 
+                legend: { display: false },
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero:true
+                        }
+                    }]
+                }
+            }
+
+    });
+  }
+
+  loadBarAppointmentsSummer() {
+    let ctx = document.getElementById("summerChart");
+    
+    this.barChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+          labels: ["April","May"],
+          datasets: [{
+                    data: [this.aprilFinish, this.mayFinish],
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(255,99,132,1)',
+                        'rgba(54, 162, 235, 1)'
+                    ],
+                    borderWidth: 1
+                },
+                {
+                  data: [this.aprilPending, this.mayPending],
+                  backgroundColor: [
+                      'rgba(255, 99, 132, 0.2)',
+                      'rgba(54, 162, 235, 0.2)'
+                  ],
+                  borderColor: [
+                      'rgba(255,99,132,1)',
+                      'rgba(54, 162, 235, 1)'
+                  ],
+                  borderWidth: 1
+              }]
+            },
+            options: { 
+                legend: { display: false },
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero:true
+                        }
+                    }]
+                }
+            }
+
+    });
+  }
+
+  loadLineAppointmentsYear() {
+    let ctx = document.getElementById("yearlyChart");
+    
+
+     this.barChart = new Chart(ctx, {
+
+      type: 'line',
+      data: {
+          labels: ["Jun", "Jul", "Aug", "Sep", "Oct", 
+                    "Nov", "Dec", "Jan", "Feb", "Mar", 
+                    "Apr", "May", ],
+          datasets: [
+              //Finished
+              {
+                label: "Finished",
+                fill: false,
+                lineTension: 0.1,
+                backgroundColor: "rgba(105,97,255,0.4)",
+                borderColor: "rgba(105,97,255,1)",
+                borderCapStyle: 'butt',
+                borderDash: [],
+                borderDashOffset: 0.0,
+                borderJoinStyle: 'miter',
+                pointBorderColor: "rgba(105,97,255,1)",
+                pointBackgroundColor: "#fff",
+                pointBorderWidth: 1,
+                pointRadius: 1,
+                pointHitRadius: 10,
+                data: [this.juneFinish, this.julyFinish, this.augustFinish, 
+                      this.septemberFinish, this.octoberFinish, this.novemberFinish,
+                      this.decemberFinish, this.januaryFinish, this.februaryFinish,
+                      this.marchFinish,this.aprilFinish, this.mayFinish],
+              },
+              //Unfinished
+              {
+                label: "Total",
+                fill: false,
+                lineTension: 0.1,
+                backgroundColor: "rgba(97,255,105,0.4)",
+                borderColor: "rgba(97,255,105,1)",
+                borderCapStyle: 'butt',
+                borderDash: [],
+                borderDashOffset: 0.0, 
+                borderJoinStyle: 'miter',
+                pointBorderColor: "rgba(97,255,105,1)",
+                pointBackgroundColor: "#fff",
+                pointBorderWidth: 1,
+                pointRadius: 1,
+                pointHitRadius: 10,
+                data: [this.junePending, this.julyPending, this.augustPending, 
+                      this.septemberPending, this.octoberPending, this.novemberPending,
+                      this.decemberPending, this.januaryPending, this.februaryPending,
+                      this.marchFinish,this.aprilPending, this.mayPending],
+              }
+          ]
+      },
+      options: { 
+        responsive: true,
+        maintainAspectRatio: false,
+        tooltips: {enabled: false},
+        hover: {mode: null},
+      }
+
+  });
+
   }
   
 

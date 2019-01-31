@@ -2306,6 +2306,68 @@ export class DatabaseProvider {
     return totalAppointments;
   }
 
+  fetchAppointmentFinishOfMonth(month, year, appointments, type) {
+    let totalFinsihedAppointments = 0;
+    let semester
+
+    //Identifies which semestral period the appointment is set
+    if(month.toString().match(/^(5|6|7|8|9)$/)) semester = "First";
+    else if (month.toString().match(/^(0|1|2|10|11)$/)) semester = "Second";
+    else semester = "Summer";
+
+    appointments.forEach(appointment => {
+      if(appointment["aStatus"] === "Finished") {
+        let appointmentYear = (new Date(appointment["aSchedule"])).getFullYear();
+        let appointmentMonth = (new Date(appointment["aSchedule"])).getMonth();
+        
+        if(type === 99) {
+          if(appointmentYear === year &&
+              appointmentMonth === month) {
+                totalFinsihedAppointments++;
+              }
+        } else {
+          if(appointment["acID"] === type) {
+            if(appointmentYear === year &&
+              appointmentMonth === month) {
+                totalFinsihedAppointments++;
+              }
+          }
+        }
+      }
+    })
+
+    console.log("Finish Month: ", month, " ? ", totalFinsihedAppointments);
+    return totalFinsihedAppointments;
+  }
+
+  fetchAppointmentAcceptOfMonth(month, year, appointments, type) {
+    let totalFinsihedAppointments = 0;
+
+    appointments.forEach(appointment => {
+      if(appointment["aStatus"] === "Accepted" || appointment["aStatus"] === "Rescheduled") {
+        let appointmentYear = (new Date(appointment["aSchedule"])).getFullYear();
+        let appointmentMonth = (new Date(appointment["aSchedule"])).getMonth();
+        
+        if(type === 99) {
+          if(appointmentYear === year &&
+              appointmentMonth === month) {
+                totalFinsihedAppointments++;
+              }
+        } else {
+          if(appointment["acID"] === type) {
+            if(appointmentYear === year &&
+              appointmentMonth === month) {
+                totalFinsihedAppointments++;
+              }
+          }
+        }
+      }
+    })
+
+    console.log("Accepted Month: ", month, " ? ", totalFinsihedAppointments);
+    return totalFinsihedAppointments;
+  }
+
   /*********************/
   /**** O T H E R S ****/
   /*********************/

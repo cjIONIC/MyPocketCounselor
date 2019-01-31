@@ -10,11 +10,50 @@ page-head-controls-statistics {
         padding:10px;
     }
 
+    .slide{
+        align-content: center;
+    }
+
     .cardHeader {
         text-align: center;
         font-size: 12pt;
         font-weight: bold;
         padding: 5px;
+    }
+
+    .cardSemester {
+        width: 91%;
+        margin: 0px auto;
+    }
+
+    .cardSemHeader {
+        text-align: center;
+        font-size: 12pt;
+        font-weight: bold;
+        padding: 5px;
+        padding-bottom: 10px;
+    }
+
+    .arrow {
+      font-size: 12pt;
+      margin: 0px;
+      text-align: center;
+      margin-top: 10px;
+    }
+
+    .yearLabel {
+      width: 100%;
+      font-size: 12pt;
+      font-weight: bold;
+      margin: 0px;
+      text-align: center;
+    }
+
+    .yearInfo {
+      width: 100%;
+      font-size: 12pt;
+      margin: 0px;
+      text-align: center;
     }
 
     .academicList {

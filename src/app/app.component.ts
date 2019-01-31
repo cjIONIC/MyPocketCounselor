@@ -16,7 +16,7 @@ import { HeadControlsPage } from '../pages/head-controls/head-controls';
   templateUrl: 'app.html'
 })
 export class MyApp {
-  rootPage: any;
+  rootPage: any = HeadControlsPage;
 
   constructor(platform: Platform, 
     statusBar: StatusBar, 
@@ -29,7 +29,7 @@ export class MyApp {
       statusBar.styleDefault();
       splashScreen.hide();
       
-        this.getUserProfile();
+        //this.getUserProfile();
     });
   }
   
