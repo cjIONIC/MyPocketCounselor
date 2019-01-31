@@ -2455,6 +2455,39 @@ export class DatabaseProvider {
     return concernList;
   }
 
+  async addConcern(concern) {
+    let numeric = Math.random().toString().replace('0.', '').substring(0,2);
+    let timestamp = new Date().getTime().toString().substring(5, 13);
+    const id = numeric+timestamp;
+    console.log(timestamp+" ? "+numeric);
+
+    this.fireDatabase.list('/concern').push({
+      "coID":id,
+      "coName": concern
+    })
+
+    return;
+  }
+
+  async removeConcern(id) {
+    let concerns = await this.fetchAllNodesBySnapshot("concern");
+    let ref = this.fireDatabase.list('concern')
+
+    let keys = Object.keys(concerns);
+
+    for(let i = 0; i < keys.length; i++) {
+      let count = keys[i];
+      let value = concerns[count].payload.val();
+
+      if(value.coID === id) {
+        ref.remove(concerns[count].key);
+        console.log("Removed concern! ");
+      }
+    }
+
+    return;
+  }
+
   /*********************/
   /**** O T H E R S ****/
   /*********************/

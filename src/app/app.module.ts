@@ -73,6 +73,9 @@ import { HeadControlsStatisticsPage } from '../pages/head-controls-statistics/he
 import { ChartsModule } from 'ng2-charts';
 import { ModalStatisticsComponent } from '../components/modal-statistics/modal-statistics';
 import { HeadControlsConcernsPage } from '../pages/head-controls-concerns/head-controls-concerns';
+import { ModalConcernsAddComponent } from '../components/modal-concerns-add/modal-concerns-add';
+import { HeadControlsCounselorsPage } from '../pages/head-controls-counselors/head-controls-counselors';
+import { ModalCounselorsProfileComponent } from '../components/modal-counselors-profile/modal-counselors-profile';
 
 const firebaseConfig = {
   apiKey: "AIzaSyAVITAZa_qU9vSHq_ASeHJ1JGt3Sy8s8a0",
@@ -111,6 +114,9 @@ const firebaseConfig = {
     HeadControlsStatisticsPage,
     ModalStatisticsComponent,
     HeadControlsConcernsPage,
+    ModalConcernsAddComponent,
+    HeadControlsCounselorsPage,
+    ModalCounselorsProfileComponent,
     SearchPage,
     ChatPage,
     ChatPeopleListPage,
@@ -168,6 +174,9 @@ const firebaseConfig = {
     HeadControlsStatisticsPage,
     ModalStatisticsComponent,
     HeadControlsConcernsPage,
+    ModalConcernsAddComponent,
+    HeadControlsCounselorsPage,
+    ModalCounselorsProfileComponent,
     SearchPage,
     ChatPage,
     ChatPeopleListPage,

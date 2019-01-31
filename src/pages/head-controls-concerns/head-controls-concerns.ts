@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, Item, AlertController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, Item, AlertController, ModalController } from 'ionic-angular';
 import { DatabaseProvider } from '../../providers/database/database';
 import { AngularFireDatabase } from 'angularfire2/database';
+import { ModalConcernsAddComponent } from '../../components/modal-concerns-add/modal-concerns-add';
 
 /**
  * Generated class for the HeadControlsConcernsPage page.
@@ -22,6 +23,7 @@ export class HeadControlsConcernsPage {
   constructor(public navCtrl: NavController, 
       public alertCtrl: AlertController,
       public db: DatabaseProvider,
+      public modalCtrl: ModalController,
       public fireDatabase: AngularFireDatabase,
       public navParams: NavParams) {
         this.initialize();
@@ -47,9 +49,12 @@ export class HeadControlsConcernsPage {
 
   addConcern() {
     console.log("Add Concern");
+
+    const modal = this.modalCtrl.create(ModalConcernsAddComponent,  "",{ cssClass: 'custom-modal-notification-counselor' });
+    modal.present();
   }
 
-  removeConcern() {
+  removeConcern(id) {
     let alert = this.alertCtrl.create({
       title: 'Confirm Delete',
       message: 'Do you want to delete this concern?',
@@ -65,7 +70,7 @@ export class HeadControlsConcernsPage {
           text: 'Yes',
           handler: () => {
             try {
-             
+              this.db.removeConcern(id);
             } catch {
               
             }
