@@ -1,0 +1,55 @@
+<!-- Generated template for the ModalStatisticsComponent component -->
+<ion-header>
+
+    <ion-navbar color="primary">
+        <ion-buttons end>
+            <button ion-button  style="text-transform: none; font-size: 15pt;" (click)="close()">
+              Close
+            </button>
+          </ion-buttons>
+        <ion-title>Academic Info</ion-title>
+    </ion-navbar>
+  
+</ion-header>
+<ion-content class="content">
+  <ion-list>
+
+    <ion-card>
+        <div>{{ academicName }} </div>
+    </ion-card>
+      
+      <ion-slides spaceBetween="-26">
+          <ion-slide>
+            <ion-card class="cardSemester">
+                <div class="cardSemHeader">First Semester</div>
+                <div class="barGraph">
+                    <canvas id="firstSemChartModal" height="200px"></canvas>
+                </div>
+            </ion-card>
+          </ion-slide>
+          <ion-slide>
+              <ion-card class="cardSemester">
+                  <div class="cardSemHeader">Second Semester</div>
+                  <div class="barGraph">
+                      <canvas id="secondSemChartModal" height="200px"></canvas>
+                  </div>
+              </ion-card>
+          </ion-slide>
+          <ion-slide>
+              <ion-card class="cardSemester">
+                  <div class="cardSemHeader">Summer</div>
+                  <div class="barGraph">
+                      <canvas id="summerChartModal" height="200px"></canvas>
+                  </div>
+              </ion-card>
+          </ion-slide>
+        </ion-slides>
+
+        <ion-card>
+            <div>Number of Students</div>
+            <div class="pieGraph">
+                <canvas id="studentChartModal" height="150px" width="150px"></canvas>
+            </div>
+        </ion-card>
+  </ion-list>
+</ion-content>

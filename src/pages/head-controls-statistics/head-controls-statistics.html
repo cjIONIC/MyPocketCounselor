@@ -72,12 +72,12 @@
         <ion-card>
           <ion-grid class="appointmentHeader">
             <ion-row>
-                <ion-col class="arrow" col-2><ion-icon name="arrow-back"></ion-icon></ion-col>
+                <ion-col class="arrow" col-2 (click)="loadPrevious()"><ion-icon name="arrow-back"></ion-icon></ion-col>
                 <ion-col col-8>
                     <ion-row><div class="yearLabel">School Year</div></ion-row>
                     <ion-row><div class="yearInfo">{{ schoolYear }}</div></ion-row>
                 </ion-col>
-                <ion-col class="arrow" col-2><ion-icon name="arrow-forward"></ion-icon></ion-col>
+                <ion-col class="arrow" col-2 (click)="loadNext()"><ion-icon name="arrow-forward"></ion-icon></ion-col>
             </ion-row>
           </ion-grid>
           <div class="cardHeader">Number of Appointments</div>
@@ -87,7 +87,7 @@
             
         </ion-card>
 
-        <ion-slides spaceBetween="-26">
+        <ion-slides spaceBetween="-26" #slides>
             <ion-slide>
               <ion-card class="cardSemester">
                   <div class="cardSemHeader">First Semester</div>
@@ -113,6 +113,26 @@
                 </ion-card>
             </ion-slide>
           </ion-slides>
+
+          <ion-card *ngFor="let unit of academicList" class="academicCard" (click)="viewStatistics(unit.id)">
+            <div class="academicDivName">
+              <div class="academicName"> {{ unit.name}} </div>
+            </div>
+            <ion-grid class="academicGrid">
+              <ion-row>
+                <ion-col col-2><img src="{{unit.avatar}}" class="avatar"></ion-col>
+                <ion-col col-9 class="counselorName">{{unit.counselor}}</ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col class="appointmentsLabel">Total Appointments:</ion-col>
+                <ion-col class="appointmentsInfo">{{unit.appointments}}</ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col class="studentsLabel">Total Students:</ion-col>
+                <ion-col class="studentsInfo">{{unit.appointments}}</ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-card>
   </ion-list>
   
 </ion-content>

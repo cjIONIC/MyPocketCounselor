@@ -71,6 +71,8 @@ import { HeadControlsPage } from '../pages/head-controls/head-controls';
 import { HeadControlsStatisticsPage } from '../pages/head-controls-statistics/head-controls-statistics';
 
 import { ChartsModule } from 'ng2-charts';
+import { ModalStatisticsComponent } from '../components/modal-statistics/modal-statistics';
+import { HeadControlsStatisticsAcademicPage } from '../pages/head-controls-statistics-academic/head-controls-statistics-academic';
 
 const firebaseConfig = {
   apiKey: "AIzaSyAVITAZa_qU9vSHq_ASeHJ1JGt3Sy8s8a0",
@@ -107,6 +109,8 @@ const firebaseConfig = {
     FeedbackPage,
     HeadControlsPage,
     HeadControlsStatisticsPage,
+    HeadControlsStatisticsAcademicPage,
+    ModalStatisticsComponent,
     SearchPage,
     ChatPage,
     ChatPeopleListPage,
@@ -162,6 +166,8 @@ const firebaseConfig = {
     FeedbackPage,
     HeadControlsPage,
     HeadControlsStatisticsPage,
+    HeadControlsStatisticsAcademicPage,
+    ModalStatisticsComponent,
     SearchPage,
     ChatPage,
     ChatPeopleListPage,

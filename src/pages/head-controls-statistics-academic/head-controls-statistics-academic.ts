@@ -5,11 +5,9 @@ import { AngularFireDatabase } from 'angularfire2/database';
 import { DatabaseProvider } from '../../providers/database/database';
 import moment from 'moment';
 import { ModalStatisticsComponent } from '../../components/modal-statistics/modal-statistics';
-import { HeadControlsStatisticsAcademicPage } from '../head-controls-statistics-academic/head-controls-statistics-academic';
-
 
 /**
- * Generated class for the HeadControlsStatisticsPage page.
+ * Generated class for the HeadControlsStatisticsAcademicPage page.
  *
  * See https://ionicframework.com/docs/components/#navigation for more info on
  * Ionic pages and navigation.
@@ -17,11 +15,11 @@ import { HeadControlsStatisticsAcademicPage } from '../head-controls-statistics-
 
 @IonicPage()
 @Component({
-  selector: 'page-head-controls-statistics',
-  templateUrl: 'head-controls-statistics.html',
+  selector: 'page-head-controls-statistics-academic',
+  templateUrl: 'head-controls-statistics-academic.html',
 })
-export class HeadControlsStatisticsPage {
-  
+export class HeadControlsStatisticsAcademicPage {
+
   @ViewChild(Slides) slides: Slides;
 
   @ViewChild('doughnutCanvas') doughnutCanvas;
@@ -90,7 +88,7 @@ export class HeadControlsStatisticsPage {
       public db: DatabaseProvider) {
 
 
-        this.initialize();
+        //this.initialize();
   }
 
   async initialize() {
@@ -207,9 +205,9 @@ export class HeadControlsStatisticsPage {
       await this.fetchAcceptYear(appointments);
       await this.loadLineAppointmentsYear();
 
-      this.loadBarAppointmentsFirstSemester();
-      this.loadBarAppointmentsSecondSemester();
-      this.loadBarAppointmentsSummer();
+      await this.loadBarAppointmentsFirstSemester();
+      await this.loadBarAppointmentsSecondSemester();
+      await this.loadBarAppointmentsSummer();
     })
   }
 
@@ -617,13 +615,55 @@ export class HeadControlsStatisticsPage {
     console.log("ID: ", id);
 
     //this.app.getRootNav().push(HeadControlsStatisticsAcademicPage, {id: id, date: this.date});
+  }
 
-    const modal = this.modalCtrl.create(ModalStatisticsComponent,  { id: id, date: this.date},{ cssClass: 'custom-modal-statistics' });
-    modal.present();
+  dummy() {
+    let ctx = document.getElementById("yearlyChart2");
+    
+
+     this.barChart = new Chart(ctx, {
+
+            type: 'bar',
+            data: {
+                labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+                datasets: [{
+                    label: '# of Votes',
+                    data: [12, 19, 3, 5, 2, 3],
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(255, 159, 64, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(255,99,132,1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero:true
+                        }
+                    }]
+                }
+            }
+
+        });
   }
   
   ionViewDidLoad() {
-    console.log('ionViewDidLoad HeadControlsStatisticsPage');
+    this.dummy();
+    //this.initialize();
   }
 
 }

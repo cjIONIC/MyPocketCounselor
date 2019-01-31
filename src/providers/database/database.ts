@@ -2368,6 +2368,77 @@ export class DatabaseProvider {
     return totalFinsihedAppointments;
   }
 
+  async fetchAcademicUnitStatistics(academics, counselors, date) {
+    console.log("Fetched date: ", date.toDateString());
+    let appointments = await this.fetchAllNodesByTableInDatabase("appointment");
+    let students = await this.fetchAllNodesByTableInDatabase("student");
+    let academicList = [];
+    let year = date.getFullYear();
+
+
+    academics.forEach(academic => {
+      let totalAppointments = 0;
+      let totalStudents = 0;
+      let counselorName, counselorAvatar;
+
+        students.forEach(student => {
+          if(student["acID"] === academic["acID"]) totalStudents++;
+        })
+
+        appointments.forEach(appointment => {
+          if(appointment["acID"] === academic["acID"]) {
+            let appointmentMonth = (new Date(appointment["aSchedule"])).getMonth();
+            let appointmentYear = (new Date(appointment["aSchedule"])).getFullYear();
+
+            //Identifies which semestral period the appointment is set
+            if(appointmentMonth.toString().match(/^(5|6|7|8|9|10|11)$/)) {
+              if(appointmentYear === year) totalAppointments++;
+            }
+            else if (appointmentMonth.toString().match(/^(0|1|2|3|4)$/)) {
+              if(appointmentYear === (year+1)) totalAppointments++;
+            }
+          }
+        })
+
+        counselors.forEach(counselor => {
+          if(counselor["cID"] === academic["cID"]) {
+            counselorName = counselor["cFirstName"] + " " + counselor["cLastName"];
+            counselorAvatar = counselor["cPicture"];
+          }
+        })
+
+        academicList.push({
+          id: academic["acID"],
+          name: academic["acName"],
+          counselor: counselorName,
+          avatar: counselorAvatar,
+          appointments: totalAppointments,
+          students: totalStudents
+        })
+
+    })
+
+    await academicList.sort(function(a,b) {
+      if(a.name < b.name) { return -1; }
+      if(a.name > b.name) { return 1; }
+      return 0;
+    });
+
+    return academicList;
+  }
+
+  async fetchAllStudents(students, academic, type) {
+    let totalStudents = 0;
+
+    students.forEach(student => {
+      if(student["acID"] === academic &&
+          student["sStatus"] === type)
+        totalStudents++;
+    })
+
+    return totalStudents;
+  }
+
   /*********************/
   /**** O T H E R S ****/
   /*********************/

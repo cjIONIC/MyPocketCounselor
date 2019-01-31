@@ -11,6 +11,7 @@ import { ModalAppointmentSearchComponent } from './modal-appointment-search/moda
 import { ModalPasswordComponent } from './modal-password/modal-password';
 import { PopProfileEditComponent } from './pop-profile-edit/pop-profile-edit';
 import { ModalProfileEditComponent } from './modal-profile-edit/modal-profile-edit';
+import { ModalStatisticsComponent } from './modal-statistics/modal-statistics';
 @NgModule({
 	declarations: [PopFilterComponent,
     ModalStudentUpdateComponent,
@@ -23,7 +24,8 @@ import { ModalProfileEditComponent } from './modal-profile-edit/modal-profile-ed
     ModalAppointmentSearchComponent,
     ModalPasswordComponent,
     PopProfileEditComponent,
-    ModalProfileEditComponent],
+    ModalProfileEditComponent,
+    ModalStatisticsComponent],
 	imports: [],
 	exports: [PopFilterComponent,
     ModalStudentUpdateComponent,
@@ -36,6 +38,7 @@ import { ModalProfileEditComponent } from './modal-profile-edit/modal-profile-ed
     ModalAppointmentSearchComponent,
     ModalPasswordComponent,
     PopProfileEditComponent,
-    ModalProfileEditComponent]
+    ModalProfileEditComponent,
+    ModalStatisticsComponent]
 })
 export class ComponentsModule {}
