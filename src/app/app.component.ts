@@ -10,6 +10,7 @@ import { DatabaseProvider } from '../providers/database/database';
 import { LoginPage } from '../pages/login/login';
 import { RegisterPage } from '../pages/register/register';
 import { HomePage } from '../pages/home/home';
+import { HeadControlsPage } from '../pages/head-controls/head-controls';
 
 @Component({
   templateUrl: 'app.html'

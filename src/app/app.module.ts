@@ -70,6 +70,8 @@ import { ModalProfileEditComponent } from '../components/modal-profile-edit/moda
 import { HeadControlsPage } from '../pages/head-controls/head-controls';
 import { HeadControlsStatisticsPage } from '../pages/head-controls-statistics/head-controls-statistics';
 
+import { ChartsModule } from 'ng2-charts';
+
 const firebaseConfig = {
   apiKey: "AIzaSyAVITAZa_qU9vSHq_ASeHJ1JGt3Sy8s8a0",
   authDomain: "mpcapp-c01ec.firebaseapp.com",
@@ -120,6 +122,7 @@ const firebaseConfig = {
   imports: [
     BrowserModule,
     ReactiveFormsModule,
+    ChartsModule,
     CommonModule,
     HttpClientModule,
     FormsModule,      

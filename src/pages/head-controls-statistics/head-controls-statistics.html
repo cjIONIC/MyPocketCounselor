@@ -6,13 +6,76 @@
 -->
 <ion-header>
 
-  <ion-navbar>
+  <ion-navbar color="primary">
     <ion-title>Statistics</ion-title>
   </ion-navbar>
 
 </ion-header>
 
 
-<ion-content padding>
+<ion-content>
+  <ion-list>
+      <ion-card>
+        <ion-grid>
+          <ion-row>
+            <ion-col col-4 class="academicLabel">Academic Unit:</ion-col>
+            <ion-col col-8>
+              <div class="academicList">
+                <ion-item no-lines>
+                  <ion-select  [(ngModel)]="academic" class="academicSelect"> 
+                      <ion-option *ngFor="let place of academicList" value ="{{place.acID}}"> {{place.acCode}}</ion-option>
+                    </ion-select>
+                </ion-item>
+              </div>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col col-4>School Year:</ion-col>
+            <ion-col col-3>
+                <ion-datetime pickerFormat="YYYY" 
+                  max="2050" 
+                  name="date" 
+                  (ionChange)="changeDate($event)"
+                  [(ngModel)]="dateDefault">
+              </ion-datetime>
+            </ion-col>
+            <ion-col col-2>to</ion-col>
+            <ion-col col-3>
+              {{ yearPlus }}
+            </ion-col>
+          </ion-row>
+          <ion-row>
+              <div class="buttons">
+                  <button ion-button class="btnAdd">Search</button>
+              </div>
+          </ion-row>
+        </ion-grid>
+      </ion-card>
 
+      <ion-card>
+        <ion-segment>
+          <ion-segment-button>
+            First
+          </ion-segment-button>
+          <ion-segment-button>
+            Second
+          </ion-segment-button>
+          <ion-segment-button>
+            Summer
+          </ion-segment-button>
+          <ion-segment-button>
+            All
+          </ion-segment-button>
+        </ion-segment>
+      </ion-card>
+    
+        <ion-card>
+          <div class="cardHeader">Number of Appointments</div>
+          <div class="barGraph">
+              <canvas id="myChart"></canvas>
+          </div>
+            
+        </ion-card>
+  </ion-list>
+  
 </ion-content>

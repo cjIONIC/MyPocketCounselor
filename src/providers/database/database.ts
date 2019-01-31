@@ -2270,6 +2270,43 @@ export class DatabaseProvider {
   }
 
   /*********************/
+  /*** C O N T R O L ***/
+  /*********************/
+  fetchAppointmentOfMonth(month, year, appointments, type) {
+    let totalAppointments = 0;
+    let semester
+
+    //Identifies which semestral period the appointment is set
+    if(month.toString().match(/^(5|6|7|8|9)$/)) semester = "First";
+    else if (month.toString().match(/^(0|1|2|10|11)$/)) semester = "Second";
+    else semester = "Summer";
+
+    appointments.forEach(appointment => {
+      let appointmentYear = (new Date(appointment["aSchedule"])).getFullYear();
+      let appointmentMonth = (new Date(appointment["aSchedule"])).getMonth();
+
+      if(type === 99) {
+        if(appointment["aSemester"] === semester &&
+            appointmentYear === year &&
+            appointmentMonth === month) {
+              totalAppointments++;
+            }
+      } else {
+        if(appointment["acID"] === type) {
+          if(appointment["aSemester"] === semester &&
+            appointmentYear === year &&
+            appointmentMonth === month) {
+              totalAppointments++;
+            }
+        }
+      }
+    })
+
+    console.log("Month: ", month, " ? ", totalAppointments);
+    return totalAppointments;
+  }
+
+  /*********************/
   /**** O T H E R S ****/
   /*********************/
   uploadImage(folder, image) {
