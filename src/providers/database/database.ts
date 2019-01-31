@@ -2439,6 +2439,22 @@ export class DatabaseProvider {
     return totalStudents;
   }
 
+  async fetchAllConcerns(concerns) {
+    let concernList = [];
+
+    concerns.forEach(concern => {
+      concernList.push(concern);
+    })
+
+    await concernList.sort(function(a,b) {
+      if(a.coName < b.coName) { return -1; }
+      if(a.coName > b.coName) { return 1; }
+      return 0;
+    });
+
+    return concernList;
+  }
+
   /*********************/
   /**** O T H E R S ****/
   /*********************/

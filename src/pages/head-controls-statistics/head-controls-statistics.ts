@@ -5,8 +5,6 @@ import { AngularFireDatabase } from 'angularfire2/database';
 import { DatabaseProvider } from '../../providers/database/database';
 import moment from 'moment';
 import { ModalStatisticsComponent } from '../../components/modal-statistics/modal-statistics';
-import { HeadControlsStatisticsAcademicPage } from '../head-controls-statistics-academic/head-controls-statistics-academic';
-
 
 /**
  * Generated class for the HeadControlsStatisticsPage page.

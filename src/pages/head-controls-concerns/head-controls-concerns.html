@@ -1,0 +1,33 @@
+<!--
+  Generated template for the HeadControlsConcernsPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar color="primary">
+    <ion-title>Student Concerns</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content>
+    <ion-fab right bottom >
+            <button ion-fab (click)="addConcern()"><ion-icon name="add"></ion-icon></button>
+    </ion-fab>
+
+  <ion-card *ngFor="let concern of concernList">
+    <ion-grid>
+      <ion-row>
+        <ion-col col-10>
+          {{concern.coName}}
+        </ion-col>
+        <ion-col col-2>
+          <div (click)="removeConcern()"><ion-icon name="close"></ion-icon></div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-card>
+</ion-content>
