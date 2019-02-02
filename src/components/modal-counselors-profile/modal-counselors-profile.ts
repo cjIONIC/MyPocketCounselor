@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ModalController, ToastController, ViewController, App, Item, Toast } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ModalController, ToastController, ViewController, App, Item, Toast, AlertController, LoadingController } from 'ionic-angular';
 import { DatabaseProvider } from '../../providers/database/database';
 import { AngularFireDatabase } from 'angularfire2/database';
 import { ModalStudentUpdateComponent } from '../../components/modal-student-update/modal-student-update';
@@ -46,6 +46,8 @@ export class ModalCounselorsProfileComponent {
       public navParams: NavParams,
       private db: DatabaseProvider,
       public toastCtrl: ToastController,
+      public alertCtrl: AlertController,
+      public loadingCtrl: LoadingController,
       public network: Network,
       public viewCtrl: ViewController,
       public modalCtrl: ModalController,
@@ -111,6 +113,47 @@ export class ModalCounselorsProfileComponent {
   changeAcademic() {
     const modal = this.modalCtrl.create(ModalCounselorsAcademicComponent, {id: this.id});
     modal.present();
+  }
+
+  removeCounselor() {
+    let alert = this.alertCtrl.create({
+      title: 'Confirm Removal',
+      message: 'You are about to remove this counselor. This will also delete' +
+                'all appointments, messages, feedbacks and post from this counselor. ' +
+                'Press "Continue" to proceed removal.',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          handler: () => {
+            console.log('Cancel clicked');
+          }
+        },
+        {
+          text: 'Continue',
+          handler: () => {
+            try {
+              
+              let loading = this.loadingCtrl.create({
+                spinner: 'ios',
+                content: 'Please Wait...'
+              });
+
+              loading.present().then(()=> {
+
+                this.db.removeCounselorInformations(this.id).then(() => {
+                  loading.dismiss();
+                  this.close();
+                })
+              })
+            } catch {
+              
+            }
+          }
+        }
+      ]
+    });
+    alert.present();
   }
 
   close() {

@@ -2579,6 +2579,125 @@ export class DatabaseProvider {
     return;
   }
 
+  async removeCounselorInformations(id) {
+    let counselors = await this.fetchAllNodesByTableInDatabase("counselor");
+
+    counselors.forEach(counselor => {
+      if(counselor["cID"] === id) {
+        firebase.auth().signInWithEmailAndPassword(counselor["cEmail"], counselor["cPassword"]).catch(function(error) {
+          // Handle Errors here.
+          var errorCode = error.code;
+          var errorMessage = error.message;
+          // ...
+        });
+      }
+    })
+
+    let user = firebase.auth().currentUser;
+
+    user.delete().then(function() {
+      // User deleted.
+    }).catch(function(error) {
+      // An error happened.
+    });
+
+    await this.removeCounselor(id);
+    await this.removeCounselorAppointments(id);
+    await this.removeCounselorMessages(id);
+    await this.removeCounselorFeedbacks(id);
+    await this.removeCounselorPosts(id);
+
+    return;
+  }
+
+  async removeCounselor(id) {
+    let counselors = await this.fetchAllNodesBySnapshot("counselor");
+    let ref = this.fireDatabase.list('counselor');
+    let keys = Object.keys(counselors);
+
+    //Removes all academic unit of the counselor
+    for(let i = 0; i < keys.length; i++) {
+      let count = keys[i];
+      let value = counselors[count].payload.val();
+      
+      if(value.cID === id) {
+        ref.remove( counselors[count].key);
+      }
+    }
+
+    return;
+  }
+
+  async removeCounselorAppointments(id) {
+    let appointments = await this.fetchAllNodesBySnapshot("appointment");
+    let ref = this.fireDatabase.list('appointment');
+    let keys = Object.keys(appointments);
+
+    //Removes all academic unit of the counselor
+    for(let i = 0; i < keys.length; i++) {
+      let count = keys[i];
+      let value = appointments[count].payload.val();
+      
+      if(value.cID === id) {
+        ref.remove( appointments[count].key);
+      }
+    }
+
+    return;
+  }
+
+  async removeCounselorMessages(id) {
+    let messages = await this.fetchAllNodesBySnapshot("message");
+    let ref = this.fireDatabase.list('message');
+    let keys = Object.keys(messages);
+
+    //Removes all academic unit of the counselor
+    for(let i = 0; i < keys.length; i++) {
+      let count = keys[i];
+      let value = messages[count].payload.val();
+      
+      if(value.cID === id) {
+        ref.remove( messages[count].key);
+      }
+    }
+
+  }
+
+  async removeCounselorPosts(id) {
+    let posts = await this.fetchAllNodesBySnapshot("post");
+    let ref = this.fireDatabase.list('post');
+    let keys = Object.keys(posts);
+
+    //Removes all academic unit of the counselor
+    for(let i = 0; i < keys.length; i++) {
+      let count = keys[i];
+      let value = posts[count].payload.val();
+      
+      if(value.cID === id) {
+        ref.remove( posts[count].key);
+      }
+    }
+
+  }
+
+  async removeCounselorFeedbacks(id) {
+    let feedbacks = await this.fetchAllNodesBySnapshot("feedback");
+    let ref = this.fireDatabase.list('feedback');
+    let keys = Object.keys(feedbacks);
+
+    //Removes all academic unit of the counselor
+    for(let i = 0; i < keys.length; i++) {
+      let count = keys[i];
+      let value = feedbacks[count].payload.val();
+      
+      if(value.cID === id) {
+        ref.remove( feedbacks[count].key);
+      }
+    }
+
+  }
+
+
   /*********************/
   /**** O T H E R S ****/
   /*********************/
