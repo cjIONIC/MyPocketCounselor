@@ -50,7 +50,7 @@ export class HeadControlsConcernsPage {
   addConcern() {
     console.log("Add Concern");
 
-    const modal = this.modalCtrl.create(ModalConcernsAddComponent,  "",{ cssClass: 'custom-modal-notification-counselor' });
+    const modal = this.modalCtrl.create(ModalConcernsAddComponent,  "",{ cssClass: 'custom-modal-concern' });
     modal.present();
   }
 

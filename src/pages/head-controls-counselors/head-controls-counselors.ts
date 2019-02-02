@@ -52,7 +52,7 @@ export class HeadControlsCounselorsPage {
   profile(person) {
     try {
       var id = person.id;
-      const modal = this.modalCtrl.create(ModalCounselorsProfileComponent,  { id: id},{ cssClass: 'custom-modal-profile' });
+      const modal = this.modalCtrl.create(ModalCounselorsProfileComponent,  { id: id},{ cssClass: 'custom-modal-counselor-profile' });
       modal.present();
     } catch {
 

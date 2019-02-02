@@ -1,3 +1,93 @@
 page-head-controls-counselors-add {
 
+    .profile {
+        margin-left: auto;
+        margin-right: auto;
+        width: 150px;
+        height: 150px;
+    }
+
+    .avatar {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        border: 1px solid rgb(179, 179, 179);
+    }
+
+    .noprofile {
+        display: block;
+        padding: 5px;
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        color: rgb(179, 179, 179);
+        text-align: center;
+        border: 1px solid rgb(179, 179, 179);
+    }
+
+    .person {
+        display: block;
+        font-size: 103pt;
+        border-radius: 50%;
+    }
+
+    .imageFooter {
+        position: absolute;
+        padding-top: 110px;
+        padding-left: 110px;
+        width: 150px;
+        height: 150px;
+    }
+
+    .upload {
+        font-size: 12pt;
+        width: 40px;
+        height: 40px;
+        border-radius: 50px;
+        padding: 0%;
+        color: white;
+        background-color: #ff6961;
+        border: 2px solid white;
+    }
+
+    .emailLabel, .email {
+        margin: 0px 15px;
+    }
+
+    .emailLabel {
+        margin-top: 10px;
+        font-size: 10pt;
+        color: #ff6961;
+    }
+
+    .email {
+        font-size: 12pt;
+    }
+
+    .alert {
+        font-size: 12pt;
+        color: white;
+        background-color: #ff6961;
+        padding: 10px 10px;
+        border-radius: 10px;
+        margin-left: 15px;
+        margin-top: 5px;
+    }
+    
+    .button {
+        display: block;
+        align-content: center;
+        text-align: center;
+        margin-top: 30px;
+    }
+
+    .btn {
+        font-size: 12pt;
+        width: 80%;
+        margin: 0px auto;
+    }
+
 }

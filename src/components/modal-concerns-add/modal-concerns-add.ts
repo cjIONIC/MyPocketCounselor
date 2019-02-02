@@ -26,11 +26,11 @@ export class ModalConcernsAddComponent {
     console.log("Concern: ", concern["name"]);
 
     this.db.addConcern(concern["name"]).then(() => {
-      this.close();
+      this.dismiss();
     })
   }
 
-  close() {
+  dismiss() {
     this.viewCtrl.dismiss();
   }
 

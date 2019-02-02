@@ -138,6 +138,7 @@ export class ModalCounselorsProfileComponent {
                 spinner: 'ios',
                 content: 'Please Wait...'
               });
+              
 
               loading.present().then(()=> {
 

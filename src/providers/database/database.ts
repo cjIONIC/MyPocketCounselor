@@ -2627,31 +2627,25 @@ export class DatabaseProvider {
 
   async removeCounselorInformations(id) {
     let counselors = await this.fetchAllNodesByTableInDatabase("counselor");
-
+    
+    
     counselors.forEach(counselor => {
       if(counselor["cID"] === id) {
-        firebase.auth().signInWithEmailAndPassword(counselor["cEmail"], counselor["cPassword"]).catch(function(error) {
-          // Handle Errors here.
-          var errorCode = error.code;
-          var errorMessage = error.message;
-          // ...
-        });
+        const remove = this.fireAuth.auth.signInWithEmailAndPassword(counselor["cEmail"], counselor["cPassword"])
+          .then(async () => {
+
+            let user = firebase.auth().currentUser;
+        
+            user.delete();
+        
+            await this.removeCounselor(id);
+            await this.removeCounselorAppointments(id);
+            await this.removeCounselorMessages(id);
+            await this.removeCounselorFeedbacks(id);
+            await this.removeCounselorPosts(id);
+          })
       }
     })
-
-    let user = firebase.auth().currentUser;
-
-    user.delete().then(function() {
-      // User deleted.
-    }).catch(function(error) {
-      // An error happened.
-    });
-
-    await this.removeCounselor(id);
-    await this.removeCounselorAppointments(id);
-    await this.removeCounselorMessages(id);
-    await this.removeCounselorFeedbacks(id);
-    await this.removeCounselorPosts(id);
 
     return;
   }

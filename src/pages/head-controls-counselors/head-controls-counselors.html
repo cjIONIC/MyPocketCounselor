@@ -13,7 +13,7 @@
 </ion-header>
 
 
-<ion-content padding>
+<ion-content>
   <ion-fab right bottom >
           <button ion-fab (click)="addCounselor()"><ion-icon name="add"></ion-icon></button>
   </ion-fab>
@@ -25,7 +25,14 @@
                   <ion-col class="profileLeft" col-2>
                         <img src="{{ person.picture }}" class="avatar">
                   </ion-col>
-                  <ion-col class="profileRight" col-10> <div class="name"> {{person.name}} </div></ion-col>
+                  <ion-col class="profileRight" col-10> 
+                    <ion-row><div class="name"> {{person.name}} </div></ion-row>
+                    <ion-row>
+                      <div *ngFor="let unit of person.academic" class="academicList">
+                        <div class="academic"> {{ unit.code }} </div>
+                      </div>
+                    </ion-row>
+                  </ion-col>
             </ion-row>
       </ion-grid>
     </ion-card>

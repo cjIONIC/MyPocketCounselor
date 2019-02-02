@@ -168,6 +168,36 @@
     border: 0;
     border-radius: 10px;
   }
+  
+  .custom-modal-concern .modal-wrapper{
+    position: absolute;
+    overflow: hidden;
+    max-width: 300px;
+    width:300px;
+    height: 250px !important;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+    border: 0;
+    border-radius: 10px;
+  }
+  
+  .custom-modal-counselor-profile .modal-wrapper{
+    position: absolute;
+    overflow: hidden;
+    max-width: 300px;
+    width:300px;
+    height: 500px !important;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+    border: 0;
+    border-radius: 10px;
+  }
 
   @font-face {
     font-family: "Brusher";

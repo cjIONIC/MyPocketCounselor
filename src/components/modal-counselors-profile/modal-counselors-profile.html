@@ -6,7 +6,7 @@
             Close
           </button>
         </ion-buttons>
-      <ion-title>{{type}} Info</ion-title>
+      <ion-title>Counselor Info</ion-title>
   </ion-navbar>
 
 </ion-header>
@@ -21,21 +21,22 @@
            <div><img src="{{ profileInfo['picture'] }}" class="avatar"></div>
            <div class="details">
              <div class="name">{{profileInfo["name"]}}</div>
-             <div class="feedback">{{rating}}
+             <div class="feedback">
                <div class="feedbackLabel">Rating</div>
-               <div class="feedbackInfo" *ngIf="rating">rating</div>
+               <div class="feedbackInfo" *ngIf="rating">{{rating}}</div>
                <div class="feedbackInfo" *ngIf="!rating">No ratings</div>
              </div>
              <div class="academicLabel">Academic Unit</div>
-             <div class="academic"> 
+             <div class="academicList"> 
                <div *ngFor="let units of profileInfo['academic']">
-                   <div class="academicCounselor2">{{units.acName}}</div>
+                   <div class="academic">{{units.acName}}</div>
                </div>
              </div>
      
              <div class="buttons">
-                 <div><button ion-button class="changeButton" clear (click)="changeAcademic()">Change Academic Unit</button></div>
-                 <div><button ion-button class="messageButton" clear (click)="removeCounselor()">Remove Counselor</button></div>
+                <div><button ion-button class="pictureButton" clear>Update Picture</button></div>
+                <div><button ion-button class="changeButton" (click)="changeAcademic()">Change Academic Unit</button></div>
+                 <div (click)="removeCounselor()" class="removeButton">Remove Counselor</div>
              </div>
            </div>
        </div>
