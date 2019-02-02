@@ -3,7 +3,7 @@ import { DatabaseProvider } from '../../providers/database/database';
 import { AngularFireDatabase } from 'angularfire2/database';
 import { Camera, CameraOptions } from '@ionic-native/camera';
 import { Item } from 'klaw';
-import { ViewController } from 'ionic-angular';
+import { ViewController, LoadingController } from 'ionic-angular';
 
 /**
  * Generated class for the ModalProfileEditComponent component.
@@ -29,6 +29,7 @@ export class ModalProfileEditComponent {
   constructor(public db: DatabaseProvider,
       public fireDatabase: AngularFireDatabase,
       public viewCtrl: ViewController,
+      public loadingCtrl: LoadingController,
       public camera: Camera) {
         
         this.initialize();
@@ -109,6 +110,21 @@ export class ModalProfileEditComponent {
     }, (err) => {
       console.log("Error: ", err);
     });
+  }
+
+  uploadPicture() {
+    
+    let loading = this.loadingCtrl.create({
+      spinner: 'ios',
+      content: 'Please Wait...'
+    });
+
+    loading.present().then(() => {
+      this.db.updatePicture(this.profilePicture).then(() => {
+        loading.dismiss();
+        this.dismiss();
+      })
+    })
   }
 
   dismiss() {

@@ -19,6 +19,10 @@
                         </ion-grid>
                     </button>
                 </div>
+               
+            </ion-card>
+
+            <ion-card>
                 <div class="item" *ngIf="userInfo['type'] !== 'Student'" (click)="registration()">
                     <ion-grid class="button btnRegister">
                         <ion-row>
@@ -35,6 +39,15 @@
                 <div class="item" *ngIf="userInfo['type'] === 'GTD Head'" (click)="controls()">
                     <button class="button btnControl">Head Controls</button>
                 </div>
+            </ion-card>
+
+            <ion-card class="settings">
+                <div class="item">
+                    <button class="button btnSettings" (click)="settings()">Settings</button>
+                </div>
+            </ion-card>
+
+            <ion-card>
                 <div class="item">
                     <div class="button">
                         <button class="btnLogout" (click)="logout()">Logout</button>

@@ -123,6 +123,105 @@ export class DatabaseProvider {
     return academicList;
   }
 
+  async updatePicture(image) {
+    if(this.userInfo["type"] === "Student") {
+      let students = await this.fetchAllNodesBySnapshot("student");
+      let ref = this.fireDatabase.list('student');
+      let keys = Object.keys(students);
+
+      for(let i = 0; i < keys.length; i++) {
+        let count = keys[i];
+        let value = students[count].payload.val();
+
+        if(value.sID === this.userInfo["id"]) {
+          let storage = firebase.storage().refFromURL(value.sPicture);
+          storage.delete();
+
+          let filePath = await this.uploadImage("student", image);
+          let imageURL = await this.downloadImage(filePath);
+
+          ref.update(students[count].key, {sPicture: imageURL});
+        }
+
+      }
+
+    } else {
+      let counselors = await this.fetchAllNodesBySnapshot("counselor");
+      let ref = this.fireDatabase.list('counselor');
+      let keys = Object.keys(counselors);
+
+      for(let i = 0; i < keys.length; i++) {
+        let count = keys[i];
+        let value = counselors[count].payload.val();
+
+        if(value.cID === this.userInfo["id"]) {
+          let storage = firebase.storage().refFromURL(value.cPicture);
+          storage.delete();
+
+          let filePath = await this.uploadImage("counselor", image);
+          let imageURL = await this.downloadImage(filePath);
+
+          ref.update(counselors[count].key, {cPicture: imageURL});
+        }
+
+      }
+    }
+
+    return;
+  }
+
+  async updatePassword(password) {
+    if(this.userInfo["type"] === "Student") {
+      let students = await this.fetchAllNodesBySnapshot("student");
+      let ref = this.fireDatabase.list('student');
+      let keys = Object.keys(students);
+
+      for(let i = 0; i < keys.length; i++) {
+        let count = keys[i];
+        let value = students[count].payload.val();
+
+        if(value.sID === this.userInfo["id"]) {
+          const update = this.fireAuth.auth.signInWithEmailAndPassword(value.sEmail, value.sPassword)
+            .then(() => {
+              let user = firebase.auth().currentUser;
+
+              user.updatePassword(password);
+              this.fireAuth.auth.signOut();
+
+              ref.update(students[count].key, {sPassword: password});
+            })
+        }
+
+      }
+
+    } else {
+      let counselors = await this.fetchAllNodesBySnapshot("counselor");
+      let ref = this.fireDatabase.list('counselor');
+      let keys = Object.keys(counselors);
+
+      for(let i = 0; i < keys.length; i++) {
+        let count = keys[i];
+        let value = counselors[count].payload.val();
+
+        if(value.cID === this.userInfo["id"]) {
+
+          const update = this.fireAuth.auth.signInWithEmailAndPassword(value.cEmail, value.cPassword)
+          .then(() => {
+            let user = firebase.auth().currentUser;
+
+            user.updatePassword(password);
+            this.fireAuth.auth.signOut();
+            
+            ref.update(counselors[count].key, {cPassword: password});
+          })
+        }
+
+      }
+    }
+
+    return;
+  }
+
   /*********************/
   /**** D E V I C E ****/
   /*********************/

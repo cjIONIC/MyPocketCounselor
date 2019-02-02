@@ -78,6 +78,8 @@ import { HeadControlsCounselorsPage } from '../pages/head-controls-counselors/he
 import { ModalCounselorsProfileComponent } from '../components/modal-counselors-profile/modal-counselors-profile';
 import { HeadControlsCounselorsAddPage } from '../pages/head-controls-counselors-add/head-controls-counselors-add';
 import { ModalCounselorsAcademicComponent } from '../components/modal-counselors-academic/modal-counselors-academic';
+import { SettingsPage } from '../pages/settings/settings';
+import { ModalPasswordUpdateComponent } from '../components/modal-password-update/modal-password-update';
 
 const firebaseConfig = {
   apiKey: "AIzaSyAVITAZa_qU9vSHq_ASeHJ1JGt3Sy8s8a0",
@@ -121,6 +123,8 @@ const firebaseConfig = {
     HeadControlsCounselorsAddPage,
     ModalCounselorsProfileComponent,
     ModalCounselorsAcademicComponent,
+    SettingsPage,
+    ModalPasswordUpdateComponent,
     SearchPage,
     ChatPage,
     ChatPeopleListPage,
@@ -183,6 +187,8 @@ const firebaseConfig = {
     HeadControlsCounselorsAddPage,
     ModalCounselorsProfileComponent,
     ModalCounselorsAcademicComponent,
+    SettingsPage,
+    ModalPasswordUpdateComponent,
     SearchPage,
     ChatPage,
     ChatPeopleListPage,

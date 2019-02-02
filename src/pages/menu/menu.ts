@@ -8,6 +8,7 @@ import { Subscription } from 'rxjs/Subscription';
 import { RegisterValidationPage } from '../register-validation/register-validation';
 import { ProfilePage } from '../profile/profile';
 import { HeadControlsPage } from '../head-controls/head-controls';
+import { SettingsPage } from '../settings/settings';
 
 /**
  * Generated class for the MenuPage page.
@@ -95,6 +96,10 @@ export class MenuPage {
 
   controls() {
     this.app.getRootNav().push(HeadControlsPage);
+  }
+
+  settings() {
+    this.app.getRootNav().push(SettingsPage);
   }
 
   async scanRegistrations() {

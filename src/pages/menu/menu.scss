@@ -36,7 +36,7 @@ page-menu {
 
     .btnProfile {
         width: 100%;
-        border-bottom: 0.5px solid gray;
+        //border-bottom: 0.5px solid gray;
     }
 
     .grid {
@@ -52,6 +52,7 @@ page-menu {
     
     .registrationLabel,
     .registrationBadge {
+        padding: 0%;
         padding-top: 13px; 
         font-size: 12pt;
         font-weight: bold;
@@ -72,12 +73,23 @@ page-menu {
     }
 
     .btnRegister, 
-    .btnControl {
+    .btnControl,
+    .btnSettings {
         width: 100%;
         height: 50px;
         font-weight: bold;
         padding-left: 17px;
         padding-right: 17px;
+    }
+
+    .btnSettings {
+        background-color: #ffb861;
+        color: white;
+    }
+
+    .btnSettings:active,
+    .btnSettings:focus {
+        background-color: #fac380;
     }
 
     .btnLogout {
