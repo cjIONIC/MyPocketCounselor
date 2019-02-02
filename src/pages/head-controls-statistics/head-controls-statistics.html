@@ -14,125 +14,89 @@
 
 
 <ion-content>
-  <ion-list>
-    <!--
-      <ion-card>
-        <ion-grid>
-          <ion-row>
-            <ion-col col-4 class="academicLabel">Academic Unit:</ion-col>
-            <ion-col col-8>
-              <div class="academicList">
-                <ion-item no-lines>
-                  <ion-select  [(ngModel)]="academic" class="academicSelect"> 
-                      <ion-option *ngFor="let place of academicList" value ="{{place.acID}}"> {{place.acCode}}</ion-option>
-                    </ion-select>
-                </ion-item>
-              </div>
-            </ion-col>
-          </ion-row>
-          <ion-row>
-            <ion-col col-4>School Year:</ion-col>
-            <ion-col col-3>
-                <ion-datetime pickerFormat="YYYY" 
-                  max="2050" 
-                  name="date" 
-                  (ionChange)="changeDate($event)"
-                  [(ngModel)]="dateDefault">
-              </ion-datetime>
-            </ion-col>
-            <ion-col col-2>to</ion-col>
-            <ion-col col-3>
-              {{ yearPlus }}
-            </ion-col>
-          </ion-row>
-          <ion-row>
-              <div class="buttons">
-                  <button ion-button class="btnAdd">Search</button>
-              </div>
-          </ion-row>
-        </ion-grid>
-      </ion-card>
-      <ion-card>
-        <ion-segment>
-          <ion-segment-button>
-            First
-          </ion-segment-button>
-          <ion-segment-button>
-            Second
-          </ion-segment-button>
-          <ion-segment-button>
-            Summer
-          </ion-segment-button>
-          <ion-segment-button>
-            All
-          </ion-segment-button>
-        </ion-segment>
-      </ion-card>
-    -->
-        <ion-card>
-          <ion-grid class="appointmentHeader">
-            <ion-row>
-                <ion-col class="arrow" col-2 (click)="loadPrevious()"><ion-icon name="arrow-back"></ion-icon></ion-col>
-                <ion-col col-8>
-                    <ion-row><div class="yearLabel">School Year</div></ion-row>
-                    <ion-row><div class="yearInfo">{{ schoolYear }}</div></ion-row>
-                </ion-col>
-                <ion-col class="arrow" col-2 (click)="loadNext()"><ion-icon name="arrow-forward"></ion-icon></ion-col>
-            </ion-row>
-          </ion-grid>
-          <div class="cardHeader">Number of Appointments</div>
-          <div class="barGraph">
-              <canvas id="yearlyChart" height="250px"></canvas>
-          </div>
-            
-        </ion-card>
-
-        <ion-slides spaceBetween="-26" #slides>
-            <ion-slide>
-              <ion-card class="cardSemester">
-                  <div class="cardSemHeader">First Semester</div>
-                  <div class="barGraph">
-                      <canvas id="firstSemChart"></canvas>
+   <div *ngIf="spinner" class="spinnerContent">
+        <ion-spinner color="primary"></ion-spinner>
+    </div>
+    <div *ngIf="!spinner">
+        <ion-list>
+          <ion-card>
+              <div class="studentLabel">Number of Enrolled Students</div>
+              <div class="studentHolder">
+                  <div class="studentInfo">
+                    {{allStudents}}
                   </div>
-              </ion-card>
-            </ion-slide>
-            <ion-slide>
-                <ion-card class="cardSemester">
-                    <div class="cardSemHeader">Second Semester</div>
-                    <div class="barGraph">
-                        <canvas id="secondSemChart"></canvas>
-                    </div>
-                </ion-card>
-            </ion-slide>
-            <ion-slide>
-                <ion-card class="cardSemester">
-                    <div class="cardSemHeader">Summer</div>
-                    <div class="barGraph">
-                        <canvas id="summerChart"></canvas>
-                    </div>
-                </ion-card>
-            </ion-slide>
-          </ion-slides>
-
-          <ion-card *ngFor="let unit of academicList" class="academicCard" (click)="viewStatistics(unit.id)">
-            <div class="academicDivName">
-              <div class="academicName"> {{ unit.name}} </div>
-            </div>
-            <ion-grid class="academicGrid">
-              <ion-row>
-                <ion-col col-2><img src="{{unit.avatar}}" class="avatar"></ion-col>
-                <ion-col col-9 class="counselorName">{{unit.counselor}}</ion-col>
-              </ion-row>
-              <ion-row>
-                <ion-col class="appointmentsLabel">Total Appointments:</ion-col>
-                <ion-col class="appointmentsInfo">{{unit.appointments}}</ion-col>
-              </ion-row>
-              <ion-row>
-                <ion-col class="studentsLabel">Total Students:</ion-col>
-                <ion-col class="studentsInfo">{{unit.appointments}}</ion-col>
-              </ion-row>
-            </ion-grid>
+              </div>
           </ion-card>
-  </ion-list>
+
+                <ion-card  class="appointmentHeader">
+                  <ion-grid>
+                    <ion-row>
+                        <ion-col class="arrow" col-2 (click)="loadPrevious()"><ion-icon name="arrow-back"></ion-icon></ion-col>
+                        <ion-col col-8>
+                            <ion-row><div class="yearLabel">Appointments</div></ion-row>
+                            <ion-row>
+                              <div class="yearRow">
+                                <div class="yearInfo">
+                                  {{ schoolYear }}
+                                </div>
+                              </div>
+                            </ion-row>
+                        </ion-col>
+                        <ion-col class="arrow" col-2 (click)="loadNext()"><ion-icon name="arrow-forward"></ion-icon></ion-col>
+                    </ion-row>
+                  </ion-grid>
+                  
+                    
+                </ion-card>
+        
+                <ion-slides spaceBetween="-26" class="cardSlides">
+                    <ion-slide>
+                      <ion-card class="cardSemester">
+                          <div class="cardSemHeader">First Semester</div>
+                          <div class="barGraph">
+                              <canvas id="firstSemChart"></canvas>
+                          </div>
+                      </ion-card>
+                    </ion-slide>
+                    <ion-slide>
+                        <ion-card class="cardSemester">
+                            <div class="cardSemHeader">Second Semester</div>
+                            <div class="barGraph">
+                                <canvas id="secondSemChart"></canvas>
+                            </div>
+                        </ion-card>
+                    </ion-slide>
+                    <ion-slide>
+                        <ion-card class="cardSemester">
+                            <div class="cardSemHeader">Summer</div>
+                            <div class="barGraph">
+                                <canvas id="summerChart"></canvas>
+                            </div>
+                        </ion-card>
+                    </ion-slide>
+                  </ion-slides>
+        
+                  <ion-card *ngFor="let unit of academicList" class="academicCard" (click)="viewStatistics(unit.id)">
+                    <div class="academicDivName">
+                      <div class="academicName"> {{ unit.name}} </div>
+                    </div>
+                    <ion-grid class="academicGrid">
+                      <ion-row>
+                        <ion-col col-2><img src="{{unit.avatar}}" class="avatar"></ion-col>
+                        <ion-col col-9 class="counselorName">{{unit.counselor}}</ion-col>
+                      </ion-row>
+                      <ion-row>
+                        <ion-col class="appointmentsLabel">Total Appointments:</ion-col>
+                        <ion-col class="appointmentsInfo">{{unit.appointments}}</ion-col>
+                      </ion-row>
+                      <ion-row>
+                        <ion-col class="studentsLabel">Total Students:</ion-col>
+                        <ion-col class="studentsInfo">{{unit.appointments}}</ion-col>
+                      </ion-row>
+                    </ion-grid>
+                  </ion-card>
+          </ion-list>
+    </div>
+  
   
 </ion-content>

@@ -105,8 +105,8 @@ export class ModalStatisticsComponent {
       let item = list.valueChanges();
 
       item.subscribe(async students => {
-        this.studentsEnrolled = await this.db.fetchAllStudents(students, this.academic, "Enrolled");
-        this.studentNotEnrolled = await this.db.fetchAllStudents(students, this.academic, "Not Enrolled");
+        this.studentsEnrolled = await this.db.fetchAllStudentsOfUnit(students, this.academic, "Enrolled");
+        this.studentNotEnrolled = await this.db.fetchAllStudentsOfUnit(students, this.academic, "Not Enrolled");
 
         this.loadPieStudents();
       })

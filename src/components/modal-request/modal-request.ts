@@ -4,6 +4,7 @@ import { DatabaseProvider } from '../../providers/database/database';
 import { AngularFireDatabase } from 'angularfire2/database';
 import { Network} from '@ionic-native/network';
 import { Subscription } from 'rxjs/Subscription';
+import moment from 'moment';
 
 /**
  * Generated class for the ModalRequestComponent component.
@@ -193,6 +194,7 @@ export class ModalRequestComponent {
   async inputs() {
     let requestInput = [];
     let requestID = this.profileInfo["id"];
+    let datetime = new Date(moment().format());
 
     let registrations = await this.db.fetchAllNodesByTableInDatabase("registration");
 
@@ -206,6 +208,7 @@ export class ModalRequestComponent {
           sPicture: request["rPicture"],
           sPassword: request["rPassword"],
           sStatus: request["rStatus"],
+          sDatetime: datetime,
           acID: parseInt(request["acID"])
         })
       }

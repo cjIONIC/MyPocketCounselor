@@ -14,11 +14,13 @@
 
 
 <ion-content>
+<div class="cardHolder">
+  <div class="cardList">
+    <ion-card class="statistics" (click)="statistics()">Statistics</ion-card>
 
-  <ion-card class="statistics" (click)="statistics()">Statistics</ion-card>
-
-  <ion-card class="concern" (click)="concerns()">Student Concerns</ion-card>
-
-  <ion-card class="counselor" (click)="counselors()">Guidance Counselors</ion-card>
-
+    <ion-card class="concern" (click)="concerns()">Student Concerns</ion-card>
+  
+    <ion-card class="counselor" (click)="counselors()">Guidance Counselors</ion-card>
+  </div>
+</div>
 </ion-content>

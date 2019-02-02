@@ -14,10 +14,16 @@
 <ion-content class="content">
   <ion-list>
 
-    <ion-card>
-        <div>{{ academicName }} </div>
+    <ion-card class="cardAcademic">
+        <div class="academicName">{{ academicName }} </div>
     </ion-card>
-      
+    <ion-card class="cardStudent">
+            <div class="studentLabel">Number of Students</div>
+            <div class="pieGraph">
+                <canvas id="studentChartModal" height="150px" width="150px"></canvas>
+            </div>
+    </ion-card>
+
       <ion-slides spaceBetween="-26">
           <ion-slide>
             <ion-card class="cardSemester">
@@ -45,11 +51,6 @@
           </ion-slide>
         </ion-slides>
 
-        <ion-card>
-            <div>Number of Students</div>
-            <div class="pieGraph">
-                <canvas id="studentChartModal" height="150px" width="150px"></canvas>
-            </div>
-        </ion-card>
+        
   </ion-list>
 </ion-content>

@@ -21,10 +21,10 @@
   <ion-card *ngFor="let concern of concernList">
     <ion-grid>
       <ion-row>
-        <ion-col col-10>
+        <ion-col col-10 class="concernName">
           {{concern.coName}}
         </ion-col>
-        <ion-col col-2>
+        <ion-col col-2 class="concernRemove">
           <div (click)="removeConcern(concern.coID)"><ion-icon name="close"></ion-icon></div>
         </ion-col>
       </ion-row>

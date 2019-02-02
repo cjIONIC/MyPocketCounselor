@@ -1,3 +1,22 @@
 page-head-controls-concerns {
 
+    .content {
+        background-color: #EFF0F1;
+        padding: 0%;
+    }
+
+    .card {
+        border-radius: 5px;
+        padding: 5px;
+    }
+
+    .concernName {
+        font-size: 12pt;
+    }
+
+    .concernRemove {
+        text-align: end;
+        color: #ff6961;
+    }
+
 }

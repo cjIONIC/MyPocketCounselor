@@ -27,19 +27,35 @@ export class HeadControlsStatisticsPage {
   barChart: any;
   date: any;
 
+  allStudents: any;
+
   //Months
-  June: any;
-  July: any;
-  August: any;
-  September: any;
-  October: any;
-  November: any;
-  December: any;
-  January: any;
-  February: any;
-  March: any;
-  April: any;
-  May: any;
+  juneEnrolled: any;
+  julyEnrolled: any;
+  augustEnrolled: any;
+  septemberEnrolled: any;
+  octoberEnrolled: any;
+  novemberEnrolled: any;
+  decemberEnrolled: any;
+  januaryEnrolled: any;
+  februaryEnrolled: any;
+  marchEnrolled: any;
+  aprilEnrolled: any;
+  mayEnrolled: any;
+  
+  //Months
+  juneNotEnrolled: any;
+  julyNotEnrolled: any;
+  augustNotEnrolled: any;
+  septemberNotEnrolled: any;
+  octoberNotEnrolled: any;
+  novemberNotEnrolled: any;
+  decemberNotEnrolled: any;
+  januaryNotEnrolled: any;
+  februaryNotEnrolled: any;
+  marchNotEnrolled: any;
+  aprilNotEnrolled: any;
+  mayNotEnrolled: any;
 
   //Months
   juneFinish: any;
@@ -96,6 +112,7 @@ export class HeadControlsStatisticsPage {
       this.date = new Date(moment().format());
       let month = this.date.getMonth();
 
+
        //Verify's the year
        if(month.toString().match(/^(5|6|7|8|9|10|11)$/)) {
         this.year = this.date.getFullYear();
@@ -112,7 +129,8 @@ export class HeadControlsStatisticsPage {
       this.academic = 99;
 
      // this.verifyDate(date);
-      this.fetchAllAppointments();
+      this.fetchAllStudents();
+      await this.fetchAllAppointments();
       await this.fetchAcademicUnitStatistics();
       
       //Identifies semestral period
@@ -127,37 +145,16 @@ export class HeadControlsStatisticsPage {
         this.slides.slideTo(2, 500);
       }
 
+
     } catch {
 
     }
 
   }
 
-  /*
-  async fetchAllAcademicUnits() {
-    let academics = await this.db.fetchAllNodesByTableInDatabase("academic");
-
-    this.academicList.push({
-      acID: 99,
-      acCode: "All",
-      acName: "All"
-    })
-
-    academics.forEach(academic => {
-      this.academicList.push(academic);
-    })
-
-    console.log("Academic List: ", this.academicList);
-  }
-  */
-
   changeDate(ev: any) {
     console.log("Date: ", ev);
     this.yearPlus = ev["year"] + 1;
-  }
-
-  search() {
-
   }
 
    verifyDate(date) {
@@ -176,26 +173,6 @@ export class HeadControlsStatisticsPage {
 
   }
 
-  /*
-  fetchAppointments() {
-    console.log("Semester: ", this.semester);
-    let list = this.fireDatabase.list<Item>("appointment");
-    let item = list.valueChanges();
-
-    item.subscribe(async appointments => {
-      if(this.semester === "First") {
-        await this.fetchFirstSemester(appointments);
-        //await this.loadPieAppointments(semester)
-      } else if (this.semester === "Second") {
-        await this.fetchSecondSemester(appointments);
-      } else {
-  
-      }
-    })
-
-  }
-  */
-
   fetchAllAppointments() {
     let list = this.fireDatabase.list<Item>("appointment");
     let item = list.valueChanges();
@@ -203,11 +180,27 @@ export class HeadControlsStatisticsPage {
     item.subscribe(async appointments => {
       await this.fetchFinishYear(appointments);
       await this.fetchAcceptYear(appointments);
-      await this.loadLineAppointmentsYear();
 
       this.loadBarAppointmentsFirstSemester();
       this.loadBarAppointmentsSecondSemester();
       this.loadBarAppointmentsSummer();
+
+    })
+  }
+
+  fetchAllStudents(){
+    let list = this.fireDatabase.list<Item>("student");
+    let item = list.valueChanges();
+
+    item.subscribe(async students => {
+      this.allStudents = await this.db.fetchAllStudents(this.year, students);
+      /*
+      await this.fetchEnrolledStudents(students);
+      await this.fetchNotEnrolledStudents(students);
+
+      
+      await this.loadLineStudentsYear();
+      */
     })
   }
 
@@ -250,98 +243,11 @@ export class HeadControlsStatisticsPage {
 
       item.subscribe(async academics => {
         this.academicList = await this.db.fetchAcademicUnitStatistics(academics, counselors, this.date);
-        console.log("Academic: ", this.academicList);
+        console.log("Academic: ", await this.academicList);
+
       })
 
     })
-  }
-
-  async fetchFirstSemester(appointments) {
-    this.June = await this.db.fetchAppointmentOfMonth(5, this.year, appointments, this.academic);
-    this.July = await this.db.fetchAppointmentOfMonth(6, this.year, appointments, this.academic);
-    this.August = await this.db.fetchAppointmentOfMonth(7, this.year, appointments, this.academic);
-    this.September = await this.db.fetchAppointmentOfMonth(8, this.year, appointments, this.academic);
-    this.October = await this.db.fetchAppointmentOfMonth(9, this.year, appointments, this.academic);
-  }
-
-  async fetchSecondSemester(appointments) {
-    this.November = await this.db.fetchAppointmentOfMonth(10, this.year, appointments, this.academic);
-    this.December = await this.db.fetchAppointmentOfMonth(11, this.year, appointments, this.academic);
-    this.January = await this.db.fetchAppointmentOfMonth(0, this.year+1, appointments, this.academic);
-    this.February = await this.db.fetchAppointmentOfMonth(1, this.year+1, appointments, this.academic);
-    this.March = await this.db.fetchAppointmentOfMonth(3, this.year+1, appointments, this.academic);
-  }
-
-  fetchSummer() {
-  }
-
-  loadBarAppointments() {
-    let ctx = document.getElementById("myChart");
-    
-    let label1, label2, label3, label4, label5;
-    let data1, data2, data3, data4, data5;
-
-    if(this.semester === "First") {
-      label1 = "June";
-      label2 = "July";
-      label3 = "August";
-      label4 = "September";
-      label5 = "October";
-
-      data1 = this.June;
-      data2 = this.July;
-      data3 = this.August;
-      data4 = this.September;
-      data5 = this.October;
-    } else if(this.semester === "Second") {
-      label1 = "November";
-      label2 = "December";
-      label3 = "January";
-      label4 = "February";
-      label5 = "March";
-
-      data1 = this.November;
-      data2 = this.December;
-      data3 = this.January;
-      data4 = this.February;
-      data5 = this.March;
-    }
-
-    this.barChart = new Chart(ctx, {
-      type: 'bar',
-      data: {
-          labels: [label1, label2, label3, label4, label5],
-          datasets: [{
-                    data: [data1, data2, data3, data4, data5],
-                    backgroundColor: [
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 206, 86, 0.2)',
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(153, 102, 255, 0.2)'
-                    ],
-                    borderColor: [
-                        'rgba(255,99,132,1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(153, 102, 255, 1)'
-                    ],
-                    borderWidth: 1
-                }]
-            },
-            options: { 
-                legend: { display: false },
-                scales: {
-                    yAxes: [{
-                        ticks: {
-                            beginAtZero:true
-                        }
-                    }]
-                }
-            }
-
-    });
   }
 
   loadBarAppointmentsFirstSemester() {
@@ -352,6 +258,7 @@ export class HeadControlsStatisticsPage {
       data: {
           labels: ["Jun", "Jul", "Aug", "Sep", "Oct"],
           datasets: [{
+                    label: "Finished",
                     data: [this.juneFinish, this.julyFinish, this.augustFinish, 
                       this.septemberFinish, this.octoberFinish],
                     backgroundColor: [
@@ -371,6 +278,7 @@ export class HeadControlsStatisticsPage {
                     borderWidth: 1
                 },
                 {
+                  label: "Not Finished",
                   data: [this.junePending, this.julyPending, this.augustPending, 
                     this.septemberPending, this.octoberPending,],
                   backgroundColor: [
@@ -412,6 +320,7 @@ export class HeadControlsStatisticsPage {
       data: {
           labels: ["Nov", "Dec", "Jan", "Feb", "March"],
           datasets: [{
+                    label: "Finished",
                     data: [this.novemberFinish,
                       this.decemberFinish, this.januaryFinish, this.februaryFinish,
                       this.marchFinish],
@@ -432,6 +341,7 @@ export class HeadControlsStatisticsPage {
                     borderWidth: 1
                 },
                 {
+                  label: "Not Finished",
                   data: [this.novemberPending,
                     this.decemberPending, this.januaryPending, this.februaryPending,
                     this.marchFinish],
@@ -474,6 +384,7 @@ export class HeadControlsStatisticsPage {
       data: {
           labels: ["April","May"],
           datasets: [{
+                    label: "Finished",
                     data: [this.aprilFinish, this.mayFinish],
                     backgroundColor: [
                         'rgba(255, 99, 132, 0.2)',
@@ -486,6 +397,7 @@ export class HeadControlsStatisticsPage {
                     borderWidth: 1
                 },
                 {
+                  label: "Not Finished",
                   data: [this.aprilPending, this.mayPending],
                   backgroundColor: [
                       'rgba(255, 99, 132, 0.2)',
@@ -512,7 +424,7 @@ export class HeadControlsStatisticsPage {
     });
   }
 
-  loadLineAppointmentsYear() {
+  loadLineStudentsYear() {
     let ctx = document.getElementById("yearlyChart");
     
 
@@ -526,11 +438,11 @@ export class HeadControlsStatisticsPage {
           datasets: [
               //Finished
               {
-                label: "Finished",
+                label: "Enrolled",
                 fill: false,
                 lineTension: 0.1,
-                backgroundColor: "rgba(105,97,255,0.4)",
-                borderColor: "rgba(105,97,255,1)",
+                backgroundColor: "rgba(97,168,255,0.4)",
+                borderColor: "rgba(97,168,255,1)",
                 borderCapStyle: 'butt',
                 borderDash: [],
                 borderDashOffset: 0.0,
@@ -538,41 +450,47 @@ export class HeadControlsStatisticsPage {
                 pointBorderColor: "rgba(105,97,255,1)",
                 pointBackgroundColor: "#fff",
                 pointBorderWidth: 1,
+                pointHoverRadius: 5,
+                pointHoverBackgroundColor: "rgba(97,168,255,1)",
+                pointHoverBorderColor: "rgba(220,220,220,1)",
+                pointHoverBorderWidth: 2,
                 pointRadius: 1,
                 pointHitRadius: 10,
-                data: [this.juneFinish, this.julyFinish, this.augustFinish, 
-                      this.septemberFinish, this.octoberFinish, this.novemberFinish,
-                      this.decemberFinish, this.januaryFinish, this.februaryFinish,
-                      this.marchFinish,this.aprilFinish, this.mayFinish],
+                data: [this.juneEnrolled, this.julyEnrolled, this.augustEnrolled, 
+                      this.septemberEnrolled, this.octoberEnrolled, this.novemberEnrolled,
+                      this.decemberEnrolled, this.januaryEnrolled, this.februaryEnrolled,
+                      this.marchEnrolled,this.aprilEnrolled, this.mayEnrolled],
               },
               //Unfinished
               {
-                label: "Total",
+                label: "Not Enrolled",
                 fill: false,
                 lineTension: 0.1,
-                backgroundColor: "rgba(97,255,105,0.4)",
-                borderColor: "rgba(97,255,105,1)",
+                backgroundColor: "rgba(255,184,97,0.4)",
+                borderColor: "rgba(255,184,97,1)",
                 borderCapStyle: 'butt',
                 borderDash: [],
                 borderDashOffset: 0.0, 
                 borderJoinStyle: 'miter',
-                pointBorderColor: "rgba(97,255,105,1)",
+                pointBorderColor: "rgba(255,184,97,1)",
                 pointBackgroundColor: "#fff",
                 pointBorderWidth: 1,
+                pointHoverRadius: 5,
+                pointHoverBackgroundColor: "rgba(255,184,97,1)",
+                pointHoverBorderColor: "rgba(255,184,97,1)",
+                pointHoverBorderWidth: 2,
                 pointRadius: 1,
                 pointHitRadius: 10,
-                data: [this.junePending, this.julyPending, this.augustPending, 
-                      this.septemberPending, this.octoberPending, this.novemberPending,
-                      this.decemberPending, this.januaryPending, this.februaryPending,
-                      this.marchFinish,this.aprilPending, this.mayPending],
+                data: [this.juneNotEnrolled, this.julyNotEnrolled, this.augustNotEnrolled, 
+                      this.septemberNotEnrolled, this.octoberNotEnrolled, this.novemberNotEnrolled,
+                      this.decemberNotEnrolled, this.januaryNotEnrolled, this.februaryNotEnrolled,
+                      this.marchNotEnrolled,this.aprilNotEnrolled, this.mayNotEnrolled],
               }
           ]
       },
       options: { 
         responsive: true,
         maintainAspectRatio: false,
-        tooltips: {enabled: false},
-        hover: {mode: null},
       }
 
   });

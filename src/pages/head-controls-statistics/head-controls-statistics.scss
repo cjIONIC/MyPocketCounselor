@@ -14,16 +14,34 @@ page-head-controls-statistics {
         align-content: center;
     }
 
-    .cardHeader {
+    .studentLabel {
         text-align: center;
         font-size: 12pt;
         font-weight: bold;
         padding: 5px;
     }
 
+    .studentHolder {
+        align-content: center;
+        text-align: center;
+    }
+
+    .studentInfo {
+        display: inline-block;
+        padding: 5px 20px;
+        text-align: center;
+        font-size: 20pt;
+        border-radius: 50px;
+        color: white;
+        background-color: #6961ff;
+    }
+
     .cardSemester {
         width: 91%;
-        margin: 0px auto;
+        margin: 5px auto;
+    }
+
+    .appointmentHeader {
     }
 
     .cardSemHeader {
@@ -35,10 +53,14 @@ page-head-controls-statistics {
     }
 
     .arrow {
-      font-size: 12pt;
+      font-size: 20pt;
       margin: 0px;
       text-align: center;
-      margin-top: 10px;
+      margin-top: 8px;
+    }
+
+    .cardSlides {
+        //padding: 10px;
     }
 
     .yearLabel {
@@ -49,11 +71,23 @@ page-head-controls-statistics {
       text-align: center;
     }
 
-    .yearInfo {
-      width: 100%;
-      font-size: 12pt;
-      margin: 0px;
+    .yearRow {
+      align-content: center;
       text-align: center;
+      margin: 5px;
+      width: 100%;
+
+    }
+
+    .yearInfo {
+      display: inline-block;
+      font-size: 12pt;
+      font-weight: bold;
+      padding: 5px 10px;
+      text-align: center;
+      background-color: #ff6961;
+      color: white;
+      border-radius: 50px;
     }
 
     .academicList {

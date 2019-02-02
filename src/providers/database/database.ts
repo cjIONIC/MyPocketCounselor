@@ -2272,6 +2272,52 @@ export class DatabaseProvider {
   /*********************/
   /*** C O N T R O L ***/
   /*********************/
+  fetchEnrolledStudents(month, year, students) {
+    let totalStudents = 0;
+
+    students.forEach(student => {
+      let studentYear = (new Date(student["sDatetime"])).getFullYear();
+      let studentMonth = (new Date(student["sDatetime"])).getMonth();
+
+      if(studentYear === year &&
+          studentMonth === month &&
+          student["sStatus"] === "Enrolled")
+        totalStudents++;
+
+    })
+
+    return totalStudents;
+  }
+  
+  fetchNotEnrolledStudents(month, year, students) {
+    let totalStudents = 0;
+
+    students.forEach(student => {
+      let studentYear = (new Date(student["sDatetime"])).getFullYear();
+      let studentMonth = (new Date(student["sDatetime"])).getMonth();
+
+      if(studentYear === year &&
+          studentMonth === month &&
+          student["sStatus"] === "Not Enrolled")
+        totalStudents++;
+
+    })
+
+    return totalStudents;
+  }
+
+  async fetchAllStudents(year, students) {
+    let totalStudents = 0;
+
+    students.forEach(student => {
+      if(student["sStatus"] === "Enrolled")
+        totalStudents++;
+    })
+    
+    console.log("Total Student: ", totalStudents);
+    return totalStudents;
+  }
+
   fetchAppointmentOfMonth(month, year, appointments, type) {
     let totalAppointments = 0;
     let semester
@@ -2427,7 +2473,7 @@ export class DatabaseProvider {
     return academicList;
   }
 
-  async fetchAllStudents(students, academic, type) {
+  async fetchAllStudentsOfUnit(students, academic, type) {
     let totalStudents = 0;
 
     students.forEach(student => {
