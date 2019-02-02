@@ -2544,6 +2544,41 @@ export class DatabaseProvider {
       return;
   }
 
+  async updateAcademicCounselor(id, academicList) {
+    let academics = await this.fetchAllNodesBySnapshot("academic");
+    console.log("Academics: ", academics);
+    let ref = this.fireDatabase.list('academic');
+    let keys = Object.keys(academics);
+
+    //Removes all academic unit of the counselor
+    for(let i = 0; i < keys.length; i++) {
+      let count = keys[i];
+      let value = academics[count].payload.val();
+      
+      if(value.cID === id) {
+        ref.update( academics[count].key, {cID: ""});
+      }
+    }
+
+    //Add new academic units of the counselor 
+    for(let i = 0; i < keys.length; i++) {
+      let count = keys[i];
+      let value = academics[count].payload.val();
+      
+      let push = false;
+
+      academicList.forEach(unit => {
+        if(value.acID === unit) push = true;
+      })
+
+      if(push) {
+        ref.update( academics[count].key, {cID: id});
+      }
+    }
+
+    return;
+  }
+
   /*********************/
   /**** O T H E R S ****/
   /*********************/

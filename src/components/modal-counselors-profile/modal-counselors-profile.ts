@@ -8,6 +8,7 @@ import { Subscription } from 'rxjs/Subscription';
 import { AppointmentAddPage } from '../../pages/appointment-add/appointment-add';
 import moment from 'moment';
 import { ChatMessagePage } from '../../pages/chat-message/chat-message';
+import { ModalCounselorsAcademicComponent } from '../modal-counselors-academic/modal-counselors-academic';
 
 /**
  * Generated class for the ModalCounselorsProfileComponent component.
@@ -104,6 +105,11 @@ export class ModalCounselorsProfileComponent {
 
   presentModal() {
     const modal = this.modalCtrl.create(ModalStudentUpdateComponent, {profile: this.profileInfo, type: this.type});
+    modal.present();
+  }
+
+  changeAcademic() {
+    const modal = this.modalCtrl.create(ModalCounselorsAcademicComponent, {id: this.id});
     modal.present();
   }
 

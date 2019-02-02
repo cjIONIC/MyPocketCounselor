@@ -1,4 +1,29 @@
-<!-- Generated template for the ModalCounselorsAcademicComponent component -->
-<div>
-  {{text}}
-</div>
+<ion-header>
+
+  <ion-navbar color="primary">
+      <ion-buttons end>
+          <button ion-button  style="text-transform: none; font-size: 15pt;" (click)="dismiss()">
+            Close
+          </button>
+        </ion-buttons>
+      <ion-title>Change Academic</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+<ion-content>
+  <div>
+      <ion-list no-lines>
+          <ion-item no-lines>Academic Units:</ion-item>
+          <ion-item *ngFor="let unit of academicList" no-lines>
+              <ion-label>{{unit.name}}</ion-label>
+              <ion-checkbox checked="{{unit.checked}}" (ionChange)="checkedUnit(unit)"></ion-checkbox>
+          </ion-item>
+      </ion-list>
+      <ion-item no-lines>
+          <button block ion-button (click)="changeAcademic()">
+              Update
+          </button>
+      </ion-item>
+  </div>
+</ion-content>
