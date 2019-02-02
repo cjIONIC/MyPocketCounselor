@@ -2488,6 +2488,62 @@ export class DatabaseProvider {
     return;
   }
 
+  async fetchCounselorProfile(id, counselors) {
+    let info = [];
+    let academicList = [];
+    let academics = await this.fetchAllNodesByTableInDatabase("academic");
+
+    counselors.forEach(counselor => {
+      if(counselor["cID"] === id) {
+        let name = counselor["cFirstName"] + " " + counselor["cLastName"];
+
+        academics.forEach(academic => {
+          if(academic["cID"] === counselor["cID"])
+            academicList.push(academic);
+        })
+
+        info.push({
+          id: counselor["cID"],
+          name: name,
+          picture: counselor["cPicture"],
+          academic: academicList
+        })
+      }
+    })
+
+    console.log("Counselor Info: ",info);
+
+    return info[0];
+  }
+
+  async addCounselor(fname, lname, email,
+    password, image) {
+      let imageURL;
+    
+      let currentUser = await firebase.auth().currentUser;
+      let id = currentUser["uid"];
+      await currentUser.updatePassword(password);
+      await this.fireAuth.auth.signOut();
+      
+      if(image) {
+        let filePath = await this.uploadImage("registration", image);
+          imageURL = await this.downloadImage(filePath);
+      } else imageURL = "No image";
+
+      this.fireDatabase.list('/counselor').push({
+        cID: id,
+        cFirstName: fname,
+        cLastName: lname,
+        cEmail: email,
+        cPassword: password,
+        cPicture: imageURL,
+        cNumber: null,
+        cType: "Counselor"
+      })
+
+      return;
+  }
+
   /*********************/
   /**** O T H E R S ****/
   /*********************/

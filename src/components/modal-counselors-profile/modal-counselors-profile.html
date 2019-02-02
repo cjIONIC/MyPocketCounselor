@@ -1,4 +1,44 @@
-<!-- Generated template for the ModalCounselorsProfileComponent component -->
-<div>
-  {{text}}
-</div>
+<ion-header>
+
+  <ion-navbar color="primary">
+      <ion-buttons end>
+          <button ion-button  style="text-transform: none; font-size: 15pt;" (click)="close()">
+            Close
+          </button>
+        </ion-buttons>
+      <ion-title>{{type}} Info</ion-title>
+  </ion-navbar>
+
+</ion-header>
+<ion-content class="content">
+
+  <div *ngIf="spinner" class="spinnerContent">
+           <ion-spinner color="primary"></ion-spinner>
+   </div>
+
+   <div *ngIf="!spinner">
+       <div class="profile">
+           <div><img src="{{ profileInfo['picture'] }}" class="avatar"></div>
+           <div class="details">
+             <div class="name">{{profileInfo["name"]}}</div>
+             <div class="feedback">{{rating}}
+               <div class="feedbackLabel">Rating</div>
+               <div class="feedbackInfo" *ngIf="rating">rating</div>
+               <div class="feedbackInfo" *ngIf="!rating">No ratings</div>
+             </div>
+             <div class="academicLabel">Academic Unit</div>
+             <div class="academic"> 
+               <div *ngFor="let units of profileInfo['academic']">
+                   <div class="academicCounselor2">{{units.acName}}</div>
+               </div>
+             </div>
+     
+             <div class="buttons">
+                 <div><button ion-button class="changeButton" clear>Change Academic Unit</button></div>
+                 <div><button ion-button class="messageButton" clear> Delete</button></div>
+             </div>
+           </div>
+       </div>
+   </div>
+   
+</ion-content>

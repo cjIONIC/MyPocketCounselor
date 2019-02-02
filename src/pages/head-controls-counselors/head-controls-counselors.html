@@ -6,7 +6,7 @@
 -->
 <ion-header>
 
-  <ion-navbar>
+  <ion-navbar color="primary">
     <ion-title>Guidance Counselors</ion-title>
   </ion-navbar>
 
@@ -14,10 +14,14 @@
 
 
 <ion-content padding>
+  <ion-fab right bottom >
+          <button ion-fab (click)="addCounselor()"><ion-icon name="add"></ion-icon></button>
+  </ion-fab>
+
   <ion-list class="list" >
-    <ion-card class="card">
+    <ion-card class="card" *ngFor="let person of counselorList">
         <ion-grid>
-            <ion-row class="contact"  *ngFor="let person of counselorList" class="profile" (click)="profile(person)">
+            <ion-row class="contact" class="profile" (click)="profile(person)">
                   <ion-col class="profileLeft" col-2>
                         <img src="{{ person.picture }}" class="avatar">
                   </ion-col>

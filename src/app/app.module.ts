@@ -76,6 +76,7 @@ import { HeadControlsConcernsPage } from '../pages/head-controls-concerns/head-c
 import { ModalConcernsAddComponent } from '../components/modal-concerns-add/modal-concerns-add';
 import { HeadControlsCounselorsPage } from '../pages/head-controls-counselors/head-controls-counselors';
 import { ModalCounselorsProfileComponent } from '../components/modal-counselors-profile/modal-counselors-profile';
+import { HeadControlsCounselorsAddPage } from '../pages/head-controls-counselors-add/head-controls-counselors-add';
 
 const firebaseConfig = {
   apiKey: "AIzaSyAVITAZa_qU9vSHq_ASeHJ1JGt3Sy8s8a0",
@@ -116,6 +117,7 @@ const firebaseConfig = {
     HeadControlsConcernsPage,
     ModalConcernsAddComponent,
     HeadControlsCounselorsPage,
+    HeadControlsCounselorsAddPage,
     ModalCounselorsProfileComponent,
     SearchPage,
     ChatPage,
@@ -176,6 +178,7 @@ const firebaseConfig = {
     HeadControlsConcernsPage,
     ModalConcernsAddComponent,
     HeadControlsCounselorsPage,
+    HeadControlsCounselorsAddPage,
     ModalCounselorsProfileComponent,
     SearchPage,
     ChatPage,
