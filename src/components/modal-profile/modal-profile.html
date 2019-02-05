@@ -21,7 +21,6 @@
             <div><img src="{{ profileInfo['picture'] }}" class="avatar"></div>
             <div class="details">
               <div class="name">{{profileInfo["name"]}}</div>
-              <div *ngIf="type === 'Counselor'" class="numberLabel">Mobile</div>
               <div class="academicLabel">Academic Unit</div>
               <div class="academic"> 
                 <div *ngFor="let units of profileInfo['academic']">

@@ -45,8 +45,22 @@ export class DatabaseProvider {
   }
 
   /*********************/
+  /* D I S C L A I M E R */
+  /*********************/
+
+
+  /*********************/
   /*** P R O F I L E ***/
   /*********************/
+  setDisclaimer() {
+    this.ionicStorage.set('disclaimer', true);
+  }
+
+  async getDisclaimer() {
+    const disclaimer = await this.ionicStorage.get('disclaimer');
+
+    return disclaimer;
+  }
 
   getUserInfo() {
     return Promise.resolve(this.userInfo);

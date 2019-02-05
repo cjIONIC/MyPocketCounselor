@@ -80,6 +80,7 @@ import { HeadControlsCounselorsAddPage } from '../pages/head-controls-counselors
 import { ModalCounselorsAcademicComponent } from '../components/modal-counselors-academic/modal-counselors-academic';
 import { SettingsPage } from '../pages/settings/settings';
 import { ModalPasswordUpdateComponent } from '../components/modal-password-update/modal-password-update';
+import { DisclaimerPage } from '../pages/disclaimer/disclaimer';
 
 const firebaseConfig = {
   apiKey: "AIzaSyAVITAZa_qU9vSHq_ASeHJ1JGt3Sy8s8a0",
@@ -94,6 +95,7 @@ const firebaseConfig = {
 @NgModule({ 
   declarations: [
     MyApp,
+    DisclaimerPage,
     LoginPage,
     ModalPasswordComponent,
     RegisterPage,
@@ -158,6 +160,7 @@ const firebaseConfig = {
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
+    DisclaimerPage,
     LoginPage,
     ModalPasswordComponent,
     RegisterPage,

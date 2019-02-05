@@ -11,6 +11,7 @@ import { LoginPage } from '../pages/login/login';
 import { RegisterPage } from '../pages/register/register';
 import { HomePage } from '../pages/home/home';
 import { HeadControlsPage } from '../pages/head-controls/head-controls';
+import { DisclaimerPage } from '../pages/disclaimer/disclaimer';
 
 @Component({
   templateUrl: 'app.html'
@@ -29,8 +30,18 @@ export class MyApp {
       statusBar.styleDefault();
       splashScreen.hide();
       
-        this.getUserProfile();
+      this.initialize();
     });
+  }
+
+  async initialize() {
+    const disclaimer = await this.db.getDisclaimer();
+    
+    if(disclaimer) {
+      this.getUserProfile();
+    } else {
+      this.rootPage = DisclaimerPage;
+    }
   }
   
   async getUserProfile() {

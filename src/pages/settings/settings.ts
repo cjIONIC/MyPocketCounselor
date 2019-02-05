@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, Item, ToastController, ModalController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, Item, ToastController, ModalController, App } from 'ionic-angular';
 import { Subscription } from 'rxjs/Subscription';
 import { DatabaseProvider } from '../../providers/database/database';
 import { AngularFireDatabase } from 'angularfire2/database';
 import { Network } from '@ionic-native/network';
 import { ModalPasswordUpdateComponent } from '../../components/modal-password-update/modal-password-update';
+import { DisclaimerPage } from '../disclaimer/disclaimer';
 
 /**
  * Generated class for the SettingsPage page.
@@ -33,6 +34,7 @@ export class SettingsPage {
   constructor(public navCtrl: NavController, 
       public db: DatabaseProvider,
       public network: Network,
+      public app: App,
       public toastCtrl: ToastController,
       public modalCtrl: ModalController,
       public fireDatabase: AngularFireDatabase,
@@ -81,6 +83,10 @@ export class SettingsPage {
   changePassword() {
     const modal = this.modalCtrl.create(ModalPasswordUpdateComponent,  "",{ cssClass: 'custom-modal-password-update' });
     modal.present();
+  }
+
+  disclaimer() {
+    this.app.getRootNav().push(DisclaimerPage);
   }
 
   ionViewDidLoad() {

@@ -37,6 +37,7 @@ page-menu {
     .btnProfile {
         width: 100%;
         //border-bottom: 0.5px solid gray;
+        margin-bottom: 0%;
     }
 
     .grid {
@@ -81,17 +82,7 @@ page-menu {
         padding-left: 17px;
         padding-right: 17px;
     }
-
-    .btnSettings {
-        background-color: #ffb861;
-        color: white;
-    }
-
-    .btnSettings:active,
-    .btnSettings:focus {
-        background-color: #fac380;
-    }
-
+    
     .btnLogout {
         margin-left: 10px;
         margin-top: 10px;

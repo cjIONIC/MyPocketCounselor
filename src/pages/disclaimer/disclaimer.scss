@@ -1,0 +1,35 @@
+page-disclaimer {
+
+    .content {
+        background-color: #EFF0F1;
+        align-content: center;
+        padding: 0%;
+    }
+
+    .card {
+        padding: 10px;
+        border-radius: 10px;
+    }
+
+    .label {
+        font-size: 15pt;
+        font-weight: bold;
+    }
+
+    .description {
+        font-size: 12pt;
+        margin: 10px 0px;
+    }
+
+    .buttons {
+        display: block;
+        align-content: center;
+        text-align: center;
+    }
+
+    .ok {
+        width: 80%;
+        margin: 0px auto;
+    }
+
+}
