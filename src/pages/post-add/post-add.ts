@@ -375,6 +375,7 @@ export class PostAddPage {
       startDate = "None";
       endDate = "None";
 
+      /*
       let tempArr = [];
       let keysAcademic = Object.keys(this.academicList);
       for(let i=0; i< keysAcademic.length; i++) {
@@ -383,7 +384,8 @@ export class PostAddPage {
         console.log("Acad ID: ", idAcademic);
         if(idAcademic != undefined) tempArr.push(idAcademic);
       }   
-      academic = tempArr;
+      */
+      academic = 1;
     }
 
     let loading = this.loadingCtrl.create({

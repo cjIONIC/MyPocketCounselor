@@ -36,7 +36,9 @@
              <div class="buttons">
                 <div><button ion-button class="pictureButton" clear>Update Picture</button></div>
                 <div><button ion-button class="changeButton" (click)="changeAcademic()">Change Academic Unit</button></div>
-                 <div (click)="removeCounselor()" class="removeButton">Remove Counselor</div>
+                 <div (click)="removeCounselor()" 
+                    class="removeButton" 
+                    *ngIf="userInfo['id'] !== id">Remove Counselor</div>
              </div>
            </div>
        </div>

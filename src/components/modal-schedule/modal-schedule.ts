@@ -22,6 +22,10 @@ export class ModalScheduleComponent {
 
   connected: Subscription;
   disconnected: Subscription;
+  schedule: Subscription;
+
+  added: Boolean = false;
+
 
   studentDefault: any;
   dateDefault: any;
@@ -120,23 +124,34 @@ export class ModalScheduleComponent {
       console.log('%c Rescheduling Appointment','color: white; background: red; font-size: 16px');
       let appointmentsOfCounselor, appointmentsOfStudent; //Variables used in checking
       console.log("Schedule: ", schedule);
+      
+      let timeout = Math.floor(Math.random() * 1500) + 500;
+      let list = this.fireDatabase.list<Item>("appointment");
+      let item = list.valueChanges();
+
+      this.schedule = item.subscribe(() => {
+        setTimeout(async () => {
+          try {
+            this.added = true;
+            appointmentsOfCounselor = await this.checkDuplicateForCounselor(this.appointment["cID"], schedule);
+            appointmentsOfStudent =  await this.checkDuplicateForStudent(this.appointment["sID"], schedule);
+      
+            console.log("Statusfinding: ", appointmentsOfCounselor, appointmentsOfStudent)
+            if(await appointmentsOfStudent && await appointmentsOfCounselor) 
+              this.presentToast("Date and time has already been occupied!");
+            else {
+              await this.db.rescheduleAppointment(this.appointment["id"], schedule, venue).then(() => {
+                  this.viewCtrl.dismiss();
+                  loading.dismiss();
+                }).catch(err => console.log("Error: ", err));
+            }
+          } catch {
+      
+          }
+
+        }, timeout)
+      })
   
-      try {
-        appointmentsOfCounselor = await this.checkDuplicateForCounselor(this.appointment["cID"], schedule);
-        appointmentsOfStudent =  await this.checkDuplicateForStudent(this.appointment["sID"], schedule);
-  
-        console.log("Statusfinding: ", appointmentsOfCounselor, appointmentsOfStudent)
-        if(await appointmentsOfStudent && await appointmentsOfCounselor) 
-          this.presentToast("Date and time has already been occupied!");
-        else {
-          await this.db.rescheduleAppointment(this.appointment["id"], schedule, venue).then(() => {
-              this.viewCtrl.dismiss();
-              loading.dismiss();
-            }).catch(err => console.log("Error: ", err));
-        }
-      } catch {
-  
-      }
     })
     
   }
@@ -259,6 +274,10 @@ export class ModalScheduleComponent {
   ionViewWillLeave(){
     this.connected.unsubscribe();
     this.disconnected.unsubscribe();
+
+    //Firebase
+    this.schedule.unsubscribe();
+    console.log("Successfully unsubscribe");
   }
 
   ionViewDidEnter() {

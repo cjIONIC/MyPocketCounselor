@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavParams, App, ViewController, AlertController } from 'ionic-angular';
+import { NavParams, App, ViewController, AlertController, ToastController, LoadingController } from 'ionic-angular';
 import { DatabaseProvider } from '../../providers/database/database';
 import { PostEditPage } from '../../pages/post-edit/post-edit';
 
@@ -21,6 +21,8 @@ export class PopFeedOptionsComponent {
   constructor( public navParams: NavParams,
     public viewCtrl: ViewController,
     public alertCtrl: AlertController,
+    public toastCtrl: ToastController,
+    public loadingCtrl: LoadingController,
     public db: DatabaseProvider,
     public app: App) {
       try {
@@ -28,6 +30,20 @@ export class PopFeedOptionsComponent {
       } catch {
 
       }
+  }
+
+  presentToast(description) {
+    let toast = this.toastCtrl.create({
+      message: description,
+      duration: 3000,
+      position: 'bottom'
+    });
+  
+    toast.onDidDismiss(() => {
+      console.log('Dismissed toast');
+    });
+  
+    toast.present();
   }
 
   deletePost() {
@@ -47,9 +63,19 @@ export class PopFeedOptionsComponent {
           handler: () => {
             try {
               let id = this.post["id"];
-        
-              this.viewCtrl.dismiss().then(() => {
-                this.db.deletePost(id);
+
+              
+              let loading = this.loadingCtrl.create({
+                spinner: 'ios',
+                content: 'Please Wait...'
+              });
+
+              loading.present().then(() => {
+                this.db.deletePost(id).then(() => {
+                  loading.dismiss();
+                  this.presentToast("Successfully deleted post");
+                  this.viewCtrl.dismiss();
+                })
               })
             } catch {
               

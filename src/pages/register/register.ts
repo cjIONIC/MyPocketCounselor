@@ -33,6 +33,7 @@ export class RegisterPage {
   emailDefault: any;
   fNameDefault: any;
   lNameDefault: any;
+  profilePic: any; //Stores the image for the profile picture
 
   matchPassword: any;
   passwordDefault: any;
@@ -41,7 +42,6 @@ export class RegisterPage {
 
   academicArray: any;
   googleInfo = [];
-  profilePic: any; //Stores the image for the profile picture
   picType: any;
 
 

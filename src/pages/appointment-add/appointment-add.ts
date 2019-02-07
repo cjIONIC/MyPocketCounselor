@@ -26,6 +26,7 @@ import { Subscription } from 'rxjs/Subscription';
 export class AppointmentAddPage {
   connected: Subscription;
   disconnected: Subscription;
+  appointment: Subscription;
 
   appointmentDetails: any;
 
@@ -48,6 +49,8 @@ export class AppointmentAddPage {
   academicDefault = [];
 
   appointmentArray = [];
+
+  added: Boolean = false;
 
   constructor(public fireDatabase: AngularFireDatabase,
     public navCtrl: NavController, 
@@ -273,9 +276,10 @@ export class AppointmentAddPage {
       let item = list.valueChanges();
       let pushed = false;
   
-      item.subscribe(() => {
+      this.appointment =  item.subscribe(() => {
         setTimeout(async () => {
           try {
+            this.added = true;
             if(this.userInfo["type"] != "Student") {
               console.log('%c Searching appointments for counselor','color: white; background: red; font-size: 16px');
               appointmentsOfCounselor = await this.checkDuplicateForCounselor(this.userInfo["id"], schedule);
@@ -340,7 +344,7 @@ export class AppointmentAddPage {
     else if (month.toString().match(/^(1|2|3|11|12)$/)) semester = "Second";
     else semester = "Summer";
 
-    if(this.userInfo["type"] != "Student") status = "Accepted";
+    if(this.userInfo["type"] != "Student") status = "Added";
     else status = "Pending";
 
     
@@ -431,6 +435,10 @@ export class AppointmentAddPage {
   ionViewWillLeave(){
     this.connected.unsubscribe();
     this.disconnected.unsubscribe();
+
+    //Firebase
+    if(this.added) this.appointment.unsubscribe();
+    console.log("Successfully unsubscribed");
   }
 
   ionViewDidEnter() {

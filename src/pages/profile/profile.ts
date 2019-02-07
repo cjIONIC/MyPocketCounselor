@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, Item, App, ModalController, ViewController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, Item, App, ModalController, ViewController, PopoverController } from 'ionic-angular';
 import { DatabaseProvider } from '../../providers/database/database';
 import { AngularFireDatabase } from 'angularfire2/database';
 import { FeedbackPage } from '../feedback/feedback';
 import { ModalProfileEditComponent } from '../../components/modal-profile-edit/modal-profile-edit';
+import { PopFeedOptionsComponent } from '../../components/pop-feed-options/pop-feed-options';
 
 /**
  * Generated class for the ProfilePage page.
@@ -35,6 +36,7 @@ export class ProfilePage {
       public app: App,
       public fireDatabase: AngularFireDatabase,
       public modalCtrl: ModalController,
+      public popoverCtrl: PopoverController,
       public viewCtrl: ViewController,
       public navParams: NavParams) {
     this.initialize();
@@ -122,6 +124,13 @@ export class ProfilePage {
   editProfile() {
     const modal = this.modalCtrl.create(ModalProfileEditComponent,  "",{ cssClass: 'custom-modal-profile-edit' });
     modal.present();
+  }
+
+  popOptions(myEvent, post) {
+    let popover = this.popoverCtrl.create(PopFeedOptionsComponent, {post:post},{ cssClass: 'custom-popover' });
+    popover.present({
+      ev: myEvent
+    });
   }
 
   viewFeedbacks() {

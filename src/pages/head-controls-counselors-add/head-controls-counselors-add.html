@@ -25,16 +25,20 @@
     <form #counselorForm="ngForm" (ngSubmit)="onSubmit(counselorForm.value)" novalidate>
 
           <ion-item>
-            <ion-label color="primary" stacked> Email </ion-label>
+            <ion-label color="primary" stacked> SU Email Address </ion-label>
             <ion-input type="text" 
                 #email="ngModel" 
                 name="email" 
+                pattern="^[a-zA-Z]+@(?:(?:[a-zA-Z0-9-]+\.)?[a-zA-Z]+\.)?(su.edu)\.ph$" 
                 ngModel
                 required></ion-input>
           </ion-item>
           <div *ngIf="email.errors && (email.dirty || email.touched)">
             <div [hidden]="!email.errors.required" class="alert">
-              Email is required
+              SU Email is required
+            </div>
+            <div [hidden]="!email.errors.pattern" class="alert">
+              Invalid SU Email address
             </div>
           </div>
 
@@ -98,7 +102,7 @@
               </div>
             </div>
             <div *ngIf="!matchPassword && !match.errors" class="alert">
-              Mismatch
+              Pasword doesn't match
             </div>
             
         

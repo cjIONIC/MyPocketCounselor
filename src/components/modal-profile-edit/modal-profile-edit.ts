@@ -74,7 +74,7 @@ export class ModalProfileEditComponent {
   async fetchProfilePicture(accounts, type) {
     let photo;
 
-    if(type === "Student") {
+    if(type === "student") {
       accounts.forEach(account => {
         if(account["sID"] === this.userInfo["id"])
           photo = account["sPicture"];
@@ -86,7 +86,7 @@ export class ModalProfileEditComponent {
       })
     }
 
-    console.log("Fetched Picture: ", this.profilePicture);
+    console.log("Fetched Picture: ", photo);
     return photo;
   }
 

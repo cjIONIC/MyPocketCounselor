@@ -15,24 +15,26 @@ page-chat-message {
     }
 
     .name {
-        padding-top: 14px;
+        //padding-top: 14px;
         margin-left: 5px;
         font-size: 15pt;
         color: white;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .avatarHolder {
+        padding: 0px 10px;
     }
 
     .avatar {
         margin: 3px auto;
-        width: 35px;
-        height: 35px;
+        width: 100%;
+        height: auto;
         border-radius: 50%;
         border: 1px solid rgb(235, 235, 235);
     }
-
-    .name {
-    }
-
-    
 
     .content {
         background-color: #EFF0F1;

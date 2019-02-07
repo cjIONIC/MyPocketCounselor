@@ -86,6 +86,40 @@ export class ModalNotificationComponent {
     }, error => console.log(error))
   }
 
+  verifyDate() {
+    let today = new Date(moment().format());
+    let schedule = new Date(this.notificationInfo["schedule"]);
+
+    if(schedule < today) {
+      let alert = this.alertCtrl.create({
+        title: 'Occupied',
+        message: 'Schedule has already passed! Do you want to reschedule?',
+        buttons: [
+          {
+            text: 'No',
+            role: 'cancel',
+            handler: () => {
+              console.log('Cancel clicked');
+            }
+          },
+          {
+            text: 'Reschedule',
+            handler: () => {
+              try {
+                this.reschedule();
+              } catch {
+                
+              }
+            }
+          }
+        ]
+      });
+      alert.present();
+    } else {
+      this.accept();
+    }
+  }
+
   async accept() {
 
     

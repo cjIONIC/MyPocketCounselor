@@ -59,13 +59,42 @@ export class ModalCounselorsProfileComponent {
     try {
       this.spinner = true;
       this.id = this.navParams.get('id');
-      this.fetchProfile();
+      this.getUserInfo();
       
       //Loading icon
     } catch {
 
     }
   }
+
+  
+  
+  
+  async getUserInfo() {
+    let userInfo = await this.db.getProfileInStorage();
+    console.log("Currently logged in: ", userInfo);
+    let table;
+
+    if(userInfo["type"] === "Student") table = "student"
+    else table = "counselor";
+
+    let list = this.fireDatabase.list<Item>(table);
+    let item = list.valueChanges();
+
+    this.fireDatabase.list<Item>("academic")
+      .valueChanges().subscribe(academics => {
+
+        item.subscribe(async accounts => {
+          await this.db.refreshUserInfo(accounts, userInfo);
+          this.userInfo = await this.db.getUserInfo();
+          console.log("User information: ", this.userInfo);
+          await this.fetchProfile();
+        }, error => console.log(error));
+
+    }, error => console.log(error));
+  }
+
+
   presentToast(description) {
     let toast = this.toastCtrl.create({
       message: description,

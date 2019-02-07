@@ -46,19 +46,22 @@ export class ModalCounselorsAcademicComponent {
 
     item.subscribe(academics => {
       academics.forEach(academic => {
-        if(academic["cID"] === this.id) {
-          this.academicList.push({
-            id: academic["acID"],
-            name: academic["acName"],
-            checked: true
-          });
-        } else {
-          this.academicList.push({
-            id: academic["acID"],
-            name: academic["acName"],
-            checked: false
-          });
+        if(academic["acID"] !== 1) {
+          if(academic["cID"] === this.id) {
+            this.academicList.push({
+              id: academic["acID"],
+              name: academic["acName"],
+              checked: true
+            });
+          } else {
+            this.academicList.push({
+              id: academic["acID"],
+              name: academic["acName"],
+              checked: false
+            });
+          }
         }
+
       })
     })
   }
@@ -107,11 +110,11 @@ export class ModalCounselorsAcademicComponent {
 
      console.log("New academic: ", academicList);
      this.db.updateAcademicCounselor(this.id, academicList).then(() => {
-       this.close();
+       this.dismiss();
      })
   }
 
-  close() {
+  dismiss() {
     this.viewCtrl.dismiss();
   }
 

@@ -968,7 +968,7 @@ export class DatabaseProvider {
     return Promise.resolve(found);
   }
 
-  deletePost(id) {
+  async deletePost(id) {
     var ref=this.fireDatabase.list('post');
 
     ref.snapshotChanges(['child_added'])
@@ -987,6 +987,8 @@ export class DatabaseProvider {
         }
       }
     });
+
+    return;
   }
 
   async likePost(postID, likes) {
@@ -1072,7 +1074,7 @@ export class DatabaseProvider {
 
         academics.forEach(academic => {
           if(academic["cID"] === post["cID"]) {
-            unit = academic["acName"];
+            unit = academic["acCode"];
           }
         })
 
@@ -1144,6 +1146,7 @@ export class DatabaseProvider {
 
     return studentList;
   }
+  
   async fetchListStudent(students, filter: Boolean, unit) {
     let studentList = [];
     let academics = await this.fetchAllNodesByTableInDatabase("academic");
@@ -1544,6 +1547,12 @@ export class DatabaseProvider {
       }
     });
 
+    appointmentList.sort(function(a,b) {
+      if(a.datetime < b.datetime) { return -1; }
+      if(a.datetime > b.datetime) { return 1; }
+      return 0;
+    });
+
     console.log("Fetched Appointment: ", appointmentList);
     return await appointmentList;
   }
@@ -1924,6 +1933,7 @@ export class DatabaseProvider {
           let appointment = appointments[count].payload.val();
           
           ref.update(appointments[count].key, { 
+            aNotification: "Sent",
             aDatetime: date.toString(),
             aStatus: "Finished"
           }).then(()=> {
