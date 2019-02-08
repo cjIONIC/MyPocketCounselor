@@ -32,8 +32,9 @@ page-head-controls {
         font-size: 12pt;
         border-radius: 5px;
         font-weight: bold;
-        color: #ff6961;
-        border: 1px solid #ff6961;
+        background-color: #ff6961;
+        color: white;
+        //border: 1px solid #ff6961;
     }
 
     .card:active {

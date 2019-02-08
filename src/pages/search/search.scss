@@ -6,15 +6,23 @@ page-search {
 
     .searchbar-search-icon { display:none; width:0; height:0; padding: 0; }
 
-    .searchbar-input,
-    .searchbar-ios {
+    .searchbar-input {
         padding-left: 10px !important;
         font-size: 15pt !important;
         padding: 3px 20px !important;
       }
+
+    .searchbar-ios .searchbar-input {
+        background-color: #f1534b !important;
+    }
    
     .searchbar-input-container {
         margin-right: 10px !important;
+    }
+   
+    .searchbar-ios .searchbar-input-container {
+        //height: 10px !important;
+        border-radius: 50px !important;
     }
       .row {
         width: 100%;

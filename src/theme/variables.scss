@@ -53,15 +53,17 @@ $button-ios-text-transform: none;
 
 $list-ios-activated-background-color: #d9d9d9;
 //Search
+
 $searchbar-ios-padding-top: 0px;
 $searchbar-ios-padding-bottom: 0px;
-$searchbar-ios-input-background-color: #f1534b;
+$searchbar-ios-background-color: #f1534b;
 $searchbar-ios-input-search-icon-size: 0px;
 $searchbar-ios-input-text-color: white;
 $searchbar-ios-input-box-shadow: 1px;
 $searchbar-ios-input-clear-icon-color:white;
 $searchbar-ios-input-placeholder-color: rgba(248, 248, 248, 0.507);
 $searchbar-ios-input-border-radius: 50px;
+$searchbar-ios-min-height:20px;
 
 //Popover
 $popover-ios-width: 200px;

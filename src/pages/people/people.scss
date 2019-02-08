@@ -208,6 +208,9 @@ page-people {
         font-size: 12pt;
         color: black;
         margin-top: 5px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
     .phone {

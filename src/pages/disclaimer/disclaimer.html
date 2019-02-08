@@ -16,13 +16,9 @@
 <ion-content>
   <ion-card>
     <div class="label"> Application Disclaimer </div>
-    <p class="description"> This application is not a substitute for counseling
-        and is not meant for emergency situations.
-        This application is only for setting appointments, inquiries
-        and getting the latest events and quotes from the university's 
-        Guidance and Testing Division.</p>
+    <p class="description"> This mobile application is intended for setting appointments, inquiries and knowing the latest events and quotes from the university’s Guidance and Testing Division (GTD). It is not a platform for counseling and doesn’t focus on emergency situations. Counseling is done outside the application which is face-to-face with a guidance counselor inside the Guidance Office. Incase of emergency, please call the SU Hotline to allow the GTD to quickly respond to your situation.</p>
     <div class="buttons">
-      <button ion-button block class="ok" (click)="proceedToLogin()">Okay</button>
+      <button ion-button block class="ok" *ngIf="!display" (click)="proceedToLogin()">Agree</button>
     </div>
   </ion-card>
 </ion-content>

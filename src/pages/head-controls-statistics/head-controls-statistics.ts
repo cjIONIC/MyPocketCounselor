@@ -282,11 +282,11 @@ export class HeadControlsStatisticsPage {
                   data: [this.junePending, this.julyPending, this.augustPending, 
                     this.septemberPending, this.octoberPending,],
                   backgroundColor: [
-                      'rgba(255, 99, 132, 0.2)',
-                      'rgba(54, 162, 235, 0.2)',
-                      'rgba(255, 206, 86, 0.2)',
-                      'rgba(75, 192, 192, 0.2)',
-                      'rgba(153, 102, 255, 0.2)'
+                      'rgba(255, 99, 132, 1)',
+                      'rgba(54, 162, 235, 1)',
+                      'rgba(255, 206, 86, 1)',
+                      'rgba(75, 192, 192, 1)',
+                      'rgba(153, 102, 255, 1)'
                   ],
                   borderColor: [
                       'rgba(255,99,132,1)',
@@ -346,11 +346,11 @@ export class HeadControlsStatisticsPage {
                     this.decemberPending, this.januaryPending, this.februaryPending,
                     this.marchFinish],
                   backgroundColor: [
-                      'rgba(255, 99, 132, 0.2)',
-                      'rgba(54, 162, 235, 0.2)',
-                      'rgba(255, 206, 86, 0.2)',
-                      'rgba(75, 192, 192, 0.2)',
-                      'rgba(153, 102, 255, 0.2)'
+                      'rgba(255, 99, 132, 1)',
+                      'rgba(54, 162, 235, 1)',
+                      'rgba(255, 206, 86, 1)',
+                      'rgba(75, 192, 192, 1)',
+                      'rgba(153, 102, 255, 1)'
                   ],
                   borderColor: [
                       'rgba(255,99,132,1)',
@@ -400,8 +400,8 @@ export class HeadControlsStatisticsPage {
                   label: "Not Finished",
                   data: [this.aprilPending, this.mayPending],
                   backgroundColor: [
-                      'rgba(255, 99, 132, 0.2)',
-                      'rgba(54, 162, 235, 0.2)'
+                      'rgba(255, 99, 132, 1)',
+                      'rgba(54, 162, 235, 1)',
                   ],
                   borderColor: [
                       'rgba(255,99,132,1)',

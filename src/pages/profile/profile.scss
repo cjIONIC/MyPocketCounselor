@@ -132,6 +132,9 @@ page-profile {
     .headerName {
         font-size: 12pt;
         font-weight: bold;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
     .headerAcademic {
@@ -233,6 +236,8 @@ page-profile {
         padding: 0px 10px;
         font-size: 12pt;
         margin-bottom: 10px;
+        text-align: justify;
+        text-justify: inter-word;
     }
 
     .divider {
