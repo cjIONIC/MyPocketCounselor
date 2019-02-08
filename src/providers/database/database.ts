@@ -280,7 +280,7 @@ export class DatabaseProvider {
     let token = this.ionicStorage.get('token');
     
    let devices = await this.fetchAllNodesBySnapshot("device");
-   let ref = this.fireDatabase.list('devices');
+   let ref = this.fireDatabase.list('device');
 
    let keys = Object.keys(devices);
 
@@ -2614,7 +2614,7 @@ export class DatabaseProvider {
       if (studentMonth.toString().match(/^(0|1|2|3|4)$/)) {
         year = year + 1;
       }
-      
+
       if(student["acID"] === academic &&
           student["sStatus"] === type &&
           studentYear === year)

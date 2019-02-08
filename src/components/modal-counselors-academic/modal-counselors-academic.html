@@ -20,10 +20,12 @@
               <ion-checkbox checked="{{unit.checked}}" (ionChange)="checkedUnit(unit)"></ion-checkbox>
           </ion-item>
       </ion-list>
-      <ion-item no-lines>
-          <button block ion-button (click)="changeAcademic()">
-              Update
-          </button>
-      </ion-item>
   </div>
 </ion-content>
+<ion-footer>
+    <div class="footerBtn">
+        <button block ion-button (click)="changeAcademic()" class="btnUpdate">
+            Update
+        </button>
+        </div>
+</ion-footer>

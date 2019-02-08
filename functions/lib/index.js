@@ -128,6 +128,30 @@ exports.updateAppointmentNotification = functions.database
             });
         }, (error) => console.log("Error"));
     }
+    if (after.aStatus === "Reschedule") {
+        const counselor = yield fetchCounselorName(after.cID);
+        console.log("Counselor name: ", counselor);
+        token = yield fetchDevice(after.sID);
+        return Promise.all([counselor]).then(function (counselorName) {
+            return __awaiter(this, void 0, void 0, function* () {
+                console.log("Retrieved data: ", counselorName);
+                token = yield fetchDevice(after.sID);
+                return Promise.all([token]).then(function (deviceToken) {
+                    console.log("Fetched device: ", deviceToken);
+                    const name = counselorName[0];
+                    const device = deviceToken[0];
+                    payload = {
+                        notification: {
+                            title: `${name} has rescheduled your appointment`,
+                            body: `${after.aDescription}`
+                        }
+                    };
+                    console.log(device, " ? ", payload);
+                    return admin.messaging().sendToDevice(device, payload);
+                }, (error) => console.log("Error"));
+            });
+        }, (error) => console.log("Error"));
+    }
     //sends notification
     return admin.messaging().sendToDevice(token, payload);
 }));
@@ -136,7 +160,7 @@ exports.newMessageNotification = functions.database
     .onCreate((snapshot, context) => __awaiter(this, void 0, void 0, function* () {
     const messageID = context.params.messageID;
     console.log(`New message ${messageID}`);
-    let token, payload;
+    let payload;
     const message = snapshot.val();
     console.log("Message values: ", message);
     if (message.mType === "Student") {
@@ -145,12 +169,12 @@ exports.newMessageNotification = functions.database
         return Promise.all([students]).then(function (studentName) {
             return __awaiter(this, void 0, void 0, function* () {
                 console.log("Fetched student name: ", studentName);
-                let name;
-                token = yield fetchDevice(message.cID);
+                let name, device;
+                const token = yield fetchDevice(message.cID);
                 return Promise.all([token]).then(function (deviceToken) {
                     console.log("Fetched device: ", deviceToken);
                     name = studentName[0];
-                    const device = deviceToken[0];
+                    device = deviceToken[0];
                     payload = {
                         notification: {
                             title: `${name}`,
@@ -169,12 +193,12 @@ exports.newMessageNotification = functions.database
         return Promise.all([counselors]).then(function (counselorName) {
             return __awaiter(this, void 0, void 0, function* () {
                 console.log("Fetched student name: ", counselorName);
-                let name;
-                token = yield fetchDevice(message.sID);
+                let name, device;
+                const token = yield fetchDevice(message.sID);
                 return Promise.all([token]).then(function (deviceToken) {
                     console.log("Fetched device: ", deviceToken);
                     name = counselorName[0];
-                    const device = deviceToken[0];
+                    device = deviceToken[0];
                     payload = {
                         notification: {
                             title: `${name}`,
@@ -193,7 +217,7 @@ exports.newRegistrationNotificationForCounselor = functions.database
     .onCreate((snapshot, context) => __awaiter(this, void 0, void 0, function* () {
     const registrationID = context.params.registrationID;
     console.log(`New message ${registrationID}`);
-    let token, payload;
+    let payload;
     const registration = snapshot.val();
     console.log("Registration for COUNSELOR values: ", registration);
     const student = registration.rLastName + ", " + registration.rFirstName;
@@ -201,10 +225,10 @@ exports.newRegistrationNotificationForCounselor = functions.database
     return Promise.all([counselorID]).then(function (id) {
         return __awaiter(this, void 0, void 0, function* () {
             console.log("Fetched ID: ", id);
-            const counselor = id[0];
-            token = yield fetchDevice(counselor);
+            let counselor = id[0], device;
+            const token = yield fetchDevice(counselor);
             return Promise.all([token]).then(function (deviceToken) {
-                const device = deviceToken[0];
+                device = deviceToken[0];
                 payload = {
                     notification: {
                         title: ` New registration request`,
@@ -221,7 +245,7 @@ exports.newRegistrationNotificationForGTDHead = functions.database
     .onCreate((snapshot, context) => __awaiter(this, void 0, void 0, function* () {
     const registrationID = context.params.registrationID;
     console.log(`New message ${registrationID}`);
-    let token, payload;
+    let payload;
     const registration = snapshot.val();
     console.log("Registration for COUNSELOR values: ", registration);
     const student = registration.rLastName + ", " + registration.rFirstName;
@@ -229,10 +253,10 @@ exports.newRegistrationNotificationForGTDHead = functions.database
     return Promise.all([counselorID]).then(function (id) {
         return __awaiter(this, void 0, void 0, function* () {
             console.log("Fetched ID: ", id);
-            const counselor = id[0];
-            token = yield fetchDevice(counselor);
+            let counselor = id[0], device;
+            const token = yield fetchDevice(counselor);
             return Promise.all([token]).then(function (deviceToken) {
-                const device = deviceToken[0];
+                device = deviceToken[0];
                 payload = {
                     notification: {
                         title: ` New registration request`,

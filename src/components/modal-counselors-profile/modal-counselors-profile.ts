@@ -9,6 +9,7 @@ import { AppointmentAddPage } from '../../pages/appointment-add/appointment-add'
 import moment from 'moment';
 import { ChatMessagePage } from '../../pages/chat-message/chat-message';
 import { ModalCounselorsAcademicComponent } from '../modal-counselors-academic/modal-counselors-academic';
+import { ModalProfileEditComponent } from '../modal-profile-edit/modal-profile-edit';
 
 /**
  * Generated class for the ModalCounselorsProfileComponent component.
@@ -184,6 +185,11 @@ export class ModalCounselorsProfileComponent {
       ]
     });
     alert.present();
+  }
+
+  editProfile() {
+    const modal = this.modalCtrl.create(ModalProfileEditComponent,  "",{ cssClass: 'custom-modal-profile-edit' });
+    modal.present();
   }
 
   close() {

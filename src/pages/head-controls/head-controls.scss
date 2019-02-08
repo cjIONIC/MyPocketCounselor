@@ -26,6 +26,8 @@ page-head-controls {
     .counselor {
         text-align: center;
         height: 50px;
+        width: 80%;
+        margin: 0px auto;
         margin-bottom: 50px;
         padding: 10px;
         padding-top: 15px;
@@ -37,8 +39,9 @@ page-head-controls {
         //border: 1px solid #ff6961;
     }
 
-    .card:active {
-        background-color: rgb(247, 247, 247);
+    .card:active,
+    .card:focus {
+        background-color: #ff847d;
     }
 
     /*

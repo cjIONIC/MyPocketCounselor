@@ -179,7 +179,7 @@ export class ModalStatisticsComponent {
                     borderWidth: 1
                 },
                 {
-                    label: "Not Finished",
+                  label: "Not Finished",
                   data: [this.junePending, this.julyPending, this.augustPending, 
                     this.septemberPending, this.octoberPending,],
                   backgroundColor: [
@@ -243,7 +243,7 @@ export class ModalStatisticsComponent {
                     borderWidth: 1
                 },
                 {
-                    label: "Not Finished",
+                  label: "Not Finished",
                   data: [this.novemberPending,
                     this.decemberPending, this.januaryPending, this.februaryPending,
                     this.marchFinish],

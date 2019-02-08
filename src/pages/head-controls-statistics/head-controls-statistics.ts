@@ -128,11 +128,6 @@ export class HeadControlsStatisticsPage {
 
       this.academic = 99;
 
-     // this.verifyDate(date);
-      this.fetchAllStudents();
-      await this.fetchAllAppointments();
-      await this.fetchAcademicUnitStatistics();
-
 
     } catch {
 
