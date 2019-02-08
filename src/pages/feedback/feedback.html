@@ -22,7 +22,11 @@
           <ion-col col-3 class="rateInfo">
             <div class="schedule">
               <div class="star"><ion-icon name="star"></ion-icon></div>
-              <div class="rate">Very Unsatisfied</div>
+              <div class="rate" *ngIf="feedback.rate ===5">Excellent</div>
+              <div class="rate" *ngIf="feedback.rate ===4">Very Satisfied</div>
+              <div class="rate" *ngIf="feedback.rate ===3">Satisfied</div>
+              <div class="rate" *ngIf="feedback.rate ===2">Neutral</div>
+              <div class="rate" *ngIf="feedback.rate ===1">Unsatisfied</div>
             </div>
           </ion-col>
           <!-- Information -->

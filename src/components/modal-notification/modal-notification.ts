@@ -265,7 +265,7 @@ export class ModalNotificationComponent {
   addFeedback() {
     console.log("Adding feedback...");
 
-    const modal = this.modalCtrl.create(ModalFeedbackAddComponent, {appointment: this.notificationInfo});
+    const modal = this.modalCtrl.create(ModalFeedbackAddComponent, {appointment: this.notificationInfo},{ cssClass: 'custom-modal-feedback' });
     modal.present();
   }
 

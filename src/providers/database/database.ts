@@ -1377,7 +1377,13 @@ export class DatabaseProvider {
   
             console.log(id, " ? ", studentID);
             if(id === studentID) {
-              ref.update(key, { acID: unit, sStatus: status  }); 
+              let studentStatus = students[count].payload.val().sStatus;
+              if(status === studentStatus)
+                ref.update(key, { acID: unit, sStatus: status  }); 
+              else {
+                let datetime = new Date(moment().format());
+                ref.update(key, { acID: unit, sStatus: status, sDatetime: datetime.toString() });
+              }
               console.log("Updated!");
             }
           }
@@ -2596,12 +2602,22 @@ export class DatabaseProvider {
     return academicList;
   }
 
-  async fetchAllStudentsOfUnit(students, academic, type) {
+  async fetchAllStudentsOfUnit(students, academic, year, type) {
     let totalStudents = 0;
 
     students.forEach(student => {
+      let studentMonth =  (new Date(student["sDatetime"])).getMonth();
+      let studentYear =  (new Date(student["sDatetime"])).getFullYear();
+
+
+      //Verify's the year
+      if (studentMonth.toString().match(/^(0|1|2|3|4)$/)) {
+        year = year + 1;
+      }
+      
       if(student["acID"] === academic &&
-          student["sStatus"] === type)
+          student["sStatus"] === type &&
+          studentYear === year)
         totalStudents++;
     })
 

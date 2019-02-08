@@ -132,18 +132,6 @@ export class HeadControlsStatisticsPage {
       this.fetchAllStudents();
       await this.fetchAllAppointments();
       await this.fetchAcademicUnitStatistics();
-      
-      //Identifies semestral period
-      if(month.toString().match(/^(5|6|7|8|9)$/)) {
-        console.log("First Semester");
-        this.slides.slideTo(0, 500);
-      }else if (month.toString().match(/^(0|1|2|10|11)$/)) {
-        console.log("Second Semester");
-        this.slides.slideTo(1, 500);
-      }else {
-        console.log("Summer");
-        this.slides.slideTo(2, 500);
-      }
 
 
     } catch {

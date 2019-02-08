@@ -105,8 +105,8 @@ export class ModalStatisticsComponent {
       let item = list.valueChanges();
 
       item.subscribe(async students => {
-        this.studentsEnrolled = await this.db.fetchAllStudentsOfUnit(students, this.academic, "Enrolled");
-        this.studentNotEnrolled = await this.db.fetchAllStudentsOfUnit(students, this.academic, "Not Enrolled");
+        this.studentsEnrolled = await this.db.fetchAllStudentsOfUnit(students, this.academic, this.year, "Enrolled");
+        this.studentNotEnrolled = await this.db.fetchAllStudentsOfUnit(students, this.academic, this.year, "Not Enrolled");
 
         this.loadPieStudents();
       })
@@ -159,6 +159,7 @@ export class ModalStatisticsComponent {
       data: {
           labels: ["Jun", "Jul", "Aug", "Sep", "Oct"],
           datasets: [{
+                    label: "Finished",
                     data: [this.juneFinish, this.julyFinish, this.augustFinish, 
                       this.septemberFinish, this.octoberFinish],
                     backgroundColor: [
@@ -178,6 +179,7 @@ export class ModalStatisticsComponent {
                     borderWidth: 1
                 },
                 {
+                    label: "Not Finished",
                   data: [this.junePending, this.julyPending, this.augustPending, 
                     this.septemberPending, this.octoberPending,],
                   backgroundColor: [
@@ -220,6 +222,7 @@ export class ModalStatisticsComponent {
       data: {
           labels: ["Nov", "Dec", "Jan", "Feb", "March"],
           datasets: [{
+                    label: "Finished",
                     data: [this.novemberFinish,
                       this.decemberFinish, this.januaryFinish, this.februaryFinish,
                       this.marchFinish],
@@ -240,6 +243,7 @@ export class ModalStatisticsComponent {
                     borderWidth: 1
                 },
                 {
+                    label: "Not Finished",
                   data: [this.novemberPending,
                     this.decemberPending, this.januaryPending, this.februaryPending,
                     this.marchFinish],
@@ -283,6 +287,7 @@ export class ModalStatisticsComponent {
       data: {
           labels: ["April","May"],
           datasets: [{
+                    label: "Finished",
                     data: [this.aprilFinish, this.mayFinish],
                     backgroundColor: [
                         'rgba(255, 99, 132, 0.2)',
@@ -295,6 +300,7 @@ export class ModalStatisticsComponent {
                     borderWidth: 1
                 },
                 {
+                    label: "Not Finished",
                   data: [this.aprilPending, this.mayPending],
                   backgroundColor: [
                       'rgba(255, 99, 132, 1)',
