@@ -2603,20 +2603,25 @@ export class DatabaseProvider {
 
   async fetchAllStudentsOfUnit(students, academic, year, type) {
     let totalStudents = 0;
+    console.log("Passed year: ", year);
 
     students.forEach(student => {
       let studentMonth =  (new Date(student["sDatetime"])).getMonth();
       let studentYear =  (new Date(student["sDatetime"])).getFullYear();
-
+      let schoolYear;
 
       //Verify's the year
       if (studentMonth.toString().match(/^(0|1|2|3|4)$/)) {
-        year = year + 1;
+        schoolYear = year + 1;
+      } else {
+        schoolYear = year;
       }
+
+      console.log("STUDENT: ", studentYear , " ? ", year);
 
       if(student["acID"] === academic &&
           student["sStatus"] === type &&
-          studentYear === year)
+          studentYear === schoolYear)
         totalStudents++;
     })
 
@@ -2726,6 +2731,30 @@ export class DatabaseProvider {
       })
 
       return;
+  }
+
+  async updateCounselorPicture(image, id) {
+    let counselors = await this.fetchAllNodesBySnapshot("counselor");
+      let ref = this.fireDatabase.list('counselor');
+      let keys = Object.keys(counselors);
+
+      for(let i = 0; i < keys.length; i++) {
+        let count = keys[i];
+        let value = counselors[count].payload.val();
+
+        if(value.cID === id) {
+          let storage = firebase.storage().refFromURL(value.cPicture);
+          storage.delete();
+
+          let filePath = await this.uploadImage("counselor", image);
+          let imageURL = await this.downloadImage(filePath);
+
+          ref.update(counselors[count].key, {cPicture: imageURL});
+        }
+
+      }
+
+    return;
   }
 
   async updateAcademicCounselor(id, academicList) {

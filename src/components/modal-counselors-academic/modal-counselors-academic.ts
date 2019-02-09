@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { AngularFireDatabase } from 'angularfire2/database';
 import { Item } from 'klaw';
-import { NavParams, ViewController } from 'ionic-angular';
+import { NavParams, ViewController, LoadingController } from 'ionic-angular';
 import { DatabaseProvider } from '../../providers/database/database';
 
 /**
@@ -26,6 +26,7 @@ export class ModalCounselorsAcademicComponent {
   constructor(public fireDatabase: AngularFireDatabase,
       public db: DatabaseProvider,
       public viewCtrl: ViewController,
+      public loadingCtrl: LoadingController,
       public navParams: NavParams) {
         this.intialize();
   }
@@ -102,16 +103,26 @@ export class ModalCounselorsAcademicComponent {
   changeAcademic() {
     let academicList = [];
 
-    this.academicList.forEach(academic => {
-      if(academic["checked"] === true) {
-        academicList.push(academic["id"])
-      }
-     })
+    
+    let loading = this.loadingCtrl.create({
+      spinner: 'ios',
+      content: 'Please Wait...'
+    });
 
-     console.log("New academic: ", academicList);
-     this.db.updateAcademicCounselor(this.id, academicList).then(() => {
-       this.dismiss();
-     })
+    loading.present().then(() => {
+      this.academicList.forEach(academic => {
+        if(academic["checked"] === true) {
+          academicList.push(academic["id"])
+        }
+       })
+  
+       console.log("New academic: ", academicList);
+       this.db.updateAcademicCounselor(this.id, academicList).then(() => {
+         loading.dismiss();
+         this.dismiss();
+       })
+    })
+
   }
 
   dismiss() {

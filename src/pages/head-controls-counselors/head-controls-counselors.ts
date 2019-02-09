@@ -20,6 +20,7 @@ import { HeadControlsCounselorsAddPage } from '../head-controls-counselors-add/h
 })
 export class HeadControlsCounselorsPage {
 
+  spinner: any = true;
   counselorList = [];
 
   constructor(public navCtrl: NavController,
@@ -28,25 +29,39 @@ export class HeadControlsCounselorsPage {
       public modalCtrl: ModalController,
       public app: App,
       public navParams: NavParams) {
+        this.initialize();
+  }
 
-        this.fetchAllCounselors();
+  initialize() {
+    try {
+      this.spinner = true;
+      this.fetchAllCounselors();
+    } catch {
+
+    }
   }
 
   async fetchAllCounselors() {
     let list = this.fireDatabase.list<Item>("counselor");
     let item = list.valueChanges();
 
-    item.subscribe(async counselors=> {
-      let tempArray = await this.db.fetchAllListCounselor(counselors);
-      tempArray.sort(function(a,b) {
-        console.log(a, " ? ", b);
-        if(a.name < b.name) { return -1; }
-        if(a.name > b.name) { return 1; }
-        return 0;
-      });
+    this.fireDatabase.list<Item>("academic")
+      .valueChanges().subscribe(() => {
 
-      this.counselorList = tempArray;
-    })
+        item.subscribe(async counselors=> {
+          let tempArray = await this.db.fetchAllListCounselor(counselors);
+          tempArray.sort(function(a,b) {
+            console.log(a, " ? ", b);
+            if(a.name < b.name) { return -1; }
+            if(a.name > b.name) { return 1; }
+            return 0;
+          });
+    
+          this.counselorList = tempArray;
+          this.spinner = false;
+        }, error => console.log("Error"));
+        
+      }, error => console.log("Error"))
   }
   
   profile(person) {

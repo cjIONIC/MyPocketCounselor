@@ -138,7 +138,7 @@
                     </ion-col>
                 </ion-row>
             </ion-grid>
-            <div *ngIf="!timeValid" class="alert">
+            <div *ngIf="!timeValid && dateValid" class="alert">
                 Starting time has passed
             </div>
             <div *ngIf="!timeBalance && includeEndTime" class="alert">

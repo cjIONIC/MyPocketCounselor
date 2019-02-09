@@ -10,6 +10,7 @@ import moment from 'moment';
 import { ChatMessagePage } from '../../pages/chat-message/chat-message';
 import { ModalCounselorsAcademicComponent } from '../modal-counselors-academic/modal-counselors-academic';
 import { ModalProfileEditComponent } from '../modal-profile-edit/modal-profile-edit';
+import { ModalCounselorEditComponent } from '../modal-counselor-edit/modal-counselor-edit';
 
 /**
  * Generated class for the ModalCounselorsProfileComponent component.
@@ -153,7 +154,7 @@ export class ModalCounselorsProfileComponent {
   removeCounselor() {
     let alert = this.alertCtrl.create({
       title: 'Confirm Removal',
-      message: 'You are about to remove this counselor. This will also delete' +
+      message: 'You are about to remove this counselor. This will also delete ' +
                 'all appointments, messages, feedbacks and post from this counselor. ' +
                 'Press "Continue" to proceed removal.',
       buttons: [
@@ -193,7 +194,7 @@ export class ModalCounselorsProfileComponent {
   }
 
   editProfile() {
-    const modal = this.modalCtrl.create(ModalProfileEditComponent,  "",{ cssClass: 'custom-modal-profile-edit' });
+    const modal = this.modalCtrl.create(ModalCounselorEditComponent,  {picture: this.profileInfo['picture'], id: this.id},{ cssClass: 'custom-modal-profile-edit' });
     modal.present();
   }
 

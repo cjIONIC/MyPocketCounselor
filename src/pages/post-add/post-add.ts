@@ -209,6 +209,7 @@ export class PostAddPage {
 
       
       this.endTimeDefault = new Date(endTime);
+      this.startTimeDefault = new Date(startTime);
 
       console.log("Compare time: ", currentTime.toString(), " ? ", startTime.toString());
 

@@ -1,0 +1,54 @@
+modal-counselor-edit {
+    .profile {
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 10px;
+        width: 200px;
+        height: 200px;
+    }
+
+    .avatar {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        width: 200px;
+        height: 200px;
+        border-radius: 50%;
+        border: 1px solid rgb(179, 179, 179);
+    }
+
+    .person {
+        display: block;
+        font-size: 103pt;
+        border-radius: 50%;
+    }
+
+    .imageFooter {
+        position: absolute;
+        padding-top: 150px;
+        padding-left: 150px;
+        width: 150px;
+        height: 150px;
+    }
+
+    .upload {
+        font-size: 15pt;
+        width: 50px;
+        height: 50px;
+        border-radius: 50px;
+        padding: 0%;
+        color: white;
+        background-color: #ff6961;
+        border: 2px solid white;
+    }
+
+    .buttons {
+        margin-top: 25px;
+    }
+
+    .btn {
+        width: 70%;
+        margin: 0px auto;
+    }
+
+}

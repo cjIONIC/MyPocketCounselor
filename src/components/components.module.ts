@@ -16,6 +16,7 @@ import { ModalConcernsAddComponent } from './modal-concerns-add/modal-concerns-a
 import { ModalCounselorsProfileComponent } from './modal-counselors-profile/modal-counselors-profile';
 import { ModalCounselorsAcademicComponent } from './modal-counselors-academic/modal-counselors-academic';
 import { ModalPasswordUpdateComponent } from './modal-password-update/modal-password-update';
+import { ModalCounselorEditComponent } from './modal-counselor-edit/modal-counselor-edit';
 @NgModule({
 	declarations: [PopFilterComponent,
     ModalStudentUpdateComponent,
@@ -33,7 +34,8 @@ import { ModalPasswordUpdateComponent } from './modal-password-update/modal-pass
     ModalConcernsAddComponent,
     ModalCounselorsProfileComponent,
     ModalCounselorsAcademicComponent,
-    ModalPasswordUpdateComponent],
+    ModalPasswordUpdateComponent,
+    ModalCounselorEditComponent],
 	imports: [],
 	exports: [PopFilterComponent,
     ModalStudentUpdateComponent,
@@ -51,6 +53,7 @@ import { ModalPasswordUpdateComponent } from './modal-password-update/modal-pass
     ModalConcernsAddComponent,
     ModalCounselorsProfileComponent,
     ModalCounselorsAcademicComponent,
-    ModalPasswordUpdateComponent]
+    ModalPasswordUpdateComponent,
+    ModalCounselorEditComponent]
 })
 export class ComponentsModule {}

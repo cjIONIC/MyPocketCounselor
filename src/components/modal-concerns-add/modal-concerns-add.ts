@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ViewController } from 'ionic-angular';
+import { ViewController, LoadingController } from 'ionic-angular';
 import { DatabaseProvider } from '../../providers/database/database';
 
 /**
@@ -17,16 +17,26 @@ export class ModalConcernsAddComponent {
   text: string;
 
   constructor(public viewCtrl: ViewController,
+      public loadingCtrl: LoadingController,
       public db: DatabaseProvider) {
     console.log('Hello ModalConcernsAddComponent Component');
     this.text = 'Hello World';
   }
 
   onAdd(concern) {
-    console.log("Concern: ", concern["name"]);
+    
+    let loading = this.loadingCtrl.create({
+      spinner: 'ios',
+      content: 'Please Wait...'
+    });
 
-    this.db.addConcern(concern["name"]).then(() => {
-      this.dismiss();
+    loading.present().then(() => {
+      console.log("Concern: ", concern["name"]);
+  
+      this.db.addConcern(concern["name"]).then(() => {
+        loading.dismiss();
+        this.dismiss();
+      })
     })
   }
 

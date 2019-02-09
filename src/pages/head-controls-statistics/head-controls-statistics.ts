@@ -5,6 +5,7 @@ import { AngularFireDatabase } from 'angularfire2/database';
 import { DatabaseProvider } from '../../providers/database/database';
 import moment from 'moment';
 import { ModalStatisticsComponent } from '../../components/modal-statistics/modal-statistics';
+import { Subscription } from 'rxjs/Subscription';
 
 /**
  * Generated class for the HeadControlsStatisticsPage page.
@@ -28,6 +29,9 @@ export class HeadControlsStatisticsPage {
   date: any;
 
   allStudents: any;
+
+  students: Subscription;
+  appointments: Subscription;
 
   //Months
   juneEnrolled: any;
@@ -164,7 +168,7 @@ export class HeadControlsStatisticsPage {
     let list = this.fireDatabase.list<Item>("appointment");
     let item = list.valueChanges();
 
-    item.subscribe(async appointments => {
+    this.appointments = item.subscribe(async appointments => {
       await this.fetchFinishYear(appointments);
       await this.fetchAcceptYear(appointments);
 
@@ -179,7 +183,7 @@ export class HeadControlsStatisticsPage {
     let list = this.fireDatabase.list<Item>("student");
     let item = list.valueChanges();
 
-    item.subscribe(async students => {
+    this.students = item.subscribe(async students => {
       this.allStudents = await this.db.fetchAllStudents(this.year, students);
       /*
       await this.fetchEnrolledStudents(students);
@@ -527,6 +531,11 @@ export class HeadControlsStatisticsPage {
   
   ionViewDidLoad() {
     console.log('ionViewDidLoad HeadControlsStatisticsPage');
+  }
+
+  ionViewWillLeave(){
+    this.appointments.unsubscribe();
+    this.students.unsubscribe();
   }
 
 }

@@ -163,6 +163,7 @@ export class PostEditPage {
                                     new Date(this.startTimeDefault).getMinutes(),0))
                 
       let endTime =  new Date();
+      this.startTimeDefault = new Date(startTime);
       
       console.log("Date not end included!!!");
         endTime = new Date((new Date(this.startDateDefault))

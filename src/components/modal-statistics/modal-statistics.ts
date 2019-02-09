@@ -3,6 +3,7 @@ import { NavParams, Item, ViewController } from 'ionic-angular';
 import { AngularFireDatabase } from 'angularfire2/database';
 import { DatabaseProvider } from '../../providers/database/database';
 import { Chart } from 'chart.js';
+import { Subscription } from 'rxjs/Subscription';
 
 /**
  * Generated class for the ModalStatisticsComponent component.
@@ -15,6 +16,9 @@ import { Chart } from 'chart.js';
   templateUrl: 'modal-statistics.html'
 })
 export class ModalStatisticsComponent {
+
+    student: Subscription;
+    appointment: Subscription;
 
   text: string;
   date: any;
@@ -54,7 +58,10 @@ export class ModalStatisticsComponent {
   aprilPending: any;
   mayPending: any;
 
-  barChart: any;
+  barChartFirst: any;
+  barChartSecond: any;
+  barChartSummer: any;
+  pieChart: any;
 
   academicName
 
@@ -90,7 +97,7 @@ export class ModalStatisticsComponent {
     let list = this.fireDatabase.list<Item>("appointment");
     let item = list.valueChanges();
 
-    item.subscribe(async appointments => {
+    this.appointment = item.subscribe(async appointments => {
       await this.fetchFinishYear(appointments);
       await this.fetchAcceptYear(appointments);
 
@@ -104,11 +111,12 @@ export class ModalStatisticsComponent {
       let list = this.fireDatabase.list<Item>("student");
       let item = list.valueChanges();
 
-      item.subscribe(async students => {
+      this.student = item.subscribe(async students => {
         this.studentsEnrolled = await this.db.fetchAllStudentsOfUnit(students, this.academic, this.year, "Enrolled");
         this.studentNotEnrolled = await this.db.fetchAllStudentsOfUnit(students, this.academic, this.year, "Not Enrolled");
 
-        this.loadPieStudents();
+        console.log("Students: ", this.studentsEnrolled, " ? ", this.studentNotEnrolled);
+        await this.loadPieStudents();
       })
   }
 
@@ -154,7 +162,7 @@ export class ModalStatisticsComponent {
     console.log("Loading Bar Graph");
     let ctx = document.getElementById("firstSemChartModal");
     
-    this.barChart = new Chart(ctx, {
+    this.barChartFirst = new Chart(ctx, {
       type: 'bar',
       data: {
           labels: ["Jun", "Jul", "Aug", "Sep", "Oct"],
@@ -217,7 +225,7 @@ export class ModalStatisticsComponent {
     console.log("Loading Bar Graph");
     let ctx = document.getElementById("secondSemChartModal");
 
-    this.barChart = new Chart(ctx, {
+    this.barChartSecond = new Chart(ctx, {
       type: 'bar',
       data: {
           labels: ["Nov", "Dec", "Jan", "Feb", "March"],
@@ -282,7 +290,7 @@ export class ModalStatisticsComponent {
     console.log("Loading Bar Graph");
     let ctx = document.getElementById("summerChartModal");
     
-    this.barChart = new Chart(ctx, {
+    this.barChartSummer = new Chart(ctx, {
       type: 'bar',
       data: {
           labels: ["April","May"],
@@ -331,43 +339,48 @@ export class ModalStatisticsComponent {
     console.log("Loading Bar Graph");
     let ctx = document.getElementById("studentChartModal");
     
-    this.barChart = new Chart(ctx, {
+    if(this.pieChart) this.pieChart.destroy();
 
-        type: 'doughnut',
-        data: {
-            labels: ["Enrolled", "Not Enrolled"],
-            datasets: [{
-                data: [this.studentsEnrolled, this.studentNotEnrolled],
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)'
-                ],
-                borderColor: [
-                    'rgba(255,99,132,1)',
-                    'rgba(54, 162, 235, 1)'
-                ],
-            }]
-        },
-        hoverBackgroundColor: [
-            "#FF6384",
-            "#36A2EB",
-            "#FFCE56",
-            "#FF6384",
-            "#36A2EB",
-            "#FFCE56"
-        ],
-        options: {
-            legend: {
-                onClick: null
+    this.pieChart = new Chart(ctx, {
+
+            type: 'doughnut',
+            data: {
+                labels: ["Enrolled", "Not Enrolled"],
+                datasets: [{
+                    data: [this.studentsEnrolled, this.studentNotEnrolled],
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(255,99,132,1)',
+                        'rgba(54, 162, 235, 1)'
+                    ],
+                }]
+            },
+            hoverBackgroundColor: [
+                "#FF6384",
+                "#36A2EB",
+                "#FFCE56",
+                "#FF6384",
+                "#36A2EB",
+                "#FFCE56"
+            ],
+            options: {
+                legend: {
+                    onClick: null
+                }
             }
-          }
 
-    },
-);
+        },
+    );
 
   }
 
   close() {
-    this.viewCtrl.dismiss();
+      this.appointment.unsubscribe();
+      this.student.unsubscribe();
+      
+      this.viewCtrl.dismiss();
   }
 }

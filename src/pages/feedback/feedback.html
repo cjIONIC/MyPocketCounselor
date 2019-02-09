@@ -14,59 +14,66 @@
 
 
 <ion-content>
+  <div *ngIf="spinner" class="spinnerContent">
+      <ion-spinner color="primary"></ion-spinner>
+  </div>
 
+  <div *ngIf="!spinner">
+    
   <ion-list>
-    <ion-card *ngFor="let feedback of feedbackList">
-      <ion-grid>
-        <ion-row>
-          <ion-col col-3 class="rateInfo">
-            <div class="schedule">
-              <div class="star"><ion-icon name="star"></ion-icon></div>
-              <div class="rate" *ngIf="feedback.rate ===5">Excellent</div>
-              <div class="rate" *ngIf="feedback.rate ===4">Very Satisfied</div>
-              <div class="rate" *ngIf="feedback.rate ===3">Satisfied</div>
-              <div class="rate" *ngIf="feedback.rate ===2">Neutral</div>
-              <div class="rate" *ngIf="feedback.rate ===1">Unsatisfied</div>
-            </div>
-          </ion-col>
-          <!-- Information -->
-          <ion-col col-9>
-            <ion-row>
-              <ion-col col-3>
-                <img src="{{ feedback.avatar }}" class="avatar">
-              </ion-col>
-              <ion-col col-9>
-                <ion-row class="name"> 
-                    {{ feedback.name}}
-                </ion-row>
-                <ion-row> 
-                  <ion-col *ngFor="let unit of feedback.academic" class="academic" col-auto>
-                    <div class="unit">{{unit.acCode}}</div>
-                  </ion-col>
-                </ion-row>
-              </ion-col>
-            </ion-row>
-            <!-- Date and Time-->
-            <ion-row>
-              <ion-col col-2 class="dateLabel">Date: </ion-col>
-              <ion-col col-10 class="dateInfo">{{ feedback.schedule | date: 'EEEE, MMMM d, y'}}</ion-col>
-            </ion-row>
-            <ion-row>
-              <ion-col col-2 class="timeLabel">Time: </ion-col>
-              <ion-col col-10 class="timeInfo">{{ feedback.schedule | date: 'hh:mm aa' }}</ion-col>
-            </ion-row>
-            <ion-row class="description">{{feedback.description}}</ion-row>
-            <ion-row>
-              <div class="datetime"> {{feedback.datetime | timeAgo}} </div>
-            </ion-row>
-          </ion-col>
-        </ion-row>
-      </ion-grid>
-    </ion-card>
+      <ion-card *ngFor="let feedback of feedbackList">
+        <ion-grid>
+          <ion-row>
+            <ion-col col-3 class="rateInfo">
+              <div class="schedule">
+                <div class="star"><ion-icon name="star"></ion-icon></div>
+                <div class="rate" *ngIf="feedback.rate ===5">Excellent</div>
+                <div class="rate" *ngIf="feedback.rate ===4">Very Satisfied</div>
+                <div class="rate" *ngIf="feedback.rate ===3">Satisfied</div>
+                <div class="rate" *ngIf="feedback.rate ===2">Neutral</div>
+                <div class="rate" *ngIf="feedback.rate ===1">Unsatisfied</div>
+              </div>
+            </ion-col>
+            <!-- Information -->
+            <ion-col col-9>
+              <ion-row>
+                <ion-col col-3>
+                  <img src="{{ feedback.avatar }}" class="avatar">
+                </ion-col>
+                <ion-col col-9>
+                  <ion-row class="name"> 
+                      {{ feedback.name}}
+                  </ion-row>
+                  <ion-row> 
+                    <ion-col *ngFor="let unit of feedback.academic" class="academic" col-auto>
+                      <div class="unit">{{unit.acCode}}</div>
+                    </ion-col>
+                  </ion-row>
+                </ion-col>
+              </ion-row>
+              <!-- Date and Time-->
+              <ion-row>
+                <ion-col col-2 class="dateLabel">Date: </ion-col>
+                <ion-col col-10 class="dateInfo">{{ feedback.schedule | date: 'EEEE, MMMM d, y'}}</ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col col-2 class="timeLabel">Time: </ion-col>
+                <ion-col col-10 class="timeInfo">{{ feedback.schedule | date: 'hh:mm aa' }}</ion-col>
+              </ion-row>
+              <ion-row class="description">{{feedback.description}}</ion-row>
+              <ion-row>
+                <div class="datetime"> {{feedback.datetime | timeAgo}} </div>
+              </ion-row>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-card>
+  
+      <ion-card *ngIf="feedbackList.length === 0" class="status">
+        No Feedback
+      </ion-card>
+    </ion-list>
+  </div>
 
-    <ion-card *ngIf="feedbackList.length === 0" class="status">
-      No Feedback
-    </ion-card>
-  </ion-list>
 
 </ion-content>
