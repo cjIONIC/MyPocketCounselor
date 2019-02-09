@@ -60,6 +60,7 @@ export class ModalCounselorsProfileComponent {
     try {
       this.spinner = true;
       this.id = this.navParams.get('id');
+      this.rating = 0;
       this.getUserInfo();
       
       //Loading icon
@@ -119,6 +120,7 @@ export class ModalCounselorsProfileComponent {
         item.subscribe(async counselors => {
           this.profileInfo = await this.db.fetchCounselorProfile(this.id, counselors);
           console.log("Profile: ", this.profileInfo);
+          this.fetchRatings();
           this.spinner = false;
         }, error => console.log(error))
       }, error => console.log(error));
@@ -131,7 +133,10 @@ export class ModalCounselorsProfileComponent {
     item.subscribe(async feedbacks => {
       this.rating = await this.db.fetchFeedbackRating(this.id, feedbacks);
 
-      if(!this.rating) console.log("No rating available");
+      if(!this.rating) {
+        this.rating = 0;
+        console.log("No rating available");
+      }
     })
   }
 

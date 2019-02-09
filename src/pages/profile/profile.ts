@@ -45,6 +45,7 @@ export class ProfilePage {
   initialize() {
     try {
       this.spinner = true;
+      this.rating = 0;
       this.getUserInfo();
     } catch {
 
@@ -92,7 +93,10 @@ export class ProfilePage {
     item.subscribe(async feedbacks => {
       this.rating = await this.db.fetchFeedbackRating(this.userInfo["id"], feedbacks);
 
-      if(!this.rating) console.log("No rating available");
+      if(!this.rating) {
+        this.rating = 0;
+        console.log("No rating available");
+      }
     })
   }
 

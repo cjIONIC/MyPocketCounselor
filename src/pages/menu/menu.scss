@@ -7,12 +7,17 @@ page-menu {
     .card {
         padding: 0% !important;
     }
+    
     .avatar {
         margin: 3px auto;
         width: 50px;
         height: 50px;
         border-radius: 50%;
         border: 1px solid rgb(179, 179, 179);
+    }
+
+    .register {
+        margin: 0% auto;
     }
 
     .item {
@@ -41,7 +46,7 @@ page-menu {
     }
 
     .grid {
-        padding: 0%;
+        padding: 5px 0px;
         margin: 0%;
     }
 
@@ -54,7 +59,7 @@ page-menu {
     .registrationLabel,
     .registrationBadge {
         padding: 0%;
-        padding-top: 13px; 
+        padding-top: 10px; 
         font-size: 12pt;
         font-weight: bold;
     }

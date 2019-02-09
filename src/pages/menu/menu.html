@@ -22,9 +22,8 @@
                
             </ion-card>
 
-            <ion-card>
-                <div class="item" *ngIf="userInfo['type'] !== 'Student'" (click)="registration()">
-                    <ion-grid class="button btnRegister">
+            <ion-card class="register">
+                 <ion-grid class="item button btnRegister" *ngIf="userInfo['type'] !== 'Student'" (click)="registration()">
                         <ion-row>
                             <ion-col col-10 class="registrationLabel">
                                 Registration
@@ -34,13 +33,11 @@
                             </ion-col>
                         </ion-row>
                     </ion-grid>
-                </div>
             </ion-card>
 
             <ion-card>
-               
-                <div class="item" *ngIf="userInfo['type'] === 'GTD Head'" (click)="controls()">
-                    <button class="button btnControl">Head Controls</button>
+                <div class="item" *ngIf="userInfo['type'] === 'GTD Head'">
+                    <button class="button btnControl" (click)="controls()">Head Controls</button>
                 </div>
             </ion-card>
 
