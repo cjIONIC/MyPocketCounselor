@@ -27,6 +27,9 @@ export class PeoplePage {
   
   connected: Subscription;
   disconnected: Subscription;
+  account: Subscription;
+  academic: Subscription;
+  people: Subscription;
 
   unit: any;
 
@@ -70,10 +73,10 @@ export class PeoplePage {
     let list = this.fireDatabase.list<Item>(table);
     let item = list.valueChanges();
 
-    this.fireDatabase.list<Item>("academic")
+    this.academic = this.fireDatabase.list<Item>("academic")
       .valueChanges().subscribe(academics => {
 
-        item.subscribe(async accounts => {
+        this.account = item.subscribe(async accounts => {
           await this.db.refreshUserInfo(accounts, userInfo);
           this.userInfo = await this.db.getUserInfo();
           console.log("User information: ", this.userInfo);
@@ -112,7 +115,7 @@ export class PeoplePage {
     let list = this.fireDatabase.list<Item>('student');
     let item = list.valueChanges();
 
-    item.subscribe( async students => {
+    this.people = item.subscribe( async students => {
       console.log('%c Fetching Students...','color: white; background: green; font-size: 16px');
       let tempArray = await this.db.fetchListStudent(students, filter, unit);
       tempArray.sort(function(a,b) {
@@ -135,7 +138,7 @@ export class PeoplePage {
     let list = this.fireDatabase.list<Item>('counselor');
     let item = list.valueChanges();
 
-    item.subscribe( async counselors => {
+    this.people = item.subscribe( async counselors => {
       console.log('%c Fetching Students...','color: white; background: green; font-size: 16px');
 
       this.counselorUnit = await this.db.fetchUnitCounselor();
@@ -268,6 +271,9 @@ export class PeoplePage {
     this.connected.unsubscribe();
     this.disconnected.unsubscribe();
 
+    this.account.unsubscribe();
+    this.academic.unsubscribe();
+    this.people.unsubscribe();
   }
 
   ionViewDidEnter() {

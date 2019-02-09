@@ -182,7 +182,7 @@
       
     <div class="buttons">
             <button ion-button class="btnAdd" 
-                [disabled]="!postForm.form.valid || !dateValid || (!dateBalance && includeEndDate) || (!timeBalance && includeEndDate)" 
+                [disabled]="!postForm.form.valid || !dateValid || (!timeValid && dateValid) || (!dateBalance && includeEndDate) || (!timeBalance && includeEndDate)" 
                 type="submit">Post</button>
         </div>
     </form>

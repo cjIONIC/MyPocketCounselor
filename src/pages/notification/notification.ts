@@ -24,6 +24,9 @@ export class NotificationPage {
 
   connected: Subscription;
   disconnected: Subscription;
+  account: Subscription;
+  academic: Subscription;
+  notification: Subscription;
 
   notificationList = [];
   userInfo=[];
@@ -59,10 +62,10 @@ export class NotificationPage {
     let list = this.fireDatabase.list<Item>(table);
     let item = list.valueChanges();
 
-    this.fireDatabase.list<Item>("academic")
+    this.academic = this.fireDatabase.list<Item>("academic")
       .valueChanges().subscribe(academics => {
 
-        item.subscribe(async accounts => {
+        this.account = item.subscribe(async accounts => {
           await this.db.refreshUserInfo(accounts, userInfo);
           this.userInfo = await this.db.getUserInfo();
           console.log("User information: ", this.userInfo);
@@ -88,7 +91,7 @@ export class NotificationPage {
   }
 
   fetchNotification() {
-    this.fireDatabase.list<Item>("appointment")
+    this.notification = this.fireDatabase.list<Item>("appointment")
       .valueChanges().subscribe(async appointment => {
         console.log('%c Fetching Notifications','color: white; background: red; font-size: 16px');
         this.notificationList = await this.db.fetchAppointmentsForNotification(appointment);
@@ -153,6 +156,9 @@ export class NotificationPage {
   ionViewWillLeave(){
     this.connected.unsubscribe();
     this.disconnected.unsubscribe();
+    this.account.unsubscribe();
+    this.academic.unsubscribe();
+    this.notification.unsubscribe();
 
     this.updateAppointmentStatus();
   }

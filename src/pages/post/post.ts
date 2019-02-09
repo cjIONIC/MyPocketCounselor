@@ -23,7 +23,12 @@ export class PostPage {
   disconnected: Subscription;
   account: Subscription;
   academic: Subscription;
-  post: Subscription
+  post: Subscription;
+
+  like: Subscription;
+  hasLike: any = false;
+  unlike: Subscription;
+  hasUnlike: any = false;
 
   spinner: any = true;
 
@@ -62,10 +67,10 @@ export class PostPage {
     let list = this.fireDatabase.list<Item>(table);
     let item = list.valueChanges();
 
-    this.fireDatabase.list<Item>("academic")
+    this.academic = this.fireDatabase.list<Item>("academic")
       .valueChanges().subscribe(academics => {
 
-        item.subscribe(async accounts => {
+        this.account = item.subscribe(async accounts => {
           await this.db.refreshUserInfo(accounts, userInfo);
           this.userInfo = await this.db.getUserInfo();
           console.log("User information: ", this.userInfo);
@@ -80,7 +85,7 @@ export class PostPage {
     let list = this.fireDatabase.list<Item>('post');
     let item = list.valueChanges();
 
-    item.subscribe( async posts => {
+    this.post = item.subscribe( async posts => {
       console.log('%c Fetching Posts to Feed','color: black; background: yellow; font-size: 16px');
       const allAcademicUnits = await this.db.fetchAllNodesByTableInDatabase("academic");
       const allCounselors = await this.db.fetchAllNodesByTableInDatabase("counselor");
@@ -136,7 +141,8 @@ export class PostPage {
     let item = list.valueChanges(["child_added"]);
 
     setTimeout(() => {
-      item.subscribe(likes => {
+      this.like = item.subscribe(likes => {
+        this.hasLike = true;
         console.log('%c Liking Post','color: black; background: yellow; font-size: 16px');
         this.db.likePost(post["id"], likes);
       })
@@ -152,7 +158,8 @@ export class PostPage {
     let item = list.valueChanges(["child_removed"]);
 
     setTimeout(() => {
-      item.subscribe(likes => {
+      this.unlike = item.subscribe(likes => {
+        this.hasUnlike = true;
         console.log('%c Unliking Post','color: black; background: yellow; font-size: 16px');
         this.db.unlikePost(post["id"], likes);
       })
@@ -166,6 +173,13 @@ export class PostPage {
   ionViewWillLeave(){
     this.connected.unsubscribe();
     this.disconnected.unsubscribe();
+
+    this.account.unsubscribe();
+    this.academic.unsubscribe();
+    this.post.unsubscribe();
+
+    if(this.hasLike) this.like.unsubscribe();
+    if(this.hasUnlike) this.unlike.unsubscribe();
     
   }
 

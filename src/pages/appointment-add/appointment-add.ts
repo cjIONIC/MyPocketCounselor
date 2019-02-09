@@ -33,6 +33,8 @@ export class AppointmentAddPage {
   dateDefault:any;
   timeDefault:any;
 
+  workTime: any = true;
+
   tempDate: any;
   tempTime: any;
 
@@ -68,12 +70,25 @@ export class AppointmentAddPage {
   async initialize() {
     let date = await this.navParams.get('date');
     console.log("Date passed: ", date);
-    let dateFormat = new Date(date);
-    dateFormat.setMinutes(dateFormat.getMinutes()-1);
+    let datetime = new Date(date);
+    datetime.setMinutes(datetime.getMinutes()-1);
 
-    console.log("Date passed: ", dateFormat);
-   this.dateDefault = moment(dateFormat).format();
-   this.timeDefault = moment().format();
+    let hour = datetime.getHours();
+ 
+    if(hour > 17) {
+      datetime.setHours(17);
+      datetime.setMinutes(59);
+    } 
+    if (hour < 7) {
+     datetime.setHours(7);
+     datetime.setMinutes(0);
+    }
+
+    console.log("Date passed: ", datetime);
+   this.dateDefault = moment(datetime).format();
+
+
+   this.timeDefault = moment(datetime).format();
 
    this.tempDate = this.dateDefault;
    this.tempTime = this.timeDefault;

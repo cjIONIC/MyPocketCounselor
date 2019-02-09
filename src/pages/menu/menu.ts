@@ -27,6 +27,9 @@ export class MenuPage {
   connected: Subscription;
   disconnected: Subscription;
   account: Subscription;
+  register: Subscription;
+  hasRegister: any = false;
+
   userInfo = [];
 
   registrationBadge: any;
@@ -117,7 +120,8 @@ export class MenuPage {
       }
     })
 
-    item.subscribe(async registrations => {
+    this.register = item.subscribe(async registrations => {
+      this.hasRegister = true;
       this.popBadge = false;
       this.registrationBadge = await this.db.scanRegistrations(academicList, registrations);
       console.log("Current no. of registrations: ", this.registrationBadge);
@@ -175,10 +179,8 @@ export class MenuPage {
   ionViewWillLeave(){
     this.connected.unsubscribe();
     this.disconnected.unsubscribe();
-    if(this.account) {
-      this.account.unsubscribe();
-    }
-    
+    this.account.unsubscribe();
+    if(this.hasRegister) this.register.unsubscribe();
   }
 
   ionViewDidEnter() {

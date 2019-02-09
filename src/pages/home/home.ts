@@ -57,6 +57,11 @@ export class HomePage {
 
   connected: Subscription;
   disconnected: Subscription;
+  account: Subscription;
+  academic: Subscription;
+  message: Subscription;
+  appointment: Subscription;
+  register: Subscription;
 
   constructor(public navCtrl: NavController, 
     public app: App,
@@ -99,10 +104,10 @@ export class HomePage {
       let list = this.fireDatabase.list<Item>(table);
       let item = list.valueChanges();
   
-      this.fireDatabase.list<Item>("academic")
+      this.academic = this.fireDatabase.list<Item>("academic")
         .valueChanges().subscribe(academics => {
   
-          item.subscribe(async accounts => {
+          this.account = item.subscribe(async accounts => {
             await this.db.refreshUserInfo(accounts, userInfo);
             this.userInfo = await this.db.getUserInfo();
 
@@ -133,7 +138,7 @@ export class HomePage {
     let list = this.fireDatabase.list<Item>("message");
     let item = list.valueChanges();
 
-    item.subscribe(messages => {
+    this.message = item.subscribe(messages => {
       let chatBadge = 0;
       let fetchedID = [];
 
@@ -204,8 +209,7 @@ export class HomePage {
     let list = this.fireDatabase.list<Item>("appointment");
     let item = list.valueChanges();
     
-
-    item.subscribe(appointments => {
+    this.appointment = item.subscribe(appointments => {
       console.log("Scanning...");
       let notificationBadge = 0;
       this.notificationBadge = null;
@@ -249,7 +253,7 @@ export class HomePage {
       }
     })
 
-    item.subscribe(async registrations => {
+    this.register = item.subscribe(async registrations => {
       this.registrationBadge = await this.db.scanRegistrations(academicList, registrations);
       console.log("Current no. of registrations: ", this.registrationBadge);
     })
@@ -264,6 +268,14 @@ export class HomePage {
 
     if(page === "NotificationPage")
       this.notificationBadge = null;
+  }
+
+  ionViewWillLeave(){
+    this.account.unsubscribe();
+    this.academic.unsubscribe();
+    this.message.unsubscribe();
+    this.appointment.unsubscribe();
+    this.register.unsubscribe();
   }
 
   ionViewDidLoad() {

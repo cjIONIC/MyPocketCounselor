@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ViewController, NavParams } from 'ionic-angular';
+import { ViewController, NavParams, AlertController } from 'ionic-angular';
 import { DatabaseProvider } from '../../providers/database/database';
 
 /**
@@ -19,6 +19,7 @@ export class ModalFeedbackAddComponent {
 
   constructor(public viewCtrl: ViewController,
     public navParams: NavParams,
+    public alertCtrl: AlertController,
     public db: DatabaseProvider) {
     
       this.initialize();
@@ -40,6 +41,15 @@ export class ModalFeedbackAddComponent {
     else this.rating = value;
   }
 
+  presentAlert(title, description) {
+    const alert = this.alertCtrl.create({
+      title: title,
+      subTitle: description,
+      buttons: ['OK']
+    });
+    alert.present();
+  }
+
   onSubmit(value) {
     console.log("Value: ", value);
     let id = this.appointmentInfo["id"];
@@ -47,7 +57,11 @@ export class ModalFeedbackAddComponent {
     let description = value["description"];
 
     this.db.addFeedback(id, rate, description)
-      .then(() => this.dismiss());
+      .then(() => {
+        this.presentAlert("Success!", "Feedback has been sent.");
+
+        this.dismiss();
+      });
   }
 
   dismiss() {

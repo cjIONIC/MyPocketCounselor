@@ -39,6 +39,8 @@ export class SettingsPage {
       public modalCtrl: ModalController,
       public fireDatabase: AngularFireDatabase,
       public navParams: NavParams) {
+
+        this.initialize();
   }
 
   initialize() {

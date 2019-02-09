@@ -14,26 +14,32 @@
 
 
 <ion-content>
-  <ion-list>
-      <ion-card>
-          <div class="item">
-              <button class="button btnPassword" (click)="changePassword()">Change your password</button>
-          </div>
-      </ion-card>
+    <div *ngIf="spinner" class="spinnerContent">
+        <ion-spinner color="primary"></ion-spinner>
+    </div>
 
-      <ion-card>
-          <div class="item">
-              <button class="button btnDisclaimer" (click)="disclaimer()">Terms and Conditions</button>
-          </div>
-      </ion-card>
-
-      <ion-card *ngIf="userInfo['type'] !== 'Student'">
-          <div class="item">
-              <button class="button btnManual" 
-              href="#" onclick="window.open('https://bit.ly/2I2HpCD', '_system', 'location=yes'); return false;">
-                View User Manual
-            </button>
-          </div>
-      </ion-card>
-  </ion-list>
+    <div *ngIf="!spinner">
+        <ion-list>
+            <ion-card>
+                <div class="item">
+                    <button class="button btnPassword" (click)="changePassword()">Change your password</button>
+                </div>
+            </ion-card>
+      
+            <ion-card>
+                <div class="item">
+                    <button class="button btnDisclaimer" (click)="disclaimer()">Terms and Conditions</button>
+                </div>
+            </ion-card>
+      
+            <ion-card *ngIf="userInfo['type'] !== 'Student'">
+                <div class="item">
+                    <button class="button btnManual" 
+                    href="#" onclick="window.open('https://bit.ly/2I2HpCD', '_system', 'location=yes'); return false;">
+                      View User Manual
+                  </button>
+                </div>
+            </ion-card>
+        </ion-list>
+    </div>
 </ion-content>

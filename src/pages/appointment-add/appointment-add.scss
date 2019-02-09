@@ -33,15 +33,22 @@ page-appointment-add {
     .avatar {
         margin: 5px auto !important;
         width: 100%;
+        max-width: 30px;
         height: auto;
         //max-width: 50px;
         //max-height: 50px;
         border-radius: 50%;
         border: 1px solid rgb(179, 179, 179);
+        position: relative;
+        top: 50%;
+        left: 50%;
+        -ms-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
     }
 
     .recipientName {
         margin-top: 12px;
+        padding-left: 5px;
         font-size: 12pt;
         font-weight: bold;
     }

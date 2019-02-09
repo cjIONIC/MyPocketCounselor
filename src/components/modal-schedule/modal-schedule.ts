@@ -276,7 +276,7 @@ export class ModalScheduleComponent {
     this.disconnected.unsubscribe();
 
     //Firebase
-    this.schedule.unsubscribe();
+    if(this.added) this.schedule.unsubscribe();
     console.log("Successfully unsubscribe");
   }
 

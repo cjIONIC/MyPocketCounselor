@@ -27,6 +27,10 @@ export class AppointmentPage {
 
   connected: Subscription;
   disconnected: Subscription;
+  account: Subscription;
+  academic: Subscription;
+  appointment: Subscription;
+  selected: Subscription;
 
   userInfo:any;
   fired:Boolean = false ;
@@ -84,10 +88,10 @@ export class AppointmentPage {
     let list = this.fireDatabase.list<Item>(table);
     let item = list.valueChanges();
 
-    this.fireDatabase.list<Item>("academic")
+    this.academic = this.fireDatabase.list<Item>("academic")
       .valueChanges().subscribe(academics => {
 
-        item.subscribe(async accounts => {
+        this.account = item.subscribe(async accounts => {
           await this.db.refreshUserInfo(accounts, userInfo);
           this.userInfo = await this.db.getUserInfo();
           console.log("User information: ", this.userInfo);
@@ -140,7 +144,7 @@ export class AppointmentPage {
     let item = list.valueChanges();
 
     try {
-      item.subscribe( async appointments => {
+      this.appointment = item.subscribe( async appointments => {
         this.appointmentsOfCurrentMonth = await this.db.fetchAppointmentsOfCurrentMonth(this.userInfo["type"], 
                                                 this.userInfo["id"], appointments, this.currentMonth, this.currentYear);
         console.log("Current Appointments: ", this.appointmentsOfCurrentMonth);
@@ -240,7 +244,7 @@ export class AppointmentPage {
     var item = list.valueChanges();
     this.daySelected = day;
 
-    item.subscribe(async appointments => {
+    this.selected = item.subscribe(async appointments => {
       let appointmentsOfSelectedDate = await this.db.fetchAppointmentsOfDate(this.userInfo["id"], this.userInfo["type"], 
                                             this.selectedDay, appointments);
       this.appointmentsOfSelectedDate = await this.db.filterAppointmentsOfDate(await appointmentsOfSelectedDate);
@@ -294,7 +298,8 @@ export class AppointmentPage {
           this.app.getRootNav().push(AppointmentAddPage, {date: datetime});
         } else {
           loading.dismiss();
-          this.presentAlert("Feedback Required", "Some of your appointments doesn't have a feedback");
+          this.presentAlert("Feedback Required", "Some of your appointments doesn't have a feedback. " +
+                            "Please submit a feedback to be able to request an appointment.");
         }
       })
     } else {
@@ -337,6 +342,11 @@ export class AppointmentPage {
   ionViewWillLeave(){
     this.connected.unsubscribe();
     this.disconnected.unsubscribe();
+
+    this.account.unsubscribe();
+    this.academic.unsubscribe();
+    this.appointment.unsubscribe();
+    this.selected.unsubscribe();
 
   }
 

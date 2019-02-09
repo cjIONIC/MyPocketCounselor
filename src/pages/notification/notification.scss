@@ -25,11 +25,15 @@ page-notification {
     }
     
     .avatar {
-        margin: 5px auto;
         width: 100%;
         height: auto;
         border-radius: 50%;
         border: 1px solid rgb(179, 179, 179);
+        position: relative;
+        top: 50%;
+        left: 50%;
+        -ms-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
     }
 
     .name {
@@ -37,6 +41,11 @@ page-notification {
         font-size: 12pt;
         font-weight: bold;
         color: black;
+        padding-left: 0%;
+    }
+
+    .nameInfo {
+        padding-left: 0%;
     }
 
     .contentNew {

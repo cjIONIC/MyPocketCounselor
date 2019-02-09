@@ -260,12 +260,13 @@ export class DatabaseProvider {
     console.log("Token Fetched: ", token);
 
     if(token) {
-      this.ionicStorage.set('token', token);
 
       let numeric = Math.random().toString().replace('0.', '').substring(0,2);
       let timestamp = new Date().getTime().toString().substring(5, 13);
       const id = numeric+timestamp;
       console.log(timestamp+" ? "+numeric);
+
+      this.ionicStorage.set('token', id);
   
       this.fireDatabase.list('/device').push({
         dID: parseInt(id),
@@ -286,7 +287,7 @@ export class DatabaseProvider {
 
    for(let a = 0; a < keys.length; a++) {
      let count = keys[a];
-     let device = devices[count].payload.val().dToken;
+     let device = devices[count].payload.val().dUserID;
 
      if(device === token) {
         ref.remove(devices[count].key);
@@ -437,7 +438,7 @@ export class DatabaseProvider {
   async logoutUser() {
     this.userInfo = [];
     this.ionicStorage.set('profile', []);
-    this.deleteDeviceToken();
+    await this.deleteDeviceToken();
 
     return;
   }
@@ -535,51 +536,7 @@ export class DatabaseProvider {
   async fetchRegistrations(academics, requests) {
     let allAcademics = await this.fetchAllNodesByTableInDatabase("academic");
     let requestList = [];
-
-    /*
-    requests.forEach(request => {
-
-      if(this.userInfo["type"] === "Counselor") {
-        academics.forEach(academic => {
-          if(request["acID"] === academic["acID"]) {
-            let name = request["rLastName"] +", "+ request["rFirstName"];
-
-            let pop = false;
-
-            if(request["rDeviceCounselor"] === "Sent") pop = true;
-  
-            requestList.push({
-              id: request["rID"],
-              name: name,
-              picture: request["rPicture"],
-              academic: academic["acCode"],
-              datetime: request["rDatetime"],
-              pop: pop
-            });
-          }
-        })
-      } else if(this.userInfo["type"] === "GTD Head"){
-        allAcademics.forEach(academic => {
-          if(request["acID"] === academic["acID"]) {
-            let name = request["rLastName"] +", "+ request["rFirstName"];
-
-            let pop = false;
-
-            if(request["rDeviceHead"] === "Sent") pop = true;
-  
-            requestList.push({
-              id: request["rID"],
-              name: name,
-              picture: request["rPicture"],
-              academic: academic["acCode"],
-              datetime: request["rDatetime"],
-              pop: pop
-            });
-          }
-        });
-      }
-     
-    }) */
+    
     requests.forEach(request => {
       allAcademics.forEach(academic => {
         if(request["acID"] === academic["acID"]) {
