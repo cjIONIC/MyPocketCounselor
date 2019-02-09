@@ -19,11 +19,12 @@
   <div *ngIf="spinner" class="spinnerContent">
            <ion-spinner color="primary"></ion-spinner>
    </div>
+   
+   <ion-fab right bottom *ngIf="!spinner">
+           <button ion-fab (click)="addCounselor()"><ion-icon name="add"></ion-icon></button>
+   </ion-fab>
 
    <div *ngIf="!spinner">
-      <ion-fab right bottom >
-              <button ion-fab (click)="addCounselor()"><ion-icon name="add"></ion-icon></button>
-      </ion-fab>
 
       <ion-list class="list" >
         <ion-card class="card" *ngFor="let person of counselorList">

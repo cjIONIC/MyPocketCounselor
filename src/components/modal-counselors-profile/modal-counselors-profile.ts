@@ -155,7 +155,7 @@ export class ModalCounselorsProfileComponent {
     let alert = this.alertCtrl.create({
       title: 'Confirm Removal',
       message: 'You are about to remove this counselor. This will also delete ' +
-                'all appointments, messages, feedbacks and post from this counselor. ' +
+                'all appointments, messages, feedbacks and post related to this counselor. ' +
                 'Press "Continue" to proceed removal.',
       buttons: [
         {

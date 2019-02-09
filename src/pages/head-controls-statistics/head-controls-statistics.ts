@@ -93,6 +93,8 @@ export class HeadControlsStatisticsPage {
   yearPlus: any;
   dateDefault: any;
 
+  slide: any = false;
+
   academic: any;
   semester: any;
 
@@ -136,7 +138,6 @@ export class HeadControlsStatisticsPage {
        this.fetchAllStudents();
        await this.fetchAllAppointments();
        await this.fetchAcademicUnitStatistics();
-
     } catch {
 
     }
@@ -176,7 +177,49 @@ export class HeadControlsStatisticsPage {
       this.loadBarAppointmentsSecondSemester();
       this.loadBarAppointmentsSummer();
 
+      setTimeout(async () => {
+        await this.setSlide();
+      }, 300);
+      
     })
+  }
+
+  async setSlide() {
+    let index;
+    let datetime = new Date(moment().format());
+    let semester = datetime.getMonth();
+    
+    let year;
+
+    //Verify's the year
+    if(semester.toString().match(/^(5|6|7|8|9|10|11)$/)) {
+      year = datetime.getFullYear();
+    }
+    if (semester.toString().match(/^(0|1|2|3|4)$/)) {
+      datetime.setFullYear(datetime.getFullYear()-1);
+      year = datetime.getFullYear();
+    }
+
+    console.log("Year: ", year, " ? ", this.year);
+    
+    if(year === this.year) {
+      let month = this.date.getMonth();
+  
+      if(month.toString().match(/^(5|6|7|8|9)$/)) {
+        console.log("First Semester");
+        index = 0;
+      }else if (month.toString().match(/^(0|1|2|10|11)$/)) {
+        console.log("Second Semester");
+        index = 1;
+      }else {
+        console.log("Summer");
+        index = 2;
+      }
+
+    } else index = 0;
+
+
+    this.slides.slideTo(index, 500);
   }
 
   fetchAllStudents(){

@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
-import { NavParams, Item, ViewController } from 'ionic-angular';
+import { Component, ViewChild } from '@angular/core';
+import { NavParams, Item, ViewController, Slides } from 'ionic-angular';
 import { AngularFireDatabase } from 'angularfire2/database';
 import { DatabaseProvider } from '../../providers/database/database';
 import { Chart } from 'chart.js';
 import { Subscription } from 'rxjs/Subscription';
+import moment from 'moment';
 
 /**
  * Generated class for the ModalStatisticsComponent component.
@@ -16,6 +17,8 @@ import { Subscription } from 'rxjs/Subscription';
   templateUrl: 'modal-statistics.html'
 })
 export class ModalStatisticsComponent {
+  
+    @ViewChild(Slides) slides: Slides;
 
     student: Subscription;
     appointment: Subscription;
@@ -104,7 +107,49 @@ export class ModalStatisticsComponent {
       this.loadBarAppointmentsFirstSemester();
       this.loadBarAppointmentsSecondSemester();
       this.loadBarAppointmentsSummer();
+
+
+      setTimeout(async () => {
+        await this.setSlide();
+      }, 300);
     })
+  }
+
+  async setSlide() {
+    let index;
+    let datetime = new Date(moment().format());
+    let semester = datetime.getMonth();
+    
+    let year;
+
+    //Verify's the year
+    if(semester.toString().match(/^(5|6|7|8|9|10|11)$/)) {
+      year = datetime.getFullYear();
+    }
+    if (semester.toString().match(/^(0|1|2|3|4)$/)) {
+      datetime.setFullYear(datetime.getFullYear()-1);
+      year = datetime.getFullYear();
+    }
+
+    console.log("Year: ", year, " ? ", this.year);
+    
+    if(year === this.year) {
+      let month = this.date.getMonth();
+  
+      if(month.toString().match(/^(5|6|7|8|9)$/)) {
+        console.log("First Semester");
+        index = 0;
+      }else if (month.toString().match(/^(0|1|2|10|11)$/)) {
+        console.log("Second Semester");
+        index = 1;
+      }else {
+        console.log("Summer");
+        index = 2;
+      }
+    } else index = 0;
+
+
+    await this.slides.slideTo(index, 500);
   }
 
   fetchAllStudents(){
@@ -116,7 +161,8 @@ export class ModalStatisticsComponent {
         this.studentNotEnrolled = await this.db.fetchAllStudentsOfUnit(students, this.academic, this.year, "Not Enrolled");
 
         console.log("Students: ", this.studentsEnrolled, " ? ", this.studentNotEnrolled);
-        await this.loadPieStudents();
+        if(this.studentsEnrolled === 0 && this.studentNotEnrolled === 0) await this.loadNoStudent();
+        else await this.loadPieStudents();
       })
   }
 
@@ -335,11 +381,42 @@ export class ModalStatisticsComponent {
     });
   }
 
+  loadNoStudent(){
+    console.log("Loading Bar Graph");
+    let ctx = document.getElementById("studentChartModal");
+
+    this.pieChart = new Chart(ctx, {
+
+            type: 'doughnut',
+            data: {
+                labels: ["No Students Found"],
+                datasets: [{
+                    data: [100],
+                    backgroundColor: [
+                        'rgba(128,128,128, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(128,128,128, 1)'
+                    ],
+                }]
+            },
+            options: {
+                legend: {
+                    onClick: null
+                },
+                tooltips: {
+                     enabled: false
+                }
+            }
+
+        },
+    );
+
+  }
+
   loadPieStudents(){
     console.log("Loading Bar Graph");
     let ctx = document.getElementById("studentChartModal");
-    
-    if(this.pieChart) this.pieChart.destroy();
 
     this.pieChart = new Chart(ctx, {
 

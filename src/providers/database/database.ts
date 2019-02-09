@@ -2439,12 +2439,8 @@ export class DatabaseProvider {
 
   fetchAppointmentFinishOfMonth(month, year, appointments, type) {
     let totalFinsihedAppointments = 0;
-    let semester
-
-    //Identifies which semestral period the appointment is set
-    if(month.toString().match(/^(5|6|7|8|9)$/)) semester = "First";
-    else if (month.toString().match(/^(0|1|2|10|11)$/)) semester = "Second";
-    else semester = "Summer";
+   
+    console.log("Year: ", year);
 
     appointments.forEach(appointment => {
       if(appointment["aStatus"] === "Finished") {
@@ -2467,7 +2463,6 @@ export class DatabaseProvider {
       }
     })
 
-    console.log("Finish Month: ", month, " ? ", totalFinsihedAppointments);
     return totalFinsihedAppointments;
   }
 
@@ -2475,7 +2470,8 @@ export class DatabaseProvider {
     let totalFinsihedAppointments = 0;
 
     appointments.forEach(appointment => {
-      if(appointment["aStatus"] === "Accepted" || appointment["aStatus"] === "Rescheduled") {
+      if(appointment["aStatus"] === "Accepted" || appointment["aStatus"] === "Rescheduled"
+          || appointment["aStatus"] === "Added") {
         let appointmentYear = (new Date(appointment["aSchedule"])).getFullYear();
         let appointmentMonth = (new Date(appointment["aSchedule"])).getMonth();
         
@@ -2525,9 +2521,14 @@ export class DatabaseProvider {
             if(appointmentMonth.toString().match(/^(5|6|7|8|9|10|11)$/)) {
               if(appointmentYear === year) totalAppointments++;
             }
-            else if (appointmentMonth.toString().match(/^(0|1|2|3|4)$/)) {
-              if(appointmentYear === (year+1)) totalAppointments++;
+            
+            if (appointmentMonth.toString().match(/^(0|1|2|3|4)$/)) {
+              let tempYear = year + 1;
+              if(appointmentYear === tempYear) totalAppointments++;
             }
+
+            console.log("Schedule: ", appointmentMonth, " ? ", appointmentYear);
+            console.log("Appointment: ", totalAppointments);
           }
         })
 
@@ -2547,6 +2548,7 @@ export class DatabaseProvider {
           students: totalStudents
         })
 
+        totalAppointments = 0;
     })
 
     await academicList.sort(function(a,b) {
