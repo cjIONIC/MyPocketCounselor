@@ -41,7 +41,7 @@
                                 <button ion-button class="reschedule" clear (click)="reschedule()">Reschedule</button>
                             </ion-col>
                             <ion-col>
-                                <button ion-button class="accept" (click)="accept()" clear>Accept</button>
+                                <button ion-button class="accept" (click)="verifyDate()" clear>Accept</button>
                             </ion-col>
                         </ion-row>
                         <ion-row class="buttons" *ngIf="userInfo['type'] === 'Student'">

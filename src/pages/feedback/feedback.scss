@@ -34,10 +34,16 @@ page-feedback {
     
     .avatar {
         width: 100%;
+        max-width: 40px;
         height: auto;
         margin: 0px auto;
         border-radius: 50%;
         border: 1px solid rgb(179, 179, 179);
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        -ms-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
     }
 
     .name {
@@ -45,6 +51,9 @@ page-feedback {
         font-size: 12pt;
         font-weight: bold;
         color: black;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
     .academic {
@@ -68,9 +77,14 @@ page-feedback {
         color: gray;
     }
 
+    .timeInfo, .dateInfo {
+        padding-left: 5px;
+        color: black;
+    }
+
     .description {
         font-size: 12pt;
-        padding: 0px;
+        padding: 5px 0px;
 
     }
 

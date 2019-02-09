@@ -201,6 +201,9 @@ page-people {
         font-size: 12pt;
         color: black;
         font-weight: bold;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
     .name2 {
