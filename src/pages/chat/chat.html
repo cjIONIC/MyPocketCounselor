@@ -27,14 +27,14 @@
     <ion-card *ngFor="let chat of chatList" (click)="openChat(chat.recipientID)">
       <ion-grid>
         <ion-row>
-          <ion-col col-2>
+          <ion-col col-2 class="avatarHolder">
             <img src = "{{ chat.picture }}" class="avatar">
           </ion-col>
           <ion-col col-10>
             <ion-row>
-              <ion-col col-8 class="name"> {{ chat.name }} </ion-col>
+              <ion-col col-7 class="name"> {{ chat.name }} </ion-col>
               
-              <ion-col col-4 class="time"> {{ chat.datetime | date: ' MM/dd/yyyy' }} </ion-col>
+              <ion-col col-5 class="time"> {{ chat.datetime | date: ' MM/dd/yyyy' }} </ion-col>
               
             </ion-row>
             <ion-row class="description">

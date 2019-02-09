@@ -77,8 +77,8 @@
                     <!-- Name and Photo -->
                     <ion-row>
                         <ion-col col-3>
-                            <div *ngIf="userInfo['type'] !== 'Student'"><img src="{{ appointment.studentPhoto }}" class="avatar"></div>
-                            <div *ngIf="userInfo['type'] === 'Student'"><img src="{{ appointment.counselorPhoto }}" class="avatar"></div>
+                            <div *ngIf="userInfo['type'] !== 'Student'" class="avatarHolder"><img src="{{ appointment.studentPhoto }}" class="avatar"></div>
+                            <div *ngIf="userInfo['type'] === 'Student'" class="avatarHolder"><img src="{{ appointment.counselorPhoto }}" class="avatar"></div>
                         </ion-col>
                         <ion-col col-7>
                             <ion-row  *ngIf="userInfo['type'] !== 'Student'"> <div class="name"> {{ appointment.student }} </div></ion-row>

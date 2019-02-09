@@ -29,11 +29,17 @@ page-chat-message {
     }
 
     .avatar {
-        margin: 3px auto;
+       // margin: 5px auto 0px auto;
         width: 100%;
+        max-width: 30px;
         height: auto;
         border-radius: 50%;
         border: 1px solid rgb(235, 235, 235);
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        -ms-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
     }
 
     .content {

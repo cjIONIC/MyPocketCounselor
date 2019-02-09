@@ -7,11 +7,15 @@ page-head-controls-counselors {
     }
     
     .avatar {
-        margin: 5px auto;
         width: 100%;
         height: auto;
         border-radius: 50%;
         border: 1px solid rgb(179, 179, 179);
+        position: relative;
+        top: 50%;
+        left: 50%;
+        -ms-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
     }
 
     .card {
@@ -21,7 +25,7 @@ page-head-controls-counselors {
     .name {
         font-size: 12pt;
         font-weight: bold;
-        margin-top: 8px;
+        //margin-top: 8px;
     }
 
     .academicList {
@@ -35,6 +39,9 @@ page-head-controls-counselors {
         padding: 2px 10px 2px 10px;
         border-radius: 50px;
         border: 1px solid #ff6961;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
 }

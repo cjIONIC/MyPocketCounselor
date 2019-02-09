@@ -30,9 +30,10 @@
                 </ion-grid>
                 
             </ion-card>
-            <div *ngIf="notificationList.length === 0">
+                
+            <ion-card class="card" *ngIf="notificationList.length === 0">
                     <div class="status"> No notification</div>
-            </div>
+            </ion-card>
           </ion-list>
     </div>
 </ion-content>

@@ -13,17 +13,26 @@ page-chat {
     .row, .col {
         padding: 0%;
     }
+
+    .avatarHolder {
+        padding: 5px 5px 0px 5px;
+    }
     
     .avatar {
-        margin: 5px auto;
-        width: 50px;
-        height: 50px;
+        width: 100%;
+        max-width: 40px;
+        height: auto;
         border-radius: 50%;
         border: 1px solid rgb(179, 179, 179);
+        position: relative;
+        top: 50%;
+        left: 50%;
+        -ms-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
     }
 
     .name, .time, .description {
-        padding: 5px 5px 0px 5px;
+        //padding: 5px 5px 0px 5px;
     }
 
     [col-10] {
@@ -32,6 +41,9 @@ page-chat {
 
     .name {
         font-size: 12pt;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
     .time {

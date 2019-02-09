@@ -116,6 +116,10 @@ page-head-controls-statistics {
         border-radius: 50px;
         margin-right: 10px;
         border: 1px solid #ff6961;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 100%;
     }
 
     .academicGrid {
