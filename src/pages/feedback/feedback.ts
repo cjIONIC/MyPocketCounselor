@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, Item } from 'ionic-angular';
 import { DatabaseProvider } from '../../providers/database/database';
 import { AngularFireDatabase } from 'angularfire2/database';
+import { Subscription } from 'rxjs/Subscription';
 
 /**
  * Generated class for the FeedbackPage page.
@@ -16,6 +17,10 @@ import { AngularFireDatabase } from 'angularfire2/database';
   templateUrl: 'feedback.html',
 })
 export class FeedbackPage {
+
+  account: Subscription;
+  academic: Subscription;
+  feedback: Subscription;
 
   userInfo = [];
   rating: any;
@@ -52,9 +57,10 @@ export class FeedbackPage {
     let list = this.fireDatabase.list<Item>(table);
     let item = list.valueChanges();
 
-    this.fireDatabase.list<Item>("academic")
+    this.academic = this.fireDatabase.list<Item>("academic")
     .valueChanges().subscribe(() => {
-      item.subscribe(async accounts => {
+      
+      this.account = item.subscribe(async accounts => {
         await this.db.refreshUserInfo(accounts, userInfo);
         this.userInfo = await this.db.getUserInfo();
         console.log("User information: ", this.userInfo);
@@ -71,7 +77,7 @@ export class FeedbackPage {
     let list = this.fireDatabase.list<Item>("feedback");
     let item = list.valueChanges();
 
-    item.subscribe(async feedbacks => {
+    this.feedback = item.subscribe(async feedbacks => {
       let tempArray;
       
       if(this.userInfo["type"] === "Student") {
@@ -86,9 +92,19 @@ export class FeedbackPage {
       console.log("Fetched feedback list: ",this.feedbackList);
     })
   }
+  
+  ionViewWillLeave() {
+    this.account.unsubscribe();
+    this.academic.unsubscribe();
+    this.feedback.unsubscribe();
+  }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad FeedbackPage');
+  }
+
+  ionViewDidEnter() {
+    this.initialize();
   }
 
 }

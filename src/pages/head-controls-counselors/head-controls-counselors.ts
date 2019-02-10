@@ -5,6 +5,7 @@ import { AngularFireDatabase } from 'angularfire2/database';
 import { Item } from 'klaw';
 import { ModalCounselorsProfileComponent } from '../../components/modal-counselors-profile/modal-counselors-profile';
 import { HeadControlsCounselorsAddPage } from '../head-controls-counselors-add/head-controls-counselors-add';
+import { Subscription } from 'rxjs/Subscription';
 
 /**
  * Generated class for the HeadControlsCounselorsPage page.
@@ -23,13 +24,15 @@ export class HeadControlsCounselorsPage {
   spinner: any = true;
   counselorList = [];
 
+  counselor: Subscription;
+  academic: Subscription;
+
   constructor(public navCtrl: NavController,
       public db: DatabaseProvider,
       public fireDatabase: AngularFireDatabase, 
       public modalCtrl: ModalController,
       public app: App,
       public navParams: NavParams) {
-        this.initialize();
   }
 
   initialize() {
@@ -45,10 +48,10 @@ export class HeadControlsCounselorsPage {
     let list = this.fireDatabase.list<Item>("counselor");
     let item = list.valueChanges();
 
-    this.fireDatabase.list<Item>("academic")
+    this.academic = this.fireDatabase.list<Item>("academic")
       .valueChanges().subscribe(() => {
 
-        item.subscribe(async counselors=> {
+        this.counselor = item.subscribe(async counselors=> {
           let tempArray = await this.db.fetchAllListCounselor(counselors);
           tempArray.sort(function(a,b) {
             console.log(a, " ? ", b);
@@ -81,6 +84,15 @@ export class HeadControlsCounselorsPage {
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad HeadControlsCounselorsPage');
+  }
+
+  ionViewDidEnter() {
+    this.initialize();
+  }
+
+  ionViewDidLeave() {
+    this.academic.unsubscribe();
+    this.counselor.unsubscribe();
   }
 
 }

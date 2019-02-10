@@ -196,8 +196,8 @@ export class HeadControlsStatisticsPage {
         this.studentNotEnrolled = await this.db.fetchAllStudentsOfUnit(students, this.academic, this.year, "Not Enrolled");
 
         console.log("Students: ", this.studentEnrolled, " ? ", this.studentNotEnrolled);
-        if(this.studentEnrolled === 0 && this.studentNotEnrolled === 0) await this.loadNoStudent();
-        else await this.loadPieStudents();
+        if(this.studentEnrolled === 0 && this.studentNotEnrolled === 0) this.loadNoStudent();
+        else this.loadPieStudents();
       })
   }
 
@@ -651,8 +651,11 @@ export class HeadControlsStatisticsPage {
   }
   
   ionViewDidLoad() {
-    this.initialize();
     console.log('ionViewDidLoad HeadControlsStatisticsPage');
+  }
+
+  ionViewDidEnter() {
+    this.initialize();
   }
 
   ionViewWillLeave(){

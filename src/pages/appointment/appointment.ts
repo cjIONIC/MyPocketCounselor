@@ -351,7 +351,7 @@ export class AppointmentPage {
   }
 
   ionViewDidEnter() {
-    if(!this.hasRun) this.initialize();
+    this.initialize();
     
     this.connected = this.network.onConnect().subscribe( data => {
       this.initialize();

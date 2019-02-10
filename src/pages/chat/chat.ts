@@ -25,6 +25,9 @@ export class ChatPage {
 
   connected: Subscription;
   disconnected: Subscription;
+  account: Subscription;
+  academic: Subscription;
+  chat: Subscription;
 
   chatList = [];
   currentDate: Date;
@@ -42,7 +45,6 @@ export class ChatPage {
     public db: DatabaseProvider,
     public app: App) {
 
-      this.initialize();
   }
 
   initialize() {
@@ -66,10 +68,10 @@ export class ChatPage {
     let list = this.fireDatabase.list<Item>(table);
     let item = list.valueChanges();
 
-    this.fireDatabase.list<Item>("academic")
+    this.academic = this.fireDatabase.list<Item>("academic")
       .valueChanges().subscribe(academics => {
 
-        item.subscribe(async accounts => {
+        this.account = item.subscribe(async accounts => {
           await this.db.refreshUserInfo(accounts, userInfo);
           this.userInfo = await this.db.getUserInfo();
           console.log("User information: ", this.userInfo);
@@ -102,7 +104,7 @@ export class ChatPage {
     let list = this.fireDatabase.list<Item>("message");
     let item = list.valueChanges();
 
-    item.subscribe( async messages => {
+    this.chat = item.subscribe( async messages => {
       this.chatList = await this.db.fetchChats(messages);
       this.chatList.reverse();
 
@@ -120,6 +122,10 @@ export class ChatPage {
   ionViewWillLeave(){
     this.connected.unsubscribe();
     this.disconnected.unsubscribe();
+
+    this.account.unsubscribe();
+    this.academic.unsubscribe();
+    this.chat.unsubscribe();
   }
 
   ionViewDidLoad() {
@@ -127,6 +133,7 @@ export class ChatPage {
   }
 
   ionViewDidEnter() {
+    this.initialize();
     
     this.connected = this.network.onConnect().subscribe( data => {
       this.presentToast("You are online");

@@ -344,7 +344,7 @@ export class PostEditPage {
 
     let loading = this.loadingCtrl.create({
       spinner: 'ios',
-      content: 'Adding Post Please Wait...'
+      content: 'Updating Post Please Wait...'
     });
     
     loading.present().then(() => {

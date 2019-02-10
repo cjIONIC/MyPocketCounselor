@@ -266,7 +266,7 @@ export class DatabaseProvider {
       const id = numeric+timestamp;
       console.log(timestamp+" ? "+numeric);
 
-      this.ionicStorage.set('token', id);
+      this.ionicStorage.set('token', parseInt(id));
   
       this.fireDatabase.list('/device').push({
         dID: parseInt(id),
@@ -278,7 +278,8 @@ export class DatabaseProvider {
   }
 
   async deleteDeviceToken() {
-    let token = this.ionicStorage.get('token');
+    let id = await this.ionicStorage.get('token');
+    console.log("Token Fetched: ", id);
     
    let devices = await this.fetchAllNodesBySnapshot("device");
    let ref = this.fireDatabase.list('device');
@@ -287,9 +288,10 @@ export class DatabaseProvider {
 
    for(let a = 0; a < keys.length; a++) {
      let count = keys[a];
-     let device = devices[count].payload.val().dUserID;
+     let device = devices[count].payload.val().dID;
+    console.log("Device: ", device);
 
-     if(device === token) {
+     if(device === id) {
         ref.remove(devices[count].key);
         console.log("Deleted Device Token!");
         this.ionicStorage.set('token', null);
@@ -1913,7 +1915,7 @@ export class DatabaseProvider {
   /*********************/
   async fetchChats(messages1) {
     let chatList = [];
-    let messages2 = messages1;
+    let messages2 = await messages1;
     let counselors = await this.fetchAllNodesByTableInDatabase("counselor");
     let students = await this.fetchAllNodesByTableInDatabase("student");
 
@@ -1938,7 +1940,8 @@ export class DatabaseProvider {
             console.log("Pushing...");
 
             messages2.forEach(async message2 => {
-              if(message2["cID"] === message1["cID"]) {
+              if(message2["cID"] === message1["cID"] &&
+                message2["sID"] === this.userInfo["id"]) {
                 datetime = message2["mDatetime"];
                 description = message2["mDescription"];
                 console.log("Info: ", datetime, description);
@@ -1969,6 +1972,7 @@ export class DatabaseProvider {
           }
         }
       } else { //Counselor or GTD Head
+        let unread = 0;
         if(message1["cID"] === this.userInfo["id"]) {
           
           chatList.forEach(chat => {
@@ -1982,7 +1986,8 @@ export class DatabaseProvider {
             console.log("Pushing...");
 
             messages2.forEach(async message2 => {
-              if(message2["sID"] === message1["sID"]) {
+              if(message2["sID"] === message1["sID"] &&
+                  message2["cID"] === this.userInfo["id"]) {
                 datetime = message2["mDatetime"];
                 description = message2["mDescription"];
                 console.log("Info: ", datetime, description);

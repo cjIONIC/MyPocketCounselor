@@ -170,8 +170,6 @@ export class MenuPage {
   }
 
   ionViewDidLoad() {
-    this.popBadge = false;
-    this.initialize();
     console.log('ionViewDidLoad MenuPage');
   }
   
@@ -184,6 +182,8 @@ export class MenuPage {
   }
 
   ionViewDidEnter() {
+    this.popBadge = false;
+    this.initialize();
     this.connected = this.network.onConnect().subscribe( data => {
       this.initialize();
       this.presentToast("You are online");

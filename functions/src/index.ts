@@ -38,7 +38,8 @@ exports.addAppointmentNotificaton = functions.database
                         payload = {
                             notification: {
                                 title: `${name} requested for an appointment`,
-                                body: `${appointment.aDescription}`
+                                body: `${appointment.aDescription}`,
+                                sound : "default"
                             }
                         }
 
@@ -68,7 +69,8 @@ exports.addAppointmentNotificaton = functions.database
                         payload = {
                             notification: {
                                 title: `${name} made an appointment with you`,
-                                body: `${appointment.aDescription}`
+                                body: `${appointment.aDescription}`,
+                                sound : "default"
                             }
                         }
 
@@ -115,7 +117,8 @@ exports.updateAppointmentNotification = functions.database
                         payload = {
                             notification: {
                                 title: `${name} accepted your request`,
-                                body: `${after.aDescription}`
+                                body: `${after.aDescription}`,
+                                sound : "default"
                             }
                         }
 
@@ -146,7 +149,8 @@ exports.updateAppointmentNotification = functions.database
                         payload = {
                             notification: {
                                 title: `${name} has marked your appointment finished`,
-                                body: `${after.aDescription}`
+                                body: `${after.aDescription}`,
+                                sound : "default"
                             }
                         }
 
@@ -177,7 +181,8 @@ exports.updateAppointmentNotification = functions.database
                         payload = {
                             notification: {
                                 title: `${name} has rescheduled your appointment`,
-                                body: `${after.aDescription}`
+                                body: `${after.aDescription}`,
+                                sound : "default"
                             }
                         }
 
@@ -225,7 +230,8 @@ exports.newMessageNotification = functions.database
                         payload = {
                             notification: {
                                 title: `${name}`,
-                                body: `${message.mDescription}`
+                                body: `${message.mDescription}`,
+                                sound : "default"
                             }
                         }
 
@@ -254,7 +260,8 @@ exports.newMessageNotification = functions.database
                         payload = {
                             notification: {
                                 title: `${name}`,
-                                body: `${message.mDescription}`
+                                body: `${message.mDescription}`,
+                                sound : "default"
                             }
                         }
 
@@ -294,7 +301,8 @@ exports.newRegistrationNotificationForCounselor = functions.database
                     payload = {
                         notification: {
                             title: ` New registration request`,
-                            body: `${student} request for registration.`
+                            body: `${student} request for registration`,
+                            sound : "default"
                         }
                     }
 
@@ -330,7 +338,8 @@ exports.newRegistrationNotificationForGTDHead = functions.database
                     payload = {
                         notification: {
                             title: ` New registration request`,
-                            body: `${student} request for registration.`
+                            body: `${student} request for registration`,
+                                sound : "default"
                         }
                     }
 

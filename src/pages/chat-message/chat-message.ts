@@ -23,9 +23,15 @@ import { Network} from '@ionic-native/network';
 export class ChatMessagePage {
   connected: Subscription;
   disconnected: Subscription;
+  account: Subscription;
+  academic: Subscription;
+  message: Subscription;
+  recipientSub: Subscription;
 
   scroll = false;
   currentDate: Date;
+
+  spinner: any = true;
 
   recipient = [];
   recipientID:any;
@@ -44,11 +50,11 @@ export class ChatMessagePage {
     public toastCtrl: ToastController,
     public db: DatabaseProvider,
     public navParams: NavParams) {
-      this.initialize()
   }
 
   initialize() {
     try {
+      this.spinner = true;
       this.currentDate = new Date(moment().format());
       this.recipientID =  this.navParams.get('person');
       console.log("Fetched Recipient: ", this.recipientID);
@@ -69,10 +75,10 @@ export class ChatMessagePage {
     let list = this.fireDatabase.list<Item>(table);
     let item = list.valueChanges();
 
-    this.fireDatabase.list<Item>("academic")
+    this.academic = this.fireDatabase.list<Item>("academic")
       .valueChanges().subscribe(academics => {
 
-        item.subscribe(async accounts => {
+        this.account = item.subscribe(async accounts => {
           await this.db.refreshUserInfo(accounts, userInfo);
           this.userInfo = await this.db.getUserInfo();
           console.log("User information: ", this.userInfo);
@@ -94,7 +100,7 @@ export class ChatMessagePage {
     let list = this.fireDatabase.list<Item>(table);
     let item = list.valueChanges();
 
-    item.subscribe(async accounts => {
+    this.recipientSub = item.subscribe(async accounts => {
       this.recipient = await this.db.fetchRecipient(this.recipientID, accounts);
       console.log("Fetched Recipient: ", this.recipient);
     })
@@ -130,9 +136,11 @@ export class ChatMessagePage {
     let list = this.fireDatabase.list<Item>("message");
     let item = list.valueChanges();
 
-    item.subscribe(async messages => {
+    this.message = item.subscribe(async messages => {
       this.messageList = await this.db.fetchMessages(this.recipient["id"], messages);
       console.log("Messages: ", this.messageList);
+      this.updateMessageStatus();
+      this.spinner = false;
       //this.scrollChat();
     }, error => console.log("Error"));
   }
@@ -185,7 +193,7 @@ export class ChatMessagePage {
       })
   }
 
-  updateMessageStatus(){
+  async updateMessageStatus(){
     let student, counselor;
     let type;
 
@@ -195,39 +203,47 @@ export class ChatMessagePage {
       counselor = this.recipient["id"];
       type = "Counselor";
     } else {
-      console.log("Type Student");
+      console.log("Type Counselor");
       counselor = this.userInfo["id"];
       student = this.recipient["id"];
       type = "Student";
     }
 
+    let messages = await this.db.fetchAllNodesBySnapshot("message");
+
     let ref =this.fireDatabase.list("message");
-    ref.snapshotChanges(["child_removed"])
-    .subscribe( async messages => {
-      let keys = Object.keys(messages);
+    let keys = Object.keys(messages);
 
       for(let i = 0; i < keys.length; i++) {
         let count = keys[i];
         let refKey = messages[count].key;
         let message = messages[count].payload.val();
 
-        if(message.cID === counselor && message.sID === student
+        if(message.cID === counselor 
+            && message.sID === student
             && message.mDevice === "Sent"
             && message.mType === type) {
           ref.update(refKey, { mDevice: "Received" });
           console.log("UPDATED!")
         }
       }
-    });
   }
 
   ionViewWillLeave(){
     this.connected.unsubscribe();
     this.disconnected.unsubscribe();
+
+    this.account.unsubscribe();
+    this.academic.unsubscribe();
+    this.message.unsubscribe();
+    this.recipientSub.unsubscribe();
+  }
+
+  ionViewDidLoad() {
   }
 
   ionViewDidEnter() {
-    this.updateMessageStatus();
+    this.initialize();
 
     this.connected = this.network.onConnect().subscribe( data => {
       this.presentToast("You are online");

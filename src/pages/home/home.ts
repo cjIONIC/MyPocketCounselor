@@ -55,6 +55,8 @@ export class HomePage {
 
   authState: any = null;
 
+  hasRun: any = false;
+
   connected: Subscription;
   disconnected: Subscription;
   account: Subscription;
@@ -78,7 +80,6 @@ export class HomePage {
   initialize() {
     try {
       this.getUserInfo();
-
       //this.chatBadge = 12;
     } catch {
 
@@ -111,6 +112,7 @@ export class HomePage {
             this.userInfo = await this.db.getUserInfo();
 
             loading.dismiss();
+            this.hasRun = true;
 
             console.log("User information: ", this.userInfo);
             this.scanAppointmentChanges();
@@ -139,6 +141,7 @@ export class HomePage {
 
     this.message = item.subscribe(messages => {
       let chatBadge = 0;
+      this.chatBadge = null
       let fetchedID = [];
 
       messages.forEach(async message => {
@@ -278,7 +281,17 @@ export class HomePage {
   }
 
   ionViewDidLoad() {
+    this.hasRun = true;
     this.initialize();
     console.log('ionViewDidLoad TabPage');
+  }
+
+  ionViewDidEnter() {
+    if(this.hasRun){
+      console.log("User information: ", this.userInfo);
+      this.scanAppointmentChanges();
+      this.scanChatChanges();
+      this.scanRegistrations();
+    }
   }
 }

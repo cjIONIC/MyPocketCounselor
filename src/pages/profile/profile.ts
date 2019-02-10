@@ -5,6 +5,7 @@ import { AngularFireDatabase } from 'angularfire2/database';
 import { FeedbackPage } from '../feedback/feedback';
 import { ModalProfileEditComponent } from '../../components/modal-profile-edit/modal-profile-edit';
 import { PopFeedOptionsComponent } from '../../components/pop-feed-options/pop-feed-options';
+import { Subscription } from 'rxjs/Subscription';
 
 /**
  * Generated class for the ProfilePage page.
@@ -23,6 +24,15 @@ export class ProfilePage {
   userInfo = [];
   rating: any;
 
+  account: Subscription;
+  academic: Subscription;
+  rate: Subscription;
+  post: Subscription;
+
+  hasRate: any = false;
+  hasPost: any = false;
+
+
   postArray = [];
 
   spinner: any = true;  
@@ -39,7 +49,6 @@ export class ProfilePage {
       public popoverCtrl: PopoverController,
       public viewCtrl: ViewController,
       public navParams: NavParams) {
-    this.initialize();
   }
 
   initialize() {
@@ -63,9 +72,10 @@ export class ProfilePage {
     let list = this.fireDatabase.list<Item>(table);
     let item = list.valueChanges();
 
-    this.fireDatabase.list<Item>("academic")
+    this.academic = this.fireDatabase.list<Item>("academic")
     .valueChanges().subscribe(() => {
-      item.subscribe(async accounts => {
+      
+      this.account = item.subscribe(async accounts => {
         await this.db.refreshUserInfo(accounts, userInfo);
         this.userInfo = await this.db.getUserInfo();
         console.log("User information: ", this.userInfo);
@@ -90,9 +100,9 @@ export class ProfilePage {
     let list = this.fireDatabase.list<Item>("feedback");
     let item = list.valueChanges();
 
-    item.subscribe(async feedbacks => {
+    this.rate = item.subscribe(async feedbacks => {
       this.rating = await this.db.fetchFeedbackRating(this.userInfo["id"], feedbacks);
-
+      this.hasRate = true;
       if(!this.rating) {
         this.rating = 0;
         console.log("No rating available");
@@ -104,8 +114,9 @@ export class ProfilePage {
     let list =  this.fireDatabase.list<Item>('post');
     let item = list.valueChanges();
 
-    item.subscribe( async posts => {
+    this.post = item.subscribe( async posts => {
       this.postArray = await this.db.fetchPostForProfile(posts);
+      this.hasPost = true;
     })
   }
 
@@ -143,8 +154,22 @@ export class ProfilePage {
     this.app.getRootNav().push(FeedbackPage);
   }
 
+  ionViewWillLeave(){
+
+    this.account.unsubscribe();
+    this.academic.unsubscribe();
+
+    if(this.hasRate) this.rate.unsubscribe();
+    if(this.hasPost) this.post.unsubscribe();
+    
+  }
+
   ionViewDidLoad() {
     console.log('ionViewDidLoad ProfilePage');
+  }
+
+  ionViewDidEnter() {
+    this.initialize();
   }
 
 }

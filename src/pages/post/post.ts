@@ -184,12 +184,15 @@ export class PostPage {
 
   ionViewDidEnter() {
 
+    this.initialize();
+
     this.connected = this.network.onConnect().subscribe( data => {
+    this.initialize();
       this.presentToast("You are online");
-      this.initialize();
     }, error => console.log(error));
 
     this.disconnected = this.network.onDisconnect().subscribe(data => {
+      this.initialize();
       this.presentToast("You are offline");
     }, error => console.log(error));
   }

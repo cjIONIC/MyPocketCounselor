@@ -28,6 +28,7 @@
                 name="hotline" 
                 [(ngModel)]="hotlineNumber"
                 maxlength="11"
+                minlength="11"
                 required>
               </ion-input>
             </ion-item>
@@ -36,10 +37,13 @@
               <div [hidden]="!hotline.errors.required" class="alert">
                 Hotline is required
               </div>
+              <div [hidden]="!hotline.errors.minlength" class="alert">
+                Hotline number must have eleven numbers
+              </div>
             </div>
       
           <div class="buttons">
-            <button ion-button class="btnConcern" [disabled]="!hotlineForm.form.valid" type="submit">Change</button>
+            <button ion-button class="btnConcern" [disabled]="!hotlineForm.form.valid" type="submit">Update</button>
           </div>
       </form>
     </div>

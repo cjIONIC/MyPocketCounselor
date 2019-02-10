@@ -23,34 +23,41 @@
 
 
 <ion-content class="content">
-  <ion-list>
-    <ion-grid>
-      <ion-row *ngFor="let detail of messageList; let last = last">
-          <div *ngIf="detail.type === 'Recipient'" class="recipient">
-            <div class="item">
-              <ion-row>
-                  <ion-col col-2><img src = "{{ recipient['picture'] }}" class="avatar"></ion-col>
-                  <ion-col col-10>
-                      <div class="messageRecipient">
-                          <div class="description">{{detail.message}}</div>
-                      </div>
-                      <div class="time"> {{ detail.datetime | date: 'MMM dd,yyyy hh:mm aa' }} </div>
-                  </ion-col>
-              </ion-row>
-            </div>
-          </div>
-          <div *ngIf="detail.type === 'Sender'" class="sender">
-            <div class="itemSender">
-              <div class="messageUser">
-                  <div class="description">{{detail.message}}</div>
+  <div *ngIf="spinner" class="spinnerContent">
+      <ion-spinner color="primary"></ion-spinner>
+  </div>
+
+  <div *ngIf="!spinner">
+    <ion-list>
+      <ion-grid>
+        <ion-row *ngFor="let detail of messageList; let last = last">
+            <div *ngIf="detail.type === 'Recipient'" class="recipient">
+              <div class="item">
+                <ion-row>
+                    <ion-col col-2><img src = "{{ recipient['picture'] }}" class="avatar"></ion-col>
+                    <ion-col col-10>
+                        <div class="messageRecipient">
+                            <div class="description">{{detail.message}}</div>
+                        </div>
+                        <div class="time"> {{ detail.datetime | date: 'MMM dd,yyyy hh:mm aa' }} </div>
+                    </ion-col>
+                </ion-row>
               </div>
-              <div class="time"> {{ detail.datetime | date: 'MMM dd,yyyy hh:mm aa' }} </div>
             </div>
-          </div>
-          {{last ? scrollChat() : ''}}
-      </ion-row>
-    </ion-grid>
-  </ion-list>
+            <div *ngIf="detail.type === 'Sender'" class="sender">
+              <div class="itemSender">
+                <div class="messageUser">
+                    <div class="description">{{detail.message}}</div>
+                </div>
+                <div class="time"> {{ detail.datetime | date: 'MMM dd,yyyy hh:mm aa' }} </div>
+              </div>
+            </div>
+            {{last ? scrollChat() : ''}}
+        </ion-row>
+      </ion-grid>
+    </ion-list>
+  </div>
+ 
 </ion-content>
 
 <ion-footer>
