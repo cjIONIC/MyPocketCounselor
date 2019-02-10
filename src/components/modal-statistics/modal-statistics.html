@@ -18,7 +18,7 @@
         <div class="academicName">{{ academicName }} </div>
     </ion-card>
     <ion-card class="cardStudent">
-            <div class="studentLabel">Number of Students</div>
+            <div class="studentLabel">Students</div>
             <div class="pieGraph">
                 <canvas id="studentChartModal" height="150px" width="150px"></canvas>
             </div>
@@ -27,7 +27,10 @@
       <ion-slides spaceBetween="-26">
           <ion-slide>
             <ion-card class="cardSemester">
-                <div class="cardSemHeader">First Semester</div>
+                    <div class="cardSemHeader">
+                        <div class="semester">First Semester</div>
+                        <div class="appointmentLabel">Appointments</div>
+                    </div>
                 <div class="barGraph">
                     <canvas id="firstSemChartModal" height="200px"></canvas>
                 </div>
@@ -35,7 +38,10 @@
           </ion-slide>
           <ion-slide>
               <ion-card class="cardSemester">
-                  <div class="cardSemHeader">Second Semester</div>
+                    <div class="cardSemHeader">
+                        <div class="semester">Second Semester</div>
+                        <div class="appointmentLabel">Appointments</div>
+                    </div>
                   <div class="barGraph">
                       <canvas id="secondSemChartModal" height="200px"></canvas>
                   </div>
@@ -43,7 +49,10 @@
           </ion-slide>
           <ion-slide>
               <ion-card class="cardSemester">
-                  <div class="cardSemHeader">Summer</div>
+                    <div class="cardSemHeader">
+                        <div class="semester">Summer</div>
+                        <div class="appointmentLabel">Appointments</div>
+                    </div>
                   <div class="barGraph">
                       <canvas id="summerChartModal" height="200px"></canvas>
                   </div>

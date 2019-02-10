@@ -46,8 +46,6 @@ export class PostPage {
     public navParams: NavParams,
     private toastCtrl: ToastController,
     private app : App) {
-
-      this.initialize();
   }
 
   async initialize() {
@@ -167,6 +165,7 @@ export class PostPage {
   }
 
   ionViewDidLoad() {
+    this.initialize();
     console.log('ionViewDidLoad FeedPage');
   }
 
@@ -184,7 +183,6 @@ export class PostPage {
   }
 
   ionViewDidEnter() {
-    if(!this.hasRun) this.initialize();
 
     this.connected = this.network.onConnect().subscribe( data => {
       this.presentToast("You are online");

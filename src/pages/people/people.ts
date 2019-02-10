@@ -53,7 +53,6 @@ export class PeoplePage {
     public navParams: NavParams,
     private callNumber: CallNumber,
     private app: App) {
-      this.initialize();
   }
 
   async initialize() {
@@ -264,6 +263,7 @@ export class PeoplePage {
   }
 
   ionViewDidLoad() {
+    this.initialize();
     console.log('ionViewDidLoad PeoplePage');
   }
 

@@ -2578,10 +2578,16 @@ export class DatabaseProvider {
 
       console.log("STUDENT: ", studentYear , " ? ", year);
 
-      if(student["acID"] === academic &&
-          student["sStatus"] === type &&
-          studentYear === schoolYear)
-        totalStudents++;
+      if(academic === 99) {
+        if(student["sStatus"] === type &&
+            studentYear === schoolYear)
+          totalStudents++;
+      } else {
+        if(student["acID"] === academic &&
+            student["sStatus"] === type &&
+            studentYear === schoolYear)
+          totalStudents++;
+      }
     })
 
     return totalStudents;

@@ -73,7 +73,6 @@ export class HomePage {
     public loadingCtrl: LoadingController,
     public navParams: NavParams) {
 
-      this.initialize();
   } 
 
   initialize() {
@@ -279,6 +278,7 @@ export class HomePage {
   }
 
   ionViewDidLoad() {
+    this.initialize();
     console.log('ionViewDidLoad TabPage');
   }
 }

@@ -30,8 +30,11 @@ export class HeadControlsStatisticsPage {
 
   allStudents: any;
 
-  students: Subscription;
-  appointments: Subscription;
+  studentPage: Subscription;
+  appointmentPage: Subscription;
+
+  studentEnrolled: any;
+  studentNotEnrolled: any;
 
   //Months
   juneEnrolled: any;
@@ -102,15 +105,14 @@ export class HeadControlsStatisticsPage {
 
   academicList = [];
 
+  pieChart: any;
+
   constructor(public navCtrl: NavController, 
       public navParams: NavParams,
       public fireDatabase: AngularFireDatabase,
       public app: App,
       public modalCtrl: ModalController,
       public db: DatabaseProvider) {
-
-
-        this.initialize();
   }
 
   async initialize() {
@@ -127,7 +129,7 @@ export class HeadControlsStatisticsPage {
       else if (month.toString().match(/^(0|1|2|3|4)$/)) {
         this.date.setFullYear(this.date.getFullYear()-1);
         this.year = this.date.getFullYear();
-        this.schoolYear = this.year + " - " + (this.year+1);
+        this.schoolYear = "SY " + this.year + " - " + (this.year+1);
       }
 
       console.log("School Year: ", this.schoolYear);
@@ -169,7 +171,7 @@ export class HeadControlsStatisticsPage {
     let list = this.fireDatabase.list<Item>("appointment");
     let item = list.valueChanges();
 
-    this.appointments = item.subscribe(async appointments => {
+    this.appointmentPage = item.subscribe(async appointments => {
       await this.fetchFinishYear(appointments);
       await this.fetchAcceptYear(appointments);
 
@@ -182,6 +184,20 @@ export class HeadControlsStatisticsPage {
       }, 300);
       
     })
+  }
+
+  fetchAllStudents(){
+      let list = this.fireDatabase.list<Item>("student");
+      let item = list.valueChanges();
+
+      this.studentPage = item.subscribe(async students => {
+        this.studentEnrolled = await this.db.fetchAllStudentsOfUnit(students, this.academic, this.year, "Enrolled");
+        this.studentNotEnrolled = await this.db.fetchAllStudentsOfUnit(students, this.academic, this.year, "Not Enrolled");
+
+        console.log("Students: ", this.studentEnrolled, " ? ", this.studentNotEnrolled);
+        if(this.studentEnrolled === 0 && this.studentNotEnrolled === 0) await this.loadNoStudent();
+        else await this.loadPieStudents();
+      })
   }
 
   async setSlide() {
@@ -222,21 +238,23 @@ export class HeadControlsStatisticsPage {
     this.slides.slideTo(index, 500);
   }
 
+  /*
   fetchAllStudents(){
     let list = this.fireDatabase.list<Item>("student");
     let item = list.valueChanges();
 
     this.students = item.subscribe(async students => {
       this.allStudents = await this.db.fetchAllStudents(this.year, students);
-      /*
+     
       await this.fetchEnrolledStudents(students);
       await this.fetchNotEnrolledStudents(students);
 
       
       await this.loadLineStudentsYear();
-      */
+      
     })
   }
+  */
 
   async fetchFinishYear(appointments) {
     this.juneFinish = await this.db.fetchAppointmentFinishOfMonth(5, this.year, appointments, this.academic);
@@ -531,12 +549,85 @@ export class HeadControlsStatisticsPage {
 
   }
 
+  loadNoStudent(){
+    console.log("Loading Bar Graph");
+    let ctx = document.getElementById("studentChart");
+
+    this.pieChart = new Chart(ctx, {
+
+            type: 'doughnut',
+            data: {
+                labels: ["No Students Found"],
+                datasets: [{
+                    data: [100],
+                    backgroundColor: [
+                        'rgba(128,128,128, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(128,128,128, 1)'
+                    ],
+                }]
+            },
+            options: {
+                legend: {
+                    onClick: null
+                },
+                tooltips: {
+                     enabled: false
+                }
+            }
+
+        },
+    );
+
+  }
+
+  loadPieStudents(){
+    console.log("Loading Bar Graph");
+    let ctx = document.getElementById("studentChart");
+
+    this.pieChart = new Chart(ctx, {
+
+            type: 'doughnut',
+            data: {
+                labels: ["Enrolled", "Not Enrolled"],
+                datasets: [{
+                    data: [this.studentEnrolled, this.studentNotEnrolled],
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(255,99,132,1)',
+                        'rgba(54, 162, 235, 1)'
+                    ],
+                }]
+            },
+            hoverBackgroundColor: [
+                "#FF6384",
+                "#36A2EB",
+                "#FFCE56",
+                "#FF6384",
+                "#36A2EB",
+                "#FFCE56"
+            ],
+            options: {
+                legend: {
+                    onClick: null
+                }
+            }
+
+        },
+    );
+
+  }
+
   async loadPrevious() {
     console.log("Previous school year");
 
     this.date.setFullYear(this.date.getFullYear()-1);
     this.year = this.date.getFullYear();
-    this.schoolYear = this.year + " - " + (this.year+1);
+    this.schoolYear = "SY " + this.year + " - " + (this.year+1);
 
     console.log("School Year: ", this.schoolYear);
 
@@ -544,6 +635,7 @@ export class HeadControlsStatisticsPage {
 
    // this.verifyDate(date);
     this.fetchAllAppointments();
+    this.fetchAllStudents();
     await this.fetchAcademicUnitStatistics();
   }
 
@@ -552,7 +644,7 @@ export class HeadControlsStatisticsPage {
 
     this.date.setFullYear(this.date.getFullYear()+1);
     this.year = this.date.getFullYear();
-    this.schoolYear = this.year + " - " + (this.year+1);
+    this.schoolYear = "SY " + this.year + " - " + (this.year+1);
 
     console.log("School Year: ", this.schoolYear);
 
@@ -560,6 +652,7 @@ export class HeadControlsStatisticsPage {
 
    // this.verifyDate(date);
     this.fetchAllAppointments();
+    this.fetchAllStudents();
     await this.fetchAcademicUnitStatistics();
   }
   
@@ -573,12 +666,13 @@ export class HeadControlsStatisticsPage {
   }
   
   ionViewDidLoad() {
+    this.initialize();
     console.log('ionViewDidLoad HeadControlsStatisticsPage');
   }
 
   ionViewWillLeave(){
-    this.appointments.unsubscribe();
-    this.students.unsubscribe();
+    this.appointmentPage.unsubscribe();
+    this.studentPage.unsubscribe();
   }
 
 }

@@ -14,6 +14,37 @@ page-head-controls-statistics {
         align-content: center;
     }
 
+    .cardStudent{
+        padding: 10px;
+    }
+
+    .studentHeader {
+        text-align: center;
+        font-weight: bold;
+        font-size: 12pt;
+        color: white;
+        background-color: #5de678;
+    }
+
+    .appointmentHeader {
+        text-align: center;
+        font-weight: bold;
+        font-size: 12pt;
+        color: white;
+        background-color: #ffb861;
+        margin-bottom: 7px;
+    }
+
+    .academicHeader {
+        margin-top: 7px;
+        text-align: center;
+        font-weight: bold;
+        font-size: 12pt;
+        color: white;
+        background-color: #6961ff;
+
+    }
+
     .studentLabel {
         text-align: center;
         font-size: 12pt;
@@ -41,42 +72,48 @@ page-head-controls-statistics {
         margin: 5px auto;
     }
 
-    .appointmentHeader {
-    }
-
     .cardSemHeader {
         text-align: center;
-        font-size: 12pt;
-        font-weight: bold;
         padding: 5px;
         padding-bottom: 10px;
+    }
+    
+    .semester {
+        font-size: 12pt;
+        font-weight: bold;
+    }
+
+    .appointmentLabel {
+        font-weight: 10pt;
+        color: gray;
     }
 
     .arrow {
       font-size: 20pt;
       margin: 0px;
       text-align: center;
-      margin-top: 8px;
     }
 
     .cardSlides {
         //padding: 10px;
     }
 
-    .yearLabel {
-      width: 100%;
-      font-size: 12pt;
-      font-weight: bold;
-      margin: 0px;
-      text-align: center;
+    .schoolYear {
+        height: 50px;
+        padding: 5px;
+        background-color: #5de678;
+        color: white;
+    }
+
+    .schoolGrid {
+        padding: 0%;
     }
 
     .yearRow {
       align-content: center;
       text-align: center;
-      margin: 5px;
       width: 100%;
-
+      padding: 2px;
     }
 
     .yearInfo {
@@ -85,8 +122,8 @@ page-head-controls-statistics {
       font-weight: bold;
       padding: 5px 10px;
       text-align: center;
-      background-color: #ff6961;
-      color: white;
+      //background-color: #ff6961;
+      //color: white;
       border-radius: 50px;
     }
 

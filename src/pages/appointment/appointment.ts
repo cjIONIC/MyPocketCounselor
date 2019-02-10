@@ -68,7 +68,6 @@ export class AppointmentPage {
     public navParams: NavParams,
     private app: App) {
 
-      this.initialize();
   }
 
   async initialize() {
@@ -336,6 +335,7 @@ export class AppointmentPage {
   }
 
   ionViewDidLoad() {
+    this.initialize();
     console.log('ionViewDidLoad AppointmentPage');
   }
 

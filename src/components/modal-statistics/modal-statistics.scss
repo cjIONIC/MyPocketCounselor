@@ -38,10 +38,22 @@ modal-statistics {
         margin: 5px auto;
     }
 
-    .cardSemHeader{
-        font-weight: bold;
+    
+
+    .cardSemHeader {
+        text-align: center;
+        padding: 5px;
+        padding-bottom: 10px;
+    }
+    
+    .semester {
         font-size: 12pt;
-        margin-bottom: 10px;
+        font-weight: bold;
+    }
+
+    .appointmentLabel {
+        font-weight: 10pt;
+        color: gray;
     }
 
 

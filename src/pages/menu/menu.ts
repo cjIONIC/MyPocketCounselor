@@ -46,7 +46,6 @@ export class MenuPage {
     public alertCtrl: AlertController,
     public navParams: NavParams,
     public app: App) {
-      this.initialize();
   }
 
   initialize() {
@@ -172,6 +171,7 @@ export class MenuPage {
 
   ionViewDidLoad() {
     this.popBadge = false;
+    this.initialize();
     console.log('ionViewDidLoad MenuPage');
   }
   

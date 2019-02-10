@@ -41,8 +41,6 @@ export class NotificationPage {
       public modalCtrl: ModalController,
       public fireDatabase: AngularFireDatabase,
       public navParams: NavParams) {
-  
-    this.initialize();
   }
 
   async initialize() {
@@ -150,6 +148,7 @@ export class NotificationPage {
   }
 
   ionViewDidLoad() {
+    this.initialize();
     console.log('ionViewDidLoad NotificationPage');
   }
 
