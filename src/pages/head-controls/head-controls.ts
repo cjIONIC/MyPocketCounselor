@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, App } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, App, ModalController } from 'ionic-angular';
 import { HeadControlsStatisticsPage } from '../head-controls-statistics/head-controls-statistics';
 import { HeadControlsConcernsPage } from '../head-controls-concerns/head-controls-concerns';
 import { HeadControlsCounselorsPage } from '../head-controls-counselors/head-controls-counselors';
+import { ModalHotlineComponent } from '../../components/modal-hotline/modal-hotline';
 
 /**
  * Generated class for the HeadControlsPage page.
@@ -19,6 +20,7 @@ import { HeadControlsCounselorsPage } from '../head-controls-counselors/head-con
 export class HeadControlsPage {
 
   constructor(public navCtrl: NavController, 
+      public modalCtrl: ModalController,
       public navParams: NavParams,
       public app: App) {
   }
@@ -35,6 +37,11 @@ export class HeadControlsPage {
 
   counselors() {
     this.app.getRootNav().push(HeadControlsCounselorsPage);
+  }
+
+  hotline() {
+    const modal = this.modalCtrl.create(ModalHotlineComponent, "",{ cssClass: 'custom-modal-hotline' });
+    modal.present();
   }
 
   ionViewDidLoad() {

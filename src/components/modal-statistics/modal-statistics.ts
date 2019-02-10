@@ -209,61 +209,60 @@ export class ModalStatisticsComponent {
     let ctx = document.getElementById("firstSemChartModal");
     
     this.barChartFirst = new Chart(ctx, {
-      type: 'bar',
-      data: {
-          labels: ["Jun", "Jul", "Aug", "Sep", "Oct"],
-          datasets: [{
-                    label: "Finished",
-                    data: [this.juneFinish, this.julyFinish, this.augustFinish, 
-                      this.septemberFinish, this.octoberFinish],
+        type: 'bar',
+        data: {
+            labels: ["Jun", "Jul", "Aug", "Sep", "Oct"],
+            datasets: [{
+                      label: "Finished",
+                      data: [this.juneFinish, this.julyFinish, this.augustFinish, 
+                        this.septemberFinish, this.octoberFinish],
+                      backgroundColor: [
+                          'rgba(105,97,255, 0.2)',
+                          'rgba(93,230,120, 0.2)',
+                          'rgba(255,105,97, 0.2)',
+                          'rgba(97,168,255, 0.2)',
+                          'rgba(255,184,97, 0.2)'
+                      ],
+                      borderColor: [
+                          'rgba(105,97,255, 1)',
+                          'rgba(93,230,120, 1)',
+                          'rgba(255,105,97, 1)',
+                          'rgba(97,168,255, 1)',
+                          'rgba(255,184,97, 1)'
+                      ],
+                      borderWidth: 1
+                  },
+                  {
+                    label: "Not Finished",
+                    data: [this.junePending, this.julyPending, this.augustPending, 
+                      this.septemberPending, this.octoberPending,],
                     backgroundColor: [
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 206, 86, 0.2)',
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(153, 102, 255, 0.2)'
+                          'rgba(105,97,255, 1)',
+                          'rgba(93,230,120, 1)',
+                          'rgba(255,105,97, 1)',
+                          'rgba(97,168,255, 1)',
+                          'rgba(255,184,97, 1)'
                     ],
                     borderColor: [
-                        'rgba(255,99,132,1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(153, 102, 255, 1)'
+                          'rgba(105,97,255, 1)',
+                          'rgba(93,230,120, 1)',
+                          'rgba(255,105,97, 1)',
+                          'rgba(97,168,255, 1)',
+                          'rgba(255,184,97, 1)'
                     ],
                     borderWidth: 1
-                },
-                {
-                  label: "Not Finished",
-                  data: [this.junePending, this.julyPending, this.augustPending, 
-                    this.septemberPending, this.octoberPending,],
-                  backgroundColor: [
-                      'rgba(255, 99, 132, 1)',
-                      'rgba(54, 162, 235, 1)',
-                      'rgba(255, 206, 86, 1)',
-                      'rgba(75, 192, 192, 1)',
-                      'rgba(153, 102, 255, 1)'
-                  ],
-                  borderColor: [
-                      'rgba(255,99,132,1)',
-                      'rgba(54, 162, 235, 1)',
-                      'rgba(255, 206, 86, 1)',
-                      'rgba(75, 192, 192, 1)',
-                      'rgba(153, 102, 255, 1)'
-                  ],
-                  borderWidth: 1
-              }]
-            },
-            options: { 
-                legend: { display: false },
-                scales: {
-                    yAxes: [{
-                        ticks: {
-                            beginAtZero:true
-                        }
-                    }]
-                }
-            }
-
+                }]
+              },
+              options: { 
+                  legend: { display: false },
+                  scales: {
+                      yAxes: [{
+                          ticks: {
+                              beginAtZero:true
+                          }
+                      }]
+                  }
+              }
     });
   }
 
@@ -272,63 +271,63 @@ export class ModalStatisticsComponent {
     let ctx = document.getElementById("secondSemChartModal");
 
     this.barChartSecond = new Chart(ctx, {
-      type: 'bar',
-      data: {
-          labels: ["Nov", "Dec", "Jan", "Feb", "March"],
-          datasets: [{
-                    label: "Finished",
-                    data: [this.novemberFinish,
-                      this.decemberFinish, this.januaryFinish, this.februaryFinish,
+        type: 'bar',
+        data: {
+            labels: ["Nov", "Dec", "Jan", "Feb", "March"],
+            datasets: [{
+                      label: "Finished",
+                      data: [this.novemberFinish,
+                        this.decemberFinish, this.januaryFinish, this.februaryFinish,
+                        this.marchFinish],
+                      backgroundColor: [
+                          'rgba(105,97,255, 0.2)',
+                          'rgba(93,230,120, 0.2)',
+                          'rgba(255,105,97, 0.2)',
+                          'rgba(97,168,255, 0.2)',
+                          'rgba(255,184,97, 0.2)'
+                      ],
+                      borderColor: [
+                          'rgba(105,97,255, 1)',
+                          'rgba(93,230,120, 1)',
+                          'rgba(255,105,97, 1)',
+                          'rgba(97,168,255, 1)',
+                          'rgba(255,184,97, 1)'
+                      ],
+                      borderWidth: 1
+                  },
+                  {
+                    label: "Not Finished",
+                    data: [this.novemberPending,
+                      this.decemberPending, this.januaryPending, this.februaryPending,
                       this.marchFinish],
                     backgroundColor: [
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 206, 86, 0.2)',
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(153, 102, 255, 0.2)'
+                          'rgba(105,97,255, 1)',
+                          'rgba(93,230,120, 1)',
+                          'rgba(255,105,97, 1)',
+                          'rgba(97,168,255, 1)',
+                          'rgba(255,184,97, 1)'
                     ],
                     borderColor: [
-                        'rgba(255,99,132,1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(153, 102, 255, 1)'
+                          'rgba(105,97,255, 1)',
+                          'rgba(93,230,120, 1)',
+                          'rgba(255,105,97, 1)',
+                          'rgba(97,168,255, 1)',
+                          'rgba(255,184,97, 1)'
                     ],
                     borderWidth: 1
-                },
-                {
-                  label: "Not Finished",
-                  data: [this.novemberPending,
-                    this.decemberPending, this.januaryPending, this.februaryPending,
-                    this.marchFinish],
-                  backgroundColor: [
-                      'rgba(255, 99, 132, 1)',
-                      'rgba(54, 162, 235, 1)',
-                      'rgba(255, 206, 86, 1)',
-                      'rgba(75, 192, 192, 1)',
-                      'rgba(153, 102, 255, 1)'
-                  ],
-                  borderColor: [
-                      'rgba(255,99,132,1)',
-                      'rgba(54, 162, 235, 1)',
-                      'rgba(255, 206, 86, 1)',
-                      'rgba(75, 192, 192, 1)',
-                      'rgba(153, 102, 255, 1)'
-                  ],
-                  borderWidth: 1
-              }]
-            },
-            options: { 
-                legend: { display: false },
-                scales: {
-                    yAxes: [{
-                        ticks: {
-                            beginAtZero:true
-                        }
-                    }]
-                }
-            }
-
+                }]
+              },
+              options: { 
+                  legend: { display: false },
+                  scales: {
+                      yAxes: [{
+                          ticks: {
+                              beginAtZero:true
+                          }
+                      }]
+                  }
+              }
+  
     });
   }
 
@@ -337,32 +336,32 @@ export class ModalStatisticsComponent {
     let ctx = document.getElementById("summerChartModal");
     
     this.barChartSummer = new Chart(ctx, {
-      type: 'bar',
+       type: 'bar',
       data: {
           labels: ["April","May"],
           datasets: [{
                     label: "Finished",
                     data: [this.aprilFinish, this.mayFinish],
                     backgroundColor: [
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)'
+                        'rgba(105,97,255, 0.2)',
+                        'rgba(93,230,120, 0.2)'
                     ],
                     borderColor: [
-                        'rgba(255,99,132,1)',
-                        'rgba(54, 162, 235, 1)'
+                        'rgba(105,97,255, 1)',
+                        'rgba(93,230,120, 1)'
                     ],
                     borderWidth: 1
                 },
                 {
-                    label: "Not Finished",
+                  label: "Not Finished",
                   data: [this.aprilPending, this.mayPending],
                   backgroundColor: [
-                      'rgba(255, 99, 132, 1)',
-                      'rgba(54, 162, 235, 1)',
+                    'rgba(105,97,255, 1)',
+                    'rgba(93,230,120, 1)'
                   ],
                   borderColor: [
-                      'rgba(255,99,132,1)',
-                      'rgba(54, 162, 235, 1)'
+                    'rgba(105,97,255, 1)',
+                    'rgba(93,230,120, 1)'
                   ],
                   borderWidth: 1
               }]
@@ -378,6 +377,7 @@ export class ModalStatisticsComponent {
                 }
             }
 
+    
     });
   }
 
@@ -420,37 +420,33 @@ export class ModalStatisticsComponent {
 
     this.pieChart = new Chart(ctx, {
 
-            type: 'doughnut',
-            data: {
-                labels: ["Enrolled", "Not Enrolled"],
-                datasets: [{
-                    data: [this.studentsEnrolled, this.studentNotEnrolled],
-                    backgroundColor: [
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)'
-                    ],
-                    borderColor: [
-                        'rgba(255,99,132,1)',
-                        'rgba(54, 162, 235, 1)'
-                    ],
-                }]
-            },
-            hoverBackgroundColor: [
-                "#FF6384",
-                "#36A2EB",
-                "#FFCE56",
-                "#FF6384",
-                "#36A2EB",
-                "#FFCE56"
-            ],
-            options: {
-                legend: {
-                    onClick: null
-                }
-            }
-
+        type: 'doughnut',
+        data: {
+            labels: ["Not Enrolled", "Enrolled"],
+            datasets: [{
+                data: [this.studentNotEnrolled, this.studentsEnrolled],
+                backgroundColor: [
+                    'rgba(255,105,97, 0.2)',
+                    'rgba(97,168,255, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255,105,97, 1)',
+                    'rgba(97,168,255, 1)'
+                ],
+            }]
         },
-    );
+        hoverBackgroundColor: [
+            "#ff6961",
+            "#61a8ff"
+        ],
+        options: {
+            legend: {
+                reverse:true,
+                onClick: null
+            }
+        }
+
+    });
 
   }
 

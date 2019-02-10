@@ -1,0 +1,48 @@
+
+<ion-header>
+
+  <ion-navbar color="primary">
+      <ion-buttons end>
+          <button ion-button  style="text-transform: none; font-size: 15pt;" (click)="dismiss()">
+            Close
+          </button>
+        </ion-buttons>
+      <ion-title>Change Hotline</ion-title>
+  </ion-navbar>
+
+</ion-header>
+<ion-content padding class="content">
+
+  
+    <div *ngIf="spinner" class="spinnerContent">
+        <ion-spinner color="primary"></ion-spinner>
+    </div>
+
+    <div *ngIf="!spinner">
+      
+        <form #hotlineForm="ngForm" (ngSubmit)="onChange(hotlineForm.value)" novalidate>
+          <ion-item>
+              <ion-label color="primary" stacked> Hotline Number</ion-label>
+              <ion-input #hotline="ngModel" 
+                type="tel"
+                name="hotline" 
+                [(ngModel)]="hotlineNumber"
+                maxlength="11"
+                required>
+              </ion-input>
+            </ion-item>
+          
+            <div *ngIf="hotline.errors && (hotline.dirty || hotline.touched)">
+              <div [hidden]="!hotline.errors.required" class="alert">
+                Hotline is required
+              </div>
+            </div>
+      
+          <div class="buttons">
+            <button ion-button class="btnConcern" [disabled]="!hotlineForm.form.valid" type="submit">Change</button>
+          </div>
+      </form>
+    </div>
+
+  
+</ion-content>

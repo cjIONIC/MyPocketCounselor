@@ -22,8 +22,6 @@ import { Subscription } from 'rxjs/Subscription';
 export class HeadControlsStatisticsPage {
   
   @ViewChild(Slides) slides: Slides;
-
-  @ViewChild('doughnutCanvas') doughnutCanvas;
   
   barChart: any;
   date: any;
@@ -32,6 +30,7 @@ export class HeadControlsStatisticsPage {
 
   studentPage: Subscription;
   appointmentPage: Subscription;
+  academicPage: Subscription;
 
   studentEnrolled: any;
   studentNotEnrolled: any;
@@ -135,11 +134,13 @@ export class HeadControlsStatisticsPage {
       console.log("School Year: ", this.schoolYear);
 
       this.academic = 99;
+  
+      // this.verifyDate(date);
+        this.fetchAllAppointments();
+        this.fetchAllStudents();
+        this.fetchAcademicUnitStatistics();
 
       // this.verifyDate(date);
-       this.fetchAllStudents();
-       await this.fetchAllAppointments();
-       await this.fetchAcademicUnitStatistics();
     } catch {
 
     }
@@ -238,24 +239,6 @@ export class HeadControlsStatisticsPage {
     this.slides.slideTo(index, 500);
   }
 
-  /*
-  fetchAllStudents(){
-    let list = this.fireDatabase.list<Item>("student");
-    let item = list.valueChanges();
-
-    this.students = item.subscribe(async students => {
-      this.allStudents = await this.db.fetchAllStudents(this.year, students);
-     
-      await this.fetchEnrolledStudents(students);
-      await this.fetchNotEnrolledStudents(students);
-
-      
-      await this.loadLineStudentsYear();
-      
-    })
-  }
-  */
-
   async fetchFinishYear(appointments) {
     this.juneFinish = await this.db.fetchAppointmentFinishOfMonth(5, this.year, appointments, this.academic);
     this.julyFinish = await this.db.fetchAppointmentFinishOfMonth(6, this.year, appointments, this.academic);
@@ -290,7 +273,7 @@ export class HeadControlsStatisticsPage {
     let list = this.fireDatabase.list<Item>("academic");
     let item = list.valueChanges();
 
-    this.fireDatabase.list<Item>("counselor")
+    this.academicPage = this.fireDatabase.list<Item>("counselor")
     .valueChanges().subscribe(counselors => {
 
       item.subscribe(async academics => {
@@ -314,18 +297,18 @@ export class HeadControlsStatisticsPage {
                     data: [this.juneFinish, this.julyFinish, this.augustFinish, 
                       this.septemberFinish, this.octoberFinish],
                     backgroundColor: [
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 206, 86, 0.2)',
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(153, 102, 255, 0.2)'
+                        'rgba(105,97,255, 0.2)',
+                        'rgba(93,230,120, 0.2)',
+                        'rgba(255,105,97, 0.2)',
+                        'rgba(97,168,255, 0.2)',
+                        'rgba(255,184,97, 0.2)'
                     ],
                     borderColor: [
-                        'rgba(255,99,132,1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(153, 102, 255, 1)'
+                        'rgba(105,97,255, 1)',
+                        'rgba(93,230,120, 1)',
+                        'rgba(255,105,97, 1)',
+                        'rgba(97,168,255, 1)',
+                        'rgba(255,184,97, 1)'
                     ],
                     borderWidth: 1
                 },
@@ -334,18 +317,18 @@ export class HeadControlsStatisticsPage {
                   data: [this.junePending, this.julyPending, this.augustPending, 
                     this.septemberPending, this.octoberPending,],
                   backgroundColor: [
-                      'rgba(255, 99, 132, 1)',
-                      'rgba(54, 162, 235, 1)',
-                      'rgba(255, 206, 86, 1)',
-                      'rgba(75, 192, 192, 1)',
-                      'rgba(153, 102, 255, 1)'
+                        'rgba(105,97,255, 1)',
+                        'rgba(93,230,120, 1)',
+                        'rgba(255,105,97, 1)',
+                        'rgba(97,168,255, 1)',
+                        'rgba(255,184,97, 1)'
                   ],
                   borderColor: [
-                      'rgba(255,99,132,1)',
-                      'rgba(54, 162, 235, 1)',
-                      'rgba(255, 206, 86, 1)',
-                      'rgba(75, 192, 192, 1)',
-                      'rgba(153, 102, 255, 1)'
+                        'rgba(105,97,255, 1)',
+                        'rgba(93,230,120, 1)',
+                        'rgba(255,105,97, 1)',
+                        'rgba(97,168,255, 1)',
+                        'rgba(255,184,97, 1)'
                   ],
                   borderWidth: 1
               }]
@@ -377,18 +360,18 @@ export class HeadControlsStatisticsPage {
                       this.decemberFinish, this.januaryFinish, this.februaryFinish,
                       this.marchFinish],
                     backgroundColor: [
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 206, 86, 0.2)',
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(153, 102, 255, 0.2)'
+                        'rgba(105,97,255, 0.2)',
+                        'rgba(93,230,120, 0.2)',
+                        'rgba(255,105,97, 0.2)',
+                        'rgba(97,168,255, 0.2)',
+                        'rgba(255,184,97, 0.2)'
                     ],
                     borderColor: [
-                        'rgba(255,99,132,1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(153, 102, 255, 1)'
+                        'rgba(105,97,255, 1)',
+                        'rgba(93,230,120, 1)',
+                        'rgba(255,105,97, 1)',
+                        'rgba(97,168,255, 1)',
+                        'rgba(255,184,97, 1)'
                     ],
                     borderWidth: 1
                 },
@@ -398,18 +381,18 @@ export class HeadControlsStatisticsPage {
                     this.decemberPending, this.januaryPending, this.februaryPending,
                     this.marchFinish],
                   backgroundColor: [
-                      'rgba(255, 99, 132, 1)',
-                      'rgba(54, 162, 235, 1)',
-                      'rgba(255, 206, 86, 1)',
-                      'rgba(75, 192, 192, 1)',
-                      'rgba(153, 102, 255, 1)'
+                        'rgba(105,97,255, 1)',
+                        'rgba(93,230,120, 1)',
+                        'rgba(255,105,97, 1)',
+                        'rgba(97,168,255, 1)',
+                        'rgba(255,184,97, 1)'
                   ],
                   borderColor: [
-                      'rgba(255,99,132,1)',
-                      'rgba(54, 162, 235, 1)',
-                      'rgba(255, 206, 86, 1)',
-                      'rgba(75, 192, 192, 1)',
-                      'rgba(153, 102, 255, 1)'
+                        'rgba(105,97,255, 1)',
+                        'rgba(93,230,120, 1)',
+                        'rgba(255,105,97, 1)',
+                        'rgba(97,168,255, 1)',
+                        'rgba(255,184,97, 1)'
                   ],
                   borderWidth: 1
               }]
@@ -439,12 +422,12 @@ export class HeadControlsStatisticsPage {
                     label: "Finished",
                     data: [this.aprilFinish, this.mayFinish],
                     backgroundColor: [
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)'
+                        'rgba(105,97,255, 0.2)',
+                        'rgba(93,230,120, 0.2)'
                     ],
                     borderColor: [
-                        'rgba(255,99,132,1)',
-                        'rgba(54, 162, 235, 1)'
+                        'rgba(105,97,255, 1)',
+                        'rgba(93,230,120, 1)'
                     ],
                     borderWidth: 1
                 },
@@ -452,12 +435,12 @@ export class HeadControlsStatisticsPage {
                   label: "Not Finished",
                   data: [this.aprilPending, this.mayPending],
                   backgroundColor: [
-                      'rgba(255, 99, 132, 1)',
-                      'rgba(54, 162, 235, 1)',
+                    'rgba(105,97,255, 1)',
+                    'rgba(93,230,120, 1)'
                   ],
                   borderColor: [
-                      'rgba(255,99,132,1)',
-                      'rgba(54, 162, 235, 1)'
+                    'rgba(105,97,255, 1)',
+                    'rgba(93,230,120, 1)'
                   ],
                   borderWidth: 1
               }]
@@ -590,35 +573,31 @@ export class HeadControlsStatisticsPage {
 
             type: 'doughnut',
             data: {
-                labels: ["Enrolled", "Not Enrolled"],
+                labels: ["Not Enrolled", "Enrolled"],
                 datasets: [{
-                    data: [this.studentEnrolled, this.studentNotEnrolled],
+                    data: [this.studentNotEnrolled, this.studentEnrolled],
                     backgroundColor: [
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)'
+                        'rgba(255,105,97, 0.2)',
+                        'rgba(97,168,255, 0.2)'
                     ],
                     borderColor: [
-                        'rgba(255,99,132,1)',
-                        'rgba(54, 162, 235, 1)'
+                        'rgba(255,105,97, 1)',
+                        'rgba(97,168,255, 1)'
                     ],
                 }]
             },
             hoverBackgroundColor: [
-                "#FF6384",
-                "#36A2EB",
-                "#FFCE56",
-                "#FF6384",
-                "#36A2EB",
-                "#FFCE56"
+                "#ff6961",
+                "#61a8ff"
             ],
             options: {
                 legend: {
+                    reverse:true,
                     onClick: null
                 }
             }
 
-        },
-    );
+        });
 
   }
 
@@ -633,10 +612,13 @@ export class HeadControlsStatisticsPage {
 
     this.academic = 99;
 
-   // this.verifyDate(date);
+    this.academicPage.unsubscribe();
+    this.appointmentPage.unsubscribe();
+    this.studentPage.unsubscribe();
+    
     this.fetchAllAppointments();
     this.fetchAllStudents();
-    await this.fetchAcademicUnitStatistics();
+    this.fetchAcademicUnitStatistics();
   }
 
   async loadNext() {
@@ -650,10 +632,13 @@ export class HeadControlsStatisticsPage {
 
     this.academic = 99;
 
-   // this.verifyDate(date);
+    this.academicPage.unsubscribe();
+    this.appointmentPage.unsubscribe();
+    this.studentPage.unsubscribe();
+
     this.fetchAllAppointments();
     this.fetchAllStudents();
-    await this.fetchAcademicUnitStatistics();
+    this.fetchAcademicUnitStatistics();
   }
   
   viewStatistics(id) {
@@ -671,6 +656,7 @@ export class HeadControlsStatisticsPage {
   }
 
   ionViewWillLeave(){
+    this.academicPage.unsubscribe();
     this.appointmentPage.unsubscribe();
     this.studentPage.unsubscribe();
   }

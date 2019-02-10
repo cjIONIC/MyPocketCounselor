@@ -82,6 +82,7 @@ import { SettingsPage } from '../pages/settings/settings';
 import { ModalPasswordUpdateComponent } from '../components/modal-password-update/modal-password-update';
 import { DisclaimerPage } from '../pages/disclaimer/disclaimer';
 import { ModalCounselorEditComponent } from '../components/modal-counselor-edit/modal-counselor-edit';
+import { ModalHotlineComponent } from '../components/modal-hotline/modal-hotline';
 
 const firebaseConfig = {
   apiKey: "AIzaSyAVITAZa_qU9vSHq_ASeHJ1JGt3Sy8s8a0",
@@ -127,6 +128,7 @@ const firebaseConfig = {
     ModalCounselorsProfileComponent,
     ModalCounselorsAcademicComponent,
     ModalCounselorEditComponent,
+    ModalHotlineComponent,
     SettingsPage,
     ModalPasswordUpdateComponent,
     SearchPage,
@@ -193,6 +195,7 @@ const firebaseConfig = {
     ModalCounselorsProfileComponent,
     ModalCounselorsAcademicComponent,
     ModalCounselorEditComponent,
+    ModalHotlineComponent,
     SettingsPage,
     ModalPasswordUpdateComponent,
     SearchPage,

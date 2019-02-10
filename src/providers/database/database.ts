@@ -2869,6 +2869,24 @@ export class DatabaseProvider {
 
   }
 
+  async updateHotline(hotline) {
+    let counselors = await this.fetchAllNodesBySnapshot("counselor");
+    let ref = this.fireDatabase.list('counselor');
+    let keys = Object.keys(counselors);
+
+    //Removes all academic unit of the counselor
+    for(let i = 0; i < keys.length; i++) {
+      let count = keys[i];
+      let value = counselors[count].payload.val();
+      
+      if(value.cType === "GTD Head") {
+        ref.update( counselors[count].key, {cNumber: hotline});
+      }
+    }
+
+    return;
+  }
+
 
   /*********************/
   /**** O T H E R S ****/
