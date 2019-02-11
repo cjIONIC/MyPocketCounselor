@@ -323,7 +323,7 @@ export class PostEditPage {
     console.log('%c Updating Post','color: black; background: yellow; font-size: 16px');
     console.log("Value: ", post);
 
-    let startDate, endDate, location;
+    let startDate, endDate, location, includeEndDate, includeEndTime;
 
     if(this.type === "Event") {
       location = post["location"];
@@ -332,10 +332,17 @@ export class PostEditPage {
       endDate = new Date(moment(this.endDateDefault).format("MMM DD YYYY") +" "+ moment(this.endTimeDefault).format("h:mm A"));
 
       console.log("End Datetime: ", endDate);
+
+      includeEndDate = this.includeEndDate;
+      includeEndTime = this.includeEndTime;
+
     } else {
       location = "None";
       startDate = "None";
       endDate = "None";
+
+      includeEndDate = null;
+      includeEndTime = null;
     }
 
     let id = this.post["id"];
@@ -348,7 +355,7 @@ export class PostEditPage {
     
     loading.present().then(() => {
           this.db.updatePost(id, post["title"], location, startDate, endDate, post["description"], 
-             post["image"], this.includeEndDate, this.includeEndTime, this.changedPhoto)
+             post["image"], includeEndDate, includeEndTime, this.changedPhoto)
           .then((action) => {
               //Dismiss loading box and page after adding event
               let currentIndex = this.navCtrl.getActive().index;

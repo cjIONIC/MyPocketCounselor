@@ -363,7 +363,7 @@ export class PostAddPage {
     console.log('%c Adding Post','color: black; background: yellow; font-size: 16px');
     console.log("Value: ", post);
 
-    let startDate, endDate, location, academic;
+    let startDate, endDate, location, academic, includeEndDate, includeEndTime;
 
     if(this.type === "Event") {
       academic = post["academic"];  
@@ -373,12 +373,19 @@ export class PostAddPage {
       endDate = new Date(moment(this.endDateDefault).format("MMM DD YYYY") +" "+ moment(this.endTimeDefault).format("h:mm A"));
 
       console.log("End Datetime: ", endDate);
+
+      includeEndDate = this.includeEndDate;
+      includeEndTime = this.includeEndTime;
+
     } else {
       location = "None";
       startDate = "None";
       endDate = "None";
 
       academic = 1;
+
+      includeEndDate = null;
+      includeEndTime = null;
     }
 
     let loading = this.loadingCtrl.create({
@@ -389,7 +396,7 @@ export class PostAddPage {
     loading.present().then(() => {
           this.db.addPost(post["title"], location, post["description"], startDate, 
             endDate, academic, post["image"], 
-            this.includeEndDate, this.includeEndTime, this.type)
+            includeEndDate, includeEndTime, this.type)
           .then((action) => {
               //Dismiss loading box and page after adding event
               let currentIndex = this.navCtrl.getActive().index;
