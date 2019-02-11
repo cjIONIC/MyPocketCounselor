@@ -1,5 +1,10 @@
 page-disclaimer {
 
+    //Hides the Scrollbar
+    ::-webkit-scrollbar{
+        display:none;
+    }
+
     .content {
         background-color: #EFF0F1;
         align-content: center;
