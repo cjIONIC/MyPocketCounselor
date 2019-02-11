@@ -14,9 +14,9 @@
 
     <div *ngIf="!spinner">
         <ion-list class="list" >
-            <ion-card class="card">
+            <ion-card class="card" *ngFor="let person of requestList"  (click)="profile(person)">
                 <ion-grid>
-                    <ion-row  *ngFor="let person of requestList" class="profile" (click)="profile(person)">
+                    <ion-row  class="profile">
                           <ion-col class="profileLeft" *ngIf="person.picture !== 'No image'" col-3>
                                 <img src="{{ person.picture }}" class="avatar">
                           </ion-col>

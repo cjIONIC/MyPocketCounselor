@@ -170,6 +170,7 @@ export class MenuPage {
   }
 
   ionViewDidLoad() {
+    this.initialize();
     console.log('ionViewDidLoad MenuPage');
   }
   

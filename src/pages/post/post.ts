@@ -192,7 +192,6 @@ export class PostPage {
     }, error => console.log(error));
 
     this.disconnected = this.network.onDisconnect().subscribe(data => {
-      this.initialize();
       this.presentToast("You are offline");
     }, error => console.log(error));
   }

@@ -234,7 +234,8 @@ export class AppointmentPage {
   async selectedDate(day, month, year) {
     console.log('%c Date Selected','color: white; background: red; font-size: 16px');
 
-    let week = [ 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+    let week = [ 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    
 
     console.log("Info: ", month, day, year);
     this.selectedDay = new Date(year, month, day);

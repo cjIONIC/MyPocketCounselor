@@ -100,11 +100,11 @@ export class FeedbackPage {
   }
 
   ionViewDidLoad() {
+    this.initialize();
     console.log('ionViewDidLoad FeedbackPage');
   }
 
   ionViewDidEnter() {
-    this.initialize();
   }
 
 }

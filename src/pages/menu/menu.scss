@@ -21,7 +21,7 @@ page-menu {
     }
 
     .control {
-        margin-top: 15px;
+        //margin-top: 15px;
     }
 
     .item {
@@ -83,14 +83,20 @@ page-menu {
 
     .btnRegister, 
     .btnControl,
-    .btnSettings {
+    .btnSettings,
+    .btnLogout {
         width: 100%;
         height: 50px;
         font-weight: bold;
         padding-left: 17px;
         padding-right: 17px;
     }
+
+    .btnLogout {
+        color: #ff6961;
+    }
     
+    /*
     .btnLogout {
         margin-left: 6px;
         margin-top: 10px;
@@ -107,4 +113,5 @@ page-menu {
         color: #fd9a94;
         margin-bottom: 10px;
     }
+    */
 }

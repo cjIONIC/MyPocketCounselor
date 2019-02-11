@@ -31,6 +31,7 @@ export class ProfilePage {
 
   hasRate: any = false;
   hasPost: any = false;
+  hasEnter: any = false;
 
 
   postArray = [];
@@ -85,10 +86,12 @@ export class ProfilePage {
           this.fetchPersonalPosts();
           this.fetchAcademic("Counselor");
           this.spinner = false;
+          this.hasEnter = true;
         } else {
           this.fetchAcademic("Student");
           this.fetchStatus();
           this.spinner = false;
+          this.hasEnter = true;
         }
       }, error => console.log(error));
       
@@ -160,16 +163,17 @@ export class ProfilePage {
     this.academic.unsubscribe();
 
     if(this.hasRate) this.rate.unsubscribe();
-    if(this.hasPost) this.post.unsubscribe();
+    //if(this.hasPost) this.post.unsubscribe();
     
   }
 
   ionViewDidLoad() {
+    this.initialize();
     console.log('ionViewDidLoad ProfilePage');
   }
 
   ionViewDidEnter() {
-    this.initialize();
+    //this.initialize();
   }
 
 }

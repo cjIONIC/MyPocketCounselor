@@ -137,7 +137,7 @@ export class ChatPage {
     
     this.connected = this.network.onConnect().subscribe( data => {
       this.presentToast("You are online");
-      this.initialize();
+      
     }, error => console.log(error));
 
     this.disconnected = this.network.onDisconnect().subscribe(data => {

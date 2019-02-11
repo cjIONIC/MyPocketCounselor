@@ -2652,7 +2652,8 @@ export class DatabaseProvider {
           id: counselor["cID"],
           name: name,
           picture: counselor["cPicture"],
-          academic: academicList
+          academic: academicList,
+          type: counselor["cType"]
         })
       }
     })
@@ -2714,7 +2715,32 @@ export class DatabaseProvider {
     return;
   }
 
-  async updateAcademicCounselor(id, academicList) {
+  async updateCounselorInfo(id, unit, type) {
+    await this.updateCounselorType(id, type);
+    await this.updateCounselorAcademic(id, unit);
+
+    return
+  }
+
+  async updateCounselorType(id, type) {
+    let counselors = await this.fetchAllNodesBySnapshot("counselor");
+    let ref = this.fireDatabase.list('counselor');
+    let keys = Object.keys(counselors);
+
+    //Removes all academic unit of the counselor
+    for(let i = 0; i < keys.length; i++) {
+      let count = keys[i];
+      let value = counselors[count].payload.val();
+      
+      if(value.cID === id) {
+        ref.update( counselors[count].key, {cType: type});
+      }
+    }
+
+    return;
+  }
+
+  async updateCounselorAcademic(id, academicList) {
     let academics = await this.fetchAllNodesBySnapshot("academic");
     console.log("Academics: ", academics);
     let ref = this.fireDatabase.list('academic');

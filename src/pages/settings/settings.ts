@@ -6,6 +6,7 @@ import { AngularFireDatabase } from 'angularfire2/database';
 import { Network } from '@ionic-native/network';
 import { ModalPasswordUpdateComponent } from '../../components/modal-password-update/modal-password-update';
 import { DisclaimerPage } from '../disclaimer/disclaimer';
+import { InAppBrowser } from '@ionic-native/in-app-browser';
 
 /**
  * Generated class for the SettingsPage page.
@@ -33,6 +34,7 @@ export class SettingsPage {
 
   constructor(public navCtrl: NavController, 
       public db: DatabaseProvider,
+      public browser: InAppBrowser,
       public network: Network,
       public app: App,
       public toastCtrl: ToastController,
@@ -89,6 +91,11 @@ export class SettingsPage {
 
   disclaimer() {
     this.app.getRootNav().push(DisclaimerPage);
+  }
+
+  manual () {
+    console.log("Opening manual...");
+    let link = this.browser.create('https://bit.ly/2I2HpCD', '_system', 'location=yes');
   }
 
   ionViewDidLoad() {

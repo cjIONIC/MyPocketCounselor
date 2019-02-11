@@ -148,6 +148,7 @@ export class NotificationPage {
   }
 
   ionViewDidLoad() {
+    this.initialize();
     console.log('ionViewDidLoad NotificationPage');
   }
 

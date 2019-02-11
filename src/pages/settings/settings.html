@@ -34,10 +34,9 @@
       
             <ion-card *ngIf="userInfo['type'] !== 'Student'">
                 <div class="item">
-                    <button class="button btnManual" 
-                    href="#" onclick="window.open('https://bit.ly/2I2HpCD', '_system', 'location=yes'); return false;">
-                      View User Manual
-                  </button>
+                        <button class="button btnManual" (click)="manual()">
+                          View User Manual
+                      </button>
                 </div>
             </ion-card>
         </ion-list>

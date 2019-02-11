@@ -84,6 +84,8 @@ import { DisclaimerPage } from '../pages/disclaimer/disclaimer';
 import { ModalCounselorEditComponent } from '../components/modal-counselor-edit/modal-counselor-edit';
 import { ModalHotlineComponent } from '../components/modal-hotline/modal-hotline';
 
+import { InAppBrowser } from '@ionic-native/in-app-browser';
+
 const firebaseConfig = {
   apiKey: "AIzaSyAVITAZa_qU9vSHq_ASeHJ1JGt3Sy8s8a0",
   authDomain: "mpcapp-c01ec.firebaseapp.com",
@@ -217,6 +219,7 @@ const firebaseConfig = {
     Keyboard,
     GooglePlus,
     CallNumber,
+    InAppBrowser,
     EmailComposer,
     FileChooser, File,
     Camera,
