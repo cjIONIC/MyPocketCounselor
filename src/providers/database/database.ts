@@ -248,7 +248,7 @@ export class DatabaseProvider {
     
     if(this.platform.is('ios')) {
       token = await this.firePlugin.getToken();
-      await this.firePlugin.grantPermission();
+      const permission = await this.firePlugin.grantPermission();
     } 
     
     if(!this.platform.is('cordova')) {
@@ -884,7 +884,10 @@ export class DatabaseProvider {
       imageURL = await this.downloadImage(filePath);
     } else if(!change){
       imageURL = image;
-    }else imageURL = "No image";
+    }
+    if(!image) imageURL = "No image";
+
+    console.log("Picture: ", imageURL);
 
     ref.snapshotChanges(['child_added'])
     .subscribe(actions => {
@@ -1018,22 +1021,13 @@ export class DatabaseProvider {
       if(post["cID"] === this.userInfo["id"]) {
 
         academics.forEach(academic => {
-          if(academic["cID"] === post["cID"]) {
+          if(academic["acID"] === post["acID"]) {
             unit = academic["acCode"];
           }
         })
 
+
         let counselorName = this.userInfo["firstname"] + " " + this.userInfo["lastname"];
-
-        let pushEndDate, pushEndTime;
-
-        let endDate = new Date(post["pEnd"]);
-        if(endDate.getFullYear() < 2000) pushEndDate = false;
-        else pushEndDate = true;
-
-        let endTime = (new Date(post["pEnd"])).getHours() + (new Date(post["pEnd"])).getMinutes();
-        if(endTime === 0) pushEndTime = false;
-        else pushEndTime = true;
 
         postArray.push({
           id : post["pID"],
@@ -1043,8 +1037,8 @@ export class DatabaseProvider {
           location : post["pLocation"],
           startDate : post["pStart"],
           endDate : post["pEnd"],
-          pushEndDate: pushEndDate,
-          pushEndTime: pushEndTime,
+          pushEndDate: post["pIncludeDate"],
+          pushEndTime: post["pIncludeTime"],
           description : post["pDescription"],
           picture : post["pPicture"],
           like : post["pLike"],

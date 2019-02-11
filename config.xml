@@ -98,7 +98,7 @@
         <variable name="REVERSED_CLIENT_ID" value="com.googleusercontent.apps.578845672664-lnhtf0ekrpvdru5k8dplr7s13pdkgdq9" />
         <variable name="PLAY_SERVICES_VERSION" value="11.8.0" />
     </plugin>
+    <plugin name="cordova-plugin-inappbrowser" spec="3.0.0" />
     <engine name="ios" spec="4.5.5" />
     <engine name="android" spec="7.1.4" />
-    <plugin name="cordova-plugin-inappbrowser" spec="3.0.0" />
 </widget>
