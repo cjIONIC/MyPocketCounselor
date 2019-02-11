@@ -21,10 +21,13 @@ import { ChatMessagePage } from '../chat-message/chat-message';
 })
 export class ChatPeopleListPage {
 
- 
+  spinner: any = true;
 
   connected: Subscription;
   disconnected: Subscription;
+  account: Subscription;
+  academic: Subscription;
+  people: Subscription;
 
   userInfo = [];
   completePeopleList = []; //Handles all people
@@ -39,7 +42,6 @@ export class ChatPeopleListPage {
     public modalCtrl: ModalController,
     private db: DatabaseProvider,
     public app: App) {
-      this.initialize();
   }
 
   async initialize() {
@@ -60,10 +62,10 @@ export class ChatPeopleListPage {
     let list = this.fireDatabase.list<Item>(table);
     let item = list.valueChanges();
 
-    this.fireDatabase.list<Item>("academic")
+    this.academic = this.fireDatabase.list<Item>("academic")
       .valueChanges().subscribe(academics => {
 
-        item.subscribe(async accounts => {
+        this.account = item.subscribe(async accounts => {
           await this.db.refreshUserInfo(accounts, userInfo);
           this.userInfo = await this.db.getUserInfo();
           console.log("User information: ", this.userInfo);
@@ -100,7 +102,7 @@ export class ChatPeopleListPage {
     let list = this.fireDatabase.list<Item>('student');
     let item = list.valueChanges();
 
-    item.subscribe( async students => {
+    this.people = item.subscribe( async students => {
       console.log('%c Fetching Students...','color: white; background: green; font-size: 16px');
       let tempArray = await this.db.fetchListStudent(students, filter, unit);
       tempArray.sort(function(a,b) {
@@ -119,7 +121,7 @@ export class ChatPeopleListPage {
     let list = this.fireDatabase.list<Item>('counselor');
     let item = list.valueChanges();
     
-    item.subscribe( async counselors => {
+    this.people = item.subscribe( async counselors => {
       console.log('%c Fetching Students...','color: white; background: green; font-size: 16px');
       let tempArray = await this.db.fetchAllListCounselor(counselors);
       tempArray.sort(function(a,b) {
@@ -175,9 +177,16 @@ export class ChatPeopleListPage {
   ionViewWillLeave(){
     this.connected.unsubscribe();
     this.disconnected.unsubscribe();
+
+    this.account.unsubscribe();
+    this.academic.unsubscribe();
+    this.people.unsubscribe();
   }
 
   ionViewDidEnter() {
+
+    this.initialize();
+
     this.connected = this.network.onConnect().subscribe( data => {
       this.presentToast("You are online");
     }, error => console.log(error));

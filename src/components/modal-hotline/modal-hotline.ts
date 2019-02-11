@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { DatabaseProvider } from '../../providers/database/database';
 import { AngularFireDatabase } from 'angularfire2/database';
-import { Item, ViewController, AlertController } from 'ionic-angular';
+import { Item, ViewController, AlertController, LoadingController } from 'ionic-angular';
 
 /**
  * Generated class for the ModalHotlineComponent component.
@@ -25,6 +25,7 @@ export class ModalHotlineComponent {
   constructor(public db: DatabaseProvider,
       public viewCtrl: ViewController,
       public alertCtrl: AlertController,
+      public loadingCtrl: LoadingController,
       public fireDatabase: AngularFireDatabase) {
     this.initialize();
   }
@@ -57,14 +58,53 @@ export class ModalHotlineComponent {
     })
 
     console.log("HOTLINE NUMBER: ", this.hotlineNumber);
+  
   }
 
   onChange(value) {
-    console.log("Hotline: ", value["hotline"]);    
+    let alert = this.alertCtrl.create({
+      title: 'Confirm Update',
+      message: 'You are about to update the Hotline number. ' +
+                'Do you want to proceed?',
+      buttons: [
+        {
+          text: 'No',
+          role: 'cancel',
+          handler: () => {
+            console.log('Cancel clicked');
+          }
+        },
+        {
+          text: 'Yes',
+          handler: () => {
+            try {
+              this.update(value["hotline"]);
+            } catch {
+              
+            }
+          }
+        }
+      ]
+    });
+    alert.present();
+  }
 
-    this.db.updateHotline(value["hotline"]).then(() => {
-      this.presentAlert("Success", "Hotline changed.");
-      this.dismiss();
+  update(hotline) {
+    console.log("Hotline: ", hotline);   
+    
+    let loading = this.loadingCtrl.create({
+      spinner: 'ios',
+      content: 'Please Wait...'
+    });
+
+    loading.present().then(()=> {
+      this.db.logoutUser().then(() => {
+        loading.dismiss();
+        this.db.updateHotline(hotline).then(() => {
+          this.presentAlert("Success", "Hotline changed.");
+          this.dismiss();
+        })
+      })
     })
   }
 

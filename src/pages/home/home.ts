@@ -79,14 +79,14 @@ export class HomePage {
 
   initialize() {
     try {
-      this.getUserInfo();
+      this.getUserInfo1();
       //this.chatBadge = 12;
     } catch {
 
     }
   }
   
-  async getUserInfo() {
+  async getUserInfo1() {
     
     let loading = this.loadingCtrl.create({
       spinner: 'ios',
@@ -124,6 +124,34 @@ export class HomePage {
       }, error => console.log(error));
     })
   }
+  
+  async getUserInfo2() {
+    let userInfo = await this.db.getProfileInStorage();
+      console.log("Currently logged in: ", userInfo);
+      let table;
+  
+      if(userInfo["type"] === "Student") table = "student"
+      else table = "counselor";
+  
+      let list = this.fireDatabase.list<Item>(table);
+      let item = list.valueChanges();
+  
+      this.academic = this.fireDatabase.list<Item>("academic")
+        .valueChanges().subscribe(academics => {
+  
+          this.account = item.subscribe(async accounts => {
+            await this.db.refreshUserInfo(accounts, userInfo);
+            this.userInfo = await this.db.getUserInfo();
+
+            console.log("User information: ", this.userInfo);
+            this.scanAppointmentChanges();
+            this.scanChatChanges();
+            this.scanRegistrations();
+  
+          }, error => console.log(error));
+  
+      }, error => console.log(error));
+  }
 
   search() {
     this.app.getRootNav().push(SearchPage, "", {animate: false}).then(() => {
@@ -154,6 +182,7 @@ export class HomePage {
 
                 messages.forEach(message2 => {
                   if(counselorID === message2["cID"]
+                    &&message2["sID"] === this.userInfo["id"]
                     && message2["mType"] === "Counselor"
                     && message2["mDevice"] === "Sent")
                       push = true;
@@ -180,6 +209,7 @@ export class HomePage {
 
                 messages.forEach(message2 => {
                   if(studentID === message2["sID"]
+                    && message2["cID"] === this.userInfo["id"]
                     && message2["mType"] === "Student"
                     && message2["mDevice"] === "Sent")
                       push = true;
@@ -288,10 +318,8 @@ export class HomePage {
 
   ionViewDidEnter() {
     if(this.hasRun){
-      console.log("User information: ", this.userInfo);
-      this.scanAppointmentChanges();
-      this.scanChatChanges();
-      this.scanRegistrations();
+      this.chatBadge = null;
+      this.getUserInfo2();
     }
   }
 }
