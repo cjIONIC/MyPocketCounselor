@@ -105,18 +105,16 @@ export class PostEditPage {
     this.tempStartDate = this.startDateDefault;
     this.tempStartTime =  this.startTimeDefault;
 
-    let year =  (new Date(post["endDate"])).getFullYear();
-    if(year < 2000) {
+    if(post["pushEndDate"] === false) {
       this.includeEndDate = false;
       this.fetchedDate = false;
       this.checkDate = false;
     } else {
-        this.includeEndDate = true;
-        this.fetchedDate = false;
-    }
-
-    let time = (new Date(post["endDate"])).getHours() + (new Date(post["endDate"])).getMinutes();
-    if(time === 0) {
+      this.includeEndDate = true;
+      this.fetchedDate = false;
+  }
+  
+    if(post["pushEndTime"] === 0) {
       this.includeEndTime = false;
       this.fetchedTime = false;
       this.checkTime = false;
@@ -190,7 +188,15 @@ export class PostEditPage {
       
       this.endTimeDefault = new Date(endTime);
 
-      if(date > startDate) this.dateBalance = true;
+      let compareCurrent = date.getMonth() + date.getDate() + date.getFullYear();
+      let compareStart = startDate.getMonth() + startDate.getDate() + startDate.getFullYear();
+
+      console.log("Compare date: ", compareCurrent, " ? ", compareStart);
+
+      if(compareCurrent > compareStart) {
+        console.log("Balance dates");
+        this.dateBalance = true;
+      }
       else this.dateBalance = false;
     }
 
@@ -320,17 +326,10 @@ export class PostEditPage {
     let startDate, endDate, location;
 
     if(this.type === "Event") {
-      location = post["location"]  
-      let tempEndDate, tempEndTime;
+      location = post["location"];
 
-      if(!this.includeEndDate) tempEndDate = new Date(0,0,0);
-      else tempEndDate = post["endDate"];
-
-      if(!this.includeEndTime) tempEndTime = new Date(0,0,0);
-      else tempEndTime = post["endTime"];
-
-      startDate = new Date(moment(post["startDate"]).format("MMM DD YYYY") +" "+ moment(post["startTime"]).format("h:mm A"));
-      endDate = new Date(moment(tempEndDate).format("MMM DD YYYY") +" "+ moment(tempEndTime).format("h:mm A"));
+      startDate = new Date(moment(this.startDateDefault).format("MMM DD YYYY") +" "+ moment(this.startTimeDefault).format("h:mm A"));
+      endDate = new Date(moment(this.endDateDefault).format("MMM DD YYYY") +" "+ moment(this.endTimeDefault).format("h:mm A"));
 
       console.log("End Datetime: ", endDate);
     } else {
@@ -349,7 +348,7 @@ export class PostEditPage {
     
     loading.present().then(() => {
           this.db.updatePost(id, post["title"], location, startDate, endDate, post["description"], 
-             post["image"], this.changedPhoto)
+             post["image"], this.includeEndDate, this.includeEndTime, this.changedPhoto)
           .then((action) => {
               //Dismiss loading box and page after adding event
               let currentIndex = this.navCtrl.getActive().index;

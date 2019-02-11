@@ -217,6 +217,7 @@ export class PostAddPage {
         this.timeValid = false;
       else if (currentTime === startTime || currentTime < startTime)
         this.timeValid = true;
+      else this.timeValid = true;  
       
 
     } else {
@@ -228,7 +229,15 @@ export class PostAddPage {
       
       this.endTimeDefault = new Date(endTime);
 
-      if(date > startDate) this.dateBalance = true;
+      let compareCurrent = date.getMonth() + date.getDate() + date.getFullYear();
+      let compareStart = startDate.getMonth() + startDate.getDate() + startDate.getFullYear();
+
+      console.log("Compare date: ", compareCurrent, " ? ", compareStart);
+
+      if(compareCurrent > compareStart) {
+        console.log("Balance dates");
+        this.dateBalance = true;
+      }
       else this.dateBalance = false;
     }
 
@@ -358,17 +367,10 @@ export class PostAddPage {
 
     if(this.type === "Event") {
       academic = post["academic"];  
-      location = post["location"]  
-      let tempEndDate, tempEndTime;
+      location = post["location"];
 
-      if(!this.includeEndDate) tempEndDate = new Date(0,0,0);
-      else tempEndDate = post["endDate"];
-
-      if(!this.includeEndTime) tempEndTime = new Date(0,0,0);
-      else tempEndTime = post["endTime"];
-
-      startDate = new Date(moment(post["startDate"]).format("MMM DD YYYY") +" "+ moment(post["startTime"]).format("h:mm A"));
-      endDate = new Date(moment(tempEndDate).format("MMM DD YYYY") +" "+ moment(tempEndTime).format("h:mm A"));
+      startDate = new Date(moment(this.startDateDefault).format("MMM DD YYYY") +" "+ moment(this.startTimeDefault).format("h:mm A"));
+      endDate = new Date(moment(this.endDateDefault).format("MMM DD YYYY") +" "+ moment(this.endTimeDefault).format("h:mm A"));
 
       console.log("End Datetime: ", endDate);
     } else {
@@ -376,16 +378,6 @@ export class PostAddPage {
       startDate = "None";
       endDate = "None";
 
-      /*
-      let tempArr = [];
-      let keysAcademic = Object.keys(this.academicList);
-      for(let i=0; i< keysAcademic.length; i++) {
-        let countAcademic = keysAcademic[i];
-        let idAcademic  = this.academicList[countAcademic].acID;
-        console.log("Acad ID: ", idAcademic);
-        if(idAcademic != undefined) tempArr.push(idAcademic);
-      }   
-      */
       academic = 1;
     }
 
@@ -396,7 +388,8 @@ export class PostAddPage {
     
     loading.present().then(() => {
           this.db.addPost(post["title"], location, post["description"], startDate, 
-            endDate, academic, post["image"], this.type)
+            endDate, academic, post["image"], 
+            this.includeEndDate, this.includeEndTime, this.type)
           .then((action) => {
               //Dismiss loading box and page after adding event
               let currentIndex = this.navCtrl.getActive().index;

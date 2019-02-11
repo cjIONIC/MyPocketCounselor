@@ -742,16 +742,6 @@ export class DatabaseProvider {
           }
         })
 
-        let pushEndDate, pushEndTime;
-
-        let endDate = new Date(post["pEnd"]);
-        if(endDate.getFullYear() < 2000) pushEndDate = false;
-        else pushEndDate = true;
-
-        let endTime = (new Date(post["pEnd"])).getHours() + (new Date(post["pEnd"])).getMinutes();
-        if(endTime === 0) pushEndTime = false;
-        else pushEndTime = true;
-
         studentFeed.push({
           id : post["pID"],
           title : post["pTitle"],
@@ -760,8 +750,8 @@ export class DatabaseProvider {
           location : post["pLocation"],
           startDate : post["pStart"],
           endDate : post["pEnd"],
-          pushEndDate: pushEndDate,
-          pushEndTime: pushEndTime,
+          pushEndDate: post["pIncludeDate"],
+          pushEndTime: post["pIncludeTime"],
           description : post["pDescription"],
           picture : post["pPicture"],
           like : post["pLike"],
@@ -813,16 +803,6 @@ export class DatabaseProvider {
           }
         })
 
-        let pushEndDate, pushEndTime;
-
-        let endDate = new Date(post["pEnd"]);
-        if(endDate.getFullYear() < 2000) pushEndDate = false;
-        else pushEndDate = true;
-
-        let endTime = (new Date(post["pEnd"])).getHours() + (new Date(post["pEnd"])).getMinutes();
-        if(endTime === 0) pushEndTime = false;
-        else pushEndTime = true;
-
         counselorFeed.push({
           id : post["pID"],
           title : post["pTitle"],
@@ -831,8 +811,8 @@ export class DatabaseProvider {
           location : post["pLocation"],
           startDate : post["pStart"],
           endDate : post["pEnd"],
-          pushEndDate: pushEndDate,
-          pushEndTime: pushEndTime,
+          pushEndDate: post["pIncludeDate"],
+          pushEndTime: post["pIncludeTime"],
           description : post["pDescription"],
           picture : post["pPicture"],
           like : post["pLike"],
@@ -849,7 +829,8 @@ export class DatabaseProvider {
   }
 
   //Adds Event and Quotes Post
-  async addPost(title, location, description,startDate, endDate, academic, image, type) {
+  async addPost(title, location, description,startDate, endDate, 
+          academic, image, includeDate, includeTime, type) {
     let today = moment().format();
     let date = new Date(today);
 
@@ -875,6 +856,8 @@ export class DatabaseProvider {
         pStart: startDate.toString(),
         pEnd: endDate.toString(),
         pDescription: description,
+        pIncludeDate: includeDate,
+        pIncludeTime: includeTime,
         pPicture: imageURL,
         pDatetime: date.toString(),
         pLike: 0,
@@ -887,8 +870,10 @@ export class DatabaseProvider {
   }
 
   //Updates Events and Quotes Posts
-  async updatePost(id, title, location, startDate, endDate, description, image, change) {
-    console.log("Info: ", id, title, location, startDate, endDate, description, image, change);
+  async updatePost(id, title, location, startDate, endDate, description, image, 
+      includeDate, includeTime, change) {
+    console.log("Info: ", id, title, location, startDate, 
+      endDate, description, image, includeDate, includeTime, change);
     var found = true;
     var ref=this.fireDatabase.list('post');
 
@@ -916,6 +901,8 @@ export class DatabaseProvider {
                                 pLocation: location,
                                 pStart: startDate.toString(),
                                 pEnd: endDate.toString(),
+                                pIncludeDate: includeDate,
+                                pIncludeTime: includeTime,
                                 pDescription: description,
                                 pPicture: imageURL}).then(() => {
                                   console.log("%cSuccessfully updated post!",'color: black; background: yellow; font-size: 16px');
@@ -2038,7 +2025,7 @@ export class DatabaseProvider {
 
       if(this.userInfo["type"] === "Student") {
         if(account["cID"] === person) {
-          name = account["cFirstName"] + " " + account["cLastName"];
+          name = account["cLastName"] + ", " + account["cFirstName"];
           recipient.push({
             id: account["cID"],
             picture: account["cPicture"],
@@ -2047,7 +2034,7 @@ export class DatabaseProvider {
         }
       } else {
         if(account["sID"] === person) {
-          name = account["sFirstName"] + " " + account["sLastName"];
+          name = account["sLastName"] + ", " + account["sFirstName"];
           recipient.push({
             id: account["sID"],
             picture: account["sPicture"],

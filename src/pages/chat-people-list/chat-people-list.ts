@@ -111,6 +111,8 @@ export class ChatPeopleListPage {
         if(a.name > b.name) { return 1; }
         return 0;
       });
+
+      this.spinner = false;
       
       if(!filter) this.completePeopleList = tempArray;
       this.peopleList = tempArray;
@@ -130,6 +132,8 @@ export class ChatPeopleListPage {
         if(a.name > b.name) { return 1; }
         return 0;
       });
+
+      this.spinner = false;
       
       if(!filter) this.completePeopleList = tempArray;
       this.peopleList = tempArray;
