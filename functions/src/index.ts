@@ -292,7 +292,8 @@ exports.newRegistrationNotificationForCounselor = functions.database
             return Promise.all([counselorID]).then(async function(id) {
                 console.log("Fetched ID: ", id);
 
-                let counselor = id[0], device;
+                const counselor = id[0];
+                let device;
                 const token = await fetchDevice(counselor);
 
                 return Promise.all([token]).then(function(deviceToken) {
@@ -312,6 +313,51 @@ exports.newRegistrationNotificationForCounselor = functions.database
             }, (error) => console.log("Error"))
         })
 
+exports.newFeedback = functions.database
+        .ref('/feedback/{feedbackID}')
+        .onCreate(async(snapshot, context) => {
+            const feedbackID = context.params.feedbackID;
+
+            console.log(`New message ${feedbackID}`);
+            let payload;
+
+            const feedback = snapshot.val();
+            console.log("Registration for COUNSELOR values: ", feedback);
+
+            const students = await fetchStudentName(feedback.sID);
+            console.log("Student name: ", students);
+
+            return Promise.all([students]).then(async function(studentName) {
+                console.log("Fetched student name: ", studentName);
+                const counselorID = await fetchAppointmentCounselor(feedback.aID);
+
+                return Promise.all([counselorID]).then(async function(id) {
+                    console.log("Fetched ID: ", id);
+                    const student = studentName[0]
+                    const counselor = id[0];
+                    let device;
+                    const token = await fetchDevice(counselor);
+    
+                    return Promise.all([token]).then(function(deviceToken) {
+                        device = deviceToken[0];
+    
+                        payload = {
+                            notification: {
+                                title: ` New feedback`,
+                                body: `${student} add a feedback`,
+                                sound : "default"
+                            }
+                        }
+    
+                        return admin.messaging().sendToDevice(device, payload);
+                    }, (error) => console.log("Error"))
+    
+                }, (error) => console.log("Error"))
+            }, (error) => console.log("Error"))
+
+          
+        })
+
 exports.newRegistrationNotificationForGTDHead = functions.database
         .ref('/registration/{registrationID}')
         .onCreate(async(snapshot, context) => {
@@ -329,7 +375,8 @@ exports.newRegistrationNotificationForGTDHead = functions.database
             return Promise.all([counselorID]).then(async function(id) {
                 console.log("Fetched ID: ", id);
 
-                let counselor = id[0], device;
+                const counselor = id[0]
+                let device;
                 const token = await fetchDevice(counselor);
 
                 return Promise.all([token]).then(function(deviceToken) {
@@ -420,6 +467,29 @@ function fetchAcademicUnitCounselor(id) {
             })
 
             resolve(academics.cID);
+        }, () => resolve(null))
+    });
+}
+
+function fetchAppointmentCounselor(id) {
+    console.log("Fetched ID: ", id);
+
+    return new Promise (function(resolve) {
+
+        return admin.database()
+        .ref(`/appointment`)
+        .orderByChild("aID")
+        .equalTo(id)
+        .once("value", (snapshot) => {
+            let appointments;
+
+            snapshot.forEach(appointment => {
+                appointments = appointment.val();
+
+                return false;
+            })
+
+            resolve(appointments.cID);
         }, () => resolve(null))
     });
 }

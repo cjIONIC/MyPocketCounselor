@@ -41,7 +41,14 @@
                   <img src="{{ feedback.avatar }}" class="avatar">
                 </ion-col>
                 <ion-col col-9>
-                  <ion-row class="name"> 
+                  <ion-row class="counselorFeedback" *ngIf="feedback.notification === 'Sent'"> 
+                      <ion-col class="feedback name" col-10>{{ feedback.name}}</ion-col>
+                      <ion-col col-2 class="feedback">
+                          <div class="contentNew">
+                          </div>
+                      </ion-col>
+                  </ion-row>
+                  <ion-row class="name" *ngIf="feedback.notification !== 'Sent'"> 
                       {{ feedback.name}}
                   </ion-row>
                   <ion-row> 

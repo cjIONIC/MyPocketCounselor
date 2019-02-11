@@ -46,6 +46,11 @@ page-feedback {
         transform: translate(-50%, -50%);
     }
 
+    .counselorFeedback,
+    .feedback {
+        padding: 0%;
+    }
+
     .name {
         text-align: left;
         font-size: 12pt;
@@ -54,6 +59,15 @@ page-feedback {
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
+    }
+
+    .contentNew {
+        background-color: #ff6961;
+        width: 12px;
+        height: 12px;
+        margin: auto;
+        margin-top: 3px;
+        border-radius: 50px;
     }
 
     .academic {

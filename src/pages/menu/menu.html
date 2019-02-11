@@ -15,6 +15,9 @@
                                     <ion-row class="name">{{userInfo["firstname"]}} {{userInfo["lastname"]}}</ion-row>
                                     <ion-row class="label">View your profile</ion-row>
                                 </ion-col>
+                                <ion-col col-2  class="feedbackBadge" *ngIf="popBadgeFeedback">
+                                    <ion-badge class="badge" *ngIf="feedbackBadge !== null"> {{ feedbackBadge }} </ion-badge>
+                                </ion-col>
                             </ion-row>
                         </ion-grid>
                     </button>
@@ -28,7 +31,7 @@
                             <ion-col col-10 class="registrationLabel">
                                 Registration
                             </ion-col>
-                            <ion-col col-2 class="registrationBadge" *ngIf="popBadge">
+                            <ion-col col-2 class="registrationBadge" *ngIf="popBadgeRegistration">
                                 <ion-badge class="badge" *ngIf="registrationBadge !== null"> {{ registrationBadge }} </ion-badge>
                             </ion-col>
                         </ion-row>

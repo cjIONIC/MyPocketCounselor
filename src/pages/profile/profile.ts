@@ -27,11 +27,16 @@ export class ProfilePage {
   account: Subscription;
   academic: Subscription;
   rate: Subscription;
+  feedback: Subscription
   post: Subscription;
 
   hasRate: any = false;
   hasPost: any = false;
   hasEnter: any = false;
+  hasFeedback: any = false;
+
+  feedbackBadge: any;
+  popBadgeFeedback: any;
 
 
   postArray = [];
@@ -84,6 +89,7 @@ export class ProfilePage {
         if(this.userInfo["type"] !== "Student") {
           this.fetchRating();
           this.fetchPersonalPosts();
+          this.scanFeedbacks();
           this.fetchAcademic("Counselor");
           this.spinner = false;
           this.hasEnter = true;
@@ -137,6 +143,20 @@ export class ProfilePage {
       if(student["sID"] === this.userInfo["id"])
         this.studentStatus = student["sStatus"];
     })
+  }
+
+  async scanFeedbacks() {
+    let list = this.fireDatabase.list<Item>("feedback");
+    let item = list.valueChanges();
+
+    this.feedback = item.subscribe(async feedbacks => {
+      this.hasFeedback = true;
+      this.popBadgeFeedback = false;
+      this.feedbackBadge = await this.db.scanFeedbacks(feedbacks);
+      console.log("Current no. of feedbacks: ", this.feedbackBadge);
+      this.popBadgeFeedback = true;
+    })
+
   }
 
   editProfile() {

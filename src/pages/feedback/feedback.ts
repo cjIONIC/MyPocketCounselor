@@ -93,10 +93,47 @@ export class FeedbackPage {
     })
   }
   
+  async updateFeedback() {
+    console.log("Updating feedbacks...");
+
+    let feedbacks = await this.db.fetchAllNodesBySnapshot("feedback");
+    let appointments = await this.db.fetchAllNodesByTableInDatabase("appointment");
+    let ref = this.fireDatabase.list('feedback');
+
+    let keys = Object.keys(feedbacks);
+
+    appointments.forEach(appointment => {
+      if(appointment["cID"] === this.userInfo["id"] 
+          && appointment["aStatus"] === "Finished") {
+            console.log("Found");
+
+            for(let i = 0; i < keys.length; i++) {
+              let count = keys[i];
+              let feedback = feedbacks[count].payload.val();
+        
+              if(feedback.aID === appointment["aID"] 
+                  && feedback.fNotification === "Sent") {
+                    console.log("Found");
+                    ref.update(feedbacks[count].key, { fNotification: "Received" });
+                    console.log("Updated Successfully");
+                }
+            }
+
+          }
+    })
+
+
+
+    return;
+  }
+  
   ionViewWillLeave() {
+    if(this.userInfo["type"] !== "Student") this.updateFeedback();
+
     this.account.unsubscribe();
     this.academic.unsubscribe();
     this.feedback.unsubscribe();
+
   }
 
   ionViewDidLoad() {

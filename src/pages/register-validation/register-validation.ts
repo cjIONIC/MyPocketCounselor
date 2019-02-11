@@ -118,11 +118,10 @@ export class RegisterValidationPage {
     console.log("Updating registrations");
 
     let ref = this.fireDatabase.list('registration');
+    let registrations = await this.db.fetchAllNodesBySnapshot("registration")
     let academics = await this.db.fetchAllNodesByTableInDatabase("academic");
 
-    ref.snapshotChanges()
-    .subscribe(registrations => {
-      let keys = Object.keys(registrations);
+    let keys = Object.keys(registrations);
 
       for(let i = 0; i < keys.length; i++) {
         let count = keys[i];
@@ -147,7 +146,6 @@ export class RegisterValidationPage {
   
         }
       }
-    })
     return;
   }
 

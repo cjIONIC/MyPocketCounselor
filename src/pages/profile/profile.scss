@@ -120,11 +120,28 @@ page-profile {
         background-color: #837df8;
         color: white;
     }
+    
+    .feedbackCounselor {
+        padding: 0%;
+    }
 
     .feedbackIcon {
         text-align: end;
     }
     
+    .feedbackBadge {
+        padding: 0%;
+        margin-top:4px;
+        font-size: 12pt;
+        font-weight: bold;
+        text-align: end;
+    }
+
+    .badge {
+        border-radius: 50px;
+        background-color: white;
+        color: #837df8;
+    }
 
     // HEADER
     .grid {
@@ -188,6 +205,8 @@ page-profile {
         color: #ff6961;
     }
     //END oF HEADER
+
+
 
     .image {
         margin: 5px 0px;

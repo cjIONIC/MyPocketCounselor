@@ -541,29 +541,51 @@ export class DatabaseProvider {
     
     requests.forEach(request => {
       allAcademics.forEach(academic => {
-        if(request["acID"] === academic["acID"]) {
-          let name = request["rLastName"] +", "+ request["rFirstName"];
 
-          let pop = false;
+        if(this.userInfo["type"] === "GTD Head") {
+          if(request["acID"] === academic["acID"]) {
+            let name = request["rLastName"] +", "+ request["rFirstName"];
+  
+            let pop = false;
+  
+            if(request["rDeviceHead"] === "Sent") pop = true;
+  
+            requestList.push({
+              id: request["rID"],
+              name: name,
+              picture: request["rPicture"],
+              academic: academic["acCode"],
+              datetime: request["rDatetime"],
+              pop: pop
+            });
+          }
+        } else {
+          if(request["acID"] === academic["acID"] 
+              && academic["cID"] === this.userInfo["id"]) {
+            let name = request["rLastName"] +", "+ request["rFirstName"];
+  
+            let pop = false;
+  
+            if(request["rDeviceCounselor"] === "Sent") pop = true;
+  
+            requestList.push({
+              id: request["rID"],
+              name: name,
+              picture: request["rPicture"],
+              academic: academic["acCode"],
+              datetime: request["rDatetime"],
+              pop: pop
+            });
+          }
 
-          if(request["rDeviceHead"] === "Sent") pop = true;
-
-          requestList.push({
-            id: request["rID"],
-            name: name,
-            picture: request["rPicture"],
-            academic: academic["acCode"],
-            datetime: request["rDatetime"],
-            pop: pop
-          });
         }
       });
      
     })
 
     requestList.sort(function(a,b) {
-      if(a.name < b.name) { return -1; }
-      if(a.name > b.name) { return 1; }
+      if(a.datetime < b.datetime) { return -1; }
+      if(a.datetime > b.datetime) { return 1; }
       return 0;
     });
 
@@ -1603,6 +1625,34 @@ export class DatabaseProvider {
     return found;
   }
 
+  async scanFeedbacks(feedbacks) {
+    let badge = 0;
+    let appointments = await this.fetchAllNodesByTableInDatabase("appointment");
+    let students = await this.fetchAllNodesByTableInDatabase("student");
+    let academics = await this.fetchAllNodesByTableInDatabase("academic");
+
+    appointments.forEach(appointment => {
+      if(appointment["cID"] === this.userInfo["id"]
+          && appointment["aStatus"] === "Finished") {
+
+            feedbacks.forEach(feedback => {
+              if(feedback["aID"] === appointment["aID"] &&
+                  feedback["fNotification"] === "Sent")  {
+                    badge++;
+              }
+            })
+
+        }
+    })
+
+    console.log("Badge: ", badge);
+
+
+    if(badge === 0) return null;
+    
+    return badge;
+  }
+
   async fetchAppointmentRecipient(academics, counselors) {
     let recipient = [];
     let students = await this.fetchAllNodesByTableInDatabase("student");
@@ -2188,6 +2238,7 @@ export class DatabaseProvider {
       fID: parseInt(id),
       fDescription: description,
       fRate: parseInt(rate),
+      fNotification: "Sent",
       fDatetime: datetime.toString(),
       sID: this.userInfo["id"],
       aID: appointmentID
@@ -2283,7 +2334,7 @@ export class DatabaseProvider {
     appointments.forEach(appointment => {
       if(appointment["cID"] === this.userInfo["id"]
           && appointment["aStatus"] === "Finished") {
-            let id, rating, description, datetime, push = false;
+            let id, rating, notification, description, datetime, push = false;
 
             feedbacks.forEach(feedback => {
               if(feedback["aID"] === appointment["aID"])  {
@@ -2291,6 +2342,7 @@ export class DatabaseProvider {
                 rating = feedback["fRate"];
                 description = feedback["fDescription"];
                 datetime = feedback["fDatetime"];
+                notification = feedback["fNotification"];
                 push = true;
               }
             })
@@ -2318,6 +2370,7 @@ export class DatabaseProvider {
                 description: description,
                 datetime: datetime,
                 schedule: appointment["aSchedule"],
+                notification: notification,
                 avatar: studentAvatar,
                 academic: academicList,
                 name: studentName

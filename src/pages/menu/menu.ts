@@ -28,12 +28,16 @@ export class MenuPage {
   disconnected: Subscription;
   account: Subscription;
   register: Subscription;
+  feedback: Subscription;
   hasRegister: any = false;
+  hasFeedback: any = false;
 
   userInfo = [];
 
   registrationBadge: any;
-  popBadge: any;
+  feedbackBadge: any;
+  popBadgeRegistration: any;
+  popBadgeFeedback: any;
 
   spinner: any = true;
 
@@ -83,7 +87,10 @@ export class MenuPage {
       this.userInfo = await this.db.getUserInfo();
       console.log("User information: ", this.userInfo);
 
-      if(this.userInfo["type"] !== "Student") this.scanRegistrations();
+      if(this.userInfo["type"] !== "Student") {
+        this.scanFeedbacks();
+        await this.scanRegistrations();
+      }
       else this.spinner = false;
     }, error => console.log(error));
   }
@@ -104,6 +111,20 @@ export class MenuPage {
     this.app.getRootNav().push(SettingsPage);
   }
 
+  async scanFeedbacks() {
+    let list = this.fireDatabase.list<Item>("feedback");
+    let item = list.valueChanges();
+
+    this.feedback = item.subscribe(async feedbacks => {
+      this.hasFeedback = true;
+      this.popBadgeFeedback = false;
+      this.feedbackBadge = await this.db.scanFeedbacks(feedbacks);
+      console.log("Current no. of feedbacks: ", this.feedbackBadge);
+      this.popBadgeFeedback = true;
+    })
+
+  }
+
   async scanRegistrations() {
     let list = this.fireDatabase.list<Item>("registration");
     let item = list.valueChanges();
@@ -121,10 +142,10 @@ export class MenuPage {
 
     this.register = item.subscribe(async registrations => {
       this.hasRegister = true;
-      this.popBadge = false;
+      this.popBadgeRegistration = false;
       this.registrationBadge = await this.db.scanRegistrations(academicList, registrations);
       console.log("Current no. of registrations: ", this.registrationBadge);
-      this.popBadge = true;
+      this.popBadgeRegistration = true;
       this.spinner = false;
     })
 
@@ -180,10 +201,11 @@ export class MenuPage {
     this.disconnected.unsubscribe();
     this.account.unsubscribe();
     if(this.hasRegister) this.register.unsubscribe();
+    if(this.hasFeedback) this.feedback.unsubscribe();
   }
 
   ionViewDidEnter() {
-    this.popBadge = false;
+    this.popBadgeRegistration = false;
     this.initialize();
     this.connected = this.network.onConnect().subscribe( data => {
       this.initialize();

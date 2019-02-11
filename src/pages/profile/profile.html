@@ -62,7 +62,16 @@
     <ion-card class="feedback" (click)="viewFeedbacks()">
       <ion-grid>
         <ion-row>
-          <ion-col col-10 class="feedbackName"> View Feedbacks</ion-col>
+          <ion-col col-10 *ngIf="userInfo['type'] === 'Student'" class="feedbackName"> View Feedbacks</ion-col>
+          
+          <ion-col col-10 *ngIf="userInfo['type'] !== 'Student'" class="feedbackCounselor">
+            <ion-row>
+              <ion-col col-10 class="feedbackName"> View Feedbacks</ion-col>
+              <ion-col col-2  class="feedbackBadge" *ngIf="popBadgeFeedback">
+                  <ion-badge class="badge" *ngIf="feedbackBadge !== null"> {{ feedbackBadge }} </ion-badge>
+              </ion-col>
+            </ion-row>
+          </ion-col>
           <ion-col col-2 class="feedbackIcon"> <ion-icon name="arrow-forward"></ion-icon> </ion-col>
         </ion-row>
       </ion-grid>
