@@ -338,8 +338,6 @@ export class HomePage {
   ionViewWillLeave(){
     this.account.unsubscribe();
     this.academic.unsubscribe();
-    this.message.unsubscribe();
-    this.appointment.unsubscribe();
   }
 
   ionViewDidLoad() {
