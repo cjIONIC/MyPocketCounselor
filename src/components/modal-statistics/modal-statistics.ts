@@ -299,7 +299,7 @@ export class ModalStatisticsComponent {
                     label: "Not Finished",
                     data: [this.novemberPending,
                       this.decemberPending, this.januaryPending, this.februaryPending,
-                      this.marchFinish],
+                      this.marchPending],
                     backgroundColor: [
                           'rgba(105,97,255, 1)',
                           'rgba(93,230,120, 1)',
