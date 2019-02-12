@@ -274,8 +274,8 @@ exports.newFeedback = functions.database
                         device = deviceToken[0];
                         payload = {
                             notification: {
-                                title: ` New feedback`,
-                                body: `${student} add a feedback`,
+                                title: ` New appointment feedback`,
+                                body: `${student} sent you a feedback`,
                                 sound: "default"
                             }
                         };
