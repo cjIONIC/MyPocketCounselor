@@ -34,12 +34,18 @@ export class HomePage {
   notificationBadge: any;
   selectedPage: any;
   updatedNotification: any = false;
+  feedbackBadge: any;
+  popBadgeFeedback: any;
+  hasFeedback: any = false;
+  hasRegister: any = false;
 
   registrationBadge: any;
   tempRegistrationBadge: any;
   menuHasEnter: any = false;
 
   chatBadge: any;
+
+  menuBadge: any;
 
   userInfo = [];
   googleID:any;
@@ -64,6 +70,7 @@ export class HomePage {
   message: Subscription;
   appointment: Subscription;
   register: Subscription;
+  feedback: Subscription;
 
   constructor(public navCtrl: NavController, 
     public app: App,
@@ -117,40 +124,12 @@ export class HomePage {
             console.log("User information: ", this.userInfo);
             this.scanAppointmentChanges();
             this.scanChatChanges();
-            this.scanRegistrations();
+            if(this.userInfo["type"] !== "Student")this.scanMenuChanges();
   
           }, error => console.log(error));
   
       }, error => console.log(error));
     })
-  }
-  
-  async getUserInfo2() {
-    let userInfo = await this.db.getProfileInStorage();
-      console.log("Currently logged in: ", userInfo);
-      let table;
-  
-      if(userInfo["type"] === "Student") table = "student"
-      else table = "counselor";
-  
-      let list = this.fireDatabase.list<Item>(table);
-      let item = list.valueChanges();
-  
-      this.academic = this.fireDatabase.list<Item>("academic")
-        .valueChanges().subscribe(academics => {
-  
-          this.account = item.subscribe(async accounts => {
-            await this.db.refreshUserInfo(accounts, userInfo);
-            this.userInfo = await this.db.getUserInfo();
-
-            console.log("User information: ", this.userInfo);
-            this.scanAppointmentChanges();
-            this.scanChatChanges();
-            this.scanRegistrations();
-  
-          }, error => console.log(error));
-  
-      }, error => console.log(error));
   }
 
   search() {
@@ -269,6 +248,48 @@ export class HomePage {
       }, error => console.log("Error"))
    
   }
+
+  async scanMenuChanges() {
+    this.scanFeedbacks();
+    this.scanRegistrations()
+  }
+
+  async scanFeedbacks() {
+    let list = this.fireDatabase.list<Item>("feedback");
+    let item = list.valueChanges();
+
+    item.subscribe(async feedbacks => {
+      if(this.menuBadge > 0 && this.hasFeedback) this.menuBadge--;
+      this.hasFeedback = false;
+      let found = false;
+      let badge = 0;
+
+      let appointments = await this.db.fetchAllNodesByTableInDatabase("appointment");
+
+      feedbacks.forEach(feedback => {
+
+        appointments.forEach(appointment => {
+          if(appointment["aID"] === feedback["aID"]
+              && appointment["cID"] === this.userInfo["id"]
+              && feedback["fNotification"] !== "Received")
+              found = true;
+        })
+
+      })
+
+
+
+      if(found){ 
+        badge++;
+        this.hasFeedback = true;
+        if(this.menuBadge )this.menuBadge += badge;
+        else this.menuBadge = badge;
+      } 
+      if(this.menuBadge === 0) this.menuBadge = null;
+      console.log("FBadge: ", this.menuBadge);
+    })
+
+  }
   
   async scanRegistrations() {
     let list = this.fireDatabase.list<Item>("registration");
@@ -285,9 +306,21 @@ export class HomePage {
       }
     })
 
-    this.register = item.subscribe(async registrations => {
+    item.subscribe(async registrations => {
+      if(this.menuBadge >0 && this.hasRegister) this.menuBadge--;
+      this.hasRegister = false;
+      let badge = 0;
       this.registrationBadge = await this.db.scanRegistrations(academicList, registrations);
       console.log("Current no. of registrations: ", this.registrationBadge);
+
+      if(this.registrationBadge){
+        this.hasRegister = true;
+        badge++;
+        if(this.menuBadge )this.menuBadge += badge;
+        else this.menuBadge = badge;
+      } 
+      if(this.menuBadge === 0) this.menuBadge = null;
+      console.log("RBadge: ", this.menuBadge);
     })
 
   }
@@ -307,19 +340,13 @@ export class HomePage {
     this.academic.unsubscribe();
     this.message.unsubscribe();
     this.appointment.unsubscribe();
-    this.register.unsubscribe();
   }
 
   ionViewDidLoad() {
-    this.hasRun = true;
     this.initialize();
     console.log('ionViewDidLoad TabPage');
   }
 
   ionViewDidEnter() {
-    if(this.hasRun){
-      this.chatBadge = null;
-      this.getUserInfo2();
-    }
   }
 }
