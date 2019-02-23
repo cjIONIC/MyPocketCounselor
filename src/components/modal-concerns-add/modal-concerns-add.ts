@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ViewController, LoadingController } from 'ionic-angular';
+import { ViewController, LoadingController, AlertController } from 'ionic-angular';
 import { DatabaseProvider } from '../../providers/database/database';
 
 /**
@@ -17,6 +17,7 @@ export class ModalConcernsAddComponent {
   text: string;
 
   constructor(public viewCtrl: ViewController,
+      public alertCtrl: AlertController,
       public loadingCtrl: LoadingController,
       public db: DatabaseProvider) {
     console.log('Hello ModalConcernsAddComponent Component');
@@ -30,14 +31,42 @@ export class ModalConcernsAddComponent {
       content: 'Please Wait...'
     });
 
-    loading.present().then(() => {
+    loading.present().then(async () => {
       console.log("Concern: ", concern["name"]);
-  
-      this.db.addConcern(concern["name"]).then(() => {
+      let found = this.checkConcernDuplicate(concern["name"]);
+
+      if(found) {
+        this.presentAlert("Duplicate", "Concern already exist!");
+        console.log("Duplicate concern");
         loading.dismiss();
-        this.dismiss();
-      })
+      } else {
+        this.db.addConcern(concern["name"]).then(() => {
+          loading.dismiss();
+          this.dismiss();
+        })
+      }
+  
     })
+  }
+
+  presentAlert(title, description) {
+    const alert = this.alertCtrl.create({
+      title: title,
+      subTitle: description,
+      buttons: ['OK']
+    });
+    alert.present();
+  }
+
+  async checkConcernDuplicate(value) {
+    let concerns = await this.db.fetchAllNodesByTableInDatabase("concern");
+    let found = false;
+
+    concerns.forEach(concern => {
+      if(concern["coName"] === value) found = true;
+    })
+
+    return found;
   }
 
   dismiss() {

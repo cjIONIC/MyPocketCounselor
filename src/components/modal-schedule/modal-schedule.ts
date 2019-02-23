@@ -126,10 +126,9 @@ export class ModalScheduleComponent {
       console.log("Schedule: ", schedule);
       
       let timeout = Math.floor(Math.random() * 1500) + 500;
-      let list = this.fireDatabase.list<Item>("appointment");
-      let item = list.valueChanges();
 
-      this.schedule = item.subscribe(() => {
+      this.schedule = this.fireDatabase.list<Item>("appointment")
+                      .valueChanges().subscribe(() => {
         setTimeout(async () => {
           try {
             this.added = true;

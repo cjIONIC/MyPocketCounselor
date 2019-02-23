@@ -27,6 +27,9 @@ export class AppointmentAddPage {
   connected: Subscription;
   disconnected: Subscription;
   appointment: Subscription;
+  account: Subscription;
+  academic: Subscription;
+  concern: Subscription;
 
   appointmentDetails: any;
 
@@ -108,13 +111,13 @@ export class AppointmentAddPage {
     let list = this.fireDatabase.list<Item>(table);
     let item = list.valueChanges();
 
-    this.fireDatabase.list<Item>("academic")
+    this.academic = this.fireDatabase.list<Item>("academic")
       .valueChanges().subscribe(academics => {
 
-        this.fireDatabase.list<Item>("concern")
+        this.concern = this.fireDatabase.list<Item>("concern")
           .valueChanges().subscribe(concerns => {
 
-            item.subscribe(async accounts => {
+            this.account = item.subscribe(async accounts => {
               await this.db.refreshUserInfo(accounts, userInfo);
               this.userInfo = await this.db.getUserInfo();
               console.log("User information: ", this.userInfo);
@@ -287,11 +290,10 @@ export class AppointmentAddPage {
   
       let timeout = Math.floor(Math.random() * 1500) + 500;
   
-      let list = this.fireDatabase.list<Item>("appointment");
-      let item = list.valueChanges();
       let pushed = false;
   
-      this.appointment =  item.subscribe(() => {
+      this.appointment = this.fireDatabase.list<Item>("appointment")
+      .valueChanges().subscribe(() => {
         setTimeout(async () => {
           try {
             this.added = true;
@@ -450,6 +452,9 @@ export class AppointmentAddPage {
   ionViewWillLeave(){
     this.connected.unsubscribe();
     this.disconnected.unsubscribe();
+    this.academic.unsubscribe();
+    this.account.unsubscribe();
+    this.concern.unsubscribe();
 
     //Firebase
     if(this.added) this.appointment.unsubscribe();

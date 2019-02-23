@@ -73,6 +73,8 @@ export class HeadControlsCounselorsAddPage {
 
         if(found) {
           this.presentAlert("Duplicate", "Email already exist!");
+          console.log("Duplicate email addresses");
+          loading.dismiss();
         } else {
           this.addCounselor(form).then(() => {
             let currentIndex = this.navCtrl.getActive().index;
