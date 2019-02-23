@@ -68,12 +68,20 @@ export class HeadControlsCounselorsAddPage {
 
     loading.present().then(() => {
       setTimeout(async () => {
-        this.addCounselor(form).then(() => {
-          let currentIndex = this.navCtrl.getActive().index;
-          this.navCtrl.remove(currentIndex);
-          console.log("Successfully added Counselor");
-          loading.dismiss();
-        }); 
+
+        let found = await this.checkEmailDuplication(form["email"]);
+
+        if(found) {
+          this.presentAlert("Duplicate", "Email already exist!");
+        } else {
+          this.addCounselor(form).then(() => {
+            let currentIndex = this.navCtrl.getActive().index;
+            this.navCtrl.remove(currentIndex);
+            console.log("Successfully added Counselor");
+            loading.dismiss();
+          }); 
+        }
+
       }, timeout);
     });
 
@@ -116,7 +124,7 @@ export class HeadControlsCounselorsAddPage {
     } else this.matchPassword = true;
   }
 
-  addCounselor(form) {
+  async addCounselor(form) {
     console.log("Academic: ", this.academic);
     let email = form["email"];
     let password = form["password"];
@@ -138,6 +146,26 @@ export class HeadControlsCounselorsAddPage {
       });
 
     })
+  }
+
+  presentAlert(title, description) {
+    const alert = this.alertCtrl.create({
+      title: title,
+      subTitle: description,
+      buttons: ['OK']
+    });
+    alert.present();
+  }
+
+  async checkEmailDuplication (email) {
+    let counselors = await this.db.fetchAllNodesByTableInDatabase("counselor");
+    let found = false;
+
+    counselors.forEach(counselor => {
+      if(counselor["cEmail"] === email) found = true;
+    })
+
+    return found;
   }
 
   ionViewDidLoad() {
