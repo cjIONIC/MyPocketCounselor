@@ -33,7 +33,7 @@ export class ModalConcernsAddComponent {
 
     loading.present().then(async () => {
       console.log("Concern: ", concern["name"]);
-      let found = this.checkConcernDuplicate(concern["name"]);
+      let found = await this.checkConcernDuplicate(concern["name"]);
 
       if(found) {
         this.presentAlert("Duplicate", "Concern already exist!");
@@ -59,14 +59,17 @@ export class ModalConcernsAddComponent {
   }
 
   async checkConcernDuplicate(value) {
+    console.log("Concern: ", value);
     let concerns = await this.db.fetchAllNodesByTableInDatabase("concern");
     let found = false;
 
     concerns.forEach(concern => {
       if(concern["coName"] === value) found = true;
     })
+    
+    console.log("Found? ", found);
 
-    return found;
+    return await found;
   }
 
   dismiss() {

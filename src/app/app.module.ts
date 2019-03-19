@@ -85,6 +85,8 @@ import { ModalCounselorEditComponent } from '../components/modal-counselor-edit/
 import { ModalHotlineComponent } from '../components/modal-hotline/modal-hotline';
 
 import { InAppBrowser } from '@ionic-native/in-app-browser';
+import { HeadControlsAcademicsPage } from '../pages/head-controls-academics/head-controls-academics';
+import { ModalAcademicsAddComponent } from '../components/modal-academics-add/modal-academics-add';
 
 const firebaseConfig = {
   apiKey: "AIzaSyAVITAZa_qU9vSHq_ASeHJ1JGt3Sy8s8a0",
@@ -127,6 +129,8 @@ const firebaseConfig = {
     ModalConcernsAddComponent,
     HeadControlsCounselorsPage,
     HeadControlsCounselorsAddPage,
+    HeadControlsAcademicsPage,
+    ModalAcademicsAddComponent,
     ModalCounselorsProfileComponent,
     ModalCounselorsAcademicComponent,
     ModalCounselorEditComponent,
@@ -194,6 +198,8 @@ const firebaseConfig = {
     ModalConcernsAddComponent,
     HeadControlsCounselorsPage,
     HeadControlsCounselorsAddPage,
+    HeadControlsAcademicsPage,
+    ModalAcademicsAddComponent,
     ModalCounselorsProfileComponent,
     ModalCounselorsAcademicComponent,
     ModalCounselorEditComponent,

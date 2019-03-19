@@ -2952,6 +2952,26 @@ export class DatabaseProvider {
     return;
   }
 
+  async fetchAllAcademics(academics) {
+    let academicList = [];
+
+    academics.forEach(academic => {
+      academicList.push({
+        id: academic["acID"],
+        name: academic["acName"],
+        code: academic["acCode"]
+      })
+    })
+    
+    await academicList.sort(function(a,b) {
+      if(a.name < b.name) { return -1; }
+      if(a.name > b.name) { return 1; }
+      return 0;
+    });
+
+    return academicList;
+  }
+
 
   /*********************/
   /**** O T H E R S ****/

@@ -4,6 +4,7 @@ import { HeadControlsStatisticsPage } from '../head-controls-statistics/head-con
 import { HeadControlsConcernsPage } from '../head-controls-concerns/head-controls-concerns';
 import { HeadControlsCounselorsPage } from '../head-controls-counselors/head-controls-counselors';
 import { ModalHotlineComponent } from '../../components/modal-hotline/modal-hotline';
+import { HeadControlsAcademicsPage } from '../head-controls-academics/head-controls-academics';
 
 /**
  * Generated class for the HeadControlsPage page.
@@ -39,10 +40,17 @@ export class HeadControlsPage {
     this.app.getRootNav().push(HeadControlsCounselorsPage);
   }
 
+  academics() {
+    console.log("Academic Units");
+    this.app.getRootNav().push(HeadControlsAcademicsPage);
+  }
+
   hotline() {
     const modal = this.modalCtrl.create(ModalHotlineComponent, "",{ cssClass: 'custom-modal-hotline' });
     modal.present();
   }
+
+
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad HeadControlsPage');
