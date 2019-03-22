@@ -1,4 +1,50 @@
-<!-- Generated template for the ModalAcademicsAddComponent component -->
-<div>
-  {{text}}
-</div>
+<!-- Generated template for the ModalConcernsAddComponent component -->
+<ion-header>
+
+  <ion-navbar color="primary">
+      <ion-buttons end>
+          <button ion-button  style="text-transform: none; font-size: 15pt;" (click)="dismiss()">
+            Close
+          </button>
+        </ion-buttons>
+      <ion-title>Add Academic Unit</ion-title>
+  </ion-navbar>
+
+</ion-header>
+<ion-content padding class="content">
+
+  <form #academicForm="ngForm" (ngSubmit)="onAdd(academicForm.value)" novalidate>
+    <ion-item>
+        <ion-label color="primary" stacked> Academic Name</ion-label>
+        <ion-input #name="ngModel" 
+          name="name" 
+          ngModel
+          required>
+        </ion-input>
+      </ion-item> 
+      <div *ngIf="name.errors && (name.dirty || name.touched)">
+        <div [hidden]="!name.errors.required" class="alert">
+          Academic name is required
+        </div>
+      </div>
+
+      
+      <ion-item>
+        <ion-label color="primary" stacked> Academic Code</ion-label>
+        <ion-input #code="ngModel" 
+          name="code" 
+          ngModel
+          required>
+        </ion-input>
+      </ion-item>
+      <div *ngIf="code.errors && (code.dirty || code.touched)">
+        <div [hidden]="!code.errors.required" class="alert">
+          Academic Code is required
+        </div>
+      </div>
+
+    <div class="buttons">
+      <button ion-button class="btnAcademic" [disabled]="!academicForm.form.valid" type="submit">Add</button>
+    </div>
+</form>
+</ion-content>
