@@ -92,7 +92,8 @@
                     </button>
                   </div>
                 <!-- END -->
-                <div class="likeNumber">{{post.like}} Like</div>
+                <div class="likeNumber" *ngIf="post.like !== 1">{{post.like}} Like</div>
+                <div class="likeNumber" *ngIf="post.like === 1">{{post.like}} Like</div>
               </div>
               <div class="datetime">{{post.datetime | timeAgo}}</div>
             </div>

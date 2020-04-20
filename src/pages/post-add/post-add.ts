@@ -392,7 +392,9 @@ export class PostAddPage {
       spinner: 'ios',
       content: 'Adding Post Please Wait...'
     });
-    
+    console.log("TO ADD: ", post["title"], location, post["description"], startDate, 
+    endDate, academic, post["image"], 
+    includeEndDate, includeEndTime, this.type)
     loading.present().then(() => {
           this.db.addPost(post["title"], location, post["description"], startDate, 
             endDate, academic, post["image"], 

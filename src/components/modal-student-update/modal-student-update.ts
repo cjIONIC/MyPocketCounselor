@@ -80,18 +80,20 @@ export class ModalStudentUpdateComponent {
 
     item.subscribe(academics => {
       academics.forEach(academic => {
-        if(academic["acID"] === this.currentUnit) {
-          this.academicList.push({
-            id: academic["acID"],
-            name: academic["acName"],
-            checked: true
-          });
-        } else {
-          this.academicList.push({
-            id: academic["acID"],
-            name: academic["acName"],
-            checked: false
-          });
+        if(academic["acCode"] !== "Guidance Center") {
+          if(academic["acID"] === this.currentUnit) {
+            this.academicList.push({
+              id: academic["acID"],
+              name: academic["acName"],
+              checked: true
+            });
+          } else {
+            this.academicList.push({
+              id: academic["acID"],
+              name: academic["acName"],
+              checked: false
+            });
+          }
         }
       })
     })

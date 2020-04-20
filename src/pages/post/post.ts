@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, App, Item, Events, PopoverController, ToastController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, App, Item, PopoverController, ToastController } from 'ionic-angular';
 import { Subscription } from 'rxjs/Subscription';
 
 //Firebase
@@ -8,6 +8,9 @@ import { AngularFireDatabase } from 'angularfire2/database';
 //Provides
 import { DatabaseProvider } from '../../providers/database/database';
 import { PopFeedOptionsComponent } from '../../components/pop-feed-options/pop-feed-options';
+
+//Constant
+import * as Constant from '../../services/constants';
 
 import { Network} from '@ionic-native/network';
 import { PostAddPage } from '../post-add/post-add';
@@ -55,36 +58,36 @@ export class PostPage {
   }
   
   async getUserInfo() {
-    let userInfo = await this.db.getProfileInStorage();
-    console.log("Currently logged in: ", userInfo);
-    let table;
+    let lList, obsAccounts, oUserInfo;
+    oUserInfo = await this.db.getProfileInStorage();
 
-    if(userInfo["type"] === "Student") table = "student"
-    else table = "counselor";
+    lList = this.fireDatabase.list<Item>(
+      oUserInfo["type"] === Constant.TYPE_STUDENT ? 
+        Constant.TABLE_STUDENT : Constant.TABLE_COUNSELOR
+    );
+    
+    obsAccounts = lList.valueChanges();
 
-    let list = this.fireDatabase.list<Item>(table);
-    let item = list.valueChanges();
+    this.academic = this.fireDatabase.list<Item>(Constant.TABLE_ACADEMIC)
+      .valueChanges().subscribe(() => {
+        this.account = obsAccounts.subscribe(async aAccounts => {
 
-    this.academic = this.fireDatabase.list<Item>("academic")
-      .valueChanges().subscribe(academics => {
-
-        this.account = item.subscribe(async accounts => {
-          await this.db.refreshUserInfo(accounts, userInfo);
+          await this.db.refreshUserInfo(aAccounts, oUserInfo);
+          
           this.userInfo = await this.db.getUserInfo();
-          console.log("User information: ", this.userInfo);
+          
           await this.fetchPostForFeed();
-        }, error => console.log(error));
+        });
 
-    }, error => console.log(error));
+    });
   }
 
   //Fetches all posts from the database
   async fetchPostForFeed() {
-    let list = this.fireDatabase.list<Item>('post');
+    let list = this.fireDatabase.list<Item>(Constant.TABLE_POST);
     let item = list.valueChanges();
 
     this.post = item.subscribe( async posts => {
-      console.log('%c Fetching Posts to Feed','color: black; background: yellow; font-size: 16px');
       const allAcademicUnits = await this.db.fetchAllNodesByTableInDatabase("academic");
       const allCounselors = await this.db.fetchAllNodesByTableInDatabase("counselor");
 
@@ -102,8 +105,7 @@ export class PostPage {
       this.spinner = false;
       this.hasRun = true;
 
-      console.log("Filtered Feed: ", this.feedList);
-    }, error => console.log(error));
+    });
   }
 
   presentToast(description) {
@@ -114,7 +116,6 @@ export class PostPage {
     });
   
     toast.onDidDismiss(() => {
-      console.log('Dismissed toast');
     });
   
     toast.present();
@@ -129,7 +130,6 @@ export class PostPage {
   }
 
   addPost(postType) {
-    console.log("Post type: ", postType);
     this.app.getRootNav().push(PostAddPage, { type: postType});
   }
 
@@ -141,7 +141,6 @@ export class PostPage {
     setTimeout(() => {
       this.like = item.subscribe(likes => {
         this.hasLike = true;
-        console.log('%c Liking Post','color: black; background: yellow; font-size: 16px');
         this.db.likePost(post["id"], likes);
       })
     }, 300)
@@ -149,16 +148,13 @@ export class PostPage {
     
   }
 
-  unlikePost(post) {
-    console.log('%c Unliking Post','color: black; background: yellow; font-size: 16px');
-    
+  unlikePost(post) {    
     let list = this.fireDatabase.list<Item>("like");
     let item = list.valueChanges(["child_removed"]);
 
     setTimeout(() => {
       this.unlike = item.subscribe(likes => {
         this.hasUnlike = true;
-        console.log('%c Unliking Post','color: black; background: yellow; font-size: 16px');
         this.db.unlikePost(post["id"], likes);
       })
     }, 300)
@@ -166,7 +162,6 @@ export class PostPage {
 
   ionViewDidLoad() {
     this.initialize();
-    console.log('ionViewDidLoad FeedPage');
   }
 
   ionViewWillLeave(){
@@ -186,14 +181,14 @@ export class PostPage {
 
     this.initialize();
 
-    this.connected = this.network.onConnect().subscribe( data => {
+    this.connected = this.network.onConnect().subscribe(() => {
     this.initialize();
       this.presentToast("You are online");
-    }, error => console.log(error));
+    });
 
-    this.disconnected = this.network.onDisconnect().subscribe(data => {
+    this.disconnected = this.network.onDisconnect().subscribe(() => {
       this.presentToast("You are offline");
-    }, error => console.log(error));
+    });
   }
 
 }

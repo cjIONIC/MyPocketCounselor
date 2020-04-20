@@ -160,7 +160,7 @@ export class ModalProfileComponent {
   }
 
   presentModal() {
-    const modal = this.modalCtrl.create(ModalStudentUpdateComponent, {profile: this.profileInfo, type: this.type});
+    const modal = this.modalCtrl.create(ModalStudentUpdateComponent, {profile: this.profileInfo, type: this.type}, {cssClass: 'custom-modal-student-update'});
     modal.present();
   }
 
